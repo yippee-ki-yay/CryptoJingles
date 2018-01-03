@@ -1,0 +1,11 @@
+.placeholder {
+    background-color: cornflowerblue;
+    height: 120px;
+    text-align: center;
+    text-justify: auto;
+    color: white;
+    border-style: dashed;
+    border-width: 3px;
+    border-color: black;
+    cursor: pointer;
+  }
