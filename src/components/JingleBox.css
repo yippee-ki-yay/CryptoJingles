@@ -1,0 +1,13 @@
+.jingle-header {
+    margin-bottom: 10px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.name-tag {
+    font-size: 13px;
+}
+
+svg {
+    cursor: pointer;
+  }

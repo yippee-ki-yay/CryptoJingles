@@ -38,7 +38,7 @@ class Placeholder extends Component {
         } else if(this.state.stage === 'selected') {
             return (
                 <div className="col-md-2" onClick={ this.placeholderSeleced } >
-                    <div className="well bs-component placeholder">
+                    <div className="well bs-component placeholder selected">
                         Select jingle
                     </div>
                 </div>

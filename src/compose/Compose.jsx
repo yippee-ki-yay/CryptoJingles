@@ -51,12 +51,12 @@ class Compose extends Component {
             <hr />
             
             <div className="row">
-                <JingleBox name='Some crazy sound (#435)' source='../audio/s1.wav' />
-                <JingleBox name='Some crazy ' source='../audio/s2.wav' />
-                <JingleBox name='Yup' source='../audio/s3.wav' />
-                <JingleBox name='Give it a go' source='../audio/s4.wav' />
-                <JingleBox name='wup wup' source='../audio/s5.wav' />
-                <JingleBox name='Last one' source='../audio/s6.wav' />
+                <JingleBox name='Jingle' id='234' source='../audio/s1.wav' type="compose" />
+                <JingleBox name='Some crazy' id='1234' source='../audio/s2.wav' type="compose" />
+                <JingleBox name='Yup' id='134' source='../audio/s3.wav' type="compose" />
+                <JingleBox name='Give it a go' id='34' source='../audio/s4.wav' type="compose" />
+                <JingleBox name='wup wup' id='834' source='../audio/s5.wav' type="compose" />
+                <JingleBox name='Last one' id='94' source='../audio/s6.wav' type="compose" />
             </div>
           </div>
       )

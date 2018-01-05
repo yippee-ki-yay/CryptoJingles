@@ -9,3 +9,7 @@
     border-color: black;
     cursor: pointer;
   }
+
+.selected {
+      border-style: solid;
+}
