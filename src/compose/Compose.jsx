@@ -15,7 +15,14 @@ class Compose extends Component {
 
   }
 
+  async componentWillMount() {
+    // we'll load all your jingles as a array of jingleIds
+    // from the jingleId we can get the jingle type
 
+    // [{id:232, type: 3}, {id:4343, type: 5}]
+    // type maps to the type of jingle and it' name
+    //we can extract that in the jinglebox component
+  }
 
   render() {
       return (
@@ -25,7 +32,7 @@ class Compose extends Component {
                 <div className="col-md-12">
                     <div className="well bs-component">
                         <form className="form-horizontal">
-                            <legend>Go on Moncart!</legend>
+                            <legend>Go on Mozart!</legend>
                             <div className="row">
                                <Placeholder id='1' />
                                <Placeholder id='2' />

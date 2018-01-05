@@ -2,14 +2,51 @@ import React, { Component } from 'react';
 
 import "./Home.css";
 
+import getWeb3 from '../util/web3/getWeb3';
+
+import contract from 'truffle-contract';
+
+import CryptoJingles from '../../build/contracts/CryptoJingles.json';
+
+import '../util/config';
+import { CryptoJinglesAddress } from '../util/config';
+
 class Home extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      numJingles: 0
+      numJingles: 0,
+      accounts: [],
+      web3: null,
+      cryptoJinglesIntance: null
     };
+  }
+
+  async componentWillMount() {
+
+    getWeb3
+    .then(async (results) => {
+      const web3 = results.payload.web3Instance;
+
+      web3.eth.getAccounts(async (error, accounts) => {
+
+         //setup contracts
+        const cryptoJinglesContract = contract(CryptoJingles);
+        cryptoJinglesContract.setProvider(web3.currentProvider);
+
+        const cryptoJinglesIntance = await cryptoJinglesContract.at(CryptoJinglesAddress);
+
+         this.setState({
+            accounts,
+            web3,
+            cryptoJinglesIntance,
+          });
+
+      });
+    });
+
   }
 
   buyJingles = () => {
