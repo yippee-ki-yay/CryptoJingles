@@ -2,6 +2,7 @@ pragma solidity ^0.4.18;
 
 import './zeppelin/ownership/Ownable.sol';
 import './Jingle.sol';
+import './Song.sol';
 
 contract CryptoJingles is Ownable {
     
@@ -18,22 +19,26 @@ contract CryptoJingles is Ownable {
     
     mapping (uint => Purchase) jinglePurchase;
     
+    mapping (uint => bool) isAlreadyUsed;
+    
     uint numOfPurchases;
     
     uint MAX_JINGLES_PER_PURCHASE = 10;
     uint JINGLE_PRICE = 1000000000000000;
-    uint JINGLES_PER_SONG = 6;
+    uint JINGLES_PER_SONG = 5;
     uint REWARD_FOR_OPEN = 10000000;
     uint NUM_JINGLE_TYPES = 20;
     
     uint ownerBalance;
     
-    Jingle jingleContract;
+    Jingle public jingleContract;
+    Song public songContract;
     
-    function CryptoJingles(address _jingle) public {
+    function CryptoJingles(address _jingle, address _song) public {
         numOfPurchases = 0;
         ownerBalance = 0;
         jingleContract = Jingle(_jingle);
+        songContract = Song(_song);
     }
     
     function buyJingle(uint numJingles) public payable {
@@ -55,13 +60,17 @@ contract CryptoJingles is Ownable {
         Purchased(msg.sender, block.number, numJingles, numOfPurchases);
     }
     
+    //TODO: check the exact number of blocks 
     function openJingles(uint purchaseId) public {
         require(jinglePurchase[purchaseId].exists == true);
         require(jinglePurchase[purchaseId].revealed == false);
         require(block.number <= jinglePurchase[purchaseId].blockNumber + 255);
         
         for (uint i = 0; i < jinglePurchase[purchaseId].numJingles; ++i) {
-            uint randomNum = randomGen(jinglePurchase[purchaseId].blockNumber, i);
+            
+            bytes32 blockHash = block.blockhash(jinglePurchase[purchaseId].blockNumber);
+            
+            uint randomNum = randomGen(blockHash, i);
             jingleContract.mint(jinglePurchase[purchaseId].user, randomNum);
         }
         
@@ -73,14 +82,29 @@ contract CryptoJingles is Ownable {
         
     }
     
-    function composeSong(uint[6] jingles) public {
-        //check if you own all the 6 jingles 
+    function composeSong(uint[5] jingles) public {
+        require(jingles.length == JINGLES_PER_SONG);
+        
+        //check if you own all the 5 jingles 
+        for (uint i = 0; i < JINGLES_PER_SONG; ++i) {
+            bool isOwner = jingleContract.isTokenOwner(jingles[i], msg.sender);
+            
+            assert(isOwner == false || isAlreadyUsed[jingles[i]] == true);
+            
+            isAlreadyUsed[jingles[i]] = true;
+        }
+        
         // remove all the jingles from your Ownership
-        //create a new song containing those 6 jingles
+        for (uint j = 0; j < JINGLES_PER_SONG; ++j) {
+            jingleContract.removeJingle(msg.sender, jingles[j]);
+        }
+        
+        //create a new song containing those 5 jingles
+        songContract.composeSong(msg.sender, jingles);
     }
     
-    function randomGen(uint blockNum, uint seed) constant public returns (uint randomNumber) {
-        return (uint(keccak256(block.blockhash(blockNum), seed )) % NUM_JINGLE_TYPES);
+    function randomGen(bytes32 blockHash, uint seed) constant public returns (uint randomNumber) {
+        return (uint(keccak256(blockHash, seed )) % NUM_JINGLE_TYPES);
     }
     
     // Owner functions 
@@ -98,8 +122,28 @@ contract CryptoJingles is Ownable {
     
     // If the time window of 255 blocks is somehow missed 
     // the owner can manualy enter that blocknum hash and unlock the jingles 
-    function forceOpenJingles(uint jingleId) public onlyOwner {
+    function forceOpenJingles(uint purchaseId, bytes32 blockHash) public onlyOwner {
+        require(jinglePurchase[purchaseId].exists == true);
+        require(jinglePurchase[purchaseId].revealed == false);
         
+        for (uint i = 0; i < jinglePurchase[purchaseId].numJingles; ++i) {
+            uint randomNum = randomGen(blockHash, i);
+            jingleContract.mint(jinglePurchase[purchaseId].user, randomNum);
+        }
+        
+        jinglePurchase[purchaseId].revealed = true;
+        
+        msg.sender.transfer(REWARD_FOR_OPEN);
+        
+        JinglesOpened(msg.sender, jinglePurchase[purchaseId].user, block.number);
+    }
+    
+    function withdraw(uint _amount) public onlyOwner {
+        require(_amount <= ownerBalance);
+        
+        ownerBalance -= _amount;
+        
+        msg.sender.transfer(_amount);
     }
     
 }

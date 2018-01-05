@@ -13,7 +13,6 @@ contract JingleStorage is Ownable {
     
     uint public numOfJingleTypes;
     
-    
     function JingleStorage() public {
     }
     
@@ -25,6 +24,4 @@ contract JingleStorage is Ownable {
         
         numOfJingleTypes++;
     }
-    
-    
 }
