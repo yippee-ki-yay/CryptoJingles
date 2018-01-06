@@ -1,9 +1,33 @@
 import React, { Component } from 'react';
+import { DropTarget } from 'react-dnd';
 
 import './Placeholder.css';
 
-class Placeholder extends Component {
+const style = {
+  height: '12rem',
+  width: '12rem',
+  marginRight: '1.5rem',
+  marginBottom: '1.5rem',
+  color: 'white',
+  padding: '1rem',
+  textAlign: 'center',
+  fontSize: '1rem',
+  lineHeight: 'normal',
+  float: 'left',
+};
 
+const dustbinTarget = {
+  drop(props, monitor) {
+    props.onDrop(monitor.getItem());
+  },
+};
+
+@DropTarget(props => props.accepts, dustbinTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop(),
+}))
+class Placeholder extends Component {
   constructor(props) {
     super(props);
 
@@ -24,26 +48,42 @@ class Placeholder extends Component {
     this.setState({
         stage: stage
     });
-  }
+  };
 
   render() {
-        if (this.state.stage === 'unselected') {
-            return (
-                <div className="col-md-2" onClick={ this.placeholderSeleced } >
-                    <div className="well bs-component placeholder">
-                        #{ this.props.id } Add jingle
-                    </div>
-                </div>
-            );
-        } else if(this.state.stage === 'selected') {
-            return (
-                <div className="col-md-2" onClick={ this.placeholderSeleced } >
-                    <div className="well bs-component placeholder selected">
-                        Select jingle
-                    </div>
-                </div>
-            );
+    const {
+      accepts,
+      isOver,
+      canDrop,
+      connectDropTarget,
+      lastDroppedItem,
+      cancelDrop
+    } = this.props;
+
+    const isActive = isOver && canDrop;
+
+    let backgroundColor = '#222'
+    if (isActive) {
+      backgroundColor = 'darkgreen'
+    } else if (canDrop) {
+      backgroundColor = 'darkkhaki'
+    }
+
+    return connectDropTarget(
+      <div style={{ ...style, backgroundColor }} className="">
+        {
+          lastDroppedItem && <div onClick={cancelDrop}>Reset X</div>
         }
+
+        {isActive
+          ? 'Release to drop'
+          : `This dustbin accepts: ${accepts.join(', ')}`}
+
+        {lastDroppedItem && (
+          <p>Last dropped: {JSON.stringify(lastDroppedItem)}</p>
+        )}
+      </div>
+    );
   }
 }
 
