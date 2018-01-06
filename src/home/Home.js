@@ -9,7 +9,7 @@ import contract from 'truffle-contract';
 import CryptoJingles from '../../build/contracts/CryptoJingles.json';
 
 import '../util/config';
-import { CryptoJinglesAddress } from '../util/config';
+import { CryptoJinglesAddress, JINGLE_PRICE } from '../util/config';
 
 class Home extends Component {
 
@@ -20,7 +20,9 @@ class Home extends Component {
       numJingles: 0,
       accounts: [],
       web3: null,
-      cryptoJinglesIntance: null
+      cryptoJinglesIntance: null,
+      purchaseNum: 0,
+      canBeOpened: false
     };
   }
 
@@ -36,6 +38,8 @@ class Home extends Component {
         const cryptoJinglesContract = contract(CryptoJingles);
         cryptoJinglesContract.setProvider(web3.currentProvider);
 
+        console.log(CryptoJinglesAddress, JINGLE_PRICE);
+
         const cryptoJinglesIntance = await cryptoJinglesContract.at(CryptoJinglesAddress);
 
          this.setState({
@@ -49,8 +53,51 @@ class Home extends Component {
 
   }
 
-  buyJingles = () => {
-    
+  buyJingles = async () => {
+    try {
+
+      const numJingles = this.state.numJingles;
+      const account = this.state.accounts[0];
+
+      const res = await this.state.cryptoJinglesIntance.buyJingle(numJingles, {from: account, value: numJingles * JINGLE_PRICE});
+
+      // this.state.cryptoJinglesIntance.Purchased((err, res) => {
+      //   console.log(err, res);
+      // });
+
+      console.log(res.logs[0].args);
+
+      const purchaseNum = res.logs[0].args.numOfPurchases.valueOf();
+
+      console.log(purchaseNum);
+
+      this.setState({
+        purchaseNum,
+        canBeOpened: true
+      });
+
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  openJingles = async () => {
+    try {
+
+      const purchaseNum = this.state.purchaseNum;
+      const account = this.state.accounts[0];
+
+      const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum - 1, {from: account});
+
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  handleChange = (event) => {
+    this.setState({
+        [event.target.name] : event.target.value
+    });
   }
 
   render() {
@@ -69,12 +116,20 @@ class Home extends Component {
                 <legend>Buy some jingles!</legend>
                   <div className="row">
                     <div className="col-lg-8">
-                        <input name="wei" value={ this.state.numJingles } type="number" className="form-control" placeholder="Num. of Jingles" />
+                        <input name="numJingles" value={ this.state.numJingles } onChange={ this.handleChange } type="number" className="form-control" placeholder="Num. of Jingles" />
                     </div>
 
-                    <div className="col-lg-4">
-                      <button type="button" className="btn btn-info" onClick={ this.buyJingles }>Buy!</button>
-                    </div>
+                    {  !this.state.canBeOpened &&
+                      <div className="col-lg-4">
+                        <button type="button" className="btn btn-info" onClick={ this.buyJingles }>Buy!</button>
+                      </div>
+                    }
+
+                    {  this.state.canBeOpened &&
+                      <div className="col-lg-4">
+                        <button type="button" className="btn btn-info" onClick={ this.openJingles }>Open!</button>
+                      </div>
+                    }
                   </div>
               </form>
             </div>

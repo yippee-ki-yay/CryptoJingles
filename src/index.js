@@ -9,6 +9,7 @@ import getWeb3 from './util/web3/getWeb3'
 import App from './App';
 import Home from './home/Home';
 import MyJingles from './myJingles/MyJingles';
+import MySongs from './mySongs/MySongs';
 import Marketplace from './marketplace/Marketplace';
 import Compose from './compose/Compose';
 
@@ -36,6 +37,7 @@ ReactDOM.render((
           <Route path="my-jingles" component={ MyJingles } />
           <Route path="marketplace" component={ Marketplace } />
           <Route path="compose" component={ Compose } />
+          <Route path="my-songs" component= { MySongs } />
         </Route>
       </Router>
     </Provider>

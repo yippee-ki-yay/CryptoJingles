@@ -41,6 +41,7 @@ contract CryptoJingles is Ownable {
         songContract = Song(_song);
     }
     
+    //NOTICE: update num after
     function buyJingle(uint numJingles) public payable {
         require(numJingles <= MAX_JINGLES_PER_PURCHASE);
         require(msg.value >= (JINGLE_PRICE * numJingles));
@@ -60,7 +61,8 @@ contract CryptoJingles is Ownable {
         Purchased(msg.sender, block.number, numJingles, numOfPurchases);
     }
     
-    //TODO: check the exact number of blocks 
+    //TODO: check the exact number of blocks
+    //NOTICE: make it so a user is not able to open at the same block as bought
     function openJingles(uint purchaseId) public {
         require(jinglePurchase[purchaseId].exists == true);
         require(jinglePurchase[purchaseId].revealed == false);

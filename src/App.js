@@ -33,6 +33,9 @@ class App extends Component {
                 <li>
                   <a href="/my-jingles">My Jingles</a>
                 </li>
+                <li>
+                  <a href="/my-songs">My Songs</a>
+                </li>
               </ul>
 
             </div>
