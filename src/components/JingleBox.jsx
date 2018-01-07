@@ -12,10 +12,8 @@ const boxSource = {
 };
 
 const style = {
-  border: '1px dashed gray',
-  backgroundColor: 'white',
-  padding: '0.5rem 1rem',
   marginRight: '1.5rem',
+  width: '150px',
   marginBottom: '1.5rem',
   cursor: 'move',
   float: 'left',
@@ -50,7 +48,7 @@ class JingleBox extends Component {
       this.setState({
           start: true
       });
-  }
+  };
 
   stopSound = () => {
       this.state.sound.stop();
@@ -64,17 +62,19 @@ class JingleBox extends Component {
     const { name, isDropped, isDragging, connectDragSource } = this.props;
     const opacity = isDragging ? 0.4 : 1;
 
+    if (isDropped) style.pointerEvents = 'none';
+    if (!isDropped) style.pointerEvents = 'initial';
+
+    console.log('isDropped', isDropped);
+
     return connectDragSource(
         <div style={{ opacity, ...style }}>
           <div className="">
               <div className="well bs-component">
                   <div className="jingle-header">
-                      <span className="text-success name-tag"> { this.props.name } </span>
+                      <span className="text-success name-tag">{isDropped ? <s>{name}</s> : name}</span>
                       <span className="id-tag pull-right"> #{ this.props.id } </span>
                   </div>
-                <div>
-                  {isDropped ? <s>{name}</s> : name}
-                </div>
 
                   { !this.state.start &&
                       <svg viewBox="0 0 140 140" onClick={ this.playSound } >

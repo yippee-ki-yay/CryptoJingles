@@ -7,8 +7,9 @@ import Placeholder from '../components/Placeholder';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 
-const jinglIdssMock = [1, 2, 3, 4, 5, 6];
+const jingleIdsMock = [1, 2, 3, 4, 5, 6];
 
 const TYPE = 'compose';
 
@@ -40,6 +41,26 @@ const getJingleSlots = () => [
   { accepts: [TYPE], lastDroppedItem: null },
 ];
 
+const SortableItem = SortableElement((props) => <Placeholder {...props} />);
+
+const SortableList = SortableContainer(({ items, onDrop, cancelDrop }) =>
+  <ul>
+    {
+      items.map(({ accepts, lastDroppedItem }, index) =>
+        <SortableItem
+          key={`item-${index}`}
+          index={index}
+          accepts={accepts}
+          lastDroppedItem={lastDroppedItem}
+          id={index}
+          onDrop={item => onDrop(index, item)}
+          cancelDrop={item => cancelDrop(index, item)}
+        />
+      )
+    }
+  </ul>
+);
+
 @DragDropContext(HTML5Backend)
 class Compose extends Component {
   constructor(props) {
@@ -52,13 +73,14 @@ class Compose extends Component {
     };
 
     this.handleDrop = this.handleDrop.bind(this);
-    this.isDropped = this.isDropped.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.isDropped = this.isDropped.bind(this);
+    this.onSortEnd = this.onSortEnd.bind(this);
   }
 
   async componentWillMount() {
     this.setState({
-      jingles: jinglIdssMock.map((jingleId) => getJingleFromJingleId(jingleId))
+      jingles: jingleIdsMock.map((jingleId) => getJingleFromJingleId(jingleId))
     })
     // we'll load all your jingles as a array of jingleIds
     // from the jingleId we can get the jingle type
@@ -87,13 +109,23 @@ class Compose extends Component {
   }
 
   handleCancel(index, { name }) {
+    let droppedBoxNames = [...this.state.droppedBoxNames];
+    const boxIndex = droppedBoxNames.findIndex((_name) => _name === name);
+    droppedBoxNames.splice(boxIndex, 1);
+
     this.setState(
       update(this.state, {
         jingleSlots: { [index]: { lastDroppedItem: { $set: null } } },
-        droppedBoxNames: name ? { $pop: [name] } : {}
+        droppedBoxNames: { $set: droppedBoxNames }
       }),
     )
   }
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+    this.setState({
+      jingleSlots: arrayMove(this.state.jingleSlots, oldIndex, newIndex),
+    });
+  };
 
   isDropped(boxName) {
     return this.state.droppedBoxNames.indexOf(boxName) > -1
@@ -109,18 +141,14 @@ class Compose extends Component {
                         <form className="form-horizontal">
                             <legend>Go on Mozart!</legend>
                             <div className="row">
-                              {
-                                this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
-                                  <Placeholder
-                                    accepts={accepts}
-                                    lastDroppedItem={lastDroppedItem}
-                                    key={index}
-                                    id={index}
-                                    onDrop={item => this.handleDrop(index, item)}
-                                    cancelDrop={item => this.handleCancel(index, item)}
-                                  />
-                                )
-                              }
+                              <SortableList
+                                axis="x"
+                                onSortEnd={this.onSortEnd}
+                                distance={ 2 }
+                                items={this.state.jingleSlots}
+                                onDrop={this.handleDrop}
+                                cancelDrop={this.handleCancel}
+                              />
 
                                <div className="col-md-2">
                                 <div className="play-btn">

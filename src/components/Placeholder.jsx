@@ -4,8 +4,9 @@ import { DropTarget } from 'react-dnd';
 import './Placeholder.css';
 
 const style = {
-  height: '12rem',
-  width: '12rem',
+  height: '16rem',
+  cursor: 'move',
+  width: '16rem',
   marginRight: '1.5rem',
   marginBottom: '1.5rem',
   color: 'white',
