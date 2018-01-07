@@ -8,6 +8,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { Sound, Group } from 'pizzicato';
 
 const jingleIdsMock = [1, 2, 3, 4, 5, 6];
 
@@ -69,13 +70,16 @@ class Compose extends Component {
     this.state = {
       jingleSlots: getJingleSlots(),
       jingles: [],
-      droppedBoxNames: []
+      droppedBoxNames: [],
+      playing: false,
+      group: null
     };
 
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.isDropped = this.isDropped.bind(this);
     this.onSortEnd = this.onSortEnd.bind(this);
+    this.startStopSong = this.startStopSong.bind(this);
   }
 
   async componentWillMount() {
@@ -131,6 +135,34 @@ class Compose extends Component {
     return this.state.droppedBoxNames.indexOf(boxName) > -1
   }
 
+  startStopSong() {
+    if (this.state.group !== null) {
+      this.state.group.stop();
+      this.setState({ playing: false, group: null });
+      return;
+    }
+
+    const selectedSongSources = this.state.jingles.filter(({ name }) =>
+      this.state.droppedBoxNames.find((selectedName) => name === selectedName)
+    ).map(({ source }) => new Promise((resolve) => {
+      const sound = new Sound(source, () => {
+        sound.loop = true;
+        resolve(sound);
+      });
+    }));
+
+    if (selectedSongSources.length !== this.state.jingleSlots.length) {
+      alert('Not enough jingls!');
+      return;
+    }
+
+    Promise.all(selectedSongSources).then((sources) => {
+      const group = new Group(sources);
+      group.play();
+      this.setState({ playing: true, group })
+    });
+  }
+
   render() {
       return (
           <div className="container">
@@ -152,7 +184,12 @@ class Compose extends Component {
 
                                <div className="col-md-2">
                                 <div className="play-btn">
-                                    <button type="button" className="btn btn-primary">Play</button>
+                                    <button
+                                      onClick={this.startStopSong}
+                                      type="button"
+                                      className="btn btn-primary">
+                                      { this.state.playing ? 'Stop' : 'Play' }
+                                    </button>
                                 </div>
                                 <div className="create-song-btn">
                                     <button type="button" className="btn btn-primary">Create song!</button>

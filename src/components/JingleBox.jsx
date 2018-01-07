@@ -65,8 +65,6 @@ class JingleBox extends Component {
     if (isDropped) style.pointerEvents = 'none';
     if (!isDropped) style.pointerEvents = 'initial';
 
-    console.log('isDropped', isDropped);
-
     return connectDragSource(
         <div style={{ opacity, ...style }}>
           <div className="">
