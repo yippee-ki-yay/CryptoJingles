@@ -1,49 +1,29 @@
 import React, { Component } from 'react';
-
-import './Compose.css';
-
-import JingleBox from '../components/JingleBox';
-import Placeholder from '../components/Placeholder';
+import JingleBox from '../components/JingleBox/JingleBox';
+import JingleSlot from '../components/JingleSlot/JingleSlot';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import { Sound, Group } from 'pizzicato';
+import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
 
-const jingleIdsMock = [1, 2, 3, 4, 5, 6];
+import './Compose.css';
 
-const TYPE = 'compose';
+/**
+ * Wrapper component for JingleSlot components
+ *
+ * @param {Object} props
+ * @returns {Function}
+ */
+const SortableItem = SortableElement((props) => <JingleSlot {...props} />);
 
-// Put some path resolver for audio source
-const getJingleFromJingleId = (jingleId) => {
- switch (jingleId) {
-   case 1:
-     return { id: jingleId, type: TYPE, name: 'Jingle', source: '../audio/s1.wav' };
-   case 2:
-     return { id: jingleId, type: TYPE, name: 'Some crazy', source: '../audio/s2.wav' };
-   case 3:
-     return { id: jingleId, type: TYPE, name: 'Yup', source: '../audio/s3.wav' };
-   case 4:
-     return { id: jingleId, type: TYPE, name: 'Give it a go', source: '../audio/s4.wav' };
-   case 5:
-     return { id: jingleId, type: TYPE, name: 'wup wup', source: '../audio/s5.wav' };
-   case 6:
-     return { id: jingleId, type: TYPE, name: 'Kek', source: '../audio/s6.wav' };
-   default:
-     return { id: 0, type: '', name: '', source: '' };
- }
-};
-
-const getJingleSlots = () => [
-  { accepts: [TYPE], lastDroppedItem: null },
-  { accepts: [TYPE], lastDroppedItem: null },
-  { accepts: [TYPE], lastDroppedItem: null },
-  { accepts: [TYPE], lastDroppedItem: null },
-  { accepts: [TYPE], lastDroppedItem: null },
-];
-
-const SortableItem = SortableElement((props) => <Placeholder {...props} />);
-
+/**
+ * Wrapper component for JingleSlot components
+ *
+ * @param {Object} params
+ * @returns {Function}
+ */
 const SortableList = SortableContainer(({ items, onDrop, cancelDrop }) =>
   <ul>
     {
@@ -69,7 +49,7 @@ class Compose extends Component {
 
     this.state = {
       jingleSlots: getJingleSlots(),
-      jingles: [],
+      jingles: getJingleIdsMock().map((jingleId) => getJingleFromJingleId(jingleId)),
       droppedBoxNames: [],
       playing: false,
       group: null
@@ -82,36 +62,27 @@ class Compose extends Component {
     this.startStopSong = this.startStopSong.bind(this);
   }
 
-  async componentWillMount() {
-    this.setState({
-      jingles: jingleIdsMock.map((jingleId) => getJingleFromJingleId(jingleId))
-    })
-    // we'll load all your jingles as a array of jingleIds
-    // from the jingleId we can get the jingle type
-
-    // [{id:232, type: 3}, {id:4343, type: 5}]
-    // type maps to the type of jingle and it' name
-    //we can extract that in the jinglebox component
-  }
-
+  /**
+   * Fires when a jingle is dropped into a JingleSlot component
+   *
+   * @param {Number} index
+   * @param {Object} item
+   */
   handleDrop(index, item) {
-    const { name } = item;
-    const droppedBoxNames = name ? { $push: [name] } : {};
-
     this.setState(
       update(this.state, {
-        jingleSlots: {
-          [index]: {
-            lastDroppedItem: {
-              $set: item,
-            },
-          },
-        },
-        droppedBoxNames,
-      }),
+        jingleSlots: { [index]: { lastDroppedItem: { $set: item, }, }, },
+        droppedBoxNames: item.name ? { $push: [item.name] } : {},
+      })
     )
   }
 
+  /**
+   * Fires when a jingle is removed from a JingleSlot component
+   *
+   * @param {Number} index
+   * @param {Object} item
+   */
   handleCancel(index, { name }) {
     let droppedBoxNames = [...this.state.droppedBoxNames];
     const boxIndex = droppedBoxNames.findIndex((_name) => _name === name);
@@ -125,16 +96,27 @@ class Compose extends Component {
     )
   }
 
+  /**
+   * Reorders JingleSlot components when the user sorts them via drag and drop
+   *
+   * @param {Object}
+   */
   onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState({
-      jingleSlots: arrayMove(this.state.jingleSlots, oldIndex, newIndex),
-    });
+    this.setState({ jingleSlots: arrayMove(this.state.jingleSlots, oldIndex, newIndex) });
   };
 
-  isDropped(boxName) {
-    return this.state.droppedBoxNames.indexOf(boxName) > -1
-  }
+  /**
+   * Checks if a jingle is inside one of the JingleSlot components
+   *
+   * @param {String} jingleName
+   * @returns {Boolean}
+   */
+  isDropped(jingleName) { return this.state.droppedBoxNames.indexOf(jingleName) > -1 }
 
+  /**
+   * Fires when the user starts or stops the composed song
+   *
+   */
   startStopSong() {
     if (this.state.group !== null) {
       this.state.group.stop();
@@ -152,7 +134,7 @@ class Compose extends Component {
     }));
 
     if (selectedSongSources.length !== this.state.jingleSlots.length) {
-      alert('Not enough jingls!');
+      alert('Not enough jingles!');
       return;
     }
 
