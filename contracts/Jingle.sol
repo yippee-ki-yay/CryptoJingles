@@ -34,10 +34,6 @@ contract Jingle is Ownable {
         Mint(_owner, numOfJingles);
     }
     
-    function isTokenOwner(uint _tokenId, address _user) public constant returns(bool) {
-        return tokensForOwner[_tokenId] == _user;
-    }
-    
     function setJingleType(uint _jingleId, uint jingleType) public onlyCryptoJingles {
         tokenType[_jingleId] = jingleType;
     }
@@ -70,6 +66,18 @@ contract Jingle is Ownable {
         
         tokensForOwner[_jingleId] = 0x0;
         
+    }
+    
+    function getJinglesForOwner(address _owner) public constant returns (uint[]) {
+        return tokensOwned[_owner];
+    }
+    
+    function getTokenType(uint _jingleId) public constant returns (uint) {
+        return tokenType[_jingleId];
+    }
+    
+    function isTokenOwner(uint _tokenId, address _user) public constant returns(bool) {
+        return tokensForOwner[_tokenId] == _user;
     }
     
      // Owner functions 

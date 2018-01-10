@@ -89,6 +89,8 @@ class Home extends Component {
 
       const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum - 1, {from: account});
 
+      console.log(res);
+
     } catch(err) {
       console.log(err);
     }
