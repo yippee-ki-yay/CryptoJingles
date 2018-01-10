@@ -73,7 +73,7 @@ contract Jingle is Ownable {
     }
     
      // Owner functions 
-    function setCryptoJinglesContract(address _cryptoJingles) public {
+    function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
         cryptoJingles = _cryptoJingles;
     }
 }

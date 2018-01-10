@@ -35,7 +35,7 @@ contract Song is Ownable, ERC721 {
         require(tokensForOwner[_songId] != 0x0);
         require(tokensForOwner[_songId] == msg.sender);
         
-        removeSong(_to, _songId);
+        removeSong(msg.sender, _songId);
         addSong(_to, _songId);
         
         Approval(msg.sender, 0, _songId);
@@ -130,7 +130,7 @@ contract Song is Ownable, ERC721 {
     }
     
     // Owner functions 
-    function setCryptoJinglesContract(address _cryptoJingles) public {
+    function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
         cryptoJingles = _cryptoJingles;
     }
 }
