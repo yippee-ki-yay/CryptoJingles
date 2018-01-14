@@ -1,0 +1,49 @@
+.marketplace-wrapper {
+    background: white;
+    display: flex;
+    height: calc(100vh - 225px);
+    overflow: hidden;
+}
+
+.marketplace-play-wrapper {
+    height: 175px;
+    font-size: 40px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.marketplace-wrapper .songs-wrapper {
+    padding: 10px;
+    width: 100%;
+    justify-content: space-evenly;
+    display: flex;
+    flex-wrap: wrap;
+    height: calc(100vh - 272px);
+    overflow-y: auto;
+}
+
+.songs-count {
+    margin: 20px 0 5px 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.single-song {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.single-song img {
+    width: 200px;
+    height: 200px;
+}
+
+
+.marketplace-wrapper .sidebar {
+    border-right: 1px solid #ECECEC;
+    color: black;
+    background: #F2F2F2;
+    padding: 20px;
+}
