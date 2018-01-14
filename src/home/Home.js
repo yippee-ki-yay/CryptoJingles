@@ -87,7 +87,7 @@ class Home extends Component {
       const purchaseNum = this.state.purchaseNum;
       const account = this.state.accounts[0];
 
-      const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum - 1, {from: account});
+      const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum, {from: account});
 
       console.log(res);
 

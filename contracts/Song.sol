@@ -19,7 +19,9 @@ contract Song is Ownable, ERC721 {
     string public name;
     string public symbol;
     
-    event Mint(address indexed _to, uint256 indexed _tokenId);
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+    event Composed(uint indexed songId, address indexed owner, uint[5] jingles);
     
     modifier onlyCryptoJingles() {
         require(msg.sender == cryptoJingles);
@@ -31,6 +33,7 @@ contract Song is Ownable, ERC721 {
         symbol = "CST";
     }
     
+    //TODO: clear
     function transfer(address _to, uint256 _songId) public {
         require(tokensForOwner[_songId] != 0x0);
         require(tokensForOwner[_songId] == msg.sender);
@@ -82,10 +85,18 @@ contract Song is Ownable, ERC721 {
         return tokensOwned[_owner].length;
     }
     
+    function ownerOf(uint256 _songId) public view returns (address) {
+        return tokensForOwner[_songId];
+    }
+    
     function tokenOfOwnerByIndex(address _owner, uint256 _index) external view returns (uint256) {
         return tokensOwned[_owner][_index];
     }
     
+    function getJinglesForSong(uint _songId) external view returns(uint[]) {
+        return jinglesInSong[_songId];
+    }
+     
     function composeSong(address _owner, uint[5] jingles) public onlyCryptoJingles {
         
         uint _songId = numOfSongs;
@@ -97,6 +108,8 @@ contract Song is Ownable, ERC721 {
         jinglesInSong[_songId] = jingles;
         
         tokenPosInArr[_songId] = tokensOwned[_owner].length - 1;
+        
+        Composed(numOfSongs, _owner, jingles);
         
         numOfSongs++;
     }

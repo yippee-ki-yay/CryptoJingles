@@ -27,11 +27,11 @@ contract Jingle is Ownable {
     
     function mint(address _owner, uint _jingleType) public onlyCryptoJingles {
         
-        addJingle(_owner, _jingleType, numOfJingles + 1);
-        
-        numOfJingles++;
+        addJingle(_owner, _jingleType, numOfJingles);
         
         Mint(_owner, numOfJingles);
+        
+        numOfJingles++;
     }
     
     function setJingleType(uint _jingleId, uint jingleType) public onlyCryptoJingles {

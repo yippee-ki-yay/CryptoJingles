@@ -38,7 +38,7 @@ class MyJingles extends Component {
 
         const jinglesIntance = await jinglesContract.at(JingleAddress);
 
-        const jingles = await jinglesIntance.getJinglesForOwner(accounts[0], accounts[0]);
+        const jingles = await jinglesIntance.getJinglesForOwner(accounts[0]);
 
         console.log(jingles);
 
