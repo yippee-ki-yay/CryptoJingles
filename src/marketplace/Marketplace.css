@@ -31,15 +31,47 @@
 
 .single-song {
     display: flex;
+    position:relative;
     flex-direction: column;
+    width: 200px;
     margin: 5px;
 }
 
 .single-song img {
-    width: 200px;
+    position: relative;
+    z-index: 9;
     height: 200px;
+    width:100%;
+    vertical-align:top;
 }
 
+.single-song .overlay {
+    position: absolute;
+    transition: 0.2s ease-in;
+    display: flex;
+    visibility: hidden;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    height: 200px;
+    width:100%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.overlay .play, .overlay .open {
+    color: white;
+    cursor: pointer;
+    font-size: 45px;
+}
+
+.single-song img:hover + .overlay, .single-song .overlay:hover {
+    visibility: visible;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/*img:after*/
+/*opacity: 1;*/
 
 .marketplace-wrapper .sidebar {
     border-right: 1px solid #ECECEC;

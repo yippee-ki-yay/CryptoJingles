@@ -1,4 +1,4 @@
-import { COMPOSE } from './constants/types';
+import { COMPOSE } from './constants/sampleTypes';
 
 export const getJingleIdsMock = () => [1, 2, 3, 4, 5, 6];
 
@@ -47,19 +47,19 @@ export const getJingleSlots = () => [
 ];
 
 export const getSongs = () => [
-  { id: 0, author: 'Saban Saulic', name: 'OFFICIAL', imageSrc: img0 },
-  { id: 1, author: 'Ceca', name: 'Beograd', imageSrc: img1 },
-  { id: 2, author: 'Jaguar', name: 'BOG', imageSrc: img2 },
-  { id: 3, author: 'Lil pump', name: 'Gucci Gang', imageSrc: img3 },
-  { id: 4, author: 'Kendric Lamar', name: 'Humble', imageSrc: img4 },
-  { id: 5, author: 'Zdravko Colic', name: 'Hotel', imageSrc: img5 },
-  { id: 6, author: 'Red Hot Chilly Peppers', name: 'Californication', imageSrc: img6 },
-  { id: 7, author: 'Vlado Georgiev', name: 'Hej ti', imageSrc: img7 },
-  { id: 8, author: 'Aca Lukas', name: 'Licna karta', imageSrc: img8 },
-  { id: 9, author: 'Halid Beslic', name: 'Miljacka', imageSrc: img9 },
-  { id: 10, author: 'Drake', name: 'Started From The Bottom', imageSrc: img10 },
-  { id: 11, author: 'Metallica', name: 'Enter Sandman', imageSrc: img11 },
-  { id: 12, author: 'Gorillaz', name: 'Stylo', imageSrc: img12 },
-  { id: 13, author: 'Deep Purple', name: 'Smoke on the watter', imageSrc: img13 },
-  { id: 14, author: 'Djani', name: 'Sve mi tvoje nedostaje', imageSrc: img14 },
+  { id: 0, source: '../audio/cat.wav', author: 'Saban Saulic', name: 'OFFICIAL', imageSrc: img0 },
+  { id: 1, source: '../audio/cat.wav', author: 'Ceca', name: 'Beograd', imageSrc: img1 },
+  { id: 2, source: '../audio/cat.wav', author: 'Jaguar', name: 'BOG', imageSrc: img2 },
+  { id: 3, source: '../audio/cat.wav', author: 'Lil pump', name: 'Gucci Gang', imageSrc: img3 },
+  { id: 4, source: '../audio/cat.wav', author: 'Kendric Lamar', name: 'Humble', imageSrc: img4 },
+  { id: 5, source: '../audio/cat.wav', author: 'Zdravko Colic', name: 'Hotel', imageSrc: img5 },
+  { id: 6, source: '../audio/cat.wav', author: 'Red Hot Chilly Peppers', name: 'Californication', imageSrc: img6 },
+  { id: 7, source: '../audio/cat.wav', author: 'Vlado Georgiev', name: 'Hej ti', imageSrc: img7 },
+  { id: 8, source: '../audio/cat.wav', author: 'Aca Lukas', name: 'Licna karta', imageSrc: img8 },
+  { id: 9, source: '../audio/cat.wav', author: 'Halid Beslic', name: 'Miljacka', imageSrc: img9 },
+  { id: 10, source: '../audio/cat.wav', author: 'Drake', name: 'Started From The Bottom', imageSrc: img10 },
+  { id: 11, source: '../audio/cat.wav', author: 'Metallica', name: 'Enter Sandman', imageSrc: img11 },
+  { id: 12, source: '../audio/cat.wav', author: 'Gorillaz', name: 'Stylo', imageSrc: img12 },
+  { id: 13, source: '../audio/cat.wav', author: 'Deep Purple', name: 'Smoke on the watter', imageSrc: img13 },
+  { id: 14, source: '../audio/cat.wav', author: 'Djani', name: 'Sve mi tvoje nedostaje', imageSrc: img14 },
 ];
