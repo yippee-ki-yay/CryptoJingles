@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
 import { marketplacePlaySong } from '../actions/marketplaceActions';
 import Audio from '../components/Audio/react-audioplayer';
+import { Link } from 'react-router';
 
 import './Marketplace.css';
 
@@ -61,7 +62,9 @@ class Marketplace extends Component {
                           >
                             play_circle_outline
                           </i>
-                          <i className="material-icons open">open_in_new</i>
+                          <Link to={`/song/${id}`}>
+                            <i className="material-icons open">open_in_new</i>
+                          </Link>
                         </div>
 
                         #{ id }
