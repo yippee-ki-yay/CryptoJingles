@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
 import { marketplacePlaySong } from '../actions/marketplaceActions';
-import Audio from 'react-audioplayer';
+import Audio from '../components/Audio/react-audioplayer';
 
 import './Marketplace.css';
 
@@ -25,8 +25,7 @@ class Marketplace extends Component {
               {
                 currentSong &&
                 <Audio
-                  width={600}
-                  height={300}
+                  height={200}
                   autoPlay={false}
                   playlist={currentSong}
                   fullPlayer={true}
