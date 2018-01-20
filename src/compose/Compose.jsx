@@ -7,6 +7,14 @@ import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import { Sound, Group } from 'pizzicato';
 import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
+import getWeb3 from '../util/web3/getWeb3';
+import contract from 'truffle-contract';
+import Jingle from '../../build/contracts/Jingle.json';
+
+import '../util/config';
+import { JingleAddress } from '../util/config';
+
+import { getJingleMetadata } from '../getMockData';
 
 import './Compose.css';
 
@@ -49,10 +57,10 @@ class Compose extends Component {
 
     this.state = {
       jingleSlots: getJingleSlots(),
-      jingles: getJingleIdsMock().map((jingleId) => getJingleFromJingleId(jingleId)),
       droppedBoxNames: [],
       playing: false,
-      group: null
+      group: null,
+      myJingles: []
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -60,6 +68,55 @@ class Compose extends Component {
     this.isDropped = this.isDropped.bind(this);
     this.onSortEnd = this.onSortEnd.bind(this);
     this.startStopSong = this.startStopSong.bind(this);
+  }
+
+  componentWillMount() {
+
+    getWeb3
+    .then(async (results) => {
+      const web3 = results.payload.web3Instance;
+
+      web3.eth.getAccounts(async (error, accounts) => {
+
+         //setup contracts
+        const jinglesContract = contract(Jingle);
+        jinglesContract.setProvider(web3.currentProvider);
+
+        const jinglesInstance = await jinglesContract.at(JingleAddress);
+
+        const jingles = await jinglesInstance.getAllJinglesForOwner(accounts[0]);
+
+        const myJingles = this.parseJingles(jingles);
+
+        this.setState({
+          accounts,
+          web3,
+          jinglesInstance,
+          myJingles
+        });
+
+      });
+    });
+
+  }
+
+  parseJingles = (jingles) => {
+
+    let myJingles = [];
+
+    for (let i = 0; i < jingles.length; i += 2) {
+      const id = jingles[i].valueOf()
+      const jingleType = jingles[i + 1].valueOf();
+
+      myJingles.push({
+        id,
+        jingleType,
+        ...getJingleMetadata(jingleType)
+      });
+    }
+
+    return myJingles;
+
   }
 
   /**
@@ -124,7 +181,7 @@ class Compose extends Component {
       return;
     }
 
-    const selectedSongSources = this.state.jingles.filter(({ name }) =>
+    const selectedSongSources = this.state.myJingles.filter(({ name }) =>
       this.state.droppedBoxNames.find((selectedName) => name === selectedName)
     ).map(({ source }) => new Promise((resolve) => {
       const sound = new Sound(source, () => {
@@ -133,7 +190,9 @@ class Compose extends Component {
       });
     }));
 
-    if (selectedSongSources.length !== this.state.jingleSlots.length) {
+    console.log(selectedSongSources);
+
+    if (selectedSongSources.length < this.state.jingleSlots.length) {
       alert('Not enough jingles!');
       return;
     }
@@ -184,7 +243,7 @@ class Compose extends Component {
             </div>
 
             {
-              (this.state.jingles.length === 0) &&
+              (this.state.myJingles.length === 0) &&
               <div>
                 <h1>You do not own any Jingls yet!</h1>
                 <hr />
@@ -196,14 +255,14 @@ class Compose extends Component {
             }
 
             {
-              (this.state.jingles.length > 0) &&
+              (this.state.myJingles.length > 0) &&
               <div>
                 <h1>Available Jingls!</h1>
                 <hr />
 
                 <div className="row">
                   {
-                    this.state.jingles.map((jingle) => (
+                    this.state.myJingles.map((jingle) => (
                       <JingleBox
                         key={jingle.id}
                         isDropped={this.isDropped(jingle.name)}

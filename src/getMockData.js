@@ -18,6 +18,54 @@ import img12 from './mockImages/render_12.png';
 import img13 from './mockImages/render_13.png';
 import img14 from './mockImages/render_14.png';
 
+export const getJingleMetadata = (jingleType) => {
+  switch (parseInt(jingleType)) {
+    case 1:
+      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+    case 2:
+      return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
+    case 3:
+      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+    case 4:
+      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+    case 5:
+      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+    case 6:
+      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };
+    case 7:
+      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+    case 8:
+      return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
+    case 9:
+      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+    case 10:
+      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+    case 11:
+      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+    case 12:
+      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };case 1:
+      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+    case 13:
+      return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
+    case 14:
+      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+    case 15:
+      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+    case 16:
+      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+    case 17:
+      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };
+    case 18:
+      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+    case 19:
+      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+    case 20:
+      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+    default:
+      return { type: COMPOSE, name: '', source: '' };
+  }
+}
+
 // Put some path resolver for audio source
 export const getJingleFromJingleId = (jingleId) => {
   switch (jingleId) {
