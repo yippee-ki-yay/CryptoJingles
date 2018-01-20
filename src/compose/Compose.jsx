@@ -9,10 +9,12 @@ import { Sound, Group } from 'pizzicato';
 import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
 import contract from 'truffle-contract';
+
 import Jingle from '../../build/contracts/Jingle.json';
+import CryptoJingles from '../../build/contracts/CryptoJingles.json';
 
 import '../util/config';
-import { JingleAddress } from '../util/config';
+import { JingleAddress, CryptoJinglesAddress } from '../util/config';
 
 import { getJingleMetadata } from '../getMockData';
 
@@ -60,7 +62,11 @@ class Compose extends Component {
       droppedBoxNames: [],
       playing: false,
       group: null,
-      myJingles: []
+      myJingles: [],
+      jinglesInstance: null,
+      cryptoJinglesInstance: null,
+      accounts: [],
+      web3: null
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -82,7 +88,11 @@ class Compose extends Component {
         const jinglesContract = contract(Jingle);
         jinglesContract.setProvider(web3.currentProvider);
 
+        const cryptoJinglesContract = contract(CryptoJingles);
+        cryptoJinglesContract.setProvider(web3.currentProvider);
+
         const jinglesInstance = await jinglesContract.at(JingleAddress);
+        const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
 
         const jingles = await jinglesInstance.getAllJinglesForOwner(accounts[0]);
 
@@ -92,7 +102,8 @@ class Compose extends Component {
           accounts,
           web3,
           jinglesInstance,
-          myJingles
+          myJingles,
+          cryptoJinglesInstance
         });
 
       });
@@ -190,8 +201,6 @@ class Compose extends Component {
       });
     }));
 
-    console.log(selectedSongSources);
-
     if (selectedSongSources.length < this.state.jingleSlots.length) {
       alert('Not enough jingles!');
       return;
@@ -202,6 +211,23 @@ class Compose extends Component {
       group.play();
       this.setState({ playing: true, group })
     });
+  }
+
+  createSong = async () => {
+    try {
+
+      //TODO: grab selected ids, this is just for testing
+      const wut = this.state.myJingles.slice(0, 5).map(j => parseInt(j.id));
+
+      console.log(wut);
+
+      const res = await this.state.cryptoJinglesInstance.composeSong(wut, { from: this.state.accounts[0] });
+
+      console.log(res);
+
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -233,7 +259,7 @@ class Compose extends Component {
                                     </button>
                                 </div>
                                 <div className="create-song-btn">
-                                    <button type="button" className="btn btn-primary">Create song!</button>
+                                    <button type="button" className="btn btn-primary" onClick={ this.createSong } >Create song!</button>
                                 </div>
                                </div>
                             </div>
