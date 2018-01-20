@@ -17,7 +17,8 @@ class MyJingles extends Component {
     this.state = {
       accounts: [],
       web3: null,
-      jinglesIntance: null
+      jinglesIntance: null,
+      myJingles: []
     };
 
   }
@@ -38,14 +39,15 @@ class MyJingles extends Component {
 
         const jinglesIntance = await jinglesContract.at(JingleAddress);
 
-        const jingles = await jinglesIntance.getJinglesForOwner(accounts[0]);
+        const jingles = await jinglesIntance.getAllJinglesForOwner(accounts[0]);
 
-        console.log(jingles);
+        const myJingles = this.parseJingles(jingles);
 
         this.setState({
           accounts,
           web3,
           jinglesIntance,
+          myJingles
         });
 
       });
@@ -53,10 +55,33 @@ class MyJingles extends Component {
 
   }
 
+  parseJingles = (jingles) => {
+
+    let myJingles = [];
+
+    for (let i = 0; i < jingles.length; i += 2) {
+      myJingles.push({
+        id: jingles[i].valueOf(),
+        type: jingles[i + 1].valueOf()
+      });
+    }
+
+    return myJingles;
+
+  }
+
   render() {
       return (
           <div>
-            My jingles
+            My jingles : { 
+              this.state.myJingles.map(jingle =>
+                <div key={ jingle.id }>
+                  <span> Jingle id: { jingle.id } </span>
+                  <span> Jingle type: { jingle.type } </span>
+                </div>
+              )
+
+             }
           </div>
       )
   }

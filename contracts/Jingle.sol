@@ -80,6 +80,19 @@ contract Jingle is Ownable {
         return tokensForOwner[_tokenId] == _user;
     }
     
+    function getAllJinglesForOwner(address _owner) public constant returns(uint[]) {
+        uint[] memory jingles = tokensOwned[_owner];
+        
+        uint[] memory usersJingles = new uint[](jingles.length*2);
+        
+        for(uint i = 0; i < jingles.length; i += 2) {
+            usersJingles[i] = jingles[i];
+            usersJingles[i + 1] = tokenType[jingles[i]];
+        }
+        
+        return usersJingles;
+    }
+    
      // Owner functions 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
         cryptoJingles = _cryptoJingles;
