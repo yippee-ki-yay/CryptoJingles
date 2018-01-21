@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import JingleBox from '../components/JingleBox/JingleBox';
-import JingleSlot from '../components/JingleSlot/JingleSlot';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import contract from 'truffle-contract';
 import { Sound, Group } from 'pizzicato';
 import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
-import contract from 'truffle-contract';
+import BoxLoader from '../components/Decorative/BoxLoader';
+import JingleBox from '../components/JingleBox/JingleBox';
+import JingleSlot from '../components/JingleSlot/JingleSlot';
 
 import Jingle from '../../build/contracts/Jingle.json';
 import CryptoJingles from '../../build/contracts/CryptoJingles.json';
@@ -58,6 +59,7 @@ class Compose extends Component {
     super(props);
 
     this.state = {
+      loading: true,
       jingleSlots: getJingleSlots(),
       droppedBoxNames: [],
       playing: false,
@@ -103,7 +105,8 @@ class Compose extends Component {
           web3,
           jinglesInstance,
           myJingles,
-          cryptoJinglesInstance
+          cryptoJinglesInstance,
+          loading: false
         });
 
       });
@@ -269,7 +272,15 @@ class Compose extends Component {
             </div>
 
             {
+              this.state.loading &&
+              <div className="loader-wrapper">
+                <BoxLoader />
+              </div>
+            }
+
+            {
               (this.state.myJingles.length === 0) &&
+              !this.state.loading &&
               <div>
                 <h1>You do not own any Jingls yet!</h1>
                 <hr />
@@ -282,6 +293,7 @@ class Compose extends Component {
 
             {
               (this.state.myJingles.length > 0) &&
+              !this.state.loading &&
               <div>
                 <h1>Available Jingls!</h1>
                 <hr />
