@@ -17,9 +17,9 @@ contract CryptoJingles is Ownable {
     event Purchased(address indexed user, uint blockNumber, uint numJingles, uint numOfPurchases);
     event JinglesOpened(address byWhom, address jingleOwner, uint currBlockNumber);
     
-    mapping (uint => Purchase) jinglePurchase;
+    mapping (uint => Purchase) public jinglePurchase;
     
-    mapping (uint => bool) isAlreadyUsed;
+    mapping (uint => bool) public isAlreadyUsed;
     
     uint numOfPurchases;
     
@@ -39,9 +39,13 @@ contract CryptoJingles is Ownable {
         ownerBalance = 0;
         jingleContract = Jingle(_jingle);
         songContract = Song(_song);
+        // jingleContract = new Jingle();
+        // songContract = new Song();
+        
+        // jingleContract.setCryptoJinglesContract(this);
+        // songContract.setCryptoJinglesContract(this);
     }
     
-    //NOTICE: update num after
     function buyJingle(uint numJingles) public payable {
         require(numJingles <= MAX_JINGLES_PER_PURCHASE);
         require(msg.value >= (JINGLE_PRICE * numJingles));
@@ -54,15 +58,14 @@ contract CryptoJingles is Ownable {
            exists: true
         });
         
-        numOfPurchases++;
-        
         ownerBalance += msg.value - REWARD_FOR_OPEN;
         
         Purchased(msg.sender, block.number, numJingles, numOfPurchases);
+        
+        numOfPurchases++;
     }
     
-    //TODO: check the exact number of blocks
-    //NOTICE: make it so a user is not able to open at the same block as bought
+    //TODO: check the exact number of blocks 
     function openJingles(uint purchaseId) public {
         require(jinglePurchase[purchaseId].exists == true);
         require(jinglePurchase[purchaseId].revealed == false);
@@ -91,7 +94,7 @@ contract CryptoJingles is Ownable {
         for (uint i = 0; i < JINGLES_PER_SONG; ++i) {
             bool isOwner = jingleContract.isTokenOwner(jingles[i], msg.sender);
             
-            assert(isOwner == false || isAlreadyUsed[jingles[i]] == true);
+            require(isOwner == true && isAlreadyUsed[jingles[i]] == false);
             
             isAlreadyUsed[jingles[i]] = true;
         }
