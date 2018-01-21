@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import "./Home.css";
 
@@ -10,6 +11,7 @@ import CryptoJingles from '../../build/contracts/CryptoJingles.json';
 
 import '../util/config';
 import { CryptoJinglesAddress, JINGLE_PRICE } from '../util/config';
+import { addPendingTx, removePendingTx } from '../actions/appActions';
 
 class Home extends Component {
 
@@ -55,12 +57,18 @@ class Home extends Component {
       const numJingles = this.state.numJingles;
       const account = this.state.accounts[0];
 
+      const id = Math.floor(Math.random() * 6) + 1;
+      this.props.addPendingTx(id, 'Buy sample');
+
       const res = await this.state.cryptoJinglesIntance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * JINGLE_PRICE});
+
+      this.props.removePendingTx(id);
 
       // this.state.cryptoJinglesIntance.Purchased((err, res) => {
       //   console.log(err, res);
       // });
 
+      console.log(res);
       console.log(res.logs[0].args);
 
       const purchaseNum = res.logs[0].args.numOfPurchases.valueOf();
@@ -83,7 +91,13 @@ class Home extends Component {
       const purchaseNum = this.state.purchaseNum;
       const account = this.state.accounts[0];
 
+      const id = Math.floor(Math.random() * 6) + 1;
+      this.props.addPendingTx(id, 'Open sample pack');
+
       const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum, {from: account});
+
+
+      this.props.removePendingTx(id);
 
       console.log(res);
 
@@ -151,6 +165,6 @@ class Home extends Component {
       </div>
     )
   }
-};
+}
 
-export default Home;
+export default connect(null, { addPendingTx, removePendingTx })(Home);
