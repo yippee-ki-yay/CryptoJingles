@@ -1,6 +1,10 @@
 build/
 build_webpack/
 
+.env
+opener/.env
+opener/node_modules
+
 # Logs
 logs
 *.log
