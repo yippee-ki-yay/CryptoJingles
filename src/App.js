@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
 
 // Styles
 import './css/bootstrap.min.css';
@@ -22,7 +23,7 @@ class App extends Component {
               </button>
             </div>
             <div className="navbar-collapse collapse" id="navbar-main">
-              <ul className="nav navbar-nav">
+              <ul className="nav navbar-nav navbar-left">
                 
                 <li>
                   <a href="/compose">Compose</a>
@@ -38,6 +39,9 @@ class App extends Component {
                 </li>
               </ul>
 
+              <div className="nav navbar-nav navbar-right">
+                <PendingTxDropdown />
+              </div>
             </div>
           </div>
         </div>
