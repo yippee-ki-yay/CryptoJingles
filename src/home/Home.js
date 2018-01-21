@@ -58,12 +58,11 @@ class Home extends Component {
       const account = this.state.accounts[0];
 
       const id = Math.floor(Math.random() * 6) + 1;
-
       this.props.addPendingTx(id, 'Buy sample');
 
       const res = await this.state.cryptoJinglesIntance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * JINGLE_PRICE});
 
-      this.props.removePendingTx(id, 'Buy sample');
+      this.props.removePendingTx(id);
 
       // this.state.cryptoJinglesIntance.Purchased((err, res) => {
       //   console.log(err, res);
@@ -92,7 +91,13 @@ class Home extends Component {
       const purchaseNum = this.state.purchaseNum;
       const account = this.state.accounts[0];
 
+      const id = Math.floor(Math.random() * 6) + 1;
+      this.props.addPendingTx(id, 'Open sample pack');
+
       const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum, {from: account});
+
+
+      this.props.removePendingTx(id);
 
       console.log(res);
 
