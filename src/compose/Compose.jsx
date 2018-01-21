@@ -3,21 +3,15 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
-import contract from 'truffle-contract';
 import { Sound, Group } from 'pizzicato';
 import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
+import { getJingles } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import JingleBox from '../components/JingleBox/JingleBox';
 import JingleSlot from '../components/JingleSlot/JingleSlot';
 
-import Jingle from '../../build/contracts/Jingle.json';
-import CryptoJingles from '../../build/contracts/CryptoJingles.json';
-
 import '../util/config';
-import { JingleAddress, CryptoJinglesAddress } from '../util/config';
-
-import { getJingleMetadata } from '../getMockData';
 
 import './Compose.css';
 
@@ -78,58 +72,11 @@ class Compose extends Component {
     this.startStopSong = this.startStopSong.bind(this);
   }
 
-  componentWillMount() {
-
-    getWeb3
-    .then(async (results) => {
-      const web3 = results.payload.web3Instance;
-
-      web3.eth.getAccounts(async (error, accounts) => {
-
-         //setup contracts
-        const jinglesContract = contract(Jingle);
-        jinglesContract.setProvider(web3.currentProvider);
-
-        const cryptoJinglesContract = contract(CryptoJingles);
-        cryptoJinglesContract.setProvider(web3.currentProvider);
-
-        const jinglesInstance = await jinglesContract.at(JingleAddress);
-        const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
-
-        const jingles = await jinglesInstance.getAllJinglesForOwner(accounts[0]);
-
-        const myJingles = this.parseJingles(jingles);
-
-        this.setState({
-          accounts,
-          web3,
-          jinglesInstance,
-          myJingles,
-          cryptoJinglesInstance,
-          loading: false
-        });
-
-      });
-    });
-
+  async componentWillMount() {
+    const results = await getWeb3();
+    const jinglesData = await getJingles(results.payload.web3Instance);
+    this.setState({ ...jinglesData, loading: false });
   }
-
-  parseJingles = (jingles) => {
-    let myJingles = [];
-
-    for (let i = 0; i < jingles.length; i += 2) {
-      const id = jingles[i].valueOf();
-      const jingleType = jingles[i + 1].valueOf();
-
-      myJingles.push({
-        id,
-        jingleType,
-        ...getJingleMetadata(jingleType)
-      });
-    }
-
-    return myJingles;
-  };
 
   /**
    * Fires when a jingle is dropped into a JingleSlot component
@@ -138,7 +85,6 @@ class Compose extends Component {
    * @param {Object} item
    */
   handleDrop(index, item) {
-    console.log('iten', item);
     this.setState(
       update(this.state, {
         jingleSlots: { [index]: { lastDroppedItem: { $set: item, }, }, },
@@ -307,6 +253,7 @@ class Compose extends Component {
                   {
                     this.state.myJingles.map((jingle) => (
                       <JingleBox
+                        draggable
                         key={jingle.id}
                         isDropped={this.isDropped(jingle.id)}
                         {...jingle}

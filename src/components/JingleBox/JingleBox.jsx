@@ -10,7 +10,7 @@ const boxSource = { beginDrag(props) { return { name: props.name, id: props.id }
 
 const style = {
   marginRight: '1.5rem',
-  width: '150px',
+    width: '150px',
   marginBottom: '1.5rem',
   cursor: 'move',
   float: 'left',
