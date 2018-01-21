@@ -218,12 +218,18 @@ class Compose extends Component {
   createSong = async () => {
     try {
 
-      //TODO: grab selected ids, this is just for testing
-      const wut = this.state.myJingles.slice(0, 5).map(j => parseInt(j.id));
+      const selectedSongSources = this.state.myJingles.filter(({ id }) =>
+        this.state.droppedBoxIds.find((selectedId) => id === selectedId)
+      );
 
-      console.log(wut);
+      const jingleIds = selectedSongSources.map(s => parseInt(s.id));
 
-      const res = await this.state.cryptoJinglesInstance.composeSong(wut, { from: this.state.accounts[0] });
+      if (jingleIds.length !== 5) {
+        alert('Must b 5 jingles m8!');
+        return;
+      }
+
+      const res = await this.state.cryptoJinglesInstance.composeSong(jingleIds, { from: this.state.accounts[0] });
 
       console.log(res);
 

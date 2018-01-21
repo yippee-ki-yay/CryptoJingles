@@ -20,6 +20,8 @@ import img14 from './mockImages/render_14.png';
 
 export const getJingleMetadata = (jingleType) => {
   switch (parseInt(jingleType)) {
+    case 0:
+      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
     case 1:
       return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
     case 2:
@@ -43,8 +45,7 @@ export const getJingleMetadata = (jingleType) => {
     case 11:
       return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
     case 12:
-      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };case 1:
-      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };
     case 13:
       return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
     case 14:

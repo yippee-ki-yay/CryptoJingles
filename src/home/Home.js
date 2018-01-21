@@ -59,7 +59,7 @@ class Home extends Component {
       const numJingles = this.state.numJingles;
       const account = this.state.accounts[0];
 
-      const res = await this.state.cryptoJinglesIntance.buyJingle(numJingles, {from: account, value: numJingles * JINGLE_PRICE});
+      const res = await this.state.cryptoJinglesIntance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * JINGLE_PRICE});
 
       // this.state.cryptoJinglesIntance.Purchased((err, res) => {
       //   console.log(err, res);
