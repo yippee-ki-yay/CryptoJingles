@@ -12,7 +12,6 @@ const style = {
   color: 'white',
   padding: '1rem',
   textAlign: 'center',
-  fontSize: '1rem',
   lineHeight: 'normal',
   float: 'left',
 };
@@ -32,7 +31,7 @@ class JingleSlot extends Component {
   }
 
   render() {
-    const { accepts, isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop } = this.props;
+    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop } = this.props;
 
     const isActive = isOver && canDrop;
 
@@ -45,12 +44,12 @@ class JingleSlot extends Component {
     }
 
     return connectDropTarget(
-      <div style={{ ...style, backgroundColor }} className="">
-        { lastDroppedItem && <div onClick={cancelDrop}>Reset X</div> }
+      <div className="jingle-slot" style={{ ...style, backgroundColor }}>
+        { lastDroppedItem && <div className="cancel-btn" onClick={cancelDrop}>x</div> }
 
-        { isActive ? 'Release to drop' : `This dustbin accepts: ${accepts.join(', ')}` }
+        { !lastDroppedItem && 'Drop sound sample here'  }
 
-        { lastDroppedItem && (<p>Last dropped: {JSON.stringify(lastDroppedItem)}</p>) }
+        { lastDroppedItem && (<p>{lastDroppedItem.name} (#{lastDroppedItem.id})</p>) }
       </div>
     );
   }
