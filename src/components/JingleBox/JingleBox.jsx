@@ -6,7 +6,7 @@ import StopIcon from '../Decorative/StopIcon';
 
 import './JingleBox.css';
 
-const boxSource = { beginDrag(props) { return { name: props.name }} };
+const boxSource = { beginDrag(props) { return { name: props.name, id: props.id }} };
 
 const style = {
   marginRight: '1.5rem',

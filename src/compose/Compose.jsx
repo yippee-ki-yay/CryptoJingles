@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import JingleBox from '../components/JingleBox/JingleBox';
-import JingleSlot from '../components/JingleSlot/JingleSlot';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import contract from 'truffle-contract';
 import { Sound, Group } from 'pizzicato';
 import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
-import contract from 'truffle-contract';
+import BoxLoader from '../components/Decorative/BoxLoader';
+import JingleBox from '../components/JingleBox/JingleBox';
+import JingleSlot from '../components/JingleSlot/JingleSlot';
 
 import Jingle from '../../build/contracts/Jingle.json';
 import CryptoJingles from '../../build/contracts/CryptoJingles.json';
@@ -58,8 +59,9 @@ class Compose extends Component {
     super(props);
 
     this.state = {
+      loading: true,
       jingleSlots: getJingleSlots(),
-      droppedBoxNames: [],
+      droppedBoxIds: [],
       playing: false,
       group: null,
       myJingles: [],
@@ -103,7 +105,8 @@ class Compose extends Component {
           web3,
           jinglesInstance,
           myJingles,
-          cryptoJinglesInstance
+          cryptoJinglesInstance,
+          loading: false
         });
 
       });
@@ -112,11 +115,10 @@ class Compose extends Component {
   }
 
   parseJingles = (jingles) => {
-
     let myJingles = [];
 
     for (let i = 0; i < jingles.length; i += 2) {
-      const id = jingles[i].valueOf()
+      const id = jingles[i].valueOf();
       const jingleType = jingles[i + 1].valueOf();
 
       myJingles.push({
@@ -127,8 +129,7 @@ class Compose extends Component {
     }
 
     return myJingles;
-
-  }
+  };
 
   /**
    * Fires when a jingle is dropped into a JingleSlot component
@@ -137,10 +138,11 @@ class Compose extends Component {
    * @param {Object} item
    */
   handleDrop(index, item) {
+    console.log('iten', item);
     this.setState(
       update(this.state, {
         jingleSlots: { [index]: { lastDroppedItem: { $set: item, }, }, },
-        droppedBoxNames: item.name ? { $push: [item.name] } : {},
+        droppedBoxIds: item.id ? { $push: [item.id] } : {},
       })
     )
   }
@@ -151,15 +153,15 @@ class Compose extends Component {
    * @param {Number} index
    * @param {Object} item
    */
-  handleCancel(index, { name }) {
-    let droppedBoxNames = [...this.state.droppedBoxNames];
-    const boxIndex = droppedBoxNames.findIndex((_name) => _name === name);
-    droppedBoxNames.splice(boxIndex, 1);
+  handleCancel(index, { id }) {
+    let droppedBoxIds = [...this.state.droppedBoxIds];
+    const boxIndex = droppedBoxIds.findIndex((_id) => _id === id);
+    droppedBoxIds.splice(boxIndex, 1);
 
     this.setState(
       update(this.state, {
         jingleSlots: { [index]: { lastDroppedItem: { $set: null } } },
-        droppedBoxNames: { $set: droppedBoxNames }
+        droppedBoxIds: { $set: droppedBoxIds }
       }),
     )
   }
@@ -176,10 +178,10 @@ class Compose extends Component {
   /**
    * Checks if a jingle is inside one of the JingleSlot components
    *
-   * @param {String} jingleName
+   * @param {String} jingleId
    * @returns {Boolean}
    */
-  isDropped(jingleName) { return this.state.droppedBoxNames.indexOf(jingleName) > -1 }
+  isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1 }
 
   /**
    * Fires when the user starts or stops the composed song
@@ -192,8 +194,8 @@ class Compose extends Component {
       return;
     }
 
-    const selectedSongSources = this.state.myJingles.filter(({ name }) =>
-      this.state.droppedBoxNames.find((selectedName) => name === selectedName)
+    const selectedSongSources = this.state.myJingles.filter(({ id }) =>
+      this.state.droppedBoxIds.find((selectedId) => id === selectedId)
     ).map(({ source }) => new Promise((resolve) => {
       const sound = new Sound(source, () => {
         sound.loop = true;
@@ -225,10 +227,10 @@ class Compose extends Component {
 
       console.log(res);
 
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   render() {
       return (
@@ -259,7 +261,7 @@ class Compose extends Component {
                                     </button>
                                 </div>
                                 <div className="create-song-btn">
-                                    <button type="button" className="btn btn-primary" onClick={ this.createSong } >Create song!</button>
+                                    <button type="button" className="btn btn-primary" onClick={ this.createSong } >Create jingle!</button>
                                 </div>
                                </div>
                             </div>
@@ -269,7 +271,15 @@ class Compose extends Component {
             </div>
 
             {
+              this.state.loading &&
+              <div className="loader-wrapper">
+                <BoxLoader />
+              </div>
+            }
+
+            {
               (this.state.myJingles.length === 0) &&
+              !this.state.loading &&
               <div>
                 <h1>You do not own any Jingls yet!</h1>
                 <hr />
@@ -282,8 +292,9 @@ class Compose extends Component {
 
             {
               (this.state.myJingles.length > 0) &&
+              !this.state.loading &&
               <div>
-                <h1>Available Jingls!</h1>
+                <h1>Available samples!</h1>
                 <hr />
 
                 <div className="row">
@@ -291,7 +302,7 @@ class Compose extends Component {
                     this.state.myJingles.map((jingle) => (
                       <JingleBox
                         key={jingle.id}
-                        isDropped={this.isDropped(jingle.name)}
+                        isDropped={this.isDropped(jingle.id)}
                         {...jingle}
                       />)
                     )
