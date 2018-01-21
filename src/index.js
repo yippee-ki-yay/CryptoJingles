@@ -21,7 +21,7 @@ import store from './store';
 const history = syncHistoryWithStore(browserHistory, store);
 
 // Initialize web3 and set in Redux.
-getWeb3
+Promise.resolve(getWeb3)
 .then(results => {
   console.log('Web3 initialized!')
 })

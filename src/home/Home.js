@@ -27,30 +27,26 @@ class Home extends Component {
   }
 
   async componentWillMount() {
+    const results = await getWeb3();
+    const web3 = results.payload.web3Instance;
 
-    getWeb3
-    .then(async (results) => {
-      const web3 = results.payload.web3Instance;
+    web3.eth.getAccounts(async (error, accounts) => {
 
-      web3.eth.getAccounts(async (error, accounts) => {
+      //setup contracts
+      const cryptoJinglesContract = contract(CryptoJingles);
+      cryptoJinglesContract.setProvider(web3.currentProvider);
 
-         //setup contracts
-        const cryptoJinglesContract = contract(CryptoJingles);
-        cryptoJinglesContract.setProvider(web3.currentProvider);
+      console.log(CryptoJinglesAddress, JINGLE_PRICE);
 
-        console.log(CryptoJinglesAddress, JINGLE_PRICE);
+      const cryptoJinglesIntance = await cryptoJinglesContract.at(CryptoJinglesAddress);
 
-        const cryptoJinglesIntance = await cryptoJinglesContract.at(CryptoJinglesAddress);
-
-         this.setState({
-            accounts,
-            web3,
-            cryptoJinglesIntance,
-          });
-
+      this.setState({
+        accounts,
+        web3,
+        cryptoJinglesIntance,
       });
-    });
 
+    });
   }
 
   buyJingles = async () => {

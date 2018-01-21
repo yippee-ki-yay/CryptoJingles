@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-
 import getWeb3 from '../util/web3/getWeb3';
+import { getJingles } from '../util/web3/ethereumService';
+import JingleBox2 from '../components/JingleBox/jingleBox2';
+import BoxLoader from '../components/Decorative/BoxLoader';
 
-import contract from 'truffle-contract';
-
-import Jingle from '../../build/contracts/Jingle.json';
-import JingleBox from '../components/JingleBox/JingleBox';
-
-import '../util/config';
-import { JingleAddress } from '../util/config';
-
-import { getJingleMetadata } from '../getMockData';
+import './MyJingles.css';
 
 class MyJingles extends Component {
 
@@ -19,77 +13,51 @@ class MyJingles extends Component {
 
     this.state = {
       accounts: [],
+      loading: true,
       web3: null,
       jinglesInstance: null,
       myJingles: []
     };
-
   }
 
-   componentWillMount() {
-
-    getWeb3
-    .then(async (results) => {
-      const web3 = results.payload.web3Instance;
-
-      web3.eth.getAccounts(async (error, accounts) => {
-
-         //setup contracts
-        const jinglesContract = contract(Jingle);
-        jinglesContract.setProvider(web3.currentProvider);
-
-        const jinglesInstance = await jinglesContract.at(JingleAddress);
-
-        const jingles = await jinglesInstance.getAllJinglesForOwner(accounts[0]);
-
-        const myJingles = this.parseJingles(jingles);
-
-        this.setState({
-          accounts,
-          web3,
-          jinglesInstance,
-          myJingles
-        });
-
-      });
-    });
-
-  }
-
-  parseJingles = (jingles) => {
-
-    let myJingles = [];
-
-    for (let i = 0; i < jingles.length; i += 2) {
-      const id = jingles[i].valueOf()
-      const type = jingles[i + 1].valueOf();
-
-      myJingles.push({
-        id,
-        type,
-        ...getJingleMetadata(type)
-      });
-    }
-
-    return myJingles;
-
+   async componentWillMount() {
+     const results = await getWeb3();
+     const jinglesData = await getJingles(results.payload.web3Instance);
+     this.setState({ ...jinglesData, loading: false });
   }
 
   render() {
       return (
-          <div className="container">
-            My jingles : { 
-              this.state.myJingles.map(jingle =>
-                <div key={ jingle.id }>
-                  <span> Jingle id: { jingle.id } </span>
-                  <span>  type: { jingle.type } </span>
-                  <span>  name: { jingle.name } </span>
-                  <span>  source: { jingle.source } </span>
-                </div>
-                //<JingleBox key={ jingle.id } {...jingle} />
-              )
+          <div className="my-jingles-wrapper container">
+            {
+              this.state.loading &&
+              <div className="loader-wrapper">
+                <BoxLoader />
+              </div>
+            }
 
-             }
+            {
+              (this.state.myJingles.length === 0) &&
+              !this.state.loading &&
+              <div>
+                <h1>You do not own any Jingles yet!</h1>
+              </div>
+            }
+
+            {
+              (this.state.myJingles.length > 0) &&
+              !this.state.loading &&
+              <div>
+                {
+                  this.state.myJingles.map(jingle =>
+                    <JingleBox2
+                      key={jingle.id}
+                      {...jingle}
+                    />
+                  )
+                }
+              </div>
+            }
           </div>
       )
   }
