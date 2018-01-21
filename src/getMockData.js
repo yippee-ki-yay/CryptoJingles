@@ -21,19 +21,19 @@ import img14 from './mockImages/render_14.png';
 export const getJingleMetadata = (jingleType) => {
   switch (parseInt(jingleType)) {
     case 0:
-      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+      return { type: COMPOSE, name: 'Hip Piano', source: '../audio/d-minor-classic-hip-hop-piano-loop-185-bpm_z1ydWAN_.mp3' };
     case 1:
-      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+      return { type: COMPOSE, name: 'Rock Guitar', source: '../audio/rock-guitar_G1xFhESd.mp3' };
     case 2:
-      return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
+      return { type: COMPOSE, name: 'Deep Drum', source: '../audio/cinematic-deep-drum-hit_z1KODSEu.mp3' };
     case 3:
-      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+      return { type: COMPOSE, name: 'Rhumba', source: '../audio/dm-rhumba-salsa-style-piano-loop-part-a-135-bpm_Gyle70V_.mp3' };
     case 4:
-      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+      return { type: COMPOSE, name: 'Heavenly trans', source: '../audio/heavenly-trans_zydE3IHu.mp3' };
     case 5:
-      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+      return { type: COMPOSE, name: 'Swagger', source: '../audio/swagger-lee-alt-mix_zJ0EaMHu.mp3' };
     case 6:
-      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };
+      return { type: COMPOSE, name: 'Speed of sound', source: '../audio/speed-of-sound-alt-mix_G1PVtzSd.mp3' };
     case 7:
       return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
     case 8:
