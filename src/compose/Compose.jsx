@@ -237,7 +237,9 @@ class Compose extends Component {
                 <hr />
 
                 <div className="row">
+                  <div className="col-md-12">
                   **Link to marketplace + catchy reason to buy jingles**
+                  </div>
                 </div>
               </div>
             }
@@ -250,16 +252,18 @@ class Compose extends Component {
                 <hr />
 
                 <div className="row">
-                  {
-                    this.state.myJingles.map((jingle) => (
-                      <JingleBox
-                        draggable
-                        key={jingle.id}
-                        isDropped={this.isDropped(jingle.id)}
-                        {...jingle}
-                      />)
-                    )
-                  }
+                  <div className="col-md-12">
+                    {
+                      this.state.myJingles.map((jingle) => (
+                        <JingleBox
+                          draggable
+                          key={jingle.id}
+                          isDropped={this.isDropped(jingle.id)}
+                          {...jingle}
+                        />)
+                      )
+                    }
+                  </div>
                 </div>
               </div>
             }

@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import "./Home.css";
-
-import getWeb3 from '../util/web3/getWeb3';
-
 import contract from 'truffle-contract';
 
+import getWeb3 from '../util/web3/getWeb3';
 import CryptoJingles from '../../build/contracts/CryptoJingles.json';
-
-import '../util/config';
 import { CryptoJinglesAddress, JINGLE_PRICE } from '../util/config';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 
-class Home extends Component {
+import '../util/config';
+import "./Home.css";
 
+class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -52,12 +48,12 @@ class Home extends Component {
   }
 
   buyJingles = async () => {
-    try {
+    const id = Math.floor(Math.random() * 6) + 1;
 
+    try {
       const numJingles = this.state.numJingles;
       const account = this.state.accounts[0];
 
-      const id = Math.floor(Math.random() * 6) + 1;
       this.props.addPendingTx(id, 'Buy sample');
 
       const res = await this.state.cryptoJinglesIntance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * JINGLE_PRICE});
@@ -81,36 +77,38 @@ class Home extends Component {
       });
 
     } catch(err) {
+      this.props.removePendingTx(id);
       console.log(err);
     }
-  }
+  };
 
   openJingles = async () => {
+    const id = Math.floor(Math.random() * 6) + 1;
+
     try {
 
       const purchaseNum = this.state.purchaseNum;
       const account = this.state.accounts[0];
 
-      const id = Math.floor(Math.random() * 6) + 1;
       this.props.addPendingTx(id, 'Open sample pack');
 
       const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum, {from: account});
-
 
       this.props.removePendingTx(id);
 
       console.log(res);
 
     } catch(err) {
+      this.props.removePendingTx(id);
       console.log(err);
     }
-  }
+  };
 
   handleChange = (event) => {
     this.setState({
         [event.target.name] : event.target.value
     });
-  }
+  };
 
   render() {
     return(
@@ -124,7 +122,7 @@ class Home extends Component {
 
           <div className="col-md-6">
             <div className="well bs-component">
-              <form className="form-horizontal">
+              <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
                 <legend>Buy some jingles!</legend>
                   <div className="row">
                     <div className="col-lg-8">
@@ -133,13 +131,13 @@ class Home extends Component {
 
                     {  !this.state.canBeOpened &&
                       <div className="col-lg-4">
-                        <button type="button" className="btn btn-info" onClick={ this.buyJingles }>Buy!</button>
+                        <button type="submit" className="btn btn-info" onClick={ this.buyJingles }>Buy!</button>
                       </div>
                     }
 
                     {  this.state.canBeOpened &&
                       <div className="col-lg-4">
-                        <button type="button" className="btn btn-info" onClick={ this.openJingles }>Open!</button>
+                        <button type="submit" className="btn btn-info" onClick={ this.openJingles }>Open!</button>
                       </div>
                     }
                   </div>

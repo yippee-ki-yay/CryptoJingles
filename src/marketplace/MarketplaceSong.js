@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
 import { marketplaceSetSingleSong } from '../actions/marketplaceActions';
 
-import './Marketplace.css';
+import './MarketplaceSong.css';
 
 class MarketplaceSong extends Component {
   constructor(props) {
@@ -19,23 +19,44 @@ class MarketplaceSong extends Component {
     const { song } = this.props;
 
     return (
-      <div>
-        Song
-        {
-          song &&
-          <div>
-            <div>#{ song.id }</div>
-            <img src={song.imageSrc} alt="song image"/>
-            <div>{ song.author }</div>
-            <div>{ song.name }</div>
+      <div className="container single-song-wrapper">
+        <div className="row">
+          <div className="col-md-2" />
+          <div className="col-md-8 row-wrapper-song">
+            {
+              song &&
+              <div>
+                <div className="song-id">#{ song.id }</div>
+                <div className="song-details-wrapper">
+                  <img src={song.imageSrc} alt="song image" />
 
-            <div className="jingle-box">
-              5 Sample tags of which the songs are composed
-            </div>
+                  <div className="song-details">
+                    <div className="song-label author">
+                      <h4>Author</h4>
+                      <div>{ song.author }</div>
+                    </div>
+                    <div className="song-label">
+                      <h4>Name</h4>
+                      <div>{ song.name }</div>
+                    </div>
 
-            <button>Buy</button>
+                    <div className="song-samples-wrapper">
+                      <h4>Samples</h4>
+                      <div className="samples">
+                        <span className="sample">Guitar</span>
+                        <span className="sample">Groovy</span>
+                        <span className="sample">Drums</span>
+                        <span className="sample">Vocal</span>
+                        <span className="sample">Bell</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
-        }
+          <div className="col-md-2" />
+        </div>
       </div>
     )
   }

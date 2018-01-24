@@ -1,0 +1,69 @@
+.single-song-wrapper {
+    margin-top: 100px;
+}
+
+.single-song-wrapper .song-id {
+    font-size: 50px;
+    font-weight: bold;
+    font-style: italic;
+    color: #C0C7D1;
+    margin-bottom: 20px;
+}
+
+.row-wrapper-song {
+    display: flex;
+    justify-content: center;
+}
+
+.song-details-wrapper {
+    display: flex;
+}
+
+.song-details-wrapper img {
+    margin-right: 50px;
+    height: 250px;
+}
+
+.song-details {
+    display: inline-flex;
+    flex-direction: column;
+    max-width: 400px;
+}
+
+.song-details .song-label {
+    margin-bottom: 20px;
+}
+
+.song-details .song-label h4, .song-samples-wrapper h4 {
+    color: #C0C7D1;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.song-details .song-label.author h4 {
+    margin-top: 0;
+}
+
+.song-details .song-label div {
+    color: #828894;
+    font-size: 27px;
+}
+
+.samples {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: stretch;
+}
+
+.samples .sample {
+    font-size: 16px;
+    background: lightgray;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-right: 7px;
+    margin-bottom: 7px;
+    color: #485355;
+}
