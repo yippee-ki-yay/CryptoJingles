@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
 import { marketplacePlaySong } from '../actions/marketplaceActions';
-import Audio from '../components/Audio/react-audioplayer';
 import { Link } from 'react-router';
 
 import './Marketplace.css';

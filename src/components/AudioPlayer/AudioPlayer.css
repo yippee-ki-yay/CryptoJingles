@@ -1,0 +1,152 @@
+.audio-player-wrapper {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #0665a2;
+    z-index: 11;
+}
+
+/* Typography / Links
+================================================== */
+
+.audio-player-wrapper p { color:#fff; display:block; font-size:.9rem; font-weight:400; margin:0 0 2px; }
+
+.audio-player-wrapper a,a:visited { color:#8cc3e6; outline:0; text-decoration:underline; }
+.audio-player-wrapper a:hover,a:focus { color:#bbdef5; }
+.audio-player-wrapper p a,p a:visited { line-height:inherit; }
+
+.audio-player-wrapper #nowPlay {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    color: white;
+}
+.audio-player-wrapper .center { text-align:center; }
+
+
+/* Audio Player Styles
+================================================== */
+
+.audio-player-wrapper audio {
+    margin:0 15px 0 14px;
+    width:670px;
+}
+
+.audio-player-wrapper #mainwrap {}
+
+.audio-player-wrapper #audiowrap,
+.audio-player-wrapper #plwrap {
+    margin:0 auto;
+}
+
+.audio-player-wrapper #tracks {
+    position:relative;
+    text-align:center;
+}
+
+.audio-player-wrapper #npAction {
+    padding: 10px 10px 0;
+}
+
+.audio-player-wrapper #npTitle {
+    padding: 10px 10px 0;
+}
+
+.audio-player-wrapper #plList li {
+    cursor:pointer;
+    display:block;
+    margin:0;
+    padding:21px 0;
+}
+
+.audio-player-wrapper #plList li:hover {
+    background-color:rgba(0,0,0,.1);
+}
+
+.audio-player-wrapper .plItem {
+    position:relative;
+}
+
+.audio-player-wrapper .plTitle {
+    left:50px;
+    overflow:hidden;
+    position:absolute;
+    right:65px;
+    text-overflow:ellipsis;
+    top:0;
+    white-space:nowrap;
+}
+
+.audio-player-wrapper .plNum {
+    padding-left:21px;
+    width:25px;
+}
+
+.audio-player-wrapper .plLength {
+    padding-left:21px;
+    position:absolute;
+    right:21px;
+    top:0;
+}
+
+.audio-player-wrapper .plSel,
+.audio-player-wrapper .plSel:hover {
+    background-color:rgba(0,0,0,.1);
+    color:#fff;
+    cursor:default !important;
+}
+
+.audio-player-wrapper a[id^="btn"] {
+    border-radius:3px;
+    color:#fff;
+    cursor:pointer;
+    display:inline-block;
+    font-size:2rem;
+    height:35px;
+    line-height:.8;
+    margin:0 20px 20px;
+    padding:10px;
+    text-decoration:none;
+    transition:background .3s ease;
+    width:35px;
+}
+
+.audio-player-wrapper a[id^="btn"]:last-child {
+    margin-left:-4px;
+}
+
+.audio-player-wrapper a[id^="btn"]:hover,
+.audio-player-wrapper a[id^="btn"]:active {
+    background-color:rgba(0,0,0,.1);
+    color:#fff;
+}
+
+/* Plyr Overrides
+================================================== */
+
+.audio-player-wrapper .plyr--audio .plyr__controls {
+    background-color:transparent;
+    border:none;
+    color:#fff;
+    padding: 10px;
+    width:100%;
+}
+
+.audio-player-wrapper .plyr--audio .plyr__controls button.tab-focus:focus,
+.audio-player-wrapper .plyr--audio .plyr__controls button:hover,
+.audio-player-wrapper .plyr__play-large {
+    background:rgba(0,0,0,.1);
+}
+
+.audio-player-wrapper .plyr__progress--played, .audio-player-wrapper .plyr__volume--display {
+    color:rgba(0,0,0,.1);
+}
+
+.audio-player-wrapper .plyr--audio .plyr__progress--buffer,
+.audio-player-wrapper .plyr--audio .plyr__volume--display {
+    background:rgba(0,0,0,.1);
+}
+
+.plyr--audio .plyr__progress--buffer {
+    color:rgba(0,0,0,.1);
+}

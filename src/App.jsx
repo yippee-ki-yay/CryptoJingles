@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
+import AudioPlayer from './components/AudioPlayer/AudioPlayer';
 
 // Styles
 import './css/bootstrap.min.css';
@@ -47,6 +48,8 @@ class App extends Component {
         </header>
 
         {this.props.children}
+
+        <AudioPlayer />
       </div>
     );
   }
