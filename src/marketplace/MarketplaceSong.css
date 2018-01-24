@@ -41,7 +41,7 @@
     margin-bottom: 2px;
 }
 
-.song-details .song-label.author h4 {
+.song-details .song-label:first-child h4 {
     margin-top: 0;
 }
 
@@ -66,4 +66,22 @@
     margin-right: 7px;
     margin-bottom: 7px;
     color: #485355;
+}
+
+.song-details-wrapper .buy-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-details-wrapper .buy-options .buy-button {
+    color: white;
+    background: #ED5253;
+    width: 250px;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.song-details-wrapper .buy-options .buy-button:hover {
+    opacity: 0.8;
 }

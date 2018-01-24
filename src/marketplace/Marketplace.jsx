@@ -18,22 +18,6 @@ class Marketplace extends Component {
 
       return (
           <div className="marketplace-page-wrapper">
-            <div className="marketplace-play-wrapper">
-              {
-                !currentSong && 'Crypto Jingles'
-              }
-
-              {
-                currentSong &&
-                <Audio
-                  height={200}
-                  autoPlay={false}
-                  playlist={currentSong}
-                  fullPlayer={true}
-                />
-              }
-            </div>
-
             <div className="marketplace-wrapper">
               <div className="sidebar">
                 All filtering options go here Lorem ipsum dolor amet Lorem ipsum dolor amet Lorem ipsum dolor amet
@@ -51,8 +35,13 @@ class Marketplace extends Component {
 
                 <div className="songs-wrapper">
                   {
-                    getSongs().map(({ id, author, name, imageSrc, source }) => (
-                      <div key={id} className="single-song">
+                    getSongs().map(({ id, author, name, imageSrc, source, sale, price }) => (
+                        <div key={id} className="single-song">
+                          {
+                            sale &&
+                            <div className="header-label"><span>On sale for:</span> {price}Ξ</div>
+                          }
+
                         <img src={ imageSrc } alt={name} />
 
                         <div className="overlay">
@@ -80,6 +69,22 @@ class Marketplace extends Component {
       )
   }
 }
+
+// <div className="marketplace-play-wrapper">
+//   {
+//     !currentSong && 'Crypto Jingles'
+//   }
+
+//   {
+//     currentSong &&
+//     <Audio
+//       height={200}
+//       autoPlay={false}
+//       playlist={currentSong}
+//       fullPlayer={true}
+//     />
+// }
+// </div>
 
 const mapStateToProps = (state) => ({
   currentSong: state.marketplace.currentSong

@@ -1,8 +1,6 @@
 .marketplace-wrapper {
     background: white;
     display: flex;
-    height: calc(100vh - 225px);
-    overflow: hidden;
 }
 
 .marketplace-play-wrapper {
@@ -19,8 +17,6 @@
     justify-content: space-evenly;
     display: flex;
     flex-wrap: wrap;
-    height: calc(100vh - 272px);
-    overflow-y: auto;
 }
 
 .songs-count {
@@ -35,6 +31,22 @@
     flex-direction: column;
     width: 200px;
     margin: 5px;
+}
+
+.single-song .header-label {
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    background: rgba(237, 82, 83, 0.8);
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    font-size: 16px;
+    color: white;
+}
+
+.single-song .header-label span {
+    margin-right: 5px;
 }
 
 .single-song img {

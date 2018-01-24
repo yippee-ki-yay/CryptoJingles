@@ -12,7 +12,7 @@ class App extends Component {
 
     return (
       <div>
-        <div className="navbar navbar-default navbar-fixed-top">
+        <header className="navbar navbar-default navbar-fixed-top header-wrapper">
           <div className="container">
             <div className="navbar-header">
               <a href="/" className="navbar-brand">Crypto Jingles</a>
@@ -44,7 +44,7 @@ class App extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </header>
 
         {this.props.children}
       </div>

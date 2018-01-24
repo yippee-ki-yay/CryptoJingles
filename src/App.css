@@ -5,3 +5,16 @@ body {
 div {
     box-sizing: border-box;
 }
+
+.header-wrapper {
+    background: white;
+}
+
+.navbar-default .navbar-nav > li > a, .navbar-default .navbar-brand {
+    color: black;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-brand:hover {
+    color: black;
+    opacity: 0.8;
+}

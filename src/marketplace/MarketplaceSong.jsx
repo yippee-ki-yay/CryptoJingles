@@ -28,10 +28,22 @@ class MarketplaceSong extends Component {
               <div>
                 <div className="song-id">#{ song.id }</div>
                 <div className="song-details-wrapper">
-                  <img src={song.imageSrc} alt="song image" />
+                  <div className="buy-options">
+                    <img src={song.imageSrc} alt="song background" />
+                    {
+                      song.sale && <button className="btn buy-button">Purchase</button>
+                    }
+                  </div>
 
                   <div className="song-details">
-                    <div className="song-label author">
+                    {
+                      song.sale &&
+                      <div className="song-label">
+                        <h4>Sale price</h4>
+                        <div>{ song.price }Ξ</div>
+                      </div>
+                    }
+                    <div className="song-label">
                       <h4>Author</h4>
                       <div>{ song.author }</div>
                     </div>
