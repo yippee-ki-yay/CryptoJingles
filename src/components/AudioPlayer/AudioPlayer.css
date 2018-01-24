@@ -16,8 +16,8 @@
 .audio-player-wrapper p a,p a:visited { line-height:inherit; }
 
 .audio-player-wrapper #nowPlay {
-    display: flex;
-    width: 100%;
+    display: inline-flex;
+    width: 30%;
     justify-content: space-between;
     color: white;
 }
@@ -32,11 +32,18 @@
     width:670px;
 }
 
-.audio-player-wrapper #mainwrap {}
+.audio-player-wrapper #mainwrap {
+    display: flex;
+    align-items: center;
+}
 
-.audio-player-wrapper #audiowrap,
 .audio-player-wrapper #plwrap {
     margin:0 auto;
+}
+
+.audio-player-wrapper #audiowrap {
+    width: 70%;
+    display: inline-block;
 }
 
 .audio-player-wrapper #tracks {
@@ -45,11 +52,11 @@
 }
 
 .audio-player-wrapper #npAction {
-    padding: 10px 10px 0;
+    padding: 10px;
 }
 
 .audio-player-wrapper #npTitle {
-    padding: 10px 10px 0;
+    padding: 10px;
 }
 
 .audio-player-wrapper #plList li {
