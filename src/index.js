@@ -8,11 +8,11 @@ import getWeb3 from './util/web3/getWeb3'
 // Layouts
 import App from './App';
 import Home from './home/Home';
+import MySamples from './mySamples/MySamples';
 import MyJingles from './myJingles/MyJingles';
-import MySongs from './mySongs/MySongs';
 import Marketplace from './marketplace/Marketplace';
 import Compose from './compose/Compose';
-import MarketplaceSong from './marketplace/MarketplaceSong';
+import MarketplaceJingle from './marketplace/MarketplaceJingle';
 
 // Redux Store
 import store from './store';
@@ -35,11 +35,11 @@ ReactDOM.render((
         <Route path='/' component={ App }>
           <IndexRoute component={ Home } />
           <Route path="/home" component={ Home } />
-          <Route path="/my-jingles" component={ MyJingles } />
+          <Route path="/my-samples" component={ MySamples } />
           <Route path="/marketplace" component={ Marketplace } />
-          <Route path="/song/:id" component={ MarketplaceSong } />
+          <Route path="/song/:id" component={ MarketplaceJingle } />
           <Route path="/compose" component={ Compose } />
-          <Route path="/my-songs" component={ MySongs } />
+          <Route path="/my-jingles" component={ MyJingles } />
         </Route>
       </Router>
     </Provider>

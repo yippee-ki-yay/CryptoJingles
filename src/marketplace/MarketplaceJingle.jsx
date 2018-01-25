@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
 import { marketplaceSetSingleSong } from '../actions/marketplaceActions';
 
-import './MarketplaceSong.css';
+import './MarketplaceJingle.css';
 
-class MarketplaceSong extends Component {
+class MarketplaceJingle extends Component {
   constructor(props) {
     super(props);
   }
@@ -78,5 +78,5 @@ const mapStateToProps = (state) => ({
   song: state.marketplace.currentSingleSong
 });
 
-export default connect(mapStateToProps, { marketplaceSetSingleSong })(MarketplaceSong);
+export default connect(mapStateToProps, { marketplaceSetSingleSong })(MarketplaceJingle);
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DropTarget } from 'react-dnd';
 
-import './JingleSlot.css';
+import './SampleSlot.css';
 
 const style = {
   height: '16rem',
@@ -23,7 +23,7 @@ const dropTarget = { drop(props, monitor) { props.onDrop(monitor.getItem()); } }
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
 }))
-class JingleSlot extends Component {
+class SampleSlot extends Component {
   constructor(props) {
     super(props);
 
@@ -55,4 +55,4 @@ class JingleSlot extends Component {
   }
 }
 
-export default JingleSlot;
+export default SampleSlot;

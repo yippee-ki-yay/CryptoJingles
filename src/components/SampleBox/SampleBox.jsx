@@ -4,7 +4,7 @@ import Pizzicato from 'pizzicato';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 
-import './JingleBox.css';
+import './SampleBox.css';
 
 const boxSource = { beginDrag(props) { return { name: props.name, id: props.id }} };
 
@@ -20,7 +20,7 @@ const style = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))
-class JingleBox extends Component {
+class SampleBox extends Component {
   constructor(props) {
     super(props);
 
@@ -67,4 +67,4 @@ class JingleBox extends Component {
   }
 }
 
-export default JingleBox;
+export default SampleBox;

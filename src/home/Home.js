@@ -150,10 +150,10 @@ class Home extends Component {
             <legend>How does it work?</legend>
 
               <div>
-                You can buy between 1 - 20 jingles <br />
+                You can buy between 1 - 10 samples <br />
                 Each jingle costs X amount of ether <br />
-                In the compose menu you can create songs with your jingles <br />
-                In the marketplace you can trade songs and individual jingles
+                In the compose menu you can create jingles with your samples <br />
+                In the marketplace you can trade jingles
               </div>
 
             </div>

@@ -3,7 +3,7 @@ import Pizzicato from 'pizzicato';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 
-import './JingleBox.css';
+import './SampleBox.css';
 
 const style = {
   marginRight: '1.5rem',
@@ -13,7 +13,7 @@ const style = {
   float: 'left',
 };
 
-class JingleBox2 extends Component {
+class SampleBox2 extends Component {
   constructor(props) {
     super(props);
 
@@ -54,4 +54,4 @@ class JingleBox2 extends Component {
   }
 }
 
-export default JingleBox2;
+export default SampleBox2;

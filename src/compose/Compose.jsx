@@ -8,8 +8,8 @@ import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getM
 import getWeb3 from '../util/web3/getWeb3';
 import { getJingles } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
-import JingleBox from '../components/JingleBox/JingleBox';
-import JingleSlot from '../components/JingleSlot/JingleSlot';
+import SampleBox from '../components/SampleBox/SampleBox';
+import SampleSlot from '../components/SampleSlot/SampleSlot';
 
 import '../util/config';
 
@@ -21,7 +21,7 @@ import './Compose.css';
  * @param {Object} props
  * @returns {Function}
  */
-const SortableItem = SortableElement((props) => <JingleSlot {...props} />);
+const SortableItem = SortableElement((props) => <SampleSlot {...props} />);
 
 /**
  * Wrapper component for JingleSlot components
@@ -255,7 +255,7 @@ class Compose extends Component {
                   <div className="col-md-12">
                     {
                       this.state.myJingles.map((jingle) => (
-                        <JingleBox
+                        <SampleBox
                           draggable
                           key={jingle.id}
                           isDropped={this.isDropped(jingle.id)}
