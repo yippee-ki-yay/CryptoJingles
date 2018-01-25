@@ -1,19 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
-import { marketplacePlaySong } from '../actions/marketplaceActions';
+import { playAudio } from '../actions/audioActions';
 import { Link } from 'react-router';
 
 import './Marketplace.css';
 
 class Marketplace extends Component {
-
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-      const { marketplacePlaySong, currentSong } = this.props;
+      const { playAudio } = this.props;
 
       return (
           <div className="marketplace-page-wrapper">
@@ -46,7 +41,7 @@ class Marketplace extends Component {
                         <div className="overlay">
                           <i
                             className="material-icons play"
-                            onClick={() => { marketplacePlaySong({ name, img: imageSrc, src: source }); }}
+                            onClick={() => { playAudio({ name, img: imageSrc, src: source, author }); }}
                           >
                             play_circle_outline
                           </i>
@@ -69,25 +64,5 @@ class Marketplace extends Component {
   }
 }
 
-// <div className="marketplace-play-wrapper">
-//   {
-//     !currentSong && 'Crypto Jingles'
-//   }
-
-//   {
-//     currentSong &&
-//     <Audio
-//       height={200}
-//       autoPlay={false}
-//       playlist={currentSong}
-//       fullPlayer={true}
-//     />
-// }
-// </div>
-
-const mapStateToProps = (state) => ({
-  currentSong: state.marketplace.currentSong
-});
-
-export default connect(mapStateToProps, { marketplacePlaySong })(Marketplace);
+export default connect(null, { playAudio })(Marketplace);
 

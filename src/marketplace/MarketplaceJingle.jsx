@@ -2,21 +2,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getSongs } from '../getMockData';
-import { marketplaceSetSingleSong } from '../actions/marketplaceActions';
+import { marketplaceSetSingleSong } from '../actions/audioActions';
 
 import './MarketplaceJingle.css';
 
 class MarketplaceJingle extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      song: null
+    }
   }
 
   componentDidMount() {
-    this.props.marketplaceSetSingleSong(getSongs().find((_song) => _song.id === parseInt(this.props.routeParams.id)));
+    this.setState({
+      song: getSongs().find((_song) => _song.id === parseInt(this.props.routeParams.id))
+    })
   }
 
   render() {
-    const { song } = this.props;
+    const { song } = this.state;
 
     return (
       <div className="container single-song-wrapper">
@@ -74,9 +79,5 @@ class MarketplaceJingle extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  song: state.marketplace.currentSingleSong
-});
-
-export default connect(mapStateToProps, { marketplaceSetSingleSong })(MarketplaceJingle);
+export default connect(null, { marketplaceSetSingleSong })(MarketplaceJingle);
 

@@ -15,6 +15,17 @@
 .audio-player-wrapper a:hover,a:focus { color:#bbdef5; }
 .audio-player-wrapper p a,p a:visited { line-height:inherit; }
 
+.not-visible {
+    visibility: hidden;
+}
+
+.close-audio {
+    position: absolute;
+    left: 15px;
+    color: white;
+    cursor: pointer;
+}
+
 .audio-player-wrapper #nowPlay {
     display: inline-flex;
     width: 30%;
@@ -51,23 +62,8 @@
     text-align:center;
 }
 
-.audio-player-wrapper #npAction {
-    padding: 10px;
-}
-
 .audio-player-wrapper #npTitle {
-    padding: 10px;
-}
-
-.audio-player-wrapper #plList li {
-    cursor:pointer;
-    display:block;
-    margin:0;
-    padding:21px 0;
-}
-
-.audio-player-wrapper #plList li:hover {
-    background-color:rgba(0,0,0,.1);
+    padding: 10px 10px 10px 35px;
 }
 
 .audio-player-wrapper .plItem {

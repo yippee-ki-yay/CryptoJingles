@@ -33,10 +33,10 @@ class App extends Component {
                   <a href="/marketplace">Marketplace</a>
                 </li>
                 <li>
-                  <a href="/my-samples">My Samples</a>
+                  <a href="/my-jingles">My samples</a>
                 </li>
                 <li>
-                  <a href="/my-jingles">My Jingles</a>
+                  <a href="/my-songs">My jingles</a>
                 </li>
               </ul>
 
