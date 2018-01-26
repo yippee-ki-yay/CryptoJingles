@@ -7,7 +7,7 @@ import { Sound, Group } from 'pizzicato';
 import { connect } from 'react-redux';
 import { getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
-import { getJingles } from '../util/web3/ethereumService';
+import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
@@ -76,7 +76,7 @@ class Compose extends Component {
 
   async componentWillMount() {
     const results = await getWeb3();
-    const jinglesData = await getJingles(results.payload.web3Instance);
+    const jinglesData = await getSamples(results.payload.web3Instance);
     this.setState({ ...jinglesData, loading: false });
   }
 

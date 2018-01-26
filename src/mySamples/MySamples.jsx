@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import getWeb3 from '../util/web3/getWeb3';
-import { getJingles } from '../util/web3/ethereumService';
+import { getSamples } from '../util/web3/ethereumService';
 import SampleBox2 from '../components/SampleBox/SampleBox2';
 import BoxLoader from '../components/Decorative/BoxLoader';
 
@@ -22,7 +22,7 @@ class MySamples extends Component {
 
    async componentWillMount() {
      const results = await getWeb3();
-     const jinglesData = await getJingles(results.payload.web3Instance);
+     const jinglesData = await getSamples(results.payload.web3Instance);
      this.setState({ ...jinglesData, loading: false });
   }
 

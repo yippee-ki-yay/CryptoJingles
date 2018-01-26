@@ -1,29 +1,30 @@
 import contract from 'truffle-contract';
 
-import { SampleAddress, CryptoJinglesAddress } from '../config';
+import { SampleAddress, CryptoJinglesAddress, JingleAddress } from '../config';
 import { getJingleMetadata } from '../../getMockData';
 
 import Sample from '../../../build/contracts/Sample.json';
+import Jingle from '../../../build/contracts/Jingle.json';
 import CryptoJingles from '../../../build/contracts/CryptoJingles.json';
 
-export const parseJingles = (jingles) => {
-  let myJingles = [];
+export const parseSamples = (samples) => {
+  let mySamples = [];
 
-  for (let i = 0; i < jingles.length; i += 2) {
-    const id = jingles[i].valueOf();
-    const jingleType = jingles[i + 1].valueOf();
+  for (let i = 0; i < samples.length; i += 2) {
+    const id = samples[i].valueOf();
+    const jingleType = samples[i + 1].valueOf();
 
-    myJingles.push({
+    mySamples.push({
       id,
       jingleType,
       ...getJingleMetadata(jingleType)
     });
   }
 
-  return myJingles;
+  return mySamples;
 };
 
-export const getJingles = (web3) =>
+export const getSamples = (web3) =>
   new Promise((resolve) => {
     web3.eth.getAccounts(async (error, accounts) => {
 
@@ -39,7 +40,7 @@ export const getJingles = (web3) =>
 
       const jingles = await samplesInstance.getAllSamplesForOwner(accounts[0]);
 
-      const myJingles = parseJingles(jingles);
+      const myJingles = parseSamples(jingles);
 
       resolve({
         accounts,
@@ -50,3 +51,19 @@ export const getJingles = (web3) =>
       });
     });
   });
+
+  export const getJingles = async (web3) => {
+    try {
+      const jinglesContract = contract(Jingle);
+      jinglesContract.setProvider(web3.currentProvider);
+
+      const jinglesInstance = await jinglesContract.at(JingleAddress);
+
+      const jingles = await jinglesInstance.getAllJingles.call(web3.eth.accounts[0]);
+
+      return jingles.map(j => j.valueOf());
+
+    } catch(err) {
+      console.log(err);
+    }
+  }
