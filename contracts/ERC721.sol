@@ -15,5 +15,5 @@ contract ERC721 {
     //function name() public view returns (string name);
     // function symbol() public view returns (string symbol);
     // function tokenOfOwnerByIndex(address _owner, uint256 _index) external view returns (uint256 tokenId);
-    function tokenMetadata(uint256 _tokenId) public view returns (string infoUrl);
+    //function tokenMetadata(uint256 _tokenId) public view returns (string infoUrl);
 }

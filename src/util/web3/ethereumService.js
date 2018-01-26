@@ -1,9 +1,9 @@
 import contract from 'truffle-contract';
 
-import { JingleAddress, CryptoJinglesAddress } from '../config';
+import { SampleAddress, CryptoJinglesAddress } from '../config';
 import { getJingleMetadata } from '../../getMockData';
 
-import Jingle from '../../../build/contracts/Jingle.json';
+import Sample from '../../../build/contracts/Sample.json';
 import CryptoJingles from '../../../build/contracts/CryptoJingles.json';
 
 export const parseJingles = (jingles) => {
@@ -28,23 +28,23 @@ export const getJingles = (web3) =>
     web3.eth.getAccounts(async (error, accounts) => {
 
       //setup contracts
-      const jinglesContract = contract(Jingle);
-      jinglesContract.setProvider(web3.currentProvider);
+      const samplesContract = contract(Sample);
+      samplesContract.setProvider(web3.currentProvider);
 
       const cryptoJinglesContract = contract(CryptoJingles);
       cryptoJinglesContract.setProvider(web3.currentProvider);
 
-      const jinglesInstance = await jinglesContract.at(JingleAddress);
+      const samplesInstance = await samplesContract.at(SampleAddress);
       const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
 
-      const jingles = await jinglesInstance.getAllJinglesForOwner(accounts[0]);
+      const jingles = await samplesInstance.getAllSamplesForOwner(accounts[0]);
 
       const myJingles = parseJingles(jingles);
 
       resolve({
         accounts,
         web3,
-        jinglesInstance,
+        samplesInstance,
         myJingles,
         cryptoJinglesInstance,
       });
