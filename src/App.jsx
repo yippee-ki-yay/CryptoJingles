@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
 import AudioPlayer from './components/AudioPlayer/AudioPlayer';
 
@@ -16,7 +17,7 @@ class App extends Component {
         <header className="navbar navbar-default navbar-fixed-top header-wrapper">
           <div className="container">
             <div className="navbar-header">
-              <a href="/" className="navbar-brand">Crypto Jingles</a>
+              <Link to="/" className="navbar-brand">Crypto Jingles</Link>
               <button className="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
@@ -27,16 +28,16 @@ class App extends Component {
               <ul className="nav navbar-nav navbar-left">
                 
                 <li>
-                  <a href="/compose">Compose</a>
+                  <Link to="/compose">Compose</Link>
                 </li>
                 <li>
-                  <a href="/marketplace">Marketplace</a>
+                  <Link to="/marketplace">Marketplace</Link>
                 </li>
                 <li>
-                  <a href="/my-jingles">My samples</a>
+                  <Link to="/my-samples">My samples</Link>
                 </li>
                 <li>
-                  <a href="/my-songs">My jingles</a>
+                  <Link to="/my-jingles">My jingles</Link>
                 </li>
               </ul>
 

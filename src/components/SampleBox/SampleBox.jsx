@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { DragSource } from 'react-dnd'
 import Pizzicato from 'pizzicato';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
+import { playAudio } from '../../actions/audioActions';
 
 import './SampleBox.css';
 
@@ -33,13 +35,8 @@ class SampleBox extends Component {
   }
 
   playSound = () => {
-      this.state.sound.play();
-      this.setState({ start: true });
-  };
-
-  stopSound = () => {
-      this.state.sound.stop();
-      this.setState({ start: false });
+      const { name, source } = this.props;
+      this.props.playAudio({ name, author: 'Sample', src: source });
   };
 
   render() {
@@ -67,4 +64,4 @@ class SampleBox extends Component {
   }
 }
 
-export default SampleBox;
+export default connect(null, { playAudio })(SampleBox);

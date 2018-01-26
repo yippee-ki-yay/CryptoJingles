@@ -4,12 +4,14 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import { Sound, Group } from 'pizzicato';
-import { getJingleIdsMock, getJingleFromJingleId, getJingleSlots } from '../getMockData';
+import { connect } from 'react-redux';
+import { getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
 import { getJingles } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
+import { playAudio } from '../actions/audioActions';
 
 import '../util/config';
 
@@ -156,6 +158,7 @@ class Compose extends Component {
 
     Promise.all(selectedSongSources).then((sources) => {
       const group = new Group(sources);
+      console.log('group', group);
       group.play();
       this.setState({ playing: true, group })
     });
@@ -254,12 +257,12 @@ class Compose extends Component {
                 <div className="row">
                   <div className="col-md-12">
                     {
-                      this.state.myJingles.map((jingle) => (
+                      this.state.myJingles.map((sample) => (
                         <SampleBox
                           draggable
-                          key={jingle.id}
-                          isDropped={this.isDropped(jingle.id)}
-                          {...jingle}
+                          key={sample.id}
+                          isDropped={this.isDropped(sample.id)}
+                          {...sample}
                         />)
                       )
                     }
@@ -272,5 +275,4 @@ class Compose extends Component {
   }
 }
 
-export default Compose;
-
+export default connect(null, { playAudio })(Compose);

@@ -10,7 +10,18 @@ class AudioPlayer extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (!newProps.currentAudio) return;
+    if ((newProps.routing.locationBeforeTransitions.pathname !== this.props.routing.locationBeforeTransitions.pathname) && newProps.currentAudio) {
+      this.props.playAudio(null);
+      return;
+    }
+
+    if (!newProps.currentAudio) {
+      jQuery(($) => { // eslint-disable-line
+        const audio = $('#audio1');
+        audio.pause();
+      });
+      return;
+    }
 
     jQuery(($) => { // eslint-disable-line
       const supportsAudio = !!document.createElement('audio').canPlayType;
@@ -71,7 +82,8 @@ class AudioPlayer extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  currentAudio: state.audio.currentAudio
+  currentAudio: state.audio.currentAudio,
+  routing: state.routing
 });
 
 export default connect(mapStateToProps, { playAudio })(AudioPlayer);
