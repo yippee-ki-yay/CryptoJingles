@@ -9,6 +9,7 @@ import { addPendingTx, removePendingTx } from '../actions/appActions';
 
 import '../util/config';
 import "./Home.css";
+import soundwawe from './soundwawe.svg';
 
 class Home extends Component {
   constructor(props) {
@@ -113,53 +114,11 @@ class Home extends Component {
   render() {
     return(
       <div className="container">
-        <div className="jumbotron headline">
-            <h1>Crypto jingles</h1>
-            <p>Compose the best jingles on the blockchain, you can share them, sell them and love them.</p>
+        <div className="homepage-main">
+          <h1 className="homepage-main">Crypto Jingles</h1>
+          <h4>Compose the best jingles on the blockchain, you can share them, sell them and love them.</h4>
         </div>
-
-        <div className="row">
-
-          <div className="col-md-6">
-            <div className="well bs-component">
-              <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
-                <legend>Buy some jingles!</legend>
-                  <div className="row">
-                    <div className="col-lg-8">
-                        <input name="numJingles" value={ this.state.numJingles } onChange={ this.handleChange } type="number" className="form-control" placeholder="Num. of Jingles" />
-                    </div>
-
-                    {  !this.state.canBeOpened &&
-                      <div className="col-lg-4">
-                        <button type="submit" className="btn btn-info" onClick={ this.buyJingles }>Buy!</button>
-                      </div>
-                    }
-
-                    {  this.state.canBeOpened &&
-                      <div className="col-lg-4">
-                        <button type="submit" className="btn btn-info" onClick={ this.openJingles }>Open!</button>
-                      </div>
-                    }
-                  </div>
-              </form>
-            </div>
-          </div>
-
-          <div className="col-md-6">
-            <div className="well bs-component">
-            <legend>How does it work?</legend>
-
-              <div>
-                You can buy between 1 - 10 samples <br />
-                Each jingle costs X amount of ether <br />
-                In the compose menu you can create jingles with your samples <br />
-                In the marketplace you can trade jingles
-              </div>
-
-            </div>
-          </div>
-
-        </div>
+        <img src={soundwawe} alt="soundwawe"/>
       </div>
     )
   }
