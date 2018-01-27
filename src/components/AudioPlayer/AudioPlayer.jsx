@@ -17,8 +17,8 @@ class AudioPlayer extends Component {
 
     if (!newProps.currentAudio) {
       jQuery(($) => { // eslint-disable-line
-        const audio = $('#audio1');
-        audio.pause();
+        // const audio = $('#audio1');
+        // audio.pause();
       });
       return;
     }

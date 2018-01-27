@@ -192,10 +192,9 @@ class Compose extends Component {
           <div className="container">
 
             <div className="row first-row">
-                <div className="col-md-12">
-                    <div className="well bs-component">
+                <div className="col-md-12 sort-samples-wrapper">
+                    <div className="bs-component">
                         <form className="form-horizontal">
-                            <legend>Go on Mozart!</legend>
                             <div className="row">
                               <SortableList
                                 axis="x"
@@ -225,6 +224,8 @@ class Compose extends Component {
                 </div>
             </div>
 
+            <div className="separator" />
+
             {
               this.state.loading &&
               <div className="loader-wrapper">
@@ -251,11 +252,11 @@ class Compose extends Component {
               (this.state.myJingles.length > 0) &&
               !this.state.loading &&
               <div>
-                <h1>Available samples!</h1>
-                <hr />
+                <h1>Available samples</h1>
 
                 <div className="row">
-                  <div className="col-md-12">
+                  <div className="col-md-1" />
+                  <div className="col-md-10">
                     {
                       this.state.myJingles.map((sample) => (
                         <SampleBox
@@ -267,6 +268,7 @@ class Compose extends Component {
                       )
                     }
                   </div>
+                  <div className="col-md-1" />
                 </div>
               </div>
             }

@@ -17,3 +17,12 @@
   justify-content: center;
   height: 200px;
 }
+
+.separator {
+  border-bottom: 1px solid black;
+  width: 100%;
+}
+
+.sort-samples-wrapper {
+  margin: 50px;
+}

@@ -68,12 +68,12 @@
     color: #485355;
 }
 
-.song-details-wrapper .buy-options {
+.buy-options {
     display: flex;
     flex-direction: column;
 }
 
-.song-details-wrapper .buy-options .buy-button {
+.buy-button {
     color: white;
     background: #ED5253;
     width: 250px;
