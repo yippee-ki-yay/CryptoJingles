@@ -39,3 +39,18 @@
   max-width: 100%;
   overflow-x: auto;
 }
+
+.compose-play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compose-play svg {
+  width: 100px;
+}
+
+.samples-slider h2 {
+  margin: 20px 0;
+  color: black;
+}

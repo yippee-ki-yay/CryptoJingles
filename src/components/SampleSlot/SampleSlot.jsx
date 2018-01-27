@@ -36,15 +36,20 @@ class SampleSlot extends Component {
 
     let backgroundColor = '#222';
 
-    if (isActive) {
-      backgroundColor = 'darkgreen';
+    if (isActive || lastDroppedItem) {
+      backgroundColor = '#48BA95';
     } else if (canDrop) {
-      backgroundColor = 'darkkhaki';
+      backgroundColor = '#8a8a8a';
     }
 
     return connectDropTarget(
       <div className="jingle-slot" style={{ ...style, backgroundColor }}>
-        { lastDroppedItem && <div className="cancel-btn" onClick={cancelDrop}>x</div> }
+        {
+          lastDroppedItem &&
+          <div className="cancel-btn" onClick={cancelDrop}>
+            <i className="material-icons">close</i>
+          </div>
+        }
 
         { !lastDroppedItem && 'Drop sound sample here'  }
 

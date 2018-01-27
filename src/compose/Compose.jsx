@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import { Sound, Group } from 'pizzicato';
 import { connect } from 'react-redux';
 import { getJingleSlots } from '../getMockData';
 import getWeb3 from '../util/web3/getWeb3';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
+import PlayIcon from '../components/Decorative/PlayIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
 import { playAudio } from '../actions/audioActions';
@@ -37,7 +37,6 @@ class Compose extends Component {
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.isDropped = this.isDropped.bind(this);
-    this.onSortEnd = this.onSortEnd.bind(this);
     this.startStopSong = this.startStopSong.bind(this);
   }
 
@@ -80,15 +79,6 @@ class Compose extends Component {
       }),
     )
   }
-
-  /**
-   * Reorders JingleSlot components when the user sorts them via drag and drop
-   *
-   * @param {Object}
-   */
-  onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState({ jingleSlots: arrayMove(this.state.jingleSlots, oldIndex, newIndex) });
-  };
 
   /**
    * Checks if a jingle is inside one of the JingleSlot components
@@ -175,17 +165,16 @@ class Compose extends Component {
                       }
 
                        <div>
-                        <div className="play-btn">
-                            <button
-                              onClick={this.startStopSong}
-                              type="button"
-                              className="btn btn-primary">
-                              { this.state.playing ? 'Stop' : 'Play' }
-                            </button>
-                        </div>
-                        <div className="create-song-btn">
-                            <button type="button" className="btn btn-primary" onClick={ this.createSong } >Create jingle!</button>
-                        </div>
+                         <span
+                           className="compose-play"
+                           onClick={this.startStopSong}
+                         >
+                           <PlayIcon />
+                         </span>
+
+                         <button type="button" className="btn buy-button" onClick={ this.createSong }>
+                           Create jingle!
+                         </button>
                        </div>
                     </div>
                 </form>
@@ -218,8 +207,8 @@ class Compose extends Component {
             {
               (this.state.myJingles.length > 0) &&
               !this.state.loading &&
-              <div>
-                <h1>Available samples</h1>
+              <div className="samples-slider">
+                <h2>Your samples:</h2>
 
                 <div className="compose-samples-wrapper">
                   {
