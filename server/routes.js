@@ -8,4 +8,6 @@ const jingleCtrl = require('./controllers/jingles.controller');
 
 router.get('/purchase', purchaseCtrl.getPurchases);
 
+router.get('/jingles/:owner', jingleCtrl.getJinglesForOwner);
+
 module.exports = router;

@@ -3,11 +3,14 @@ require('dotenv').load();
 
 const Web3 = require('web3');
 const express = require('express');
+const cors = require('cors');
 
 const db = require('./db');
 const routes = require('./routes');
 const marketplaceAbi = require("../build/contracts/Marketplace");
 const jinglesAbi = require("../build/contracts/Jingle");
+
+const jingleCtrl = require('./controllers/jingles.controller');
 
 const app = express();
 const marketplaceAddress = "0x1cd2d4def506a69858f30bce024481e8fc4d3ab8";
@@ -19,14 +22,29 @@ const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplace
 
 const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
+
 (async () => {
 
     jingles.Composed(async (err, res) => {
         if(err) {
             console.log(err);
         }
+
+        const samples = res.args.samples.map(s => s.valueOf());
+
+        const jingleData = {
+            jingleId: res.args.songId.valueOf(),
+            owner: res.args.owner,
+            samples,
+        };
  
-        console.log(res);
+        console.log(jingleData);
+
+        const saved = await jingleCtrl.addJingle(jingleData);
+
+        if (saved) {
+            console.log('Jingle added to db!');
+        }
     });
 
     marketplaceContract.SellOrder(async (err, res) => {
@@ -55,6 +73,7 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
 })();
 
+app.use(cors());
 app.use('/api', routes);
 
 app.get('/', (req, res) => res.send('Hi'));

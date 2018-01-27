@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
+import axios from 'axios';
+
 import getWeb3 from '../util/web3/getWeb3';
-import { getJingles } from "../util/web3/ethereumService";
+import { getJingles } from '../util/web3/ethereumService';
+import { API_URL } from '../util/config';
 
 class MyJingles extends Component {
 
@@ -16,7 +19,12 @@ class MyJingles extends Component {
 
   async componentWillMount() {
     const results = await getWeb3();
-    const jinglesData = await getJingles(results.payload.web3Instance);
+
+    const web3 = results.payload.web3Instance;
+
+    const res = await axios(`${API_URL}/jingles/${web3.eth.accounts[0]}`);
+
+    const jinglesData = res.data;
 
     console.log(jinglesData);
 
@@ -26,13 +34,7 @@ class MyJingles extends Component {
   render() {
       return (
           <div>
-            Id of jingles:
-
-            {
-              this.state.jinglesData.map(j => 
-                <div>{ j } </div>
-              )
-            }
+            My jingles:
           </div>
       )
   }
