@@ -24,16 +24,16 @@ export const parseSamples = (samples) => {
   return mySamples;
 };
 
-export const getSamples = (web3) =>
+export const getSamples = () =>
   new Promise((resolve) => {
-    web3.eth.getAccounts(async (error, accounts) => {
+    window.web3.eth.getAccounts(async (error, accounts) => {
 
       //setup contracts
       const samplesContract = contract(Sample);
-      samplesContract.setProvider(web3.currentProvider);
+      samplesContract.setProvider(window.web3.currentProvider);
 
       const cryptoJinglesContract = contract(CryptoJingles);
-      cryptoJinglesContract.setProvider(web3.currentProvider);
+      cryptoJinglesContract.setProvider(window.web3.currentProvider);
 
       const samplesInstance = await samplesContract.at(SampleAddress);
       const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
@@ -42,13 +42,7 @@ export const getSamples = (web3) =>
 
       const myJingles = parseSamples(jingles);
 
-      resolve({
-        accounts,
-        web3,
-        samplesInstance,
-        myJingles,
-        cryptoJinglesInstance,
-      });
+      resolve({ myJingles });
     });
   });
 

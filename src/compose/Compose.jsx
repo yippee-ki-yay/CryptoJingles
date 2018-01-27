@@ -5,7 +5,6 @@ import update from 'immutability-helper';
 import { Sound, Group } from 'pizzicato';
 import { connect } from 'react-redux';
 import { getJingleSlots } from '../getMockData';
-import getWeb3 from '../util/web3/getWeb3';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import PlayIcon from '../components/Decorative/PlayIcon';
@@ -29,9 +28,7 @@ class Compose extends Component {
       group: null,
       myJingles: [],
       jinglesInstance: null,
-      cryptoJinglesInstance: null,
       accounts: [],
-      web3: null
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -41,9 +38,12 @@ class Compose extends Component {
   }
 
   async componentWillMount() {
-    const results = await getWeb3();
-    const jinglesData = await getSamples(results.payload.web3Instance);
+    const jinglesData = await getSamples();
     this.setState({ ...jinglesData, loading: false });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps);
   }
 
   /**

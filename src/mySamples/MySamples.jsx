@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { getSamples } from '../util/web3/ethereumService';
 import SampleBox2 from '../components/SampleBox/SampleBox2';
 import BoxLoader from '../components/Decorative/BoxLoader';
-import contract from 'truffle-contract';
-import { CryptoJinglesAddress, SAMPLE_PRICE } from '../util/config';
-import getWeb3 from '../util/web3/getWeb3';
-import CryptoJingles from '../../build/contracts/CryptoJingles.json';
+import { SAMPLE_PRICE } from '../util/config';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 
 import './MySamples.css';
@@ -20,9 +17,6 @@ class MySamples extends Component {
       jinglesInstance: null,
       myJingles: [],
       numJingles: 1,
-      accounts: [],
-      web3: null,
-      cryptoJinglesInstance: null,
       purchaseNum: 0
     };
 
@@ -30,56 +24,39 @@ class MySamples extends Component {
   }
 
   async componentWillMount() {
-    const results = await getWeb3();
-    const web3 = results.payload.web3Instance;
-
-    web3.eth.getAccounts(async (error, accounts) => {
-      //setup contracts
-      const cryptoJinglesContract = contract(CryptoJingles);
-      cryptoJinglesContract.setProvider(web3.currentProvider);
-
-      console.log(CryptoJinglesAddress, SAMPLE_PRICE);
-
-      const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
-
-      this.setState({ accounts, web3, cryptoJinglesInstance });
-
-      const jinglesData = await getSamples(results.payload.web3Instance);
-
-      this.setState({ ...jinglesData, loading: false });
-    });
+    const jinglesData = await getSamples();
+    this.setState({ ...jinglesData, loading: false });
   }
 
   handleChange = (event) => {
     if (event.target.value < 1) return;
 
-    this.setState({
-      [event.target.name] : event.target.value
-    });
+    this.setState({ [event.target.name] : event.target.value });
   };
 
   buyJingles = async () => {
     const id = Math.floor(Math.random() * 6) + 1;
 
     try {
-      const numJingles = this.state.numJingles;
-      const account = this.state.accounts[0];
+      window.web3.eth.getAccounts(async (error, accounts) => {
+        const numJingles = this.state.numJingles;
+        const account = accounts[0];
 
-      this.props.addPendingTx(id, 'Buy sample');
+        this.props.addPendingTx(id, 'Buy sample');
 
-      const res = await this.state.cryptoJinglesInstance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * SAMPLE_PRICE});
+        const res = await window.contract.buyJingle(parseInt(numJingles, 10), {from: account, value: numJingles * SAMPLE_PRICE});
 
-      this.props.removePendingTx(id);
+        this.props.removePendingTx(id);
 
-      console.log(res);
-      console.log(res.logs[0].args);
+        console.log(res);
+        console.log(res.logs[0].args);
 
-      const purchaseNum = res.logs[0].args.numOfPurchases.valueOf();
+        const purchaseNum = res.logs[0].args.numOfPurchases.valueOf();
 
-      console.log('purchaseNum', purchaseNum);
+        console.log('purchaseNum', purchaseNum);
 
-      this.setState({ purchaseNum });
-
+        this.setState({ purchaseNum });
+      });
     } catch(err) {
       this.props.removePendingTx(id);
     }
