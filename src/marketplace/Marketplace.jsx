@@ -4,9 +4,33 @@ import { getSongs } from '../getMockData';
 import { playAudio } from '../actions/audioActions';
 import { Link } from 'react-router';
 
+import axios from 'axios';
+
+import { API_URL } from '../util/config';
 import './Marketplace.css';
 
 class Marketplace extends Component {
+
+  constructor(params) {
+    super(params);
+
+    this.state = {
+      orders: []
+    };
+  }
+
+  async componentDidMount() {
+
+    const pageNum = 1;
+
+    // it can be price || time, add a prefix '-' for ascending sort example -price
+    const field = 'price';
+
+    const orders = await axios(`${API_URL}/orders/pagination/${pageNum}/filter/${field}`);
+
+    console.log(orders);
+  }
+
   render() {
       const { playAudio } = this.props;
 

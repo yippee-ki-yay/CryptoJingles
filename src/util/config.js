@@ -7,4 +7,4 @@ export const SampleStorage = '0x52e24a05ace3e71d3d939a89fc5a9db8072108ff';
 export const Marketplace = '0x1cd2d4def506a69858f30bce024481e8fc4d3ab8';
 
 export const SAMPLE_PRICE = 1000000000000000;
-export const API_URL = 'http://localhost:9999/api/';
+export const API_URL = 'http://localhost:9999/api';
