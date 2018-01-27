@@ -42,15 +42,11 @@ class MySamples extends Component {
 
       const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
 
+      this.setState({ accounts, web3, cryptoJinglesInstance });
+
       const jinglesData = await getSamples(results.payload.web3Instance);
 
-      this.setState({
-        accounts,
-        web3,
-        ...jinglesData,
-        loading: false,
-        cryptoJinglesInstance,
-      });
+      this.setState({ ...jinglesData, loading: false });
     });
   }
 
@@ -86,7 +82,6 @@ class MySamples extends Component {
 
     } catch(err) {
       this.props.removePendingTx(id);
-      console.log(err);
     }
   };
 
