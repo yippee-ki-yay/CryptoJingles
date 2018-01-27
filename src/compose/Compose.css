@@ -24,8 +24,15 @@
 }
 
 .sort-samples-wrapper {
-  margin: 50px;
+  margin: 50px 0  ;
 }
+
+.sort-samples-wrapper:after {
+  content:"";
+  clear:both;
+  display:block;
+}
+
 
 .compose-samples-wrapper {
   display: flex;

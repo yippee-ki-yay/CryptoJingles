@@ -144,7 +144,7 @@ class Compose extends Component {
         return;
       }
 
-      const res = await this.state.cryptoJinglesInstance.composeJingle(jingleIds, { from: this.state.accounts[0] });
+      const res = await this.state.cryptoJinglesInstance.composeSong(jingleIds, { from: this.state.accounts[0] });
 
       console.log(res);
 
@@ -157,43 +157,39 @@ class Compose extends Component {
       return (
           <div className="container">
 
-            <div className="row first-row">
-                <div className="col-md-12 sort-samples-wrapper">
-                    <div className="bs-component">
-                        <form className="form-horizontal">
-                            <div className="row">
-                              {
-                                this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
-                                  <SampleSlot
-                                    key={`item-${index}`}
-                                    index={index}
-                                    accepts={accepts}
-                                    lastDroppedItem={lastDroppedItem}
-                                    id={index}
-                                    onDrop={item => this.handleDrop(index, item)}
-                                    cancelDrop={item => this.handleCancel(index, item)}
-                                  />
-                                )
-                              }
+              <div className="sort-samples-wrapper">
+                <form className="form-horizontal">
+                    <div>
+                      {
+                        this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                          <SampleSlot
+                            key={`item-${index}`}
+                            index={index}
+                            accepts={accepts}
+                            lastDroppedItem={lastDroppedItem}
+                            id={index}
+                            onDrop={item => this.handleDrop(index, item)}
+                            cancelDrop={item => this.handleCancel(index, item)}
+                          />
+                        )
+                      }
 
-                               <div className="col-md-2">
-                                <div className="play-btn">
-                                    <button
-                                      onClick={this.startStopSong}
-                                      type="button"
-                                      className="btn btn-primary">
-                                      { this.state.playing ? 'Stop' : 'Play' }
-                                    </button>
-                                </div>
-                                <div className="create-song-btn">
-                                    <button type="button" className="btn btn-primary" onClick={ this.createSong } >Create jingle!</button>
-                                </div>
-                               </div>
-                            </div>
-                        </form>
+                       <div>
+                        <div className="play-btn">
+                            <button
+                              onClick={this.startStopSong}
+                              type="button"
+                              className="btn btn-primary">
+                              { this.state.playing ? 'Stop' : 'Play' }
+                            </button>
+                        </div>
+                        <div className="create-song-btn">
+                            <button type="button" className="btn btn-primary" onClick={ this.createSong } >Create jingle!</button>
+                        </div>
+                       </div>
                     </div>
-                </div>
-            </div>
+                </form>
+              </div>
 
             <div className="separator" />
 
