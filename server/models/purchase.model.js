@@ -7,4 +7,4 @@ const purchaseSchema = new mongoose.Schema({
     time: {type: Date, default: Date.now},
 });
 
-  mongoose.model('Purchase', purchaseSchema);
+mongoose.model('Purchase', purchaseSchema);
