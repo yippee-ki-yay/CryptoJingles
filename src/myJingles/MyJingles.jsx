@@ -1,40 +1,63 @@
 import React, { Component } from 'react';
-
 import axios from 'axios';
-
-import getWeb3 from '../util/web3/getWeb3';
-import { getJingles } from '../util/web3/ethereumService';
 import { API_URL } from '../util/config';
+import BoxLoader from '../components/Decorative/BoxLoader';
 
 class MyJingles extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      jinglesData: []
+      myJingles: [],
+      loading: true,
     };
-
   }
 
   async componentWillMount() {
-    const results = await getWeb3();
+    const res = await axios(`${API_URL}/jingles/${window.web3.eth.accounts[0]}`);
 
-    const web3 = results.payload.web3Instance;
+    const myJingles = res.data;
 
-    const res = await axios(`${API_URL}/jingles/${web3.eth.accounts[0]}`);
+    console.log('myJingles', myJingles);
 
-    const jinglesData = res.data;
-
-    console.log(jinglesData);
-
-    this.setState({ ...jinglesData });
+    this.setState({ myJingles, loading: false });
  }
 
   render() {
       return (
-          <div>
-            My jingles:
+          <div className="container">
+            <div className="samples-wrapper">
+              {
+                this.state.loading &&
+                <div className="loader-wrapper">
+                  <BoxLoader />
+                </div>
+              }
+
+              {
+                (this.state.myJingles.length === 0) &&
+                !this.state.loading &&
+                <div>
+                  <h2>You do not own any jingles yet!</h2>
+                </div>
+              }
+
+              {
+                (this.state.myJingles.length > 0) &&
+                !this.state.loading &&
+                <div>
+                  {
+                    this.state.myJingles.map((jingle) =>
+                      (
+                        <div key={jingle.jingleId}>
+                          Jingle {jingle.jingleId}
+                        </div>
+                      )
+                    )
+                  }
+                </div>
+              }
+            </div>
           </div>
       )
   }

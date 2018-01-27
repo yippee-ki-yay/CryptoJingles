@@ -122,7 +122,6 @@ class Compose extends Component {
 
   createSong = async () => {
     try {
-
       const selectedSongSources = this.state.myJingles.filter(({ id }) =>
         this.state.droppedBoxIds.find((selectedId) => id === selectedId)
       );
@@ -134,10 +133,9 @@ class Compose extends Component {
         return;
       }
 
-      const res = await this.state.cryptoJinglesInstance.composeJingle(jingleIds, { from: this.state.accounts[0] });
+      const res = await window.contract.composeJingle(jingleIds, { from: window.web3.eth.accounts[0] });
 
       console.log(res);
-
     } catch (err) {
       console.log(err);
     }
