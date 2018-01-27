@@ -134,7 +134,7 @@ class Compose extends Component {
         return;
       }
 
-      const res = await this.state.cryptoJinglesInstance.composeSong(jingleIds, { from: this.state.accounts[0] });
+      const res = await this.state.cryptoJinglesInstance.composeJingle(jingleIds, { from: this.state.accounts[0] });
 
       console.log(res);
 

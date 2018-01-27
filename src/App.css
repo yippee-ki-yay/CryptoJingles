@@ -26,3 +26,15 @@ div {
     opacity: 0.65;
     transition: 0.2s ease-in;
 }
+
+body::-webkit-scrollbar, div::-webkit-scrollbar {
+     width: 15px;
+ }
+
+body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
+     border-radius: 10px;
+     background-color: rgba(0, 0, 0, 0.65);
+     border: 5px solid rgba(0, 0, 0, 0);
+     background-clip: padding-box;
+     -webkit-box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.05), inset 1px 1px 0 rgba(0, 0, 0, 0.05);
+ }
