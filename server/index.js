@@ -11,9 +11,10 @@ const marketplaceAbi = require("../build/contracts/Marketplace");
 const jinglesAbi = require("../build/contracts/Jingle");
 
 const jingleCtrl = require('./controllers/jingles.controller');
+const orderCtrl = require('./controllers/order.controller');
 
 const app = express();
-const marketplaceAddress = "0x1cd2d4def506a69858f30bce024481e8fc4d3ab8";
+const marketplaceAddress = "0x8ee827700b84e54788f6f90df23079b71964c5a3";
 const jinglesAddress = "0x48961f89cd2df64766184d358bc7c2e3cb1873ba";
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETH_NODE));
@@ -24,6 +25,16 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
 
 (async () => {
+
+    //mockup data
+
+//     const order = {
+//         jingleId: 13,
+//         seller: '0x094144edafd5eA40f82d0bDa155A3E5eFc93658E',
+//         price: 300000000,
+//     };
+
+//    await orderCtrl.addOrder(order);
 
     jingles.Composed(async (err, res) => {
         if(err) {
@@ -38,8 +49,6 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
             samples,
         };
  
-        console.log(jingleData);
-
         const saved = await jingleCtrl.addJingle(jingleData);
 
         if (saved) {
@@ -52,15 +61,31 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
            console.log(err);
        }
 
-       // write the jingle data of the jingles that are on sale
-   });
+       const order = {
+            jingleId: res.args.songId.valueOf(),
+            seller: res.args.owner,
+            price: res.args.price.valueOf(),
+        };
+
+       const saved = await orderCtrl.addOrder(order);
+
+       if (saved) {
+           console.log('Sell Order saved');
+       }
+    });
 
    marketplaceContract.Bought(async (err, res) => {
         if(err) {
             console.log(err);
         }
 
-        // remove the jingle
+        const jingleId = res.args.songId.valueOf();
+
+        const saved = await orderCtrl.removePurchase(jingleId);
+
+        if (saved) {
+            console.log('Sell Order removed (bought)');
+        }
     });
 
     marketplaceContract.Canceled(async (err, res) => {
