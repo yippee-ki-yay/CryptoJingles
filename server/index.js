@@ -14,8 +14,8 @@ const jingleCtrl = require('./controllers/jingles.controller');
 const orderCtrl = require('./controllers/order.controller');
 
 const app = express();
-const marketplaceAddress = "0x8ee827700b84e54788f6f90df23079b71964c5a3";
-const jinglesAddress = "0x48961f89cd2df64766184d358bc7c2e3cb1873ba";
+const marketplaceAddress = "0xee27dfb8a6bdf007d598ed3984505b3e5348c4bb";
+const jinglesAddress = "0x6d27e8ce139fe893b32a5e7c63d633ded0c71559";
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETH_NODE));
 
