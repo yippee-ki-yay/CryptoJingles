@@ -11,3 +11,11 @@
 svg {
     cursor: pointer;
 }
+
+.sample-component {
+    height: 100%;
+    margin-bottom: 0;
+    min-width: 150px;
+    flex-basis: auto; /* default value */
+    flex-grow: 1;
+}

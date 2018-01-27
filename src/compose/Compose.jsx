@@ -14,40 +14,7 @@ import SampleSlot from '../components/SampleSlot/SampleSlot';
 import { playAudio } from '../actions/audioActions';
 
 import '../util/config';
-
 import './Compose.css';
-
-/**
- * Wrapper component for JingleSlot components
- *
- * @param {Object} props
- * @returns {Function}
- */
-const SortableItem = SortableElement((props) => <SampleSlot {...props} />);
-
-/**
- * Wrapper component for JingleSlot components
- *
- * @param {Object} params
- * @returns {Function}
- */
-const SortableList = SortableContainer(({ items, onDrop, cancelDrop }) =>
-  <ul>
-    {
-      items.map(({ accepts, lastDroppedItem }, index) =>
-        <SortableItem
-          key={`item-${index}`}
-          index={index}
-          accepts={accepts}
-          lastDroppedItem={lastDroppedItem}
-          id={index}
-          onDrop={item => onDrop(index, item)}
-          cancelDrop={item => cancelDrop(index, item)}
-        />
-      )
-    }
-  </ul>
-);
 
 @DragDropContext(HTML5Backend)
 class Compose extends Component {
@@ -142,23 +109,22 @@ class Compose extends Component {
       return;
     }
 
-    const selectedSongSources = this.state.myJingles.filter(({ id }) =>
-      this.state.droppedBoxIds.find((selectedId) => id === selectedId)
-    ).map(({ source }) => new Promise((resolve) => {
-      const sound = new Sound(source, () => {
-        sound.loop = true;
-        resolve(sound);
-      });
-    }));
+    let selectedSongSources = this.state.jingleSlots.filter((slot) => slot.lastDroppedItem !== null);
 
-    if (selectedSongSources.length < this.state.jingleSlots.length) {
-      alert('Not enough jingles!');
-      return;
-    }
+    selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
+      this.state.myJingles.find((sample) => lastDroppedItem.id === sample.id)
+    );
+
+    selectedSongSources = selectedSongSources.map(({ source }) =>
+      new Promise((resolve) => { const sound = new Sound(source, () => { resolve(sound); }); }));
+
+    // if (selectedSongSources.length < this.state.jingleSlots.length) {
+    //   alert('Not enough jingles!');
+    //   return;
+    // }
 
     Promise.all(selectedSongSources).then((sources) => {
       const group = new Group(sources);
-      console.log('group', group);
       group.play();
       this.setState({ playing: true, group })
     });
@@ -196,14 +162,19 @@ class Compose extends Component {
                     <div className="bs-component">
                         <form className="form-horizontal">
                             <div className="row">
-                              <SortableList
-                                axis="x"
-                                onSortEnd={this.onSortEnd}
-                                distance={ 2 }
-                                items={this.state.jingleSlots}
-                                onDrop={this.handleDrop}
-                                cancelDrop={this.handleCancel}
-                              />
+                              {
+                                this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                                  <SampleSlot
+                                    key={`item-${index}`}
+                                    index={index}
+                                    accepts={accepts}
+                                    lastDroppedItem={lastDroppedItem}
+                                    id={index}
+                                    onDrop={item => this.handleDrop(index, item)}
+                                    cancelDrop={item => this.handleCancel(index, item)}
+                                  />
+                                )
+                              }
 
                                <div className="col-md-2">
                                 <div className="play-btn">
@@ -254,21 +225,17 @@ class Compose extends Component {
               <div>
                 <h1>Available samples</h1>
 
-                <div className="row">
-                  <div className="col-md-1" />
-                  <div className="col-md-10">
-                    {
-                      this.state.myJingles.map((sample) => (
-                        <SampleBox
-                          draggable
-                          key={sample.id}
-                          isDropped={this.isDropped(sample.id)}
-                          {...sample}
-                        />)
-                      )
-                    }
-                  </div>
-                  <div className="col-md-1" />
+                <div className="compose-samples-wrapper">
+                  {
+                    this.state.myJingles.map((sample) => (
+                      <SampleBox
+                        draggable
+                        key={sample.id}
+                        isDropped={this.isDropped(sample.id)}
+                        {...sample}
+                      />)
+                    )
+                  }
                 </div>
               </div>
             }

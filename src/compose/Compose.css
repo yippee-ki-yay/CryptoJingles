@@ -26,3 +26,9 @@
 .sort-samples-wrapper {
   margin: 50px;
 }
+
+.compose-samples-wrapper {
+  display: flex;
+  max-width: 100%;
+  overflow-x: auto;
+}

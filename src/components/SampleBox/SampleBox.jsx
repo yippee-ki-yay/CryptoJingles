@@ -12,10 +12,9 @@ const boxSource = { beginDrag(props) { return { name: props.name, id: props.id }
 
 const style = {
   marginRight: '1.5rem',
-    width: '150px',
+  width: '350px',
   marginBottom: '1.5rem',
   cursor: 'move',
-  float: 'left',
 };
 
 @DragSource(props => props.type, boxSource, (connect, monitor) => ({
@@ -48,17 +47,15 @@ class SampleBox extends Component {
 
     return connectDragSource(
         <div style={{ opacity, ...style }}>
-          <div className="">
-              <div className="well bs-component">
-                  <div className="jingle-header">
-                      <span className="text-success name-tag">{isDropped ? <s>{name}</s> : name}</span>
-                      <span className="id-tag pull-right"> #{ this.props.id } </span>
-                  </div>
+            <div className="well bs-component sample-component">
+                <div className="jingle-header">
+                    <span className="text-success name-tag">{isDropped ? <s>{name}</s> : name}</span>
+                    <span className="id-tag pull-right"> #{ this.props.id } </span>
+                </div>
 
-                  { !this.state.start && <span onClick={ this.playSound }><PlayIcon /></span>}
-                  { this.state.start && <span onClick={ this.stopSound }><StopIcon /></span>}
-                  </div>
-              </div>
+                { !this.state.start && <span onClick={ this.playSound }><PlayIcon /></span>}
+                { this.state.start && <span onClick={ this.stopSound }><StopIcon /></span>}
+            </div>
         </div>
     )
   }

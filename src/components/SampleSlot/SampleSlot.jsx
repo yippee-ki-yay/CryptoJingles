@@ -5,7 +5,6 @@ import './SampleSlot.css';
 
 const style = {
   height: '16rem',
-  cursor: 'move',
   width: '16rem',
   marginRight: '1.5rem',
   marginBottom: '1.5rem',
@@ -13,7 +12,7 @@ const style = {
   padding: '1rem',
   textAlign: 'center',
   lineHeight: 'normal',
-  float: 'left',
+  float: 'left'
 };
 
 const dropTarget = { drop(props, monitor) { props.onDrop(monitor.getItem()); } };
