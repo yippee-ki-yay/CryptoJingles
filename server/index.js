@@ -25,8 +25,16 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
         if(err) {
             console.log(err);
         }
+
+        const samples = res.args.samples.map(s => s.valueOf());
+
+        const jingleData = {
+            jingleId: res.args.songId.valueOf(),
+            owner: res.args.owner,
+            samples,
+        };
  
-        console.log(res);
+        console.log(jingleData);
     });
 
     marketplaceContract.SellOrder(async (err, res) => {
