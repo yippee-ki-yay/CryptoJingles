@@ -22,9 +22,8 @@ class MySamples extends Component {
       numJingles: 1,
       accounts: [],
       web3: null,
-      cryptoJinglesIntance: null,
-      purchaseNum: 0,
-      canBeOpened: false
+      cryptoJinglesInstance: null,
+      purchaseNum: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -41,20 +40,15 @@ class MySamples extends Component {
 
       console.log(CryptoJinglesAddress, SAMPLE_PRICE);
 
-      const cryptoJinglesIntance = await cryptoJinglesContract.at(CryptoJinglesAddress);
+      const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
+
+      this.setState({ accounts, web3, cryptoJinglesInstance });
 
       const jinglesData = await getSamples(results.payload.web3Instance);
 
-      this.setState({
-        accounts,
-        web3,
-        ...jinglesData,
-        loading: false,
-        cryptoJinglesIntance,
-      });
+      this.setState({ ...jinglesData, loading: false });
     });
   }
-
 
   handleChange = (event) => {
     if (event.target.value < 1) return;
@@ -73,51 +67,21 @@ class MySamples extends Component {
 
       this.props.addPendingTx(id, 'Buy sample');
 
-      const res = await this.state.cryptoJinglesIntance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * SAMPLE_PRICE});
+      const res = await this.state.cryptoJinglesInstance.buyJingle(parseInt(numJingles), {from: account, value: numJingles * SAMPLE_PRICE});
 
       this.props.removePendingTx(id);
-
-      // this.state.cryptoJinglesIntance.Purchased((err, res) => {
-      //   console.log(err, res);
-      // });
 
       console.log(res);
       console.log(res.logs[0].args);
 
       const purchaseNum = res.logs[0].args.numOfPurchases.valueOf();
 
-      console.log(purchaseNum);
+      console.log('purchaseNum', purchaseNum);
 
-      this.setState({
-        purchaseNum,
-        canBeOpened: true
-      });
+      this.setState({ purchaseNum });
 
     } catch(err) {
       this.props.removePendingTx(id);
-      console.log(err);
-    }
-  };
-
-  openJingles = async () => {
-    const id = Math.floor(Math.random() * 6) + 1;
-
-    try {
-
-      const purchaseNum = this.state.purchaseNum;
-      const account = this.state.accounts[0];
-
-      this.props.addPendingTx(id, 'Open sample pack');
-
-      const res = await this.state.cryptoJinglesIntance.openJingles(purchaseNum, {from: account});
-
-      this.props.removePendingTx(id);
-
-      console.log(res);
-
-    } catch(err) {
-      this.props.removePendingTx(id);
-      console.log(err);
     }
   };
 
@@ -139,13 +103,7 @@ class MySamples extends Component {
                             className="form-control"
                             placeholder="Num. of Jingles" />
 
-                        {  !this.state.canBeOpened &&
-                           <button type="submit" className="btn buy-button" onClick={ this.buyJingles }>Buy!</button>
-                        }
-
-                        {  this.state.canBeOpened &&
-                          <button type="submit" className="btn buy-button" onClick={ this.openJingles }>Open!</button>
-                        }
+                        <button type="submit" className="btn buy-button" onClick={ this.buyJingles }>Buy!</button>
                       </div>
                     </div>
                   </form>
