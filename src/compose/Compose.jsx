@@ -10,7 +10,7 @@ import BoxLoader from '../components/Decorative/BoxLoader';
 import PlayIcon from '../components/Decorative/PlayIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
-import { playAudio } from '../actions/audioActions';
+import { addPendingTx, removePendingTx } from '../actions/appActions';
 
 import '../util/config';
 import './Compose.css';
@@ -133,7 +133,12 @@ class Compose extends Component {
         return;
       }
 
+      const id = Math.floor(Math.random() * 6) + 1;
+      this.props.addPendingTx(id, 'Create jingle');
+
       const res = await window.contract.composeJingle(jingleIds, { from: window.web3.eth.accounts[0] });
+
+      this.props.removePendingTx(id);
 
       console.log(res);
     } catch (err) {
@@ -227,4 +232,4 @@ class Compose extends Component {
   }
 }
 
-export default connect(null, { playAudio })(Compose);
+export default connect(null, { addPendingTx, removePendingTx, })(Compose);

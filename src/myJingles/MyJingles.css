@@ -1,0 +1,9 @@
+.my-jingles-wrapper {
+}
+
+.my-jingles-list {
+    width: 100%;
+    justify-content: space-evenly;
+    display: flex;
+    flex-wrap: wrap;
+}
