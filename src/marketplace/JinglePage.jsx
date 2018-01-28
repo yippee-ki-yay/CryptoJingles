@@ -8,13 +8,13 @@ import { marketplaceSetSingleSong } from '../actions/audioActions';
 
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 
-import './MarketplaceJingle.css';
+import './JinglePage.css';
 import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 
 import img0 from '../mockImages/render_0.png';
 
-class MarketplaceJingle extends Component {
+class JinglePage extends Component {
   constructor(props) {
     super(props);
 
@@ -56,7 +56,7 @@ class MarketplaceJingle extends Component {
     this.props.removePendingTx(id);
 
     console.log('You bought a jingle!');
-  }
+  };
 
   sell = async () => {
     const jingle = this.state.jingle;
@@ -152,5 +152,5 @@ class MarketplaceJingle extends Component {
   }
 }
 
-export default connect(null, { marketplaceSetSingleSong, addPendingTx, removePendingTx })(MarketplaceJingle);
+export default connect(null, { marketplaceSetSingleSong, addPendingTx, removePendingTx })(JinglePage);
 

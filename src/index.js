@@ -1,3 +1,4 @@
+import FastClick from 'fastclick';
 import React from 'react';
 import getWeb3 from './util/web3/getWeb3';
 import ReactDOM from 'react-dom';
@@ -12,7 +13,7 @@ import MySamples from './mySamples/MySamples';
 import MyJingles from './myJingles/MyJingles';
 import Marketplace from './marketplace/Marketplace';
 import Compose from './compose/Compose';
-import MarketplaceJingle from './marketplace/MarketplaceJingle';
+import JinglePage from './marketplace/JinglePage';
 
 // Redux Store
 import store from './store';
@@ -21,6 +22,10 @@ import store from './store';
 const history = syncHistoryWithStore(browserHistory, store);
 
 const startApp = () => {
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', () => { FastClick.attach(document.body); }, false);
+  }
+
   getWeb3();
 
   ReactDOM.render((
@@ -32,7 +37,7 @@ const startApp = () => {
             <Route path="/home" component={ Home } />
             <Route path="/my-samples" component={ MySamples } />
             <Route path="/marketplace" component={ Marketplace } />
-            <Route path="/jingle/:id" component={ MarketplaceJingle } />
+            <Route path="/jingle/:id" component={ JinglePage } />
             <Route path="/compose" component={ Compose } />
             <Route path="/my-jingles" component={ MyJingles } />
           </Route>

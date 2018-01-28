@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 /**
  * Component that alerts if you click outside of it
+ *
  */
 class OutsideAlerter extends Component {
   constructor(props) {
