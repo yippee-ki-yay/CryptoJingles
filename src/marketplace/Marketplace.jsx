@@ -6,6 +6,9 @@ import SingleJingle from '../components/SingleJingle/SingleJingle';
 
 import './Marketplace.css';
 
+import img0 from '../mockImages/render_0.png';
+
+
 class Marketplace extends Component {
   constructor(params) {
     super(params);
@@ -23,10 +26,18 @@ class Marketplace extends Component {
 
     const jingles = await axios(`${API_URL}/jingles/pagination/${pageNum}/filter/${field}`);
 
-    console.log(jingles);
+    jingles.data.forEach(j => {
+      j.imageSrc = img0;
+    });
+
+    this.setState({
+      jingles: jingles.data
+    });
   }
 
   render() {
+    const jingles = this.state.jingles;
+
       return (
           <div className="marketplace-page-wrapper">
             <div className="marketplace-wrapper">
@@ -41,11 +52,11 @@ class Marketplace extends Component {
 
               <div className="songs-section">
                 <div className="songs-count">
-                  { getSongs().length } songs created
+                  { jingles.length } jingles created
                 </div>
 
                 <div className="songs-wrapper">
-                  { getSongs().map((jingle) => (<SingleJingle key={jingle.id} {...jingle} />)) }
+                  { jingles.map((jingle) => (<SingleJingle key={jingle.jingleId} {...jingle} />)) }
                 </div>
               </div>
             </div>

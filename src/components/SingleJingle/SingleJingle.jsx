@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { playAudio } from '../../actions/audioActions';
 import { Link } from 'react-router';
 
-const SingleJingle = ({ id, author, name, imageSrc, source, sale, price, playAudio }) => (
-  <div key={id} className="single-song">
+const SingleJingle = ({ jingleId, author, name, imageSrc, source, onSale, price, playAudio }) => (
+  <div key={jingleId} className="single-song">
     {
-      sale &&
-      <div className="header-label"><span>On sale for:</span> {price}Ξ</div>
+      onSale &&
+      <div className="header-label"><span>On sale for:</span> {window.web3.fromWei(price, 'ether')}Ξ</div>
     }
 
     <img src={ imageSrc } alt={name} />
@@ -19,12 +19,12 @@ const SingleJingle = ({ id, author, name, imageSrc, source, sale, price, playAud
       >
         play_circle_outline
       </i>
-      <Link to={`/jingle/${id}`}>
+      <Link to={`/jingle/${jingleId}`}>
         <i className="material-icons open">open_in_new</i>
       </Link>
     </div>
 
-    #{ id }
+    #{ jingleId }
     <div>{ author }</div>
     <div>{ name }</div>
   </div>

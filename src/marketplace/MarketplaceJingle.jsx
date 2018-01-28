@@ -40,17 +40,19 @@ class MarketplaceJingle extends Component {
     });
   }
 
-  purchase = () => {
-    const jingle = this.state;
+  purchase = async () => {
+    const jingle = this.state.jingle;
 
-    
+    await window.marketplaceContract.buy(jingle.jingleId, {from: this.state.account, value: jingle.price});
+
+    console.log('You bought a jingle!');
   }
 
   sell = async () => {
     const jingle = this.state.jingle;
 
     //TODO: get price input from user
-    const amount = parseInt(Math.floor((Math.random() % 100000000) * 10000000));
+    const amount = 100000000000000;
 
     console.log(jingle.jingleId, amount);
 
@@ -75,7 +77,7 @@ class MarketplaceJingle extends Component {
                   <div className="buy-options">
                     <img src={jingle.imageSrc} alt="jingle background" />
                     {
-                      jingle.onSale && !isOwner && <button className="btn buy-button" onClick={ this.purchase }>Purchase</button>
+                      jingle.onSale && <button className="btn buy-button" onClick={ this.purchase }>Purchase { window.web3.fromWei(jingle.price, 'ether') }Ξ</button>
                     }
                     {
                       !jingle.onSale && isOwner && <button className="btn buy-button" onClick={ this.sell }>Sell</button>

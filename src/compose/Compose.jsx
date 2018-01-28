@@ -196,7 +196,7 @@ class Compose extends Component {
               (this.state.myJingles.length === 0) &&
               !this.state.loading &&
               <div>
-                <h1>You do not own any Jingls yet!</h1>
+                <h1>You do not own any Sound Samples yet!</h1>
                 <hr />
 
                 <div className="row">

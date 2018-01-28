@@ -54,10 +54,10 @@ class MyJingles extends Component {
                     this.state.myJingles.map((jingle) =>
                       (
                         <SingleJingle
-                          id={jingle.jingleId}
+                          jingleId={jingle.jingleId}
                           key={jingle.jingleId}
                           owner={jingle.owner}
-                          sale={jingle.onSale}
+                          onSale={jingle.onSale}
                           price={jingle.price}
                           author={jingle.author}
                           name={jingle.name}
