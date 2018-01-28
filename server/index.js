@@ -99,7 +99,14 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
             console.log(err);
         }
 
-        // remove the jingle
+        const jingleId = res.args.songId.valueOf();
+        const owner = res.args.owner;
+
+        const updated = await jingleCtrl.removeFromSale(jingleId, owner);
+
+        if (updated) {
+            console.log('Sell Order removed (canceled)');
+        }
     });
 
 })();

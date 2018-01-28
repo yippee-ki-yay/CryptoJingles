@@ -61,6 +61,14 @@ class MarketplaceJingle extends Component {
     console.log('Jingle has been set for sale');
   }
 
+  cancelSale = async () => {
+    const jingle = this.state.jingle;
+
+    await window.marketplaceContract.cancel(jingle.jingleId, {from: this.state.account});
+
+    console.log('You canceled the sale!');
+  }
+
   render() {
     const { jingle, isOwner } = this.state;
 
@@ -77,10 +85,13 @@ class MarketplaceJingle extends Component {
                   <div className="buy-options">
                     <img src={jingle.imageSrc} alt="jingle background" />
                     {
-                      jingle.onSale && <button className="btn buy-button" onClick={ this.purchase }>Purchase { window.web3.fromWei(jingle.price, 'ether') }Ξ</button>
+                      jingle.onSale && !isOwner && <button className="btn buy-button" onClick={ this.purchase }>Purchase { window.web3.fromWei(jingle.price, 'ether') }Ξ</button>
                     }
                     {
                       !jingle.onSale && isOwner && <button className="btn buy-button" onClick={ this.sell }>Sell</button>
+                    }
+                    {
+                      jingle.onSale && isOwner && <button className="btn buy-button" onClick={ this.cancelSale }>Cancel Sale</button>
                     }
                   </div>
 
