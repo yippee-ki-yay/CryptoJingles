@@ -2,6 +2,7 @@ pragma solidity ^0.4.18;
 
 import './zeppelin/ownership/Ownable.sol';
 import './ERC721.sol';
+import './SampleStorage.sol';
 
 contract Sample is Ownable {
     
@@ -15,6 +16,8 @@ contract Sample is Ownable {
     
     address public cryptoJingles;
     
+    SampleStorage public sampleStorage;
+    
     event Mint(address indexed _to, uint256 indexed _tokenId);
     
     modifier onlyCryptoJingles() {
@@ -22,12 +25,15 @@ contract Sample is Ownable {
         _;
     }
     
-    function Sample() public {
+    function Sample(address _sampleStorage) public {
+        sampleStorage = SampleStorage(_sampleStorage);
     }
     
-    function mint(address _owner, uint _sampleType) public onlyCryptoJingles {
+    function mint(address _owner, uint _randomNum) public onlyCryptoJingles {
         
-        addSample(_owner, _sampleType, numOfSamples);
+        uint sampleType = sampleStorage.getType(_randomNum);
+        
+        addSample(_owner, sampleType, numOfSamples);
         
         Mint(_owner, numOfSamples);
         

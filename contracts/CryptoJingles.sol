@@ -24,7 +24,7 @@ contract CryptoJingles is Ownable {
     uint MAX_SAMPLES_PER_PURCHASE = 30;
     uint SAMPLE_PRICE = 1000000000000000;
     uint SAMPLES_PER_SONG = 5;
-    uint NUM_SAMPLE_TYPES = 20;
+    uint NUM_SAMPLE_RANGE = 1000;
     
     Sample public sampleContract;
     Jingle public jingleContract;
@@ -81,7 +81,7 @@ contract CryptoJingles is Ownable {
     }
     
     function randomGen(bytes32 blockHash, uint seed) constant public returns (uint randomNumber) {
-        return (uint(keccak256(blockHash, block.timestamp, seed )) % NUM_SAMPLE_TYPES);
+        return (uint(keccak256(blockHash, block.timestamp, numOfPurchases, seed )) % NUM_SAMPLE_RANGE);
     }
     
     // Owner functions 
@@ -89,15 +89,9 @@ contract CryptoJingles is Ownable {
         SAMPLE_PRICE = newCost;
     }
     
-    function changeNumJingleTypes(uint newNum) public onlyOwner {
-        NUM_SAMPLE_TYPES = newNum;
-    }
-    
-    
     function withdraw(uint _amount) public onlyOwner {
         require(_amount <= this.balance);
         
         msg.sender.transfer(_amount);
-    }
-    
+    }  
 }

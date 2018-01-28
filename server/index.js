@@ -13,8 +13,8 @@ const jinglesAbi = require("../build/contracts/Jingle");
 const jingleCtrl = require('./controllers/jingles.controller');
 
 const app = express();
-const marketplaceAddress = "0xa95a23828aeb38742fd5854fdcfe01f6a0526437";
-const jinglesAddress = "0xc40b33a25e9ced0e37db1d0ae347ee758db18110";
+const marketplaceAddress = "0x8dc200c40dc9b23ccab8389c9c138e1255e204ad";
+const jinglesAddress = "0x904e8fc7b01db0e3c512c131909896408254b683";
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETH_NODE));
 
