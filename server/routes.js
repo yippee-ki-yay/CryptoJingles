@@ -6,5 +6,6 @@ const jingleCtrl = require('./controllers/jingles.controller');
 router.get('/jingles/:owner', jingleCtrl.getJinglesForOwner);
 router.get('/jingle/:jingleId', jingleCtrl.getJingle);
 router.get('/jingles/pagination/:page/filter/:filter', jingleCtrl.getJingles);
+router.get('/jingles/sale/:page/filter/:filter', jingleCtrl.getJinglesForSale);
 
 module.exports = router;

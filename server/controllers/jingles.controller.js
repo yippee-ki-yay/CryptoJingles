@@ -55,6 +55,28 @@ module.exports.getJingles = async (req, res) => {
     }
 }
 
+module.exports.getJinglesForSale = async (req, res) => {
+    try {
+
+        const pageNum = parseInt(req.params.page) - 1;
+        const filter = req.params.filter;
+
+        console.log('Getting orders', pageNum, filter);
+
+        const orders = await Jingle.find({onSale: true})
+                                  .limit(JINGLES_PER_PAGE)
+                                  .skip(JINGLES_PER_PAGE * pageNum)
+                                  .sort(filter)
+                                  .exec();
+
+        res.status(200);
+        res.json(orders);
+
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 // Server only method not exposed in api
 module.exports.addJingle = async (jingleData) => {
     try {
