@@ -85,3 +85,8 @@
 .buy-button:hover {
     opacity: 0.8;
 }
+
+.jingle-page-img .jingle-image-wrapper {
+    margin-right: 50px;
+    height: 250px;
+}

@@ -21,11 +21,7 @@ import map16 from './maps/sym3.jpg';
 import map17 from './maps/sym6.jpg';
 
 module.exports = (seed) => {
-  if (typeof seed === 'undefined') {
-    seed = String(Math.floor(Math.random() * 1000000));
-  }
-
-  console.log('Seed:', seed);
+  if (typeof seed === 'undefined') seed = String(Math.floor(Math.random() * 1000000));
 
   let randomFunc = seedRandom(seed);
   let random = createRandomRange(randomFunc);

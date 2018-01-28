@@ -5,6 +5,20 @@ import createRenderer  from './createRenderer';
 
 import './JingleImage.css';
 
+const letterbox = (element, parent) => {
+  let aspect = element.width / element.height;
+  let pwidth = parent.offsetWidth;
+  let pheight = parent.offsetHeight;
+
+  let width = pwidth;
+  let height = Math.round(width / aspect);
+  let y = Math.floor(pheight - height) / 2;
+
+  element.style.top = y + 'px';
+  element.style.width = width + 'px';
+  element.style.height = height + 'px';
+};
+
 // TODO - add proptypes
 class JingleImage extends Component {
   constructor(props) {
@@ -15,6 +29,7 @@ class JingleImage extends Component {
 
   componentDidMount() {
     this.reload(createConfig(this.props.id));
+    // this.resize();
 
     // document.addEventListener('resize', this.resize.bind(this));
   }
@@ -24,22 +39,7 @@ class JingleImage extends Component {
   }
 
   resize() {
-    console.log('12322');
-    this.letterbox(this.canvas, [ this.canvasWrapper.innerWidth, this.canvasWrapper.innerHeight ]);
-  }
-
-  static letterbox(element, parent) {
-    let aspect = element.width / element.height;
-    let pwidth = parent[0];
-    let pheight = parent[1];
-
-    let width = pwidth;
-    let height = Math.round(width / aspect);
-    let y = Math.floor(pheight - height) / 2;
-
-    element.style.top = y + 'px';
-    element.style.width = width + 'px';
-    element.style.height = height + 'px';
+    letterbox(this.canvas, this.canvasWrapper);
   }
 
   reload(config) {
@@ -55,28 +55,24 @@ class JingleImage extends Component {
       ...config,
       backgroundImage: background,
       context: context,
-      width: 200,
-      height: 200,
-      // seedName: this.props.id
+      width: this.props.width,
+      height: this.props.height
     };
 
-    console.log('opts', opts);
-
-    var pixelRatio = typeof opts.pixelRatio === 'number' ? opts.pixelRatio : 1;
+    let pixelRatio = typeof opts.pixelRatio === 'number' ? opts.pixelRatio : 1;
     canvas.width = opts.width * pixelRatio;
     canvas.height = opts.height * pixelRatio;
 
     this.canvasWrapper.style.background = opts.palette[0];
-    // seedText.textContent = opts.seedName;
 
     background.onload = () => {
-      var renderer = createRenderer(opts);
+      let renderer = createRenderer(opts);
 
       if (opts.debugLuma) {
         renderer.debugLuma();
       } else {
         renderer.clear();
-        var stepCount = 0;
+        let stepCount = 0;
         loop.on('tick', () => {
           renderer.step(opts.interval);
           stepCount++;

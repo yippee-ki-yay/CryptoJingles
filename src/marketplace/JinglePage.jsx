@@ -1,9 +1,8 @@
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import JingleImage from '../components/JingleImage/JingleImage';
 
-import { getSongs } from '../getMockData';
 import { marketplaceSetSingleSong } from '../actions/audioActions';
 
 import { addPendingTx, removePendingTx } from '../actions/appActions';
@@ -12,10 +11,8 @@ import './JinglePage.css';
 import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 
-import img0 from '../mockImages/render_0.png';
-
 class JinglePage extends Component {
-  constructor(props) {
+  constructor(props ) {
     super(props);
 
     this.state = {
@@ -29,10 +26,7 @@ class JinglePage extends Component {
 
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
 
-    console.log(jingleData);
-
-    // append default img
-    jingleData.data.imageSrc = img0;
+    console.log('jingleData', jingleData);
 
     window.web3.eth.getAccounts((err, res) => {
       const isOwner = (jingleData.data.owner === res[0]) ? true : false;
@@ -101,7 +95,10 @@ class JinglePage extends Component {
                 <div className="jingle-id">#{ jingle.jingleId }</div>
                 <div className="jingle-details-wrapper">
                   <div className="buy-options">
-                    <img src={jingle.imageSrc} alt="jingle background" />
+                    <div className="jingle-page-img">
+                      <JingleImage id={jingle.jingleId} width={250} height={250} />
+                    </div>
+
                     {
                       jingle.onSale && !isOwner && <button className="btn buy-button" onClick={ this.purchase }>Purchase { window.web3.fromWei(jingle.price, 'ether') }Ξ</button>
                     }

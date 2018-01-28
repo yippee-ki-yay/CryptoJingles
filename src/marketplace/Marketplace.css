@@ -49,14 +49,6 @@
     margin-right: 5px;
 }
 
-.single-song img {
-    position: relative;
-    z-index: 9;
-    height: 200px;
-    width:100%;
-    vertical-align:top;
-}
-
 .single-song .overlay {
     position: absolute;
     transition: 0.2s ease-in;
@@ -77,7 +69,18 @@
     font-size: 45px;
 }
 
-.single-song img:hover + .overlay, .single-song .overlay:hover {
+.jingle-image-container {
+    position: relative;
+    z-index: 9;
+    width:100%;
+    vertical-align:top;
+}
+
+.marketplace-wrapper .jingle-image-container .jingle-image-wrapper {
+    height: 200px;
+}
+
+.single-song .jingle-image-container:hover + .overlay, .single-song .overlay:hover {
     visibility: visible;
     background: rgba(0, 0, 0, 0.5);
 }

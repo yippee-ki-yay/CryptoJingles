@@ -11,8 +11,8 @@ const SingleJingle = ({ jingleId, author, name, imageSrc, source, onSale, price,
       <div className="header-label"><span>On sale for:</span> {window.web3.fromWei(price, 'ether')}Ξ</div>
     }
 
-    <div>
-      <JingleImage id={jingleId} />
+    <div className="jingle-image-container">
+      <JingleImage width={200} height={200} id={jingleId} />
     </div>
 
     <div className="overlay">
