@@ -5,12 +5,18 @@ import './ERC721.sol';
 
 contract Jingle is Ownable, ERC721 {
     
+    struct MetaInfo {
+        string name;
+        string author;
+    }
+    
     mapping (uint => address) internal tokensForOwner;
     mapping (uint => address) internal tokensForApproved;
     mapping (address => uint[]) internal tokensOwned;
     mapping (uint => uint) internal tokenPosInArr;
     
     mapping(uint => uint[]) internal samplesInJingle;
+    mapping(uint => MetaInfo) public jinglesInfo;
     
     mapping(bytes32 => bool) public uniqueJingles;
     
@@ -20,7 +26,8 @@ contract Jingle is Ownable, ERC721 {
     
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-    event Composed(uint indexed songId, address indexed owner, uint[5] samples);
+    event Composed(uint indexed songId, address indexed owner, 
+                uint[5] samples, uint[5] jingleTypes, string name, string author);
     
     modifier onlyCryptoJingles() {
         require(msg.sender == cryptoJingles);
@@ -97,8 +104,13 @@ contract Jingle is Ownable, ERC721 {
     function getAllJingles(address _owner) external view returns(uint[]) {
         return tokensOwned[_owner];
     }
+    
+    function getMetaInfo(uint _jingleId) external view returns(string, string) {
+        return (jinglesInfo[_jingleId].name, jinglesInfo[_jingleId].author);
+    }
      
-    function composeJingle(address _owner, uint[5] jingles) public onlyCryptoJingles {
+    function composeJingle(address _owner, uint[5] jingles, 
+            uint[5] jingleTypes, string name, string author) public onlyCryptoJingles {
         
         uint _jingleId = numOfJingles;
         
@@ -112,7 +124,12 @@ contract Jingle is Ownable, ERC721 {
         
         tokenPosInArr[_jingleId] = tokensOwned[_owner].length - 1;
         
-        Composed(numOfJingles, _owner, jingles);
+        jinglesInfo[numOfJingles] = MetaInfo({
+            name: name,
+            author: author
+        });
+        
+        Composed(numOfJingles, _owner, jingles, jingleTypes, name, author);
         
         numOfJingles++;
     }

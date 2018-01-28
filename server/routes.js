@@ -10,5 +10,6 @@ router.get('/orders', orderCtrl.getOrders);
 router.get('/orders/pagination/:page/filter/:filter', orderCtrl.getOrders);
 
 router.get('/jingles/:owner', jingleCtrl.getJinglesForOwner);
+router.get('/jingle/:jingleId', jingleCtrl.getJingle);
 
 module.exports = router;

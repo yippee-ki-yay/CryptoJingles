@@ -1,10 +1,10 @@
 // On kovan
 
-export const CryptoJinglesAddress = '0x7c4dabacfd8adc560fbf0f34d5075601c1f1bffd';
-export const JingleAddress = '0x6d27e8ce139fe893b32a5e7c63d633ded0c71559';
-export const SampleAddress = '0x922f39c410b7df9dcbf98d1a3d403d9997f0da1b';
+export const CryptoJinglesAddress = '0x5d2f42896e3a8d1ec841c3864a13935bd309c7b3';
+export const JingleAddress = '0xec914e5e1ef3a204bbf45ea6267eb2039fe7e48a';
+export const SampleAddress = '0x90b65b819bcde1b75434ef4913860a8868656746';
 export const SampleStorage = '0x52e24a05ace3e71d3d939a89fc5a9db8072108ff';
-export const Marketplace = '0xee27dfb8a6bdf007d598ed3984505b3e5348c4bb';
+export const Marketplace = '0x957585bc5e3642b26a0d339a006683b218fb0109';
 
 export const SAMPLE_PRICE = 1000000000000000;
 export const API_URL = 'http://localhost:9999/api';

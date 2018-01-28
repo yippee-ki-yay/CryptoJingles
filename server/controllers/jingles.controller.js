@@ -15,6 +15,22 @@ module.exports.getJinglesForOwner = async (req, res) => {
     }
 }
 
+module.exports.getJingle = async (req, res) => {
+    try {
+        const jingleId = req.params.jingleId;
+
+        const jingle = await Jingle.find({jingleId: jingleId});
+
+        console.log(jingle);
+
+        res.status(200);
+        res.json(jingle);
+
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 // Server only method not exposed in api
 module.exports.addJingle = async (jingleData) => {
     try {

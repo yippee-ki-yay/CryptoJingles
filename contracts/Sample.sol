@@ -9,7 +9,7 @@ contract Sample is Ownable {
     mapping (address => uint[]) internal tokensOwned;
     mapping (uint => uint) internal tokenPosInArr;
     
-    mapping (uint => uint) internal tokenType;
+    mapping (uint => uint) public tokenType;
     
     uint public numOfSamples;
     

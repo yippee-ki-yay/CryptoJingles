@@ -21,6 +21,10 @@ class MyJingles extends Component {
     console.log('myJingles', myJingles);
 
     this.setState({ myJingles, loading: false });
+
+    const jingleInfo = await axios(`${API_URL}/jingle/1`);
+
+    console.log(jingleInfo);
  }
 
   render() {

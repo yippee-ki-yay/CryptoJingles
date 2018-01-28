@@ -133,7 +133,7 @@ class Compose extends Component {
         return;
       }
 
-      const res = await window.contract.composeJingle(jingleIds, { from: window.web3.eth.accounts[0] });
+      const res = await window.contract.composeJingle("Jaguar Bog", "Satohi Nakamoto", jingleIds, { from: window.web3.eth.accounts[0] });
 
       console.log(res);
     } catch (err) {

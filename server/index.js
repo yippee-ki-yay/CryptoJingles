@@ -14,8 +14,8 @@ const jingleCtrl = require('./controllers/jingles.controller');
 const orderCtrl = require('./controllers/order.controller');
 
 const app = express();
-const marketplaceAddress = "0xee27dfb8a6bdf007d598ed3984505b3e5348c4bb";
-const jinglesAddress = "0x6d27e8ce139fe893b32a5e7c63d633ded0c71559";
+const marketplaceAddress = "0x957585bc5e3642b26a0d339a006683b218fb0109";
+const jinglesAddress = "0xec914e5e1ef3a204bbf45ea6267eb2039fe7e48a";
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETH_NODE));
 
@@ -43,10 +43,15 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
         const samples = res.args.samples.map(s => s.valueOf());
 
+        const sampleTypes = res.args.jingleTypes.map(s => s.valueOf());
+
         const jingleData = {
             jingleId: res.args.songId.valueOf(),
+            name: res.args.name,
+            author: res.args.author,
             owner: res.args.owner,
             samples,
+            sampleTypes
         };
  
         const saved = await jingleCtrl.addJingle(jingleData);

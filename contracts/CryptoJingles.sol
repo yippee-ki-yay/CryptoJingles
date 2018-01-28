@@ -21,7 +21,7 @@ contract CryptoJingles is Ownable {
     
     uint numOfPurchases;
     
-    uint MAX_SAMPLES_PER_PURCHASE = 10;
+    uint MAX_SAMPLES_PER_PURCHASE = 30;
     uint SAMPLE_PRICE = 1000000000000000;
     uint SAMPLES_PER_SONG = 5;
     uint NUM_SAMPLE_TYPES = 20;
@@ -29,13 +29,13 @@ contract CryptoJingles is Ownable {
     Sample public sampleContract;
     Jingle public jingleContract;
     
-    function CryptoJingles() public {
+    function CryptoJingles(address _sample, address _jingle) public {
         numOfPurchases = 0;
-        sampleContract = new Sample();
-        jingleContract = new Jingle();
+        sampleContract = Sample(_sample);
+        jingleContract = Jingle(_jingle);
         
-        sampleContract.setCryptoJinglesContract(this);
-        jingleContract.setCryptoJinglesContract(this);
+        //sampleContract.setCryptoJinglesContract(this);
+        //jingleContract.setCryptoJinglesContract(this);
     }
     
     function buyJingle(uint numSamples) public payable {
@@ -46,18 +46,16 @@ contract CryptoJingles is Ownable {
             
             bytes32 blockHash = block.blockhash(block.number - 1);
             
-            uint randomNum = randomGen(blockHash, block.timestamp);
+            uint randomNum = randomGen(blockHash, i);
             sampleContract.mint(msg.sender, randomNum);
         }
-        
-        
         
         Purchased(msg.sender, block.number, numSamples, numOfPurchases);
         
         numOfPurchases++;
     }
     
-    function composeJingle(uint[5] samples) public {
+    function composeJingle(string name, string author, uint[5] samples) public {
         require(samples.length == SAMPLES_PER_SONG);
         require(jingleContract.uniqueJingles(keccak256(samples)) == false);
         
@@ -70,17 +68,20 @@ contract CryptoJingles is Ownable {
             isAlreadyUsed[samples[i]] = true;
         }
         
+        uint[5] memory sampleTypes;
+        
         // remove all the samples from your Ownership
         for (uint j = 0; j < SAMPLES_PER_SONG; ++j) {
+            sampleTypes[j] = sampleContract.tokenType(samples[j]);
             sampleContract.removeSample(msg.sender, samples[j]);
         }
         
         //create a new song containing those 5 samples
-        jingleContract.composeJingle(msg.sender, samples);
+        jingleContract.composeJingle(msg.sender, samples, sampleTypes, name, author);
     }
     
     function randomGen(bytes32 blockHash, uint seed) constant public returns (uint randomNumber) {
-        return (uint(keccak256(blockHash, seed )) % NUM_SAMPLE_TYPES);
+        return (uint(keccak256(blockHash, block.timestamp, seed )) % NUM_SAMPLE_TYPES);
     }
     
     // Owner functions 
