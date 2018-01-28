@@ -89,12 +89,13 @@ module.exports.setForSale = async (order) => {
     }
 }
 
-module.exports.removeFromSale = async (jingleId) => {
+module.exports.removeFromSale = async (jingleId, buyer) => {
     try {
         const jingle = await Jingle.findOne({jingleId: jingleId});
 
         jingle.onSale = false;
         jingle.price = 0;
+        jingle.owner = buyer;
 
         await jingle.save();
 

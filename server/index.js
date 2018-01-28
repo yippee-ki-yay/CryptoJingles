@@ -85,8 +85,9 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
         }
 
         const jingleId = res.args.songId.valueOf();
+        const buyer = res.args.buyer;
 
-        const updated = await jingleCtrl.removeFromSale(jingleId);
+        const updated = await jingleCtrl.removeFromSale(jingleId, buyer);
 
         if (updated) {
             console.log('Sell Order removed (bought)');
