@@ -86,8 +86,23 @@
 /*opacity: 1;*/
 
 .marketplace-wrapper .sidebar {
-    border-right: 1px solid #ECECEC;
+    height: calc(100vh - 65px);
+    border-right: 1px solid black;
     color: black;
-    background: #F2F2F2;
     padding: 20px;
+    flex: 1;
+    flex-basis: 300px;
+    min-width: 300px;
+    max-width: 300px;
+    margin-left: 6px;
+    margin-right: 10px;
+}
+
+.sort-wrapper:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.sort-wrapper .sort-wrapper-label {
+    font-size: 20px;
+    margin-bottom: 15px;
 }

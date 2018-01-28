@@ -38,3 +38,7 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
      background-clip: padding-box;
      -webkit-box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.05), inset 1px 1px 0 rgba(0, 0, 0, 0.05);
  }
+
+.navbar-collapse.collapsing, .navbar-collapse.collapse.in {
+    border-bottom: 1px solid black;
+}

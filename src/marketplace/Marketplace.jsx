@@ -1,63 +1,68 @@
+// TODO - move file to components folder
 import React, { Component } from 'react';
-import axios from 'axios';
-import { API_URL } from '../util/config';
-import { getSongs } from '../getMockData';
+import { connect } from 'react-redux';
 import SingleJingle from '../components/SingleJingle/SingleJingle';
+import Pagination from '../components/Pagination/Pagination';
+import Dropdown from 'react-dropdown'
+import {
+  getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting,
+  onMarketplacePaginationChange
+} from '../actions/marketplaceActions';
 
+import 'react-dropdown/style.css';
 import './Marketplace.css';
 
-import img0 from '../mockImages/render_0.png';
-
-
+// TODO - Add prototypes
 class Marketplace extends Component {
-  constructor(params) {
-    super(params);
-
-    this.state = {
-      jingles: []
-    };
-  }
-
   async componentDidMount() {
-    const pageNum = 1;
-
-    // it can be price || time || onSale, add a prefix '-' for ascending sort example -price
-    const field = 'price';
-
-    const jingles = await axios(`${API_URL}/jingles/pagination/${pageNum}/filter/${field}`);
-
-    jingles.data.forEach(j => {
-      j.imageSrc = img0;
-    });
-
-    this.setState({
-      jingles: jingles.data
-    });
+    this.props.getMarketplaceJingles();
   }
 
   render() {
-    const jingles = this.state.jingles;
+    const { jingles, jinglesPerPage, sorting, sortingOptions, category, categories, totalJingles } = this.props;
+    const { changeMarketplaceCategory, changeMarketplaceSorting, onMarketplacePaginationChange } = this.props;
 
       return (
           <div className="marketplace-page-wrapper">
             <div className="marketplace-wrapper">
-              <div className="sidebar">
-                All filtering options go here Lorem ipsum dolor amet Lorem ipsum dolor amet Lorem ipsum dolor amet
-                Lorem ipsum dolor amet Lorem ipsum dolor
 
-                <div>Sorting dropdown</div>
-                <div>Most popular</div>
-                <div>Genres</div>
+              { /* SIDEBAR RENDER (TODO - Create component) */ }
+              <div className="sidebar">
+
+                <div className="sort-wrapper">
+                  <div className="sort-wrapper-label">Category:</div>
+                  <Dropdown
+                    onChange={(val) => { changeMarketplaceCategory(val) }}
+                    value={category}
+                    options={categories}
+                  />
+                </div>
+
+                <div className="sort-wrapper">
+                  <div className="sort-wrapper-label">Sort by:</div>
+                  <Dropdown
+                    onChange={(val) => { changeMarketplaceSorting(val) }}
+                    value={sorting}
+                    options={sortingOptions}
+                  />
+                </div>
+
               </div>
 
+              { /* JINGLES RENDER (TODO - Create component) */ }
               <div className="songs-section">
                 <div className="songs-count">
-                  { jingles.length } jingles created
+                  { totalJingles } jingles created
                 </div>
 
                 <div className="songs-wrapper">
                   { jingles.map((jingle) => (<SingleJingle key={jingle.jingleId} {...jingle} />)) }
                 </div>
+
+                <Pagination
+                  pageCount={Math.round(totalJingles / jinglesPerPage)}
+                  onPageChange={onMarketplacePaginationChange}
+                />
               </div>
             </div>
           </div>
@@ -65,5 +70,19 @@ class Marketplace extends Component {
   }
 }
 
-export default Marketplace;
+const mapStateToProps = (state) => ({
+  totalJingles: state.marketplace.totalJingles,
+  jinglesPerPage: state.marketplace.jinglesPerPage,
+  jingles: state.marketplace.jingles,
+  sorting: state.marketplace.sorting,
+  sortingOptions: state.marketplace.sortingOptions,
+  category: state.marketplace.category,
+  categories: state.marketplace.categories
+});
+
+const mapDispatchToProps = {
+  getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting, onMarketplacePaginationChange
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Marketplace);
 

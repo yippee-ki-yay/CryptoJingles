@@ -1,4 +1,19 @@
-export const MARKETPLACE_CHANGE_SONG = 'marketplace_change_song';
+export const CATEGORY_OPTIONS = [{ value: 'pagination', label: 'All jingles' }, { value: 'sale', label: 'For sale' }];
+export const SORTING_OPTIONS = [
+  { value: 'time', label: 'Newest first' },
+  { value: '-time', label: 'Oldest first' },
+  { value: 'price', label: 'Most expensive first' },
+  { value: '-price', label: 'Cheapest first' }
+];
+export const MARKETPLACE_JINGLES_PER_PAGE = 10;
+// TODO put everything above this comment in a constants file
+
+export const CHANGE_MARKETPLACE_PAGE = 'change_marketplace_page';
+export const SET_MARKETPLACE_JINGLES = 'set_marketplace_jingles';
+export const SET_MARKETPLACE_CATEGORY = 'set_marketplace_category';
+export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
+export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';
+
 export const SET_SINGLE_AUDIO = 'set_single_audio';
 
 export const ADD_PENDING_TX = 'add_pending_tx';
