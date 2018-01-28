@@ -57,10 +57,10 @@ class MyJingles extends Component {
                           id={jingle.jingleId}
                           key={jingle.jingleId}
                           owner={jingle.owner}
-                          sale={true}
-                          price={'0.0001'}
-                          author={'Some author'}
-                          name={'OFFICIAL'}
+                          sale={jingle.onSale}
+                          price={jingle.price}
+                          author={jingle.author}
+                          name={jingle.name}
                           imageSrc={img0}
                         />
                       )

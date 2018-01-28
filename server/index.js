@@ -11,7 +11,6 @@ const marketplaceAbi = require("../build/contracts/Marketplace");
 const jinglesAbi = require("../build/contracts/Jingle");
 
 const jingleCtrl = require('./controllers/jingles.controller');
-const orderCtrl = require('./controllers/order.controller');
 
 const app = express();
 const marketplaceAddress = "0x957585bc5e3642b26a0d339a006683b218fb0109";
@@ -51,7 +50,9 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
             author: res.args.author,
             owner: res.args.owner,
             samples,
-            sampleTypes
+            sampleTypes,
+            onSale: false,
+            price: 0
         };
  
         const saved = await jingleCtrl.addJingle(jingleData);
@@ -68,14 +69,13 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
        const order = {
             jingleId: res.args.songId.valueOf(),
-            seller: res.args.owner,
             price: res.args.price.valueOf(),
         };
 
-       const saved = await orderCtrl.addOrder(order);
+       const updated = await jingleCtrl.setForSale(order);
 
-       if (saved) {
-           console.log('Sell Order saved');
+       if (updated) {
+           console.log('Jingle set for sale');
        }
     });
 
@@ -86,9 +86,9 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
         const jingleId = res.args.songId.valueOf();
 
-        const saved = await orderCtrl.removePurchase(jingleId);
+        const updated = await jingleCtrl.removeFromSale(jingleId);
 
-        if (saved) {
+        if (updated) {
             console.log('Sell Order removed (bought)');
         }
     });

@@ -11,19 +11,19 @@ class Marketplace extends Component {
     super(params);
 
     this.state = {
-      orders: []
+      jingles: []
     };
   }
 
   async componentDidMount() {
     const pageNum = 1;
 
-    // it can be price || time, add a prefix '-' for ascending sort example -price
+    // it can be price || time || onSale, add a prefix '-' for ascending sort example -price
     const field = 'price';
 
-    const orders = await axios(`${API_URL}/orders/pagination/${pageNum}/filter/${field}`);
+    const jingles = await axios(`${API_URL}/jingles/pagination/${pageNum}/filter/${field}`);
 
-    console.log(orders);
+    console.log(jingles);
   }
 
   render() {
