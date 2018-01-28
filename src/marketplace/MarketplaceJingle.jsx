@@ -6,8 +6,11 @@ import axios from 'axios';
 import { getSongs } from '../getMockData';
 import { marketplaceSetSingleSong } from '../actions/audioActions';
 
+import { addPendingTx, removePendingTx } from '../actions/appActions';
+
 import './MarketplaceJingle.css';
 import { API_URL } from '../util/config';
+import { getJingleMetadata } from '../getMockData';
 
 import img0 from '../mockImages/render_0.png';
 
@@ -26,6 +29,8 @@ class MarketplaceJingle extends Component {
 
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
 
+    console.log(jingleData);
+
     // append default img
     jingleData.data.imageSrc = img0;
 
@@ -43,7 +48,12 @@ class MarketplaceJingle extends Component {
   purchase = async () => {
     const jingle = this.state.jingle;
 
+    const id = 1;
+    this.props.addPendingTx(id, 'Buy Jingle');
+
     await window.marketplaceContract.buy(jingle.jingleId, {from: this.state.account, value: jingle.price});
+
+    this.props.removePendingTx(id);
 
     console.log('You bought a jingle!');
   }
@@ -54,9 +64,12 @@ class MarketplaceJingle extends Component {
     //TODO: get price input from user
     const amount = 100000000000000;
 
-    console.log(jingle.jingleId, amount);
+    const id = 1;
+    this.props.addPendingTx(id, 'Sell Jingle');
 
     await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: this.state.account});
+
+    this.props.removePendingTx(id);
 
     console.log('Jingle has been set for sale');
   }
@@ -64,7 +77,12 @@ class MarketplaceJingle extends Component {
   cancelSale = async () => {
     const jingle = this.state.jingle;
 
+    const id = 1;
+    this.props.addPendingTx(id, 'Cancel Sale');
+
     await window.marketplaceContract.cancel(jingle.jingleId, {from: this.state.account});
+
+    this.props.removePendingTx(id);
 
     console.log('You canceled the sale!');
   }
@@ -115,11 +133,11 @@ class MarketplaceJingle extends Component {
                     <div className="jingle-samples-wrapper">
                       <h4>Samples</h4>
                       <div className="samples">
-                        <span className="sample">Guitar</span>
-                        <span className="sample">Groovy</span>
-                        <span className="sample">Drums</span>
-                        <span className="sample">Vocal</span>
-                        <span className="sample">Bell</span>
+                        {
+                          jingle.sampleTypes.map((type, i) => 
+                            <span key={ i } className="sample">{ getJingleMetadata(type).name }</span>
+                          )
+                        }
                       </div>
                     </div>
                   </div>
@@ -134,5 +152,5 @@ class MarketplaceJingle extends Component {
   }
 }
 
-export default connect(null, { marketplaceSetSingleSong })(MarketplaceJingle);
+export default connect(null, { marketplaceSetSingleSong, addPendingTx, removePendingTx })(MarketplaceJingle);
 
