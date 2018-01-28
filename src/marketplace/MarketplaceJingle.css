@@ -1,8 +1,8 @@
-.single-song-wrapper {
+.single-jingle-wrapper {
     margin-top: 100px;
 }
 
-.single-song-wrapper .song-id {
+.single-jingle-wrapper .jingle-id {
     font-size: 50px;
     font-weight: bold;
     font-style: italic;
@@ -10,42 +10,42 @@
     margin-bottom: 20px;
 }
 
-.row-wrapper-song {
+.row-wrapper-jingle {
     display: flex;
     justify-content: center;
 }
 
-.song-details-wrapper {
+.jingle-details-wrapper {
     display: flex;
 }
 
-.song-details-wrapper img {
+.jingle-details-wrapper img {
     margin-right: 50px;
     height: 250px;
 }
 
-.song-details {
+.jingle-details {
     display: inline-flex;
     flex-direction: column;
     max-width: 400px;
 }
 
-.song-details .song-label {
+.jingle-details .jingle-label {
     margin-bottom: 20px;
 }
 
-.song-details .song-label h4, .song-samples-wrapper h4 {
+.jingle-details .jingle-label h4, .jingle-samples-wrapper h4 {
     color: #C0C7D1;
     font-weight: bold;
     text-transform: uppercase;
     margin-bottom: 2px;
 }
 
-.song-details .song-label:first-child h4 {
+.jingle-details .jingle-label:first-child h4 {
     margin-top: 0;
 }
 
-.song-details .song-label div {
+.jingle-details .jingle-label div {
     color: #828894;
     font-size: 27px;
 }

@@ -21,7 +21,7 @@ module.exports.getJingle = async (req, res) => {
     try {
         const jingleId = req.params.jingleId;
 
-        const jingle = await Jingle.find({jingleId: jingleId});
+        const jingle = await Jingle.findOne({jingleId: jingleId});
 
         console.log(jingle);
 
