@@ -32,7 +32,7 @@ const startApp = () => {
             <Route path="/home" component={ Home } />
             <Route path="/my-samples" component={ MySamples } />
             <Route path="/marketplace" component={ Marketplace } />
-            <Route path="/song/:id" component={ MarketplaceJingle } />
+            <Route path="/jingle/:id" component={ MarketplaceJingle } />
             <Route path="/compose" component={ Compose } />
             <Route path="/my-jingles" component={ MyJingles } />
           </Route>
