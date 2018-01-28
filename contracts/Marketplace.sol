@@ -5,6 +5,11 @@ import './zeppelin/ownership/Ownable.sol';
 
 contract Marketplace is Ownable {
     
+    modifier onlyJingle() {
+        require(msg.sender == address(jingleContract));
+        _;
+    }
+    
     struct Order {
         uint price;
         address seller;
@@ -33,14 +38,13 @@ contract Marketplace is Ownable {
         ownerBalance = 0;
     }
 
-    function sell(uint _jingleId, uint _amount) public {
+    function sell(address _owner, uint _jingleId, uint _amount) public onlyJingle {
         require(_amount > 100);
-        require(jingleContract.ownerOf(_jingleId) == msg.sender);
         require(sellOrders[_jingleId].exists == false);
         
         sellOrders[_jingleId] = Order({
            price: _amount,
-           seller: msg.sender,
+           seller: _owner,
            timestamp: now,
            exists: true
         });
@@ -52,11 +56,10 @@ contract Marketplace is Ownable {
         positionOfJingle[_jingleId] = jinglesOnSale.length - 1;
         
         //transfer ownership 
-        jingleContract.approve(this, _jingleId);
-        jingleContract.transferFrom(msg.sender, this, _jingleId);
+        jingleContract.transferFrom(_owner, this, _jingleId);
         
         //Fire an sell event
-        SellOrder(msg.sender, _jingleId, _amount);
+        SellOrder(_owner, _jingleId, _amount);
     }
     
     function buy(uint _jingleId) public payable {

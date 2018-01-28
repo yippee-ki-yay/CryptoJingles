@@ -2,6 +2,7 @@ pragma solidity ^0.4.18;
 
 import './zeppelin/ownership/Ownable.sol';
 import './ERC721.sol';
+import './Marketplace.sol';
 
 contract Jingle is Ownable, ERC721 {
     
@@ -23,6 +24,7 @@ contract Jingle is Ownable, ERC721 {
     uint public numOfJingles;
     
     address public cryptoJingles;
+    Marketplace public marketplaceContract;
     
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
@@ -75,6 +77,12 @@ contract Jingle is Ownable, ERC721 {
         Approval(_from, 0, _jingleId);
         Transfer(_from, _to, _jingleId);
         
+    }
+    
+    function approveAndSell(uint _jingleId, uint _amount) public {
+        this.approve(address(marketplaceContract), _jingleId);
+        
+        marketplaceContract.sell(msg.sender, _jingleId, _amount);
     }
     
     function implementsERC721() public pure returns (bool) {
@@ -165,5 +173,9 @@ contract Jingle is Ownable, ERC721 {
     // Owner functions 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
         cryptoJingles = _cryptoJingles;
+    }
+    
+    function setMarketplaceContract(address _marketplace) public onlyOwner {
+        marketplaceContract = Marketplace(_marketplace);
     }
 }

@@ -72,7 +72,9 @@ module.exports.addJingle = async (jingleData) => {
 
 module.exports.setForSale = async (order) => {
     try {
-        const jingle = await Jingle.find({jingleId: order.jingleId});
+        console.log("Id: ", order.jingleId);
+
+        const jingle = await Jingle.findOne({jingleId: order.jingleId});
 
         jingle.onSale = true;
         jingle.price = order.price;
@@ -89,7 +91,7 @@ module.exports.setForSale = async (order) => {
 
 module.exports.removeFromSale = async (jingleId) => {
     try {
-        const jingle = await Jingle.find({jingleId: jingleId});
+        const jingle = await Jingle.findOne({jingleId: jingleId});
 
         jingle.onSale = false;
         jingle.price = 0;
