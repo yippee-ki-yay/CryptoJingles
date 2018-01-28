@@ -56,7 +56,7 @@ class JingleImage extends Component {
       backgroundImage: background,
       context: context,
       width: this.props.width,
-      height: this.props.height
+      height: this.props.height,
     };
 
     let pixelRatio = typeof opts.pixelRatio === 'number' ? opts.pixelRatio : 1;
@@ -67,21 +67,17 @@ class JingleImage extends Component {
 
     background.onload = () => {
       let renderer = createRenderer(opts);
+      renderer.clear();
 
-      if (opts.debugLuma) {
-        renderer.debugLuma();
-      } else {
-        renderer.clear();
-        let stepCount = 0;
-        loop.on('tick', () => {
-          renderer.step(opts.interval);
-          stepCount++;
-          if (!opts.endlessBrowser && stepCount > opts.steps) {
-            loop.stop();
-          }
-        });
-        loop.start();
-      }
+      let stepCount = 0;
+
+      loop.on('tick', () => {
+        renderer.step(opts.interval);
+        stepCount++;
+        if (!opts.endlessBrowser && stepCount > opts.steps) loop.stop();
+      });
+
+      loop.start();
     };
 
     background.src = config.backgroundSrc;

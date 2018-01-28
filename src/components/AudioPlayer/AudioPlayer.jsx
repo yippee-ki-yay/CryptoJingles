@@ -65,7 +65,9 @@ class AudioPlayer extends Component {
       <div className={`audio-player-wrapper ${this.props.currentAudio ? '' : 'not-visible'}`}>
           <div className="column add-bottom">
             <div id="mainwrap">
-              <div className="close-audio" onClick={() => { this.props.playAudio(null); }}>X</div>
+              <div className="close-audio" onClick={() => { this.props.playAudio(null); }}>
+                <i className="material-icons">close</i>
+              </div>
               <div id="nowPlay">
                 <span className="right" id="npTitle" />
               </div>

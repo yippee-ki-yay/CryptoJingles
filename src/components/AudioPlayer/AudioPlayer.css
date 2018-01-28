@@ -26,6 +26,11 @@
     cursor: pointer;
 }
 
+.close-audio i {
+    position: relative;
+    top: 3px;
+}
+
 .audio-player-wrapper #nowPlay {
     display: inline-flex;
     width: 30%;
@@ -63,7 +68,7 @@
 }
 
 .audio-player-wrapper #npTitle {
-    padding: 10px 10px 10px 35px;
+    padding: 10px 10px 10px 45px;
 }
 
 .audio-player-wrapper .plItem {
@@ -153,3 +158,4 @@
 .plyr--audio .plyr__progress--buffer {
     color:rgba(0,0,0,.1);
 }
+
