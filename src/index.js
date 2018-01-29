@@ -38,7 +38,7 @@ const startApp = () => {
             <Route path="/marketplace" component={Marketplace} />
             <Route path="/jingle/:id" component={JinglePage} />
             <Route path="/compose" component={Compose} />
-            <Route path="/profile" component={Profile} />
+            <Route path="/profile/:address" component={Profile} />
             <Route path='/404' component={() => (<div>404</div>)} />
             <Redirect from='*' to='/404' />
           </Route>

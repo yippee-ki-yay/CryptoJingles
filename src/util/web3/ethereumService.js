@@ -36,13 +36,10 @@ export const getSamples = () =>
       cryptoJinglesContract.setProvider(window.web3.currentProvider);
 
       const samplesInstance = await samplesContract.at(SampleAddress);
-      const cryptoJinglesInstance = await cryptoJinglesContract.at(CryptoJinglesAddress);
 
-      const jingles = await samplesInstance.getAllSamplesForOwner(accounts[0]);
+      const samples = await samplesInstance.getAllSamplesForOwner(accounts[0]);
 
-      const myJingles = parseSamples(jingles);
-
-      resolve({ myJingles });
+      resolve(parseSamples(samples));
     });
   });
 
