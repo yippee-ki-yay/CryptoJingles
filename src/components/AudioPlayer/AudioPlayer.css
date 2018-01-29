@@ -49,7 +49,7 @@
   left: 50%;
   margin: 0 -170px;
 }
-.btn {
+.btn-player {
   position: absolute;
   cursor: pointer;
   opacity: 0.9;

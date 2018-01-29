@@ -147,7 +147,7 @@ class Compose extends Component {
       const id = Math.floor(Math.random() * 6) + 1;
       this.props.addPendingTx(id, 'Create jingle');
       
-      const res = await window.contract.composeJingle("Jaguar Bog", "Satohi Nakamoto", jingleIds, { from: window.web3.eth.accounts[0] });
+      const res = await window.contract.composeJingle("Jaguar Bog", jingleIds, { from: window.web3.eth.accounts[0] });
 
       this.props.removePendingTx(id);
 

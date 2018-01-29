@@ -65,5 +65,6 @@ export const buySamples = () => async (dispatch, getState) => {
 
 export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
   if (value < 1) return;
+
   dispatch({ type: SET_PROFILE_NUM_SAMPLES_TO_BUY, payload: value });
 };

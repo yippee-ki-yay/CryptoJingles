@@ -34,13 +34,13 @@ class AudioPlayer extends Component {
         <div className="controlsOuter">
           <div className="controlsInner">
             <div id="loading"></div>
-            <div className="btn" id="playBtn" onClick={ this.playAudio.bind(this) }></div>
-            <div className="btn" id="pauseBtn" onClick={ this.pauseAudio.bind(this) }></div>
-            <div className="btn" id="prevBtn"></div>
-            <div className="btn" id="nextBtn"></div>
+            <div className="btn-player" id="playBtn" onClick={ this.playAudio.bind(this) }></div>
+            <div className="btn-player" id="pauseBtn" onClick={ this.pauseAudio.bind(this) }></div>
+            <div className="btn-player" id="prevBtn"></div>
+            <div className="btn-player" id="nextBtn"></div>
           </div>
-          <div className="btn" id="playlistBtn"></div>
-          <div className="btn" id="volumeBtn"></div>
+          <div className="btn-player" id="playlistBtn"></div>
+          <div className="btn-player" id="volumeBtn"></div>
         </div>
 
         <div id="waveform"></div>

@@ -13,7 +13,7 @@ class MySamples extends Component {
 
   render() {
       const { isOwner, mySamples, loading, numSamplesToBuy } = this.props;
-      const { buySamples } = this.props;
+      const { buySamples, handleNumSamplesToBuyChange } = this.props;
 
       return (
           <div className="my-jingles-wrapper">
@@ -30,7 +30,7 @@ class MySamples extends Component {
                           <input
                             name="numJinglesToBuy"
                             value={ numSamplesToBuy }
-                            onChange={(event) => {this.handleNumSamplesToBuyChange(event.target); }}
+                            onChange={(event) => {handleNumSamplesToBuyChange(event.target) }}
                             type="number"
                             className="form-control"
                             placeholder="Num. of Jingles" />
