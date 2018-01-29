@@ -15,7 +15,25 @@ module.exports.getJinglesForOwner = async (req, res) => {
                                     .sort(filter)
                                     .exec();
 
-        console.log(jingles);
+        res.status(200);
+        res.json(jingles);
+
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+module.exports.getJinglesOnSaleForOwner = async (req, res) => {
+
+    const pageNum = parseInt(req.params.page) - 1;
+    const filter = req.params.filter;
+
+    try {
+        const jingles = await Jingle.find({owner: req.params.owner, onSale: true})
+                                    .limit(JINGLES_PER_PAGE)
+                                    .skip(JINGLES_PER_PAGE * pageNum)
+                                    .sort(filter)
+                                    .exec();
 
         res.status(200);
         res.json(jingles);

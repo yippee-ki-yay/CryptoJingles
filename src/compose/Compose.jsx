@@ -11,6 +11,7 @@ import PlayIcon from '../components/Decorative/PlayIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
+import { playAudio } from '../actions/audioActions';
 
 import '../util/config';
 import './Compose.css';
@@ -38,8 +39,9 @@ class Compose extends Component {
   }
 
   async componentWillMount() {
-    const jinglesData = await getSamples();
-    this.setState({ ...jinglesData, loading: false });
+    const myJingles = await getSamples();
+
+    this.setState({ myJingles, loading: false });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -116,8 +118,10 @@ class Compose extends Component {
       group
     });
 
+    this.props.playAudio({ name, author: 'Sample', src: group });
 
-    console.log(selectedSongSources);
+
+    //console.log(selectedSongSources);
     //selectedSongSources.map( )
 
     // Promise.all(selectedSongSources).then((sources) => {
@@ -239,4 +243,4 @@ class Compose extends Component {
   }
 }
 
-export default connect(null, { addPendingTx, removePendingTx, })(Compose);
+export default connect(null, { addPendingTx, removePendingTx, playAudio })(Compose);
