@@ -34,10 +34,7 @@ class App extends Component {
                   <Link to="/marketplace">Marketplace</Link>
                 </li>
                 <li>
-                  <Link to="/my-samples">My samples</Link>
-                </li>
-                <li>
-                  <Link to="/my-jingles">My jingles</Link>
+                  <Link to="/profile">Profile</Link>
                 </li>
               </ul>
 

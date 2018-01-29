@@ -4,9 +4,11 @@ import web3Reducer from './util/web3/web3Reducer';
 import audioReducer from './reducers/audioReducer';
 import appReducer from './reducers/appReducer';
 import marketplaceReducer from './reducers/marketplaceReducer';
+import profileReducer from './reducers/profileReducer';
 
 const reducer = combineReducers({
   routing: routerReducer,
+  profile: profileReducer,
   marketplace: marketplaceReducer,
   web3: web3Reducer,
   audio: audioReducer,
