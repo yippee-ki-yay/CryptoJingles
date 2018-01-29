@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
-import { Sound, Group } from 'pizzicato';
+import { Howl } from 'howler';
 import { connect } from 'react-redux';
 import { getJingleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
@@ -105,19 +105,26 @@ class Compose extends Component {
       this.state.myJingles.find((sample) => lastDroppedItem.id === sample.id)
     );
 
-    selectedSongSources = selectedSongSources.map(({ source }) =>
-      new Promise((resolve) => { const sound = new Sound(source, () => { resolve(sound); }); }));
+    const sampleUrls = selectedSongSources.map(sample => sample.source);
 
-    // if (selectedSongSources.length < this.state.jingleSlots.length) {
-    //   alert('Not enough jingles!');
-    //   return;
-    // }
-
-    Promise.all(selectedSongSources).then((sources) => {
-      const group = new Group(sources);
-      group.play();
-      this.setState({ playing: true, group })
+    const group = new Howl({
+      src: sampleUrls
     });
+
+    this.setState({
+      playing: true,
+      group
+    });
+
+
+    console.log(selectedSongSources);
+    //selectedSongSources.map( )
+
+    // Promise.all(selectedSongSources).then((sources) => {
+    //   const group = new Group(sources);
+    //   group.play();
+    //   this.setState({ playing: true, group })
+    // });
   }
 
   createSong = async () => {
