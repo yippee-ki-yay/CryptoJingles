@@ -4,8 +4,16 @@ const Jingle = mongoose.model('Jingle');
 const JINGLES_PER_PAGE = 10;
 
 module.exports.getJinglesForOwner = async (req, res) => {
+
+    const pageNum = parseInt(req.params.page) - 1;
+    const filter = req.params.filter;
+
     try {
-        const jingles = await Jingle.find({owner: req.params.owner});
+        const jingles = await Jingle.find({owner: req.params.owner})
+                                    .limit(JINGLES_PER_PAGE)
+                                    .skip(JINGLES_PER_PAGE * pageNum)
+                                    .sort(filter)
+                                    .exec();
 
         console.log(jingles);
 
@@ -47,12 +55,34 @@ module.exports.getJingles = async (req, res) => {
                                   .sort(filter)
                                   .exec();
 
+
         res.status(200);
         res.json(orders);
 
     } catch(err) {
         console.log(err);
     }
+}
+
+module.exports.getJingleNum = async (req, res) => {
+    try {
+        const sale = req.params.sale;
+
+
+        let search = {};
+
+        if (sale === 'true') {
+            search = { onSale: true};
+        }
+
+        const num = await Jingle.count(search).exec();
+
+        res.status(200);
+        res.json(num);
+
+    } catch(err) {
+        console.log(err);
+    }  
 }
 
 module.exports.getJinglesForSale = async (req, res) => {

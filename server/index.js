@@ -4,6 +4,7 @@ require('dotenv').load();
 const Web3 = require('web3');
 const express = require('express');
 const cors = require('cors');
+const pizzicato = require('pizzicato');
 
 const db = require('./db');
 const routes = require('./routes');
