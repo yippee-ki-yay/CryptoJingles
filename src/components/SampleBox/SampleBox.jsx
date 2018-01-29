@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { DragSource } from 'react-dnd'
-import Pizzicato from 'pizzicato';
+import { Howl } from 'howler';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import { playAudio } from '../../actions/audioActions';
@@ -27,10 +27,7 @@ class SampleBox extends Component {
 
     this.state = { start: false };
 
-    const sound = new Pizzicato.Sound(props.source, () => {
-        sound.loop = true;
-        this.state = { sound, start: false };
-    });
+    const sound = new Howl({src: props.source});
   }
 
   playSound = () => {

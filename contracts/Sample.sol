@@ -15,6 +15,7 @@ contract Sample is Ownable {
     uint public numOfSamples;
     
     address public cryptoJingles;
+    bool cryptoJinglesSet = false;
     
     SampleStorage public sampleStorage;
     
@@ -42,18 +43,6 @@ contract Sample is Ownable {
     
     function setSampleType(uint _sampleId, uint _sampleType) public onlyCryptoJingles {
         tokenType[_sampleId] = _sampleType;
-    }
-    
-    // Internal functions of the contract
-    
-    function addSample(address _owner, uint _sampleType, uint _sampleId) internal {
-        tokensForOwner[_sampleId] = _owner;
-        
-        tokensOwned[_owner].push(_sampleId);
-        
-        tokenType[_sampleId] = _sampleType;
-        
-        tokenPosInArr[_sampleId] = tokensOwned[_owner].length - 1;
     }
     
     //TODO: check this again
@@ -102,8 +91,24 @@ contract Sample is Ownable {
         return usersSamples;
     }
     
+    // Internal functions of the contract
+    
+    function addSample(address _owner, uint _sampleType, uint _sampleId) internal {
+        tokensForOwner[_sampleId] = _owner;
+        
+        tokensOwned[_owner].push(_sampleId);
+        
+        tokenType[_sampleId] = _sampleType;
+        
+        tokenPosInArr[_sampleId] = tokensOwned[_owner].length - 1;
+    }
+    
      // Owner functions 
+    // Set the crypto jingles contract can 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
+        require(cryptoJinglesSet == false);
+        
         cryptoJingles = _cryptoJingles;
+        cryptoJinglesSet = true;
     }
 }

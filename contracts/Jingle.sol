@@ -21,13 +21,17 @@ contract Jingle is Ownable, ERC721 {
     
     mapping(bytes32 => bool) public uniqueJingles;
     
+    mapping(uint => uint[]) public soundEffects;
+    
     uint public numOfJingles;
     
     address public cryptoJingles;
+    bool public cryptoJinglesSet = false;
     Marketplace public marketplaceContract;
     
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+    event EffectAdded(uint indexed jingleId, uint[] effectParams);
     event Composed(uint indexed songId, address indexed owner, 
                 uint[5] samples, uint[5] jingleTypes, string name, string author);
     
@@ -39,10 +43,11 @@ contract Jingle is Ownable, ERC721 {
     function Jingle() public {
     }
     
-    //TODO: clear
     function transfer(address _to, uint256 _jingleId) public {
         require(tokensForOwner[_jingleId] != 0x0);
         require(tokensForOwner[_jingleId] == msg.sender);
+        
+        tokensForApproved[_jingleId] = 0x0;
         
         removeSong(msg.sender, _jingleId);
         addSong(_to, _jingleId);
@@ -80,9 +85,53 @@ contract Jingle is Ownable, ERC721 {
     }
     
     function approveAndSell(uint _jingleId, uint _amount) public {
-        this.approve(address(marketplaceContract), _jingleId);
+        require(tokensForOwner[_jingleId] != 0x0);
+        require(ownerOf(_jingleId) == msg.sender);
+        require(address(marketplaceContract) != msg.sender);
+        
+        if (_getApproved(_jingleId) != 0x0 || address(marketplaceContract) != 0x0) {
+            tokensForApproved[_jingleId] = address(marketplaceContract);
+            Approval(msg.sender, address(marketplaceContract), _jingleId);
+        }
         
         marketplaceContract.sell(msg.sender, _jingleId, _amount);
+    }
+    
+    function composeJingle(address _owner, uint[5] jingles, 
+            uint[5] jingleTypes, string name, string author) public onlyCryptoJingles {
+        
+        uint _jingleId = numOfJingles;
+        
+        uniqueJingles[keccak256(jingles)] = true;
+        
+        tokensForOwner[_jingleId] = _owner;
+        
+        tokensOwned[_owner].push(_jingleId);
+        
+        samplesInJingle[_jingleId] = jingles;
+        
+        tokenPosInArr[_jingleId] = tokensOwned[_owner].length - 1;
+        
+        if (bytes(author).length == 0) {
+            author = "Satoshi Nakajingles";
+        }
+        
+        jinglesInfo[numOfJingles] = MetaInfo({
+            name: name,
+            author: author
+        });
+        
+        Composed(numOfJingles, _owner, jingles, jingleTypes, name, author);
+        
+        numOfJingles++;
+    }
+    
+    function addSoundEffect(uint _jingleId, uint[] _effectParams) external {
+        require(msg.sender == ownerOf(_jingleId));
+        
+        soundEffects[_jingleId] = _effectParams;
+        
+        EffectAdded(_jingleId, _effectParams);
     }
     
     function implementsERC721() public pure returns (bool) {
@@ -116,30 +165,9 @@ contract Jingle is Ownable, ERC721 {
     function getMetaInfo(uint _jingleId) external view returns(string, string) {
         return (jinglesInfo[_jingleId].name, jinglesInfo[_jingleId].author);
     }
-     
-    function composeJingle(address _owner, uint[5] jingles, 
-            uint[5] jingleTypes, string name, string author) public onlyCryptoJingles {
-        
-        uint _jingleId = numOfJingles;
-        
-        uniqueJingles[keccak256(jingles)] = true;
-        
-        tokensForOwner[_jingleId] = _owner;
-        
-        tokensOwned[_owner].push(_jingleId);
-        
-        samplesInJingle[_jingleId] = jingles;
-        
-        tokenPosInArr[_jingleId] = tokensOwned[_owner].length - 1;
-        
-        jinglesInfo[numOfJingles] = MetaInfo({
-            name: name,
-            author: author
-        });
-        
-        Composed(numOfJingles, _owner, jingles, jingleTypes, name, author);
-        
-        numOfJingles++;
+    
+    function _getApproved(uint _jingleId) internal view returns (address) {
+        return tokensForApproved[_jingleId];
     }
     
      // Internal functions of the contract
@@ -166,13 +194,12 @@ contract Jingle is Ownable, ERC721 {
         tokensOwned[_owner].length--;
     }
     
-    function _getApproved(uint _jingleId) internal view returns (address) {
-        return tokensForApproved[_jingleId];
-    }
-    
     // Owner functions 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
+        require(cryptoJinglesSet == false);
+        
         cryptoJingles = _cryptoJingles;
+        cryptoJinglesSet = true;
     }
     
     function setMarketplaceContract(address _marketplace) public onlyOwner {
