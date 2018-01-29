@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 // import SingleJingle from '../components/SingleJingle/SingleJingle';
 import MySamples from '../../mySamples/MySamples';
 import MyJingles from '../../myJingles/MyJingles';
+import MySongs from '../MySongs/MySongs';
+import MyAlbums from '../MyAlbums/MyAlbums';
 import { setActiveTab, checkIfOwnerProfile } from '../../actions/profileActions';
 
 import './Profile.css';
@@ -58,6 +60,8 @@ class Profile extends Component {
 
         { activeTab === tabs[0].value && <MySamples />  }
         { activeTab === tabs[1].value && <MyJingles />  }
+        { activeTab === tabs[2].value && <MySongs />  }
+        { activeTab === tabs[3].value && <MyAlbums /> }
       </div>
     )
   }
