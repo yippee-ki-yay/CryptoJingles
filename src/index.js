@@ -9,11 +9,11 @@ import { syncHistoryWithStore } from 'react-router-redux';
 // Layouts
 import App from './App';
 import Home from './home/Home';
-import MySamples from './mySamples/MySamples';
 import Profile from './components/Profile/Profile';
 import Marketplace from './marketplace/Marketplace';
 import Compose from './compose/Compose';
 import JinglePage from './marketplace/JinglePage';
+import Page404 from './components/Page404/Page404';
 
 // Redux Store
 import store from './store';
@@ -39,7 +39,7 @@ const startApp = () => {
             <Route path="/jingle/:id" component={JinglePage} />
             <Route path="/compose" component={Compose} />
             <Route path="/profile/:address" component={Profile} />
-            <Route path='/404' component={() => (<div>404</div>)} />
+            <Route path='/404' component={Page404} />
             <Redirect from='*' to='/404' />
           </Route>
         </Router>
