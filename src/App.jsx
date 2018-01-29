@@ -1,3 +1,5 @@
+/* eslint-disable */
+// TODO - set web3 as eslint global
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
@@ -34,7 +36,7 @@ class App extends Component {
                   <Link to="/marketplace">Marketplace</Link>
                 </li>
                 <li>
-                  <Link to="/profile">Profile</Link>
+                  <Link to={`/profile/${web3.eth.accounts[0]}`}>Profile</Link>
                 </li>
               </ul>
 

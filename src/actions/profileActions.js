@@ -1,5 +1,5 @@
 import {
-  SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY
+  SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
@@ -17,6 +17,18 @@ export const setActiveTab = (value) => (dispatch, getState) => {
   tabs[tabs.findIndex((_tab) => _tab.active)].active = false;
   tabs[tabs.findIndex((_tab) => _tab.value === value)].active = true;
   dispatch({ type: SET_ACTIVE_PROFILE_TAB, payload: tabs });
+};
+
+/**
+ * Checks if the current profile is the users profile and sets
+ * the results in the reducer
+ *
+ * @param {String} address - current profile address
+ *
+ * @return {Function}
+ */
+export const checkIfOwnerProfile = (address) => (dispatch) => {
+  dispatch({ type: SET_PROFILE_IS_OWNER, payload: web3.eth.accounts[0] === address }); // eslint-disable-line
 };
 
 // SAMPLES

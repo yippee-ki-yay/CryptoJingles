@@ -12,18 +12,21 @@ class MySamples extends Component {
   }
 
   render() {
-      const { mySamples, loading, numSamplesToBuy } = this.props;
+      const { isOwner, mySamples, loading, numSamplesToBuy } = this.props;
       const { buySamples } = this.props;
 
       return (
-          <div className="my-jingles-wrapper container">
-            <div className="buy-samples-section">
-                <div>
-                  <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
-                    <div className="buy-samples-wrapper">
-                      <h2>Buy some samples:</h2>
+          <div className="my-jingles-wrapper">
+            {
+              isOwner &&
+              <div>
+                <div className="buy-samples-section">
+                  <div>
+                    <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
+                      <div className="buy-samples-wrapper">
+                        <h2>Buy some samples:</h2>
 
-                      <div className="form-items-wrapper">
+                        <div className="form-items-wrapper">
                           <input
                             name="numJinglesToBuy"
                             value={ numSamplesToBuy }
@@ -32,14 +35,15 @@ class MySamples extends Component {
                             className="form-control"
                             placeholder="Num. of Jingles" />
 
-                        <button type="submit" className="btn buy-button" onClick={buySamples}>Buy!</button>
+                          <button type="submit" className="btn buy-button" onClick={buySamples}>Buy!</button>
+                        </div>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
+                </div>
+                <div className="separator" />
               </div>
-            </div>
-
-            <div className="separator" />
+            }
 
             <div className="samples-wrapper">
               { loading && <div className="loader-wrapper"><BoxLoader /></div> }
@@ -73,7 +77,8 @@ class MySamples extends Component {
 const mapStateToProps = (state) => ({
   mySamples: state.profile.mySamples,
   numSamplesToBuy: state.profile.numSamplesToBuy,
-  loading: state.profile.loading
+  loading: state.profile.loading,
+  isOwner: state.profile.isOwner
 });
 
 const mapDispatchToProps = { getSamplesForUser, buySamples, handleNumSamplesToBuyChange };

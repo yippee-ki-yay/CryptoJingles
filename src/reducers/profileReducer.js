@@ -1,8 +1,9 @@
 import {
-  PROFILE_TABS, SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY
+  PROFILE_TABS, SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
+  isOwner: false,
   tabs: PROFILE_TABS,
   mySamples: [],
   numSamplesToBuy: 1,
@@ -20,6 +21,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_PROFILE_NUM_SAMPLES_TO_BUY:
       return { ...state, numSamplesToBuy: payload };
+
+    case SET_PROFILE_IS_OWNER:
+      return { ...state, isOwner: payload };
 
     default:
       return state;

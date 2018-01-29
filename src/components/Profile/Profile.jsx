@@ -6,18 +6,19 @@ import { connect } from 'react-redux';
 // import SingleJingle from '../components/SingleJingle/SingleJingle';
 import MySamples from '../../mySamples/MySamples';
 import MyJingles from '../../myJingles/MyJingles';
-import { setActiveTab } from '../../actions/profileActions';
+import { setActiveTab, checkIfOwnerProfile } from '../../actions/profileActions';
 
 import './Profile.css';
+import profilePlaceholder from './profile-placeholder.png';
 
 // TODO - add proptypes
 class Profile extends Component {
   componentWillMount() {
-    // callGetJinglesForUser
+    this.props.checkIfOwnerProfile(this.props.params.address);
   }
 
   render() {
-    const { tabs } = this.props;
+    const { tabs, params } = this.props;
     const { setActiveTab } = this.props;
 
     const activeTab = tabs.find((_tab) => _tab.active).value;
@@ -28,10 +29,10 @@ class Profile extends Component {
         { /* TODO - create component out of this, fix html layout */  }
         <div className="profile-info-wrapper">
           <div className="profile-image-wrapper">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="profile image"/>
+            <img src={profilePlaceholder} alt="profile image"/>
             <div>
-              <h2>Author name</h2>
-              <h4>0x69cc780bf4f63380c4bc745ee338cb678752301a</h4>
+              <h2>Satoshi Nakajingles</h2>
+              <h4>{ params.address }</h4>
             </div>
           </div>
 
@@ -63,10 +64,10 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  tabs: state.profile.tabs,
+  tabs: state.profile.tabs
 });
 
-const mapDispatchToProps = { setActiveTab };
+const mapDispatchToProps = { setActiveTab, checkIfOwnerProfile };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 

@@ -29,3 +29,4 @@ export const REMOVE_PENDING_TX = 'remove_pending_tx';
 export const SET_ACTIVE_PROFILE_TAB = 'set_active_profile_tab';
 export const SET_PROFILE_SAMPLES = 'set_profile_samples';
 export const SET_PROFILE_NUM_SAMPLES_TO_BUY = 'set_profile_num_samples_to_buy';
+export const SET_PROFILE_IS_OWNER = 'set_profile_is_owner';

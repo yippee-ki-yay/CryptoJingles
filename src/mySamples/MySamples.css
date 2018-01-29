@@ -9,7 +9,7 @@
 }
 
 .buy-samples-section {
-    margin: 50px 0;
+    margin: 10px 0 20px 0;
 }
 
 .buy-samples-wrapper h2,
@@ -39,5 +39,7 @@ input.form-control {
 }
 
 .samples-wrapper {
-    margin-top: 50px;
+    margin-top: 30px;
+    display: inline-block;
+    width: 100%;
 }
