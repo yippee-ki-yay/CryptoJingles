@@ -6,6 +6,13 @@ export const SORTING_OPTIONS = [
   { value: '-price', label: 'Cheapest first' }
 ];
 export const MARKETPLACE_JINGLES_PER_PAGE = 10;
+
+export const PROFILE_TABS = [
+  { label: 'Samples', value: 'samples', active: true },
+  { label: 'Jingles', value: 'jingles' },
+  { label: 'Songs', value: 'songs' },
+  { label: 'Albums', value: 'albums' }
+];
 // TODO put everything above this comment in a constants file
 
 export const CHANGE_MARKETPLACE_PAGE = 'change_marketplace_page';
@@ -18,3 +25,5 @@ export const SET_SINGLE_AUDIO = 'set_single_audio';
 
 export const ADD_PENDING_TX = 'add_pending_tx';
 export const REMOVE_PENDING_TX = 'remove_pending_tx';
+
+export const SET_ACTIVE_PROFILE_TAB = 'set_active_profile_tab';
