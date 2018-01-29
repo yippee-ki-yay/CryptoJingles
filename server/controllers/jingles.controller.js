@@ -4,8 +4,16 @@ const Jingle = mongoose.model('Jingle');
 const JINGLES_PER_PAGE = 10;
 
 module.exports.getJinglesForOwner = async (req, res) => {
+
+    const pageNum = parseInt(req.params.page) - 1;
+    const filter = req.params.filter;
+
     try {
-        const jingles = await Jingle.find({owner: req.params.owner});
+        const jingles = await Jingle.find({owner: req.params.owner})
+                                    .limit(JINGLES_PER_PAGE)
+                                    .skip(JINGLES_PER_PAGE * pageNum)
+                                    .sort(filter)
+                                    .exec();
 
         console.log(jingles);
 

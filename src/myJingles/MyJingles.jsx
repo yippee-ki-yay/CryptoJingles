@@ -15,7 +15,7 @@ class MyJingles extends Component {
   }
 
   async componentWillMount() {
-    const res = await axios(`${API_URL}/jingles/${window.web3.eth.accounts[0]}`);
+    const res = await axios(`${API_URL}/jingles/${window.web3.eth.accounts[0]}/page/1/filter/price/`);
 
     const myJingles = res.data;
 
