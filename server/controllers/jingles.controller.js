@@ -47,12 +47,34 @@ module.exports.getJingles = async (req, res) => {
                                   .sort(filter)
                                   .exec();
 
+
         res.status(200);
         res.json(orders);
 
     } catch(err) {
         console.log(err);
     }
+}
+
+module.exports.getJingleNum = async (req, res) => {
+    try {
+        const sale = req.params.sale;
+
+
+        let search = {};
+
+        if (sale === 'true') {
+            search = { onSale: true};
+        }
+
+        const num = await Jingle.count(search).exec();
+
+        res.status(200);
+        res.json(num);
+
+    } catch(err) {
+        console.log(err);
+    }  
 }
 
 module.exports.getJinglesForSale = async (req, res) => {

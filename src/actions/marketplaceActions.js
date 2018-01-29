@@ -18,6 +18,11 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
     const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
     response.data.forEach(j => { j.imageSrc = img0; }); // TODO Replace this with canvas in SingleJingle component
 
+    // false for all jingles, true to get jingles on sale
+    const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/false`);
+
+    console.log(num);
+
     dispatch({ type: SET_MARKETPLACE_JINGLES, payload: response.data })
   } catch (err) {
     console.error('Get marketplace jingles error:', err); // TODO Handle this in the future

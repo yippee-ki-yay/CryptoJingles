@@ -37,11 +37,11 @@ export const getJingleMetadata = (jingleType) => {
     case 7:
       return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
     case 8:
-      return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
+      return { type: COMPOSE, name: 'Bitconnect', source: '../audio/01-28-2018_00-04_msg797792.mp3' };
     case 9:
       return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
     case 10:
-      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+      return { type: COMPOSE, name: 'Bitconnect', source: '../audio/01-28-2018_00-04_msg797792.mp3'  };
     case 11:
       return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
     case 12:
