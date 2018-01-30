@@ -1,9 +1,13 @@
 import {
   PROFILE_TABS, SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
-  SET_PROFILE_JINGLES, SORTING_OPTIONS, CATEGORY_OPTIONS, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT
+  SET_PROFILE_JINGLES, SORTING_OPTIONS, CATEGORY_OPTIONS, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT,
+  TOGGLE_PROFILE_AUTHOR, SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
+  author: 'Satoshi Nakajingles',
+  authorEdit: 'Satoshi Nakajingles',
+  editAuthorActive: false,
   profileAddress: '',
   isOwner: false,
   tabs: PROFILE_TABS,
@@ -41,6 +45,23 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_PROFILE_JINGLES_SORT:
       return { ...state, jingleSorting: payload };
+
+    case TOGGLE_PROFILE_AUTHOR: {
+      if (payload === false) {
+        return { ...state, editAuthorActive: payload, author: state.author, authorEdit: state.author };
+      } else {
+        return { ...state, editAuthorActive: payload };
+      }
+    }
+
+    case SET_PROFILE_AUTHOR_EDIT:
+      return { ...state, authorEdit: payload };
+
+    case SET_PENDING_AUTHOR:
+      return { ...state, editAuthorActive: payload, author: 'Updating author...' };
+
+    case AUTHOR_EDIT_SUCCESS:
+      return { ...state, author: payload, authorEdit: payload };
 
     default:
       return state;

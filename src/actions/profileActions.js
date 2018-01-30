@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
-  SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT
+  SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
+  SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
@@ -37,6 +38,72 @@ export const checkIfOwnerProfile = (address) => (dispatch) => {
       isOwner: web3.eth.accounts[0] === address, // eslint-disable-line
       address
     }});
+};
+
+/**
+ * Dispatches action to change the value of authorEdit in the reducer
+ * fires on input change
+ *
+ * @param {Object} event
+ *
+ * @return {Function}
+ */
+export const onEditAuthorChange = ({ target }) => (dispatch) => {
+  dispatch({ type: SET_PROFILE_AUTHOR_EDIT, payload: target.value })
+};
+
+/**
+ * Checks if the current profile is the users profile and sets
+ * the results in the reducer
+ *
+ * @param {Boolean} hideOrShow - boolean to hide or show author input
+ *
+ * @return {Function}
+ */
+export const toggleEditAuthor = (hideOrShow) => (dispatch) => {
+  dispatch({ type: TOGGLE_PROFILE_AUTHOR, payload: hideOrShow });
+};
+
+/**
+ * Gets the author name from the contract for the given address
+ *
+ * @return {Function}
+ */
+export const getAuthor = () => async (dispatch, getState) => {
+  try {
+    const address = web3.eth.accounts[0]; // eslint-disable-line
+    let author = await window.contract.authors(address);
+    author = author || getState().profile.author;
+
+    dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: author });
+  } catch(err) {
+    console.log('Get author error', err);
+    // TODO - Handle this
+  }
+};
+
+/**
+ * Sends value of author edit to the contract
+ *
+ * @return {Function}
+ */
+export const submitEditAuthorForm = () => async (dispatch, getState) => {
+  const id = Math.floor(Math.random() * 6) + 1; // TODO - replace this with pending tx length
+  try {
+    const address = web3.eth.accounts[0]; // eslint-disable-line
+    const newAuthorName = getState().profile.authorEdit;
+
+    dispatch(addPendingTx(id, 'Edit author name'));
+    dispatch({ type: SET_PENDING_AUTHOR });
+
+    await window.contract.setAuthorName(newAuthorName, { from: address });
+
+    dispatch(removePendingTx(id));
+    dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: newAuthorName });
+  } catch(err) {
+    dispatch(removePendingTx(id));
+    dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: getState().profile.author });
+  }
 };
 
 // SAMPLES TODO - create separate reducer & actions for this

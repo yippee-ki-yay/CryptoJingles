@@ -33,3 +33,7 @@ export const SET_PROFILE_IS_OWNER = 'set_profile_is_owner';
 export const SET_PROFILE_JINGLES = 'set_profile_jingles';
 export const SET_PROFILE_JINGLES_CATEGORY = 'set_profile_jingles_category';
 export const SET_PROFILE_JINGLES_SORT = 'set_profile_jingles_sort';
+export const TOGGLE_PROFILE_AUTHOR = 'toggle_profile_author';
+export const SET_PROFILE_AUTHOR_EDIT = 'set_profile_author_edit';
+export const SET_PENDING_AUTHOR = 'set_pending_author';
+export const AUTHOR_EDIT_SUCCESS = 'author_edit_success';
