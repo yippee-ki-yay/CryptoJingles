@@ -32,7 +32,7 @@ contract Jingle is Ownable, ERC721 {
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     event EffectAdded(uint indexed jingleId, uint[] effectParams);
-    event Composed(uint indexed songId, address indexed owner, 
+    event Composed(uint indexed jingleId, address indexed owner, 
                 uint[5] samples, uint[5] jingleTypes, string name, string author);
     
     modifier onlyCryptoJingles() {
@@ -49,8 +49,8 @@ contract Jingle is Ownable, ERC721 {
         
         tokensForApproved[_jingleId] = 0x0;
         
-        removeSong(msg.sender, _jingleId);
-        addSong(_to, _jingleId);
+        removeJingle(msg.sender, _jingleId);
+        addJingle(_to, _jingleId);
         
         Approval(msg.sender, 0, _jingleId);
         Transfer(msg.sender, _to, _jingleId);
@@ -76,8 +76,8 @@ contract Jingle is Ownable, ERC721 {
         
         tokensForApproved[_jingleId] = 0x0;
         
-        removeSong(_from, _jingleId);
-        addSong(_to, _jingleId);
+        removeJingle(_from, _jingleId);
+        addJingle(_to, _jingleId);
         
         Approval(_from, 0, _jingleId);
         Transfer(_from, _to, _jingleId);
@@ -113,7 +113,7 @@ contract Jingle is Ownable, ERC721 {
         tokenPosInArr[_jingleId] = tokensOwned[_owner].length - 1;
         
         if (bytes(author).length == 0) {
-            author = "Satoshi Nakajingles";
+            author = "Soundtoshi Nakajingles";
         }
         
         jinglesInfo[numOfJingles] = MetaInfo({
@@ -172,7 +172,7 @@ contract Jingle is Ownable, ERC721 {
     
      // Internal functions of the contract
     
-    function addSong(address _owner, uint _jingleId) internal {
+    function addJingle(address _owner, uint _jingleId) internal {
         tokensForOwner[_jingleId] = _owner;
         
         tokensOwned[_owner].push(_jingleId);
@@ -182,7 +182,7 @@ contract Jingle is Ownable, ERC721 {
     
     // find who owns that jingle and at what position is it in the owners arr 
     // Swap that token with the last one in arr and delete the end of arr
-    function removeSong(address _owner, uint _jingleId) internal {
+    function removeJingle(address _owner, uint _jingleId) internal {
         uint length = tokensOwned[_owner].length;
         uint index = tokenPosInArr[_jingleId];
         uint swapToken = tokensOwned[_owner][length - 1];

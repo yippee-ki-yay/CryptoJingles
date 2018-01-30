@@ -13,8 +13,8 @@ const jinglesAbi = require("../build/contracts/Jingle");
 const jingleCtrl = require('./controllers/jingles.controller');
 
 const app = express();
-const marketplaceAddress = "0xd4d31f5c46b4bfe80a21be892e5df7788f684872";
-const jinglesAddress = "0x64abb42ab685ba78b81732b8081270e8d25af3f0";
+const marketplaceAddress = "0x1d744b4fb32265f1a624ad38ea5c55d029719da8";
+const jinglesAddress = "0x17330b21d4c706eadc745295ed0a0b4bc43e8381";
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETH_NODE));
 
@@ -24,16 +24,6 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
 
 (async () => {
-
-    //mockup data
-
-//     const order = {
-//         jingleId: 13,
-//         seller: '0x094144edafd5eA40f82d0bDa155A3E5eFc93658E',
-//         price: 300000000,
-//     };
-
-//    await orderCtrl.addOrder(order);
 
     jingles.Composed(async (err, res) => {
         if(err) {
@@ -45,7 +35,7 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
         const sampleTypes = res.args.jingleTypes.map(s => s.valueOf());
 
         const jingleData = {
-            jingleId: res.args.songId.valueOf(),
+            jingleId: res.args.jingleId.valueOf(),
             name: res.args.name,
             author: res.args.author,
             owner: res.args.owner,
@@ -68,7 +58,7 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
        }
 
        const order = {
-            jingleId: res.args.songId.valueOf(),
+            jingleId: res.args.jingleId.valueOf(),
             price: res.args.price.valueOf(),
         };
 
@@ -84,7 +74,7 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
             console.log(err);
         }
 
-        const jingleId = res.args.songId.valueOf();
+        const jingleId = res.args.jingleId.valueOf();
         const buyer = res.args.buyer;
 
         const updated = await jingleCtrl.removeFromSale(jingleId, buyer);
@@ -99,7 +89,7 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
             console.log(err);
         }
 
-        const jingleId = res.args.songId.valueOf();
+        const jingleId = res.args.jingleId.valueOf();
         const owner = res.args.owner;
 
         const updated = await jingleCtrl.removeFromSale(jingleId, owner);

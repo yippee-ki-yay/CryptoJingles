@@ -17,9 +17,9 @@ contract Marketplace is Ownable {
         bool exists;
     }
     
-    event SellOrder(address owner, uint songId, uint price);
-    event Bought(uint songId, address buyer, uint price);
-    event Canceled(address owner, uint songId);
+    event SellOrder(address owner, uint jingleId, uint price);
+    event Bought(uint jingleId, address buyer, uint price);
+    event Canceled(address owner, uint jingleId);
     
     uint public numOrders;
     uint public ownerBalance;

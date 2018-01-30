@@ -75,7 +75,7 @@ contract CryptoJingles is Ownable {
             sampleContract.removeSample(msg.sender, samples[j]);
         }
         
-        //create a new song containing those 5 samples
+        //create a new jingle containing those 5 samples
         jingleContract.composeJingle(msg.sender, samples, sampleTypes, name, authors[msg.sender]);
     }
     
