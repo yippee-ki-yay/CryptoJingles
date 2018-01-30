@@ -51,7 +51,7 @@ class MySamples extends Component {
               {
                 (mySamples.length === 0) &&
                 !loading &&
-                <div><h2>You do not own any samples yet!</h2></div>
+                <div className="empty-state"><h2>You do not own any samples yet!</h2></div>
               }
 
               {
