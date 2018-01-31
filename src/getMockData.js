@@ -21,47 +21,47 @@ import img14 from './mockImages/render_14.png';
 export const getJingleMetadata = (jingleType) => {
   switch (parseInt(jingleType)) {
     case 0:
-      return { type: COMPOSE, name: 'Hip Piano', source: '../audio/d-minor-classic-hip-hop-piano-loop-185-bpm_z1ydWAN_.mp3' };
+      return { type: COMPOSE, name: 'Bass Groove', source: '../audio/bass-groove.wav' };
     case 1:
-      return { type: COMPOSE, name: 'Rock Guitar', source: '../audio/rock-guitar_G1xFhESd.mp3' };
+      return { type: COMPOSE, name: 'Boomin Melody', source: '../audio/boomin-melody.wav' };
     case 2:
-      return { type: COMPOSE, name: 'Deep Drum', source: '../audio/cinematic-deep-drum-hit_z1KODSEu.mp3' };
+      return { type: COMPOSE, name: 'Brasil tropical', source: '../audio/brasil-ritmo-tropical-7.wav' };
     case 3:
-      return { type: COMPOSE, name: 'Rhumba', source: '../audio/dm-rhumba-salsa-style-piano-loop-part-a-135-bpm_Gyle70V_.mp3' };
+      return { type: COMPOSE, name: 'Bassline', source: '../audio/catchy-af-bassline-2.wav' };
     case 4:
-      return { type: COMPOSE, name: 'Heavenly trans', source: '../audio/heavenly-trans_zydE3IHu.mp3' };
+      return { type: COMPOSE, name: 'Drum beat', source: '../audio/catchy-af-drumbeat.wav' };
     case 5:
-      return { type: COMPOSE, name: 'Swagger', source: '../audio/swagger-lee-alt-mix_zJ0EaMHu.mp3' };
+      return { type: COMPOSE, name: 'Synth lead', source: '../audio/catchy-af-synth-lead.wav' };
     case 6:
-      return { type: COMPOSE, name: 'Speed of sound', source: '../audio/speed-of-sound-alt-mix_G1PVtzSd.mp3' };
+      return { type: COMPOSE, name: 'Quiet Bit', source: '../audio/cool-quiet-beat.wav' };
     case 7:
-      return { type: COMPOSE, name: 'Jingle', source: '../audio/s1.wav' };
+      return { type: COMPOSE, name: 'Crystal bells', source: '../audio/crystal-bells-70-bmp.wav' };
     case 8:
-      return { type: COMPOSE, name: 'Bitconnect', source: '../audio/01-28-2018_00-04_msg797792.mp3' };
+      return { type: COMPOSE, name: 'Distorted drum', source: '../audio/distorted-808-drum.wav' };
     case 9:
-      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+      return { type: COMPOSE, name: 'Drum loop', source: '../audio/drumloop-trap-with-808.wav' };
     case 10:
-      return { type: COMPOSE, name: 'Bitconnect', source: '../audio/01-28-2018_00-04_msg797792.mp3'  };
+      return { type: COMPOSE, name: 'Enjoy drum', source: '../audio/enjoy-drm-90bmp.wav'  };
     case 11:
-      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+      return { type: COMPOSE, name: 'Flair melody', source: '../audio/flair-melody.wav' };
     case 12:
-      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };
+      return { type: COMPOSE, name: 'Funky bass', source: '../audio/funky-bass.wav' };
     case 13:
-      return { type: COMPOSE, name: 'Some crazy', source: '../audio/s2.wav' };
+      return { type: COMPOSE, name: 'GG melody', source: '../audio/gg-melody.wav' };
     case 14:
-      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+      return { type: COMPOSE, name: 'Giving melody', source: '../audio/giving80bmp-drm.wav' };
     case 15:
-      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+      return { type: COMPOSE, name: 'Hard harp', source: '../audio/hard-harp.wav' };
     case 16:
-      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+      return { type: COMPOSE, name: 'Hi Hat', source: '../audio/hi-hat-120bpm.wav' };
     case 17:
-      return { type: COMPOSE, name: 'Kek', source: '../audio/s6.wav' };
+      return { type: COMPOSE, name: 'Huge Melody', source: '../audio/huge-melody.wav' };
     case 18:
-      return { type: COMPOSE, name: 'Yup', source: '../audio/s3.wav' };
+      return { type: COMPOSE, name: 'Hister1a', source: '../audio/hyster1a-boombap-beat.wav' };
     case 19:
-      return { type: COMPOSE, name: 'Give it a go', source: '../audio/s4.wav' };
+      return { type: COMPOSE, name: 'I have beats', source: '../audio/i-have-132bpm.wav' };
     case 20:
-      return { type: COMPOSE, name: 'wup wup', source: '../audio/s5.wav' };
+      return { type: COMPOSE, name: 'Love lead', source: '../audio/love-lead-v1-120bpm.wav' };
     default:
       return { type: COMPOSE, name: '', source: '' };
   }
