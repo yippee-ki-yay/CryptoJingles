@@ -68,15 +68,7 @@ class MyJingles extends Component {
                   {
                     myJingles.map((jingle) =>
                       (
-                        <SingleJingle
-                          jingleId={jingle.jingleId}
-                          key={jingle.jingleId}
-                          owner={jingle.owner}
-                          onSale={jingle.onSale}
-                          price={jingle.price}
-                          author={jingle.author}
-                          name={jingle.name}
-                        />
+                        <SingleJingle key={jingle.jingleId} {...jingle} />
                       )
                     )
                   }

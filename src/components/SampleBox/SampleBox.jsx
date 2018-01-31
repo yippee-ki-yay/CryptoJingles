@@ -28,14 +28,21 @@ class SampleBox extends Component {
     this.state = { start: false };
 
     const sound = new Pizzicato.Sound(props.source, () => {
-      sound.loop = true;
+      sound.on('stop', () => {
+        this.setState({ start: false });
+      });
       this.state = { sound, start: false };
-  });
+    });
   }
 
   playSound = () => {
-      const { name, source } = this.props;
-      this.props.playAudio({ name, author: 'Sample', src: source });
+    this.state.sound.play();
+    this.setState({ start: true });
+  };
+
+  stopSound = () => {
+    this.state.sound.stop();
+    this.setState({ start: false });
   };
 
   render() {

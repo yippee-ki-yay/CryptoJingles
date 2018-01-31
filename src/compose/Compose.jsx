@@ -8,6 +8,7 @@ import { getJingleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import PlayIcon from '../components/Decorative/PlayIcon';
+import StopIcon from '../components/Decorative/StopIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
@@ -113,6 +114,10 @@ class Compose extends Component {
     Promise.all(selectedSongSources).then((sources) => {
       const group = new Group(sources);
       group.play();
+
+      group.on('stop', () => {
+        this.setState({ playing: false });
+      });
       this.setState({ playing: true, group })
     });
   }
@@ -169,7 +174,8 @@ class Compose extends Component {
                            className="compose-play"
                            onClick={this.startStopSong}
                          >
-                           <PlayIcon />
+                           { !this.state.playing && <PlayIcon />}
+                           { this.state.playing && <StopIcon />}
                          </span>
 
                          <button type="button" className="btn buy-button" onClick={ this.createSong }>

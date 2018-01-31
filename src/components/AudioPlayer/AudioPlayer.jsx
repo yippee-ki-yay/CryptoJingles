@@ -62,23 +62,7 @@ class AudioPlayer extends Component {
 
   render() {
     return(
-      <div className={`audio-player-wrapper ${this.props.currentAudio ? '' : 'not-visible'}`}>
-          <div className="column add-bottom">
-            <div id="mainwrap">
-              <div className="close-audio" onClick={() => { this.props.playAudio(null); }}>
-                <i className="material-icons">close</i>
-              </div>
-              <div id="nowPlay">
-                <span className="right" id="npTitle" />
-              </div>
-              <div id="audiowrap">
-                <div id="audio0">
-                  <audio preload id="audio1" controls="controls">Your browser does not support HTML5 Audio!</audio>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>
+      <div />
     )
   }
 }

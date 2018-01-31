@@ -63,7 +63,7 @@
     justify-content: space-evenly;
 }
 
-.overlay .play, .overlay .open {
+.overlay .play, .overlay .open, .overlay .stop {
     color: white;
     cursor: pointer;
     font-size: 45px;
