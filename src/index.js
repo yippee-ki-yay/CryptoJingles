@@ -2,7 +2,7 @@ import FastClick from 'fastclick';
 import React from 'react';
 import getWeb3 from './util/web3/getWeb3';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory, Redirect } from 'react-router';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 
@@ -19,7 +19,7 @@ import Page404 from './components/Page404/Page404';
 import store from './store';
 
 // Initialize react-router-redux.
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
 
 const startApp = () => {
   if ('addEventListener' in document) {

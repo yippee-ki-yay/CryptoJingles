@@ -30,6 +30,7 @@ class Compose extends Component {
       myJingles: [],
       jinglesInstance: null,
       accounts: [],
+      allJingles: [],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -226,7 +227,7 @@ class Compose extends Component {
 
                 <div className="compose-samples-wrapper">
                   {
-                    this.state.myJingles.map((sample) => (
+                    this.state.allJingles.map((sample) => (
                       <SampleBox
                         draggable
                         key={sample.id}
