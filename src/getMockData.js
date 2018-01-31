@@ -43,7 +43,7 @@ export const getJingleMetadata = (jingleType) => {
     case 10:
       return { type: COMPOSE, name: 'Enjoy drum', source: '../audio/enjoy-drm-90bmp.wav'  };
     case 11:
-      return { type: COMPOSE, name: 'Flair melody', source: '../audio/flair-melody.wav' };
+      return { type: COMPOSE, name: 'Flair melody', source: '../audio/flair-melody-2.wav' };
     case 12:
       return { type: COMPOSE, name: 'Funky bass', source: '../audio/funky-bass.wav' };
     case 13:
