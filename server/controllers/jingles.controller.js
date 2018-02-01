@@ -43,6 +43,29 @@ module.exports.getJinglesOnSaleForOwner = async (req, res) => {
     }
 }
 
+module.exports.getJingleNumForOwner = async (req, res) => {
+    try {
+        const sale = req.params.sale;
+
+        let search = { owner: req.params.owner };
+
+        if (sale === 'true') {
+            search = { 
+                onSale: true,
+                owner: req.params.owner
+            };
+        }
+
+        const num = await Jingle.count(search).exec();
+
+        res.status(200);
+        res.json(num);
+
+    } catch(err) {
+        console.log(err);
+    }  
+}
+
 module.exports.getJingle = async (req, res) => {
     try {
         const jingleId = req.params.jingleId;
@@ -85,7 +108,6 @@ module.exports.getJingles = async (req, res) => {
 module.exports.getJingleNum = async (req, res) => {
     try {
         const sale = req.params.sale;
-
 
         let search = {};
 
