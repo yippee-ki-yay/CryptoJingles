@@ -89,3 +89,14 @@
   margin: 0;
   width: 250px;
 }
+
+.buy-samples-link a {
+  text-decoration: underline;
+  color: #16add8;
+  margin-left: 10px;
+  transition: 0.2s;
+}
+
+.buy-samples-link a:hover {
+  opacity: 0.75;
+}

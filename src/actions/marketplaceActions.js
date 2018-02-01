@@ -4,8 +4,6 @@ import {
   SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_JINGLES, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE
 } from '../constants/actionTypes';
 
-import img0 from '../mockImages/render_0.png'; // TODO Replace this with canvas in SingleJingle component
-
 /**
  * Gets all jingles for category and sort option fromm the server and then sets it in the state
  *
@@ -13,16 +11,16 @@ import img0 from '../mockImages/render_0.png'; // TODO Replace this with canvas 
  */
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
   const { currentPage, category, sorting, } = getState().marketplace;
-
+console.log('currentPage', currentPage);
   try {
     const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
 
     // false for all jingles, true to get jingles on sale
-    const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/false`);
+    const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/${(category.value === 'sale').toString()}`);
 
     console.log(num);
 
-    dispatch({ type: SET_MARKETPLACE_JINGLES, payload: response.data })
+    dispatch({ type: SET_MARKETPLACE_JINGLES, payload: { jingles: response.data, num: num.data } })
   } catch (err) {
     console.error('Get marketplace jingles error:', err); // TODO Handle this in the future
   }
@@ -57,12 +55,11 @@ export const changeMarketplaceSorting = (payload) => (dispatch) => {
 /**
  * Changes the current selected page and then get all jingles for that page
  *
- * @param {Object} payload
+ * @param {Number} pageNum
  *
  * @return {Function}
  */
-export const onMarketplacePaginationChange = (payload) => (dispatch) => {
-  console.log('payload', payload);
-  dispatch({ type: SET_MARKETPLACE_PAGE, payload });
+export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
+  dispatch({ type: SET_MARKETPLACE_PAGE, payload: pageNum + 1 });
   dispatch(getMarketplaceJingles());
 };

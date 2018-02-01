@@ -33,6 +33,9 @@ class SampleBox extends Component {
       });
       this.state = { sound, start: false };
     });
+
+    this.stopSound = this.stopSound.bind(this);
+    this.playSound = this.playSound.bind(this);
   }
 
   componentWillUnmount() { this.stopSound(); }
@@ -43,6 +46,7 @@ class SampleBox extends Component {
   };
 
   stopSound = () => {
+    if (!this.state.sound) return;
     this.state.sound.stop();
     this.setState({ start: false });
   };
