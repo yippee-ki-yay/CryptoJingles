@@ -4,8 +4,8 @@ import { DropTarget } from 'react-dnd';
 import './SampleSlot.css';
 
 const style = {
-  height: '16rem',
-  width: '16rem',
+  height: '17rem',
+  width: '17rem',
   marginRight: '1.5rem',
   marginBottom: '1.5rem',
   color: 'white',

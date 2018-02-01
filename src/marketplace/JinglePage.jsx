@@ -155,7 +155,7 @@ class JinglePage extends Component {
                         </h3>
                         {
                           !isOwner &&
-                          <button className="btn buy-button" onClick={ this.purchase }>
+                          <button type="submit" className="btn buy-button" onClick={ this.purchase }>
                             Purchase
                           </button>
                         }

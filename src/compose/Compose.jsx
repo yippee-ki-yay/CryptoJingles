@@ -37,6 +37,7 @@ class Compose extends Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.isDropped = this.isDropped.bind(this);
     this.startStopSong = this.startStopSong.bind(this);
+    this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
   }
 
   async componentWillMount() {
@@ -137,6 +138,8 @@ class Compose extends Component {
   }
 
   createSong = async () => {
+    const id = Math.floor(Math.random() * 6) + 1;
+
     try {
       const selectedSongSources = this.state.myJingles.filter(({ id }) =>
         this.state.droppedBoxIds.find((selectedId) => id === selectedId)
@@ -149,41 +152,46 @@ class Compose extends Component {
         return;
       }
 
-      const id = Math.floor(Math.random() * 6) + 1;
+      const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Create jingle');
       
-      const res = await window.contract.composeJingle("Jaguar Bog", jingleIds, { from: window.web3.eth.accounts[0] });
+      const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
 
       this.props.removePendingTx(id);
 
       console.log(res);
     } catch (err) {
-      console.log(err);
+      this.props.removePendingTx(id);
     }
   };
+
+  handleJingleNameChange(e) {
+    const val = e.target.value;
+    if (val > 30) return;
+    this.setState({ jingleName: val });
+  }
 
   render() {
       return (
           <div className="container">
-
+            <div className="compose-top-wrapper">
               <div className="sort-samples-wrapper">
-                <form className="form-horizontal">
-                    <div>
-                      {
-                        this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
-                          <SampleSlot
-                            key={`item-${index}`}
-                            index={index}
-                            accepts={accepts}
-                            lastDroppedItem={lastDroppedItem}
-                            id={index}
-                            onDrop={item => this.handleDrop(index, item)}
-                            cancelDrop={item => this.handleCancel(index, item)}
-                          />
-                        )
-                      }
+                <div>
+                  {
+                    this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                      <SampleSlot
+                        key={`item-${index}`}
+                        index={index}
+                        accepts={accepts}
+                        lastDroppedItem={lastDroppedItem}
+                        id={index}
+                        onDrop={item => this.handleDrop(index, item)}
+                        cancelDrop={item => this.handleCancel(index, item)}
+                      />
+                    )
+                  }
 
-                       <div>
+                  <div>
                          <span
                            className="compose-play"
                            onClick={this.startStopSong}
@@ -191,14 +199,26 @@ class Compose extends Component {
                            { !this.state.playing && <PlayIcon />}
                            { this.state.playing && <StopIcon />}
                          </span>
-
-                         <button type="button" className="btn buy-button" onClick={ this.createSong }>
-                           Create jingle!
-                         </button>
-                       </div>
-                    </div>
-                </form>
+                  </div>
+                </div>
               </div>
+
+              <form onSubmit={(e) => {e.preventDefault(); }} className="form-horizontal create-jingle-form">
+                <h4>Compose jingle:</h4>
+                <div>
+                  <input
+                    className="form-control"
+                    placeholder="Jingle name"
+                    type="text"
+                    onChange={this.handleJingleNameChange}
+                  />
+
+                  <button type="submit" className="btn buy-button" onClick={ this.createSong }>
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
 
             <div className="separator" />
 

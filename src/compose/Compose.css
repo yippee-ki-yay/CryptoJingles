@@ -24,7 +24,7 @@
 }
 
 .sort-samples-wrapper {
-  margin: 50px 0  ;
+  margin: 50px 0 20px 0;
 }
 
 .sort-samples-wrapper:after {
@@ -41,6 +41,7 @@
 }
 
 .compose-play {
+  height: 17rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +51,41 @@
   width: 100px;
 }
 
+.compose-play svg:hover {
+  opacity: 0.75;
+}
+
 .samples-slider h2 {
   margin: 20px 0;
   color: black;
+}
+
+.form-horizontal.create-jingle-form {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form-horizontal.create-jingle-form div {
+  display: flex;
+  align-items: center;
+}
+
+.form-horizontal.create-jingle-form input {
+  width: 200px;
+  margin-right: 10px;
+  height: 40px;
+  font-size: 18px;
+}
+
+.form-horizontal.create-jingle-form h4 {
+  font-size: 28px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.form-horizontal.create-jingle-form button {
+  margin: 0;
+  width: 250px;
 }
