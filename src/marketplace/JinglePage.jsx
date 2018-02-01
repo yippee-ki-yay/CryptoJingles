@@ -20,7 +20,8 @@ class JinglePage extends Component {
       jingle: null,
       isOwner: false,
       account: '',
-      start: false
+      start: false,
+      salePrice: undefined,
     };
   }
 
@@ -67,16 +68,14 @@ class JinglePage extends Component {
   };
 
   sell = async () => {
-    const jingle = this.state.jingle;
+    let amount = this.state.salePrice;
+    if (amount && (amount <= 0)) return;
 
-    //TODO: get price input from user
-    const amount = 100000000000000;
+    const jingle = this.state.jingle;
 
     const id = 1;
     this.props.addPendingTx(id, 'Sell Jingle');
-
     await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: this.state.account});
-
     this.props.removePendingTx(id);
 
     console.log('Jingle has been set for sale');
@@ -87,12 +86,14 @@ class JinglePage extends Component {
 
     const id = 1;
     this.props.addPendingTx(id, 'Cancel Sale');
-
     await window.marketplaceContract.cancel(jingle.jingleId, {from: this.state.account});
-
     this.props.removePendingTx(id);
 
     console.log('You canceled the sale!');
+  };
+
+  handleSalePriceChange = (e) => {
+    this.setState({ salePrice: window.web3.toWei(e.target.value) });
   };
 
   playSound = () => {
@@ -140,7 +141,20 @@ class JinglePage extends Component {
                       jingle.onSale && !isOwner && <button className="btn buy-button" onClick={ this.purchase }>Purchase { window.web3.fromWei(jingle.price, 'ether') }Ξ</button>
                     }
                     {
-                      !jingle.onSale && isOwner && <button className="btn buy-button" onClick={ this.sell }>Sell</button>
+                      !jingle.onSale &&
+                      isOwner &&
+                      <form className="sell-form" onSubmit={(e) => e.preventDefault()}>
+                        <input
+                          className="form-control"
+                          placeholder="Sell price in ETH"
+                          type="number"
+                          step="any"
+                          onChange={this.handleSalePriceChange}
+                        />
+                        <button type="submit" className="btn buy-button" onClick={ this.sell }>
+                          Put on sale
+                        </button>
+                      </form>
                     }
                     {
                       jingle.onSale && isOwner && <button className="btn buy-button" onClick={ this.cancelSale }>Cancel Sale</button>

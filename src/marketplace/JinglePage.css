@@ -120,3 +120,15 @@
     height: 250px;
 }
 
+.sell-form {
+    margin-top: 20px;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.sell-form input {
+    width: 100%;
+    text-align: right;
+    max-width: 250px;
+}
+
