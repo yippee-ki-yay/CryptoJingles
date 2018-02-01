@@ -22,9 +22,6 @@ class JinglePage extends Component {
       account: '',
       start: false
     };
-
-    this.playSound = this.playSound.bind(this);
-    this.stopSound = this.stopSound.bind(this);
   }
 
   async componentDidMount() {
@@ -45,17 +42,16 @@ class JinglePage extends Component {
 
       longestSound.on('stop', () => { this.setState({ start: false }); });
 
-      const sound = new Group(sources);
-
       this.setState({
         jingle: jingleData.data,
-        sound,
-        start: false,
+        sound: new Group(sources),
         isOwner,
         account
       });
     });
   }
+
+  componentWillUnmount() { this.stopSound(); }
 
   purchase = async () => {
     const jingle = this.state.jingle;

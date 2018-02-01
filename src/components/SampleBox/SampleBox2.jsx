@@ -29,6 +29,8 @@ class SampleBox2 extends Component {
     });
   }
 
+  componentWillUnmount() { this.stopSound(); }
+
   playSound = () => {
     this.state.sound.play();
     this.setState({ start: true });

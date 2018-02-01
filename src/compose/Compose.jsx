@@ -49,6 +49,13 @@ class Compose extends Component {
     console.log('nextProps', nextProps);
   }
 
+  componentWillUnmount() {
+    if (this.state.group === null) return;
+
+    this.state.group.stop();
+    this.setState({ playing: false, group: null });
+  }
+
   /**
    * Fires when a jingle is dropped into a JingleSlot component
    *
