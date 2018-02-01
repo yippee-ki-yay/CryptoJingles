@@ -97,19 +97,63 @@ export const getJingleMetadata = (jingleType) => {
     case 37:
       return { type: COMPOSE, name: 'Out of this', source: 'https://gateway.ipfs.io/ipfs/QmasdugxGy2uiTmUUz6j9hhMh61tqaCRXLm2offS8oMYsw' };
     case 38:
-      return { type: COMPOSE, name: 'Climax 170', source: 'https://gateway.ipfs.io/ipfs/QmYMYbXfEtXutqigurQ3Xq8s1ogjdT22KBBmiHcBbo9mnK' };
-    case 39:
       return { type: COMPOSE, name: 'Keys', source: 'https://gateway.ipfs.io/ipfs/QmQ9TWUQyEj51P9FeanwkkFq2eNFsNtudcaowuBrWwCnfh' };
-    case 40:
+    case 39:
       return { type: COMPOSE, name: 'Slide', source: 'https://gateway.ipfs.io/ipfs/QmVP6oxnsaE3qauBLM5SjjELrASehmwcpEJQAbx5E9qoyV' };
-    case 41:
+    case 40:
       return { type: COMPOSE, name: 'Tip Tap', source: 'https://gateway.ipfs.io/ipfs/QmQdEFdaZgs6XRU9k3MrcUKZFfhSYCPrYCVwE31aepm46J' };
-    case 42:
+    case 41:
       return { type: COMPOSE, name: 'Spooky', source: 'https://gateway.ipfs.io/ipfs/QmTudsxzbp79m8QJJoDYHdYfbJCCsdgv443dasJQZANoFj' };
-    case 43:
+    case 42:
       return { type: COMPOSE, name: 'The lies', source: 'https://gateway.ipfs.io/ipfs/QmTK31acPf8rcshhCbmEHqFMQZ1jPha3MLDWPvvecfoaSa' };
-    case 44:
+    case 43:
       return { type: COMPOSE, name: 'Backup lies', source: 'https://gateway.ipfs.io/ipfs/QmPr7YCP7rGpn8iaefoueRR9V1FHTxHXme2FPrznW3pDkX' };
+    case 44:
+      return { type: COMPOSE, name: 'Aesthetics', source: 'https://gateway.ipfs.io/ipfs/QmWUkvGLE7o4PuwnVbRXek2WC5KbNPDgVZ1m4YswFpwZBX' };
+    case 45:
+      return { type: COMPOSE, name: 'Beat box', source: 'https://gateway.ipfs.io/ipfs/Qmb7eMbZj7XW3P3YJmTGsGLTeNMpW3FFkdzFxbDYLj7hAY' };
+    case 46:
+      return { type: COMPOSE, name: 'Chill trap', source: 'https://gateway.ipfs.io/ipfs/QmfSe9ma6UCEmiTyuu3mT3nSuf1RSLYTnWEk1rxSHnpC5z' };
+    case 47:
+      return { type: COMPOSE, name: 'Chop Loop', source: 'https://gateway.ipfs.io/ipfs/QmZRt1ZxHYqLjuaRaKxVXAHKR4dTx6ByMahhx18RXCgEEV' };
+    case 48:
+      return { type: COMPOSE, name: 'Aliens', source: 'https://gateway.ipfs.io/ipfs/QmbH3qBr9nX81aRcXtPqAJakcUqUEodzsoQRNzEkhoyvou' };
+    case 49:
+      return { type: COMPOSE, name: 'Haywire', source: 'https://gateway.ipfs.io/ipfs/QmPNHS5vxntSkWMYo5uki5JNJvfA51gpiMBDktHyqMdwbN' };
+    case 50:
+      return { type: COMPOSE, name: 'Curtains', source: 'https://gateway.ipfs.io/ipfs/QmPnn1EVs82wedZPzYDT9mFpDAAQ3n5h4gpo7CdgPF6rJR' };
+    case 51:
+      return { type: COMPOSE, name: 'Dog Bark', source: 'https://gateway.ipfs.io/ipfs/QmTYcbgM48N3cvnmdQddRB3qAnbkJRFtw3FHYxL8btA2eg' };
+    case 52:
+      return { type: COMPOSE, name: 'Natural voice', source: 'https://gateway.ipfs.io/ipfs/QmUTyBGW3Wz3xWGX3dr4qggKauVaex5HMWWeKNGm7epNaz' };
+    case 53:
+      return { type: COMPOSE, name: 'Paradime shattered', source: 'https://gateway.ipfs.io/ipfs/Qmf3poBH4cKxsi2DDcoJKcBX81Ab5swQZTw9twYtwPArvs' };
+    case 54:
+      return { type: COMPOSE, name: 'Party people', source: 'https://gateway.ipfs.io/ipfs/QmRMKih1k4x3k3bv2jrcDdQLfce5mxvyEQkiYChq7Pd8ap' };
+    case 55:
+      return { type: COMPOSE, name: 'Strong', source: 'https://gateway.ipfs.io/ipfs/QmbdZHpLG1WUCpz8tghy1Z981JNAAasn5TRekkQ9XgB4Yn' };
+    case 56:
+      return { type: COMPOSE, name: 'Climax 170', source: 'https://gateway.ipfs.io/ipfs/QmYMYbXfEtXutqigurQ3Xq8s1ogjdT22KBBmiHcBbo9mnK' };
+    case 57:
+      return { type: COMPOSE, name: 'Beat 64', source: 'https://gateway.ipfs.io/ipfs/QmUksYmkuDJgBeM4HEDhhnjAkoaFrrUN38qvq4geBpKqnZ' };
+    case 58:
+      return { type: COMPOSE, name: 'Hesitation', source: 'https://gateway.ipfs.io/ipfs/QmbGqx2dpFsM4Kmw7cqAe9AvB8ej6FCDyoLVak3i5Fzo2e' };
+    case 59:
+      return { type: COMPOSE, name: 'Piano Melody', source: 'https://gateway.ipfs.io/ipfs/QmfGh8am4MdEn7HyNX2Q3jW18L4zmrS2saYg7qU1xMUEhN' };
+    case 60:
+      return { type: COMPOSE, name: 'Suffer', source: 'https://gateway.ipfs.io/ipfs/QmPGbWUVAiwTKbBnRwuCdc1Xn9GnqWVYD63MKtvC9yot3z' };
+    case 61:
+      return { type: COMPOSE, name: 'Impact', source: 'https://gateway.ipfs.io/ipfs/QmWMgmNV1zE54j21mqWSpa9gM9a1o97XCKYyaqYBRNwBLq' };
+    case 62:
+      return { type: COMPOSE, name: 'Reverse FX', source: 'https://gateway.ipfs.io/ipfs/QmUumcK86JhMZ9S64YYUfbpnhopgtsxXVWJsFsGkKHy4z5' };
+    case 63:
+      return { type: COMPOSE, name: 'Violin Carry', source: 'https://gateway.ipfs.io/ipfs/QmQFgrN4cvtB5AfHRWJ6BptukeQjL1V9R3MiUyEVDXstA9' };
+    case 64:
+      return { type: COMPOSE, name: 'Vocal loop', source: 'https://gateway.ipfs.io/ipfs/QmbBEjxrgipBxFJsimvVTcSN1BZtRfA3uV8EAkWmrQPohL' };
+    case 65:
+      return { type: COMPOSE, name: 'Vocal ohh', source: 'https://gateway.ipfs.io/ipfs/QmZvwGghKFUBEi3X97yQhyH7pkofF3K6rFLvYne879i75j' };
+    case 66:
+      return { type: COMPOSE, name: 'Wopple', source: 'https://gateway.ipfs.io/ipfs/QmPHbg5NaXzVc5h2zBRVfKfzBqUmyDyhycrX39Z2g3DSd4' };
     default:
       return { type: COMPOSE, name: '', source: '' };
   }
