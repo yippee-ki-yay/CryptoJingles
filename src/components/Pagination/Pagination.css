@@ -1,0 +1,33 @@
+.pagination-wrapper .pagination > .active > a {
+    background: black;
+    color: white;
+}
+
+.pagination-wrapper .pagination > li > a {
+    font-size: 14px;
+    color: black;
+}
+
+.pagination-wrapper .pagination > li > a:hover {
+    cursor: pointer;
+    background: black;
+    color: white;
+}
+
+.pagination-wrapper .pagination > .disabled > a:hover {
+    cursor: not-allowed;
+}
+
+.pagination-wrapper .pagination > li.next > a:hover,
+.pagination-wrapper .pagination > li.previous > a:hover {
+    background: white;
+    color: black;
+    opacity: 0.75;
+}
+
+.pagination-wrapper .pagination > li:first-child > a,
+.pagination-wrapper .pagination > li:first-child > span {
+    margin-left: 0;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
