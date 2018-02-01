@@ -67,12 +67,13 @@ export const toggleEditAuthor = (hideOrShow) => (dispatch) => {
 /**
  * Gets the author name from the contract for the given address
  *
+ * @param {String} authorAddress
+ *
  * @return {Function}
  */
-export const getAuthor = () => async (dispatch, getState) => {
+export const getAuthor = (authorAddress) => async (dispatch, getState) => {
   try {
-    const address = web3.eth.accounts[0]; // eslint-disable-line
-    let author = await window.contract.authors(address);
+    let author = await window.contract.authors(authorAddress);
     author = author || getState().profile.author;
 
     dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: author });
@@ -110,10 +111,12 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
 /**
  * Gets all samples from the contract for the current address
  *
+ * @param {String} profileAddress
+ *
  * @return {Function}
  */
-export const getSamplesForUser = () => async (dispatch) => {
-  const mySamples = await getSamples();
+export const getSamplesForUser = (profileAddress) => async (dispatch) => {
+  const mySamples = await getSamples(profileAddress);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
 };
 
@@ -154,10 +157,12 @@ export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
 /**
  * Gets all jingles from the server for the current address
  *
+ * @param {String} profileAddress
+ *
  * @return {Function}
  */
-export const getJinglesForUser = () => async (dispatch, getState) => {
-  const { currentJinglesPage, jingleCategory, jingleSorting, profileAddress } = getState().profile;
+export const getJinglesForUser = (profileAddress) => async (dispatch, getState) => {
+  const { currentJinglesPage, jingleCategory, jingleSorting } = getState().profile;
   const res = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
   dispatch({ type: SET_PROFILE_JINGLES, payload: res.data });
 };

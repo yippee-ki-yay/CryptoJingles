@@ -35,13 +35,14 @@
 
 .single-song .header-label {
     position: absolute;
-    top: 0;
+    top: 10px;
+    left: 25px;
     z-index: 10;
-    background: rgba(237, 82, 83, 0.8);
-    width: 100%;
+    background: black;
+    width: 150px;
     text-align: center;
     padding: 5px;
-    font-size: 16px;
+    font-size: 14px;
     color: white;
 }
 

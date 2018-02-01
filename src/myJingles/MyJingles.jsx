@@ -11,7 +11,13 @@ import './MyJingles.css';
 
 class MyJingles extends Component {
   async componentWillMount() {
-    this.props.getJinglesForUser();
+    this.props.getJinglesForUser(this.props.address);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.address === this.props.address) return;
+
+    this.props.getJinglesForUser(newProps.address);
   }
 
   render() {

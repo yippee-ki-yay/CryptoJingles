@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import axios from 'axios';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../components/JingleImage/JingleImage';
@@ -59,12 +60,14 @@ class JinglePage extends Component {
 
     const id = 1;
     this.props.addPendingTx(id, 'Buy Jingle');
-
     await window.marketplaceContract.buy(jingle.jingleId, {from: this.state.account, value: jingle.price});
-
     this.props.removePendingTx(id);
 
-    console.log('You bought a jingle!');
+    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
+    const account = window.web3.eth.accounts[0];
+    const isOwner = jingleData.data.owner === account;
+
+    this.setState({ jingle: jingleData.data, isOwner });
   };
 
   sell = async () => {
@@ -78,6 +81,9 @@ class JinglePage extends Component {
     await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: this.state.account});
     this.props.removePendingTx(id);
 
+    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
+    this.setState({ jingle: jingleData.data, });
+
     console.log('Jingle has been set for sale');
   };
 
@@ -88,6 +94,9 @@ class JinglePage extends Component {
     this.props.addPendingTx(id, 'Cancel Sale');
     await window.marketplaceContract.cancel(jingle.jingleId, {from: this.state.account});
     this.props.removePendingTx(id);
+
+    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
+    this.setState({ jingle: jingleData.data, });
 
     console.log('You canceled the sale!');
   };
@@ -138,8 +147,21 @@ class JinglePage extends Component {
                     </div>
 
                     {
-                      jingle.onSale && !isOwner && <button className="btn buy-button" onClick={ this.purchase }>Purchase { window.web3.fromWei(jingle.price, 'ether') }Ξ</button>
+                      jingle.onSale &&
+                      <div className="sell-price-wrapper">
+                        <h3>
+                          <span>Sell price:</span>
+                          <span className="price">{ window.web3.fromWei(jingle.price, 'ether').slice(0, 8) }Ξ</span>
+                        </h3>
+                        {
+                          !isOwner &&
+                          <button className="btn buy-button" onClick={ this.purchase }>
+                            Purchase
+                          </button>
+                        }
+                      </div>
                     }
+
                     {
                       !jingle.onSale &&
                       isOwner &&
@@ -162,13 +184,12 @@ class JinglePage extends Component {
                   </div>
 
                   <div className="jingle-details">
-                    {
-                      jingle.sale &&
-                      <div className="jingle-label">
-                        <h4>Sale price</h4>
-                        <div>{ jingle.price }Ξ</div>
+                    <div className="jingle-label owner">
+                      <h4>Owner</h4>
+                      <div>
+                        <Link to={`/profile/${jingle.owner}`}>{jingle.owner}</Link>
                       </div>
-                    }
+                    </div>
                     <div className="jingle-label">
                       <h4>Author</h4>
                       <div>{ jingle.author }</div>

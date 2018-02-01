@@ -34,6 +34,26 @@
     margin-bottom: 20px;
 }
 
+.jingle-label.owner div {
+    cursor: pointer;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.2s;
+}
+
+.jingle-label.owner div a {
+    color: #828894;
+}
+
+.jingle-label.owner div a:hover {
+    text-decoration: none;
+}
+
+.jingle-label.owner div:hover {
+    opacity: 0.75;
+}
+
 .jingle-details .jingle-label h4, .jingle-samples-wrapper h4 {
     color: #C0C7D1;
     font-weight: bold;
@@ -130,5 +150,16 @@
     width: 100%;
     text-align: right;
     max-width: 250px;
+}
+
+.sell-price-wrapper h3 {
+    margin: 20px 0 0 0;
+    display: flex;
+    max-width: 250px;
+    justify-content: space-between;
+}
+
+.sell-price-wrapper h3 .price {
+    font-weight: bold;
 }
 

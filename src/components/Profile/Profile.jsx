@@ -15,8 +15,15 @@ import profilePlaceholder from './profile-placeholder.png';
 // TODO - add proptypes
 class Profile extends Component {
   componentWillMount() {
-    this.props.getAuthor();
+    this.props.getAuthor(this.props.params.address);
     this.props.checkIfOwnerProfile(this.props.params.address);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.params.address === this.props.params.address) return;
+
+    this.props.getAuthor(newProps.params.address);
+    this.props.checkIfOwnerProfile(newProps.params.address);
   }
 
   render() {
@@ -105,8 +112,8 @@ class Profile extends Component {
           <div className="separator" />
         </div>
 
-        { activeTab === tabs[0].value && <MySamples />  }
-        { activeTab === tabs[1].value && <MyJingles />  }
+        { activeTab === tabs[0].value && <MySamples address={this.props.params.address} />  }
+        { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} />  }
         { activeTab === tabs[2].value && <MySongs />  }
         { activeTab === tabs[3].value && <MyAlbums /> }
       </div>

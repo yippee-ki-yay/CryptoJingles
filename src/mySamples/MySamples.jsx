@@ -8,7 +8,13 @@ import './MySamples.css';
 
 class MySamples extends Component {
   async componentWillMount() {
-    this.props.getSamplesForUser();
+    this.props.getSamplesForUser(this.props.address);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.address === this.props.address) return;
+
+    this.props.getSamplesForUser(newProps.address);
   }
 
   render() {
@@ -19,7 +25,7 @@ class MySamples extends Component {
           <div className="my-jingles-wrapper">
             {
               isOwner &&
-              <div>
+              <div className="buy-samples-section-wrapper">
                 <div className="buy-samples-section">
                   <div>
                     <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>

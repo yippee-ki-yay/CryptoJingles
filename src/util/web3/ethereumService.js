@@ -24,23 +24,22 @@ export const parseSamples = (samples) => {
   return mySamples;
 };
 
-export const getSamples = () =>
-  new Promise((resolve) => {
-    window.web3.eth.getAccounts(async (error, accounts) => {
+export const getSamples = (_address = null) =>
+  new Promise(async (resolve) => {
+    const addresss = _address || window.web3.eth.accounts[0];
 
-      //setup contracts
-      const samplesContract = contract(Sample);
-      samplesContract.setProvider(window.web3.currentProvider);
+    //setup contracts
+    const samplesContract = contract(Sample);
+    samplesContract.setProvider(window.web3.currentProvider);
 
-      const cryptoJinglesContract = contract(CryptoJingles);
-      cryptoJinglesContract.setProvider(window.web3.currentProvider);
+    const cryptoJinglesContract = contract(CryptoJingles);
+    cryptoJinglesContract.setProvider(window.web3.currentProvider);
 
-      const samplesInstance = await samplesContract.at(SampleAddress);
+    const samplesInstance = await samplesContract.at(SampleAddress);
 
-      const samples = await samplesInstance.getAllSamplesForOwner(accounts[0]);
+    const samples = await samplesInstance.getAllSamplesForOwner(addresss);
 
-      resolve(parseSamples(samples));
-    });
+    resolve(parseSamples(samples));
   });
 
   export const getJingles = async (web3) => {

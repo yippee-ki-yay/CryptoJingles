@@ -47,3 +47,7 @@ input.form-control {
     display: inline-block;
     width: 100%;
 }
+
+.buy-samples-section-wrapper .separator {
+    margin-bottom: 10px;
+}

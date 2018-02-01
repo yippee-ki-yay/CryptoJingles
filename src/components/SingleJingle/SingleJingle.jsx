@@ -53,7 +53,10 @@ class SingleJingle extends Component {
       <div key={jingleId} className="single-song">
         {
           onSale &&
-          <div className="header-label"><span>On sale for:</span> {window.web3.fromWei(price, 'ether')}Ξ</div>
+          <div className="header-label">
+            <span>On sale for:</span>
+            {window.web3.fromWei(price, 'ether').slice(0, 8)}Ξ
+          </div>
         }
 
         <div className="jingle-image-container">
