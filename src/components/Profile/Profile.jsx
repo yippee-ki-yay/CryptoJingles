@@ -5,7 +5,8 @@ import MyJingles from '../../myJingles/MyJingles';
 import MySongs from '../MySongs/MySongs';
 import MyAlbums from '../MyAlbums/MyAlbums';
 import {
-  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor
+  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
+  setProfileAddress
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
@@ -15,15 +16,17 @@ import profilePlaceholder from './profile-placeholder.png';
 // TODO - add proptypes
 class Profile extends Component {
   componentWillMount() {
-    this.props.getAuthor(this.props.params.address);
-    this.props.checkIfOwnerProfile(this.props.params.address);
+    this.props.setProfileAddress(this.props.params.address);
+    this.props.getAuthor();
+    this.props.checkIfOwnerProfile();
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.params.address === this.props.params.address) return;
 
-    this.props.getAuthor(newProps.params.address);
-    this.props.checkIfOwnerProfile(newProps.params.address);
+    this.props.setProfileAddress(this.props.params.address);
+    this.props.getAuthor();
+    this.props.checkIfOwnerProfile();
   }
 
   render() {
@@ -130,7 +133,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor
+  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
+  setProfileAddress
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

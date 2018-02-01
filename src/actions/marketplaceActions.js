@@ -11,7 +11,7 @@ import {
  */
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
   const { currentPage, category, sorting, } = getState().marketplace;
-console.log('currentPage', currentPage);
+
   try {
     const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
 

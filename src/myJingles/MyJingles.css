@@ -49,3 +49,9 @@
 .empty-state {
     margin-top: 20px;
 }
+
+.my-jingles-num {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+}

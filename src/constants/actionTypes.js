@@ -39,3 +39,5 @@ export const TOGGLE_PROFILE_AUTHOR = 'toggle_profile_author';
 export const SET_PROFILE_AUTHOR_EDIT = 'set_profile_author_edit';
 export const SET_PENDING_AUTHOR = 'set_pending_author';
 export const AUTHOR_EDIT_SUCCESS = 'author_edit_success';
+export const SET_MY_JINGLES_PAGE = 'set_my_jingles_page';
+export const SET_PROFILE_ADDRESS = 'set_profile_address';

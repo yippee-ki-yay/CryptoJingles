@@ -8,7 +8,7 @@ import {
   getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting,
   onMarketplacePaginationChange
 } from '../actions/marketplaceActions';
-import { MARKETPLACE_JINNGLES_PER_PAGE } from '../constants/actionTypes';
+import { MARKETPLACE_JINGLES_PER_PAGE, MARKETPLACE_JINNGLES_PER_PAGE } from '../constants/actionTypes';
 
 import 'react-dropdown/style.css';
 import './Marketplace.css';
@@ -61,9 +61,9 @@ class Marketplace extends Component {
                 </div>
 
                 {
-                  jingles.length === MARKETPLACE_JINNGLES_PER_PAGE &&
+                  totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
                   <Pagination
-                    pageCount={Math.round(totalJingles / jinglesPerPage)}
+                    pageCount={Math.ceil(totalJingles / jinglesPerPage)}
                     onPageChange={onMarketplacePaginationChange}
                   />
                 }

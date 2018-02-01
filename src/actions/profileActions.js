@@ -2,12 +2,23 @@ import axios from 'axios';
 import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
-  SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS
+  SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 import { SAMPLE_PRICE } from '../util/config';
 import { API_URL } from '../util/config';
+
+/**
+ * Sets the profile address to be equal to the route para
+ *
+ * @param {String} address
+ *
+ * @return {Function}
+ */
+export const setProfileAddress = (address) => (dispatch) => {
+  dispatch({ type: SET_PROFILE_ADDRESS, payload: address });
+};
 
 /**
  * Sets the active tab to the new value
@@ -27,16 +38,13 @@ export const setActiveTab = (value) => (dispatch, getState) => {
  * Checks if the current profile is the users profile and sets
  * the results in the reducer
  *
- * @param {String} address - current profile address
- *
  * @return {Function}
  */
-export const checkIfOwnerProfile = (address) => (dispatch) => {
+export const checkIfOwnerProfile = () => (dispatch, getState) => {
   dispatch({
     type: SET_PROFILE_IS_OWNER,
     payload: {
-      isOwner: web3.eth.accounts[0] === address, // eslint-disable-line
-      address
+      isOwner: window.web3.eth.accounts[0] === getState().profile.profileAddress,
     }});
 };
 
@@ -67,13 +75,11 @@ export const toggleEditAuthor = (hideOrShow) => (dispatch) => {
 /**
  * Gets the author name from the contract for the given address
  *
- * @param {String} authorAddress
- *
  * @return {Function}
  */
-export const getAuthor = (authorAddress) => async (dispatch, getState) => {
+export const getAuthor = () => async (dispatch, getState) => {
   try {
-    let author = await window.contract.authors(authorAddress);
+    let author = await window.contract.authors(getState().profile.profileAddress);
     author = author || getState().profile.author;
 
     dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: author });
@@ -111,12 +117,10 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
 /**
  * Gets all samples from the contract for the current address
  *
- * @param {String} profileAddress
- *
  * @return {Function}
  */
-export const getSamplesForUser = (profileAddress) => async (dispatch) => {
-  const mySamples = await getSamples(profileAddress);
+export const getSamplesForUser = () => async (dispatch, getState) => {
+  const mySamples = await getSamples(getState().profile.profileAddress);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
 };
 
@@ -159,14 +163,16 @@ export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
 /**
  * Gets all jingles from the server for the current address
  *
- * @param {String} profileAddress
- *
  * @return {Function}
  */
-export const getJinglesForUser = (profileAddress) => async (dispatch, getState) => {
-  const { currentJinglesPage, jingleCategory, jingleSorting } = getState().profile;
+export const getJinglesForUser = () => async (dispatch, getState) => {
+  const { currentJinglesPage, jingleCategory, jingleSorting, profileAddress } = getState().profile;
   const res = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
-  dispatch({ type: SET_PROFILE_JINGLES, payload: res.data });
+
+  // false for all jingles, true to get jingles on sale
+  const num = await axios(`${API_URL}/jingles/count/owner/${profileAddress}/sale/${(jingleCategory.value === 'sale').toString()}`);
+
+  dispatch({ type: SET_PROFILE_JINGLES, payload: { jingles: res.data, num: num.data } });
 };
 
 /**
@@ -192,5 +198,17 @@ export const changeProfileJinglesCategory = (payload) => (dispatch) => {
  */
 export const changeProfileJinglesSorting = (payload) => (dispatch) => {
   dispatch({ type: SET_PROFILE_JINGLES_SORT, payload });
+  dispatch(getJinglesForUser());
+};
+
+/**
+ * Changes the current selected page and then get all jingles for that page
+ *
+ * @param {Number} pageNum
+ *
+ * @return {Function}
+ */
+export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
+  dispatch({ type: SET_MY_JINGLES_PAGE, payload: pageNum + 1 });
   dispatch(getJinglesForUser());
 };

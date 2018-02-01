@@ -2,29 +2,32 @@ import React, { Component } from 'react';
 import Dropdown from 'react-dropdown';
 import { connect } from 'react-redux';
 import BoxLoader from '../components/Decorative/BoxLoader';
+import Pagination from '../components/Pagination/Pagination';
 import SingleJingle from '../components/SingleJingle/SingleJingle';
 import {
-  getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting
+  getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange
 } from '../actions/profileActions';
+import { MARKETPLACE_JINGLES_PER_PAGE } from '../constants/actionTypes';
 
 import './MyJingles.css';
 
 class MyJingles extends Component {
   async componentWillMount() {
-    this.props.getJinglesForUser(this.props.address);
+    this.props.getJinglesForUser();
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.address === this.props.address) return;
 
-    this.props.getJinglesForUser(newProps.address);
+    this.props.getJinglesForUser();
   }
 
   render() {
       const {
-        myJingles, loading, jingleSorting, jingleSortingOptions, jingleCategory, jingleCategories
+        myJingles, loading, jingleSorting, jingleSortingOptions, jingleCategory, jingleCategories, totalJingles,
+        jinglesPerPage
       } = this.props;
-      const { changeProfileJinglesSorting, changeProfileJinglesCategory } = this.props;
+      const { changeProfileJinglesSorting, changeProfileJinglesCategory, onMyJinglesPaginationChange } = this.props;
 
       return (
           <div className="my-jingles-wrapper">
@@ -70,15 +73,30 @@ class MyJingles extends Component {
               {
                 (myJingles.length > 0) &&
                 !loading &&
-                <div className="my-jingles-list">
-                  {
-                    myJingles.map((jingle) =>
-                      (
-                        <SingleJingle key={jingle.jingleId} {...jingle} />
+                <div>
+                  <div className="my-jingles-num">
+                    { totalJingles } Jingles
+                  </div>
+
+                  <div className="my-jingles-list">
+
+                    {
+                      myJingles.map((jingle) =>
+                        (
+                          <SingleJingle key={jingle.jingleId} {...jingle} />
+                        )
                       )
-                    )
-                  }
+                    }
+                  </div>
                 </div>
+              }
+
+              {
+                totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
+                <Pagination
+                  pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+                  onPageChange={onMyJinglesPaginationChange}
+                />
               }
             </div>
           </div>
@@ -88,6 +106,8 @@ class MyJingles extends Component {
 
 const mapStateToProps = (state) => ({
   myJingles: state.profile.myJingles,
+  totalJingles: state.profile.totalJingles,
+  jinglesPerPage: state.profile.jinglesPerPage,
   loading: state.profile.loading,
   jingleSorting: state.profile.jingleSorting,
   jingleSortingOptions: state.profile.jingleSortingOptions,
@@ -95,7 +115,9 @@ const mapStateToProps = (state) => ({
   jingleCategories: state.profile.jingleCategories
 });
 
-const mapDispatchToProps = { getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting };
+const mapDispatchToProps = {
+  getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyJingles);
 
