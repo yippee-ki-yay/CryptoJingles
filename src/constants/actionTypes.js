@@ -1,9 +1,9 @@
 export const CATEGORY_OPTIONS = [{ value: 'pagination', label: 'All jingles' }, { value: 'sale', label: 'For sale' }];
 export const SORTING_OPTIONS = [
-  { value: 'time', label: 'Newest first' },
-  { value: '-time', label: 'Oldest first' },
-  { value: 'price', label: 'Most expensive first' },
-  { value: '-price', label: 'Cheapest first' }
+  { value: '-time', label: 'Newest first' },
+  { value: 'time', label: 'Oldest first' },
+  { value: '-price', label: 'Most expensive first' },
+  { value: 'price', label: 'Cheapest first' }
 ];
 export const MARKETPLACE_JINGLES_PER_PAGE = 10;
 
@@ -13,6 +13,8 @@ export const PROFILE_TABS = [
   { label: 'Songs', value: 'songs' },
   { label: 'Albums', value: 'albums' }
 ];
+
+export const MARKETPLACE_JINNGLES_PER_PAGE = 10;
 // TODO put everything above this comment in a constants file
 
 export const CHANGE_MARKETPLACE_PAGE = 'change_marketplace_page';

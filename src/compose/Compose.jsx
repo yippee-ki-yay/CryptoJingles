@@ -3,6 +3,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
 import { Sound, Group} from 'pizzicato';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { getJingleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
@@ -148,7 +149,7 @@ class Compose extends Component {
       const jingleIds = selectedSongSources.map(s => parseInt(s.id));
 
       if (jingleIds.length !== 5) {
-        alert('Must b 5 jingles m8!');
+        alert('Not enough samples!');
         return;
       }
 
@@ -157,8 +158,13 @@ class Compose extends Component {
       
       const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
 
-      this.props.removePendingTx(id);
+      this.setState({ loading: true });
 
+      const myJingles = await getSamples();
+
+      this.setState({ myJingles, loading: false, jingleSlots: getJingleSlots() });
+
+      this.props.removePendingTx(id);
       console.log(res);
     } catch (err) {
       this.props.removePendingTx(id);
@@ -233,14 +239,14 @@ class Compose extends Component {
               (this.state.myJingles.length === 0) &&
               !this.state.loading &&
               <div>
-                <h1>You do not own any Sound Samples yet!</h1>
-                <hr />
+                { /* TODO - insert buy sample form here */ }
+                    <h1 className="no-samples-heading">
+                  <span>You do not own any Sound Samples yet!</span>
 
-                <div className="row">
-                  <div className="col-md-12">
-                  **Link to marketplace + catchy reason to buy jingles**
-                  </div>
-                </div>
+                  <span className="buy-samples-link">
+                    <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Buy samples here.</Link>
+                  </span>
+                </h1>
               </div>
             }
 

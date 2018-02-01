@@ -6,7 +6,7 @@ import {
 const INITIAL_STATE = {
   jingles: [],
   jinglesPerPage: MARKETPLACE_JINGLES_PER_PAGE,
-  totalJingles: 15, // TODO Add api call and redux action on category & action sort to get this data
+  totalJingles: 0,
   currentPage: 1,
   sorting: SORTING_OPTIONS[0],
   sortingOptions: SORTING_OPTIONS,
@@ -21,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, currentPage: payload };
 
     case SET_MARKETPLACE_JINGLES:
-      return { ...state, jingles: payload };
+      return { ...state, jingles: payload.jingles, totalJingles: payload.num };
 
     case SET_MARKETPLACE_CATEGORY:
       return { ...state, category: payload };

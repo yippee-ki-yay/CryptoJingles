@@ -1,13 +1,14 @@
 // TODO - move file to components folder
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Dropdown from 'react-dropdown';
 import SingleJingle from '../components/SingleJingle/SingleJingle';
 import Pagination from '../components/Pagination/Pagination';
-import Dropdown from 'react-dropdown'
 import {
   getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting,
   onMarketplacePaginationChange
 } from '../actions/marketplaceActions';
+import { MARKETPLACE_JINNGLES_PER_PAGE } from '../constants/actionTypes';
 
 import 'react-dropdown/style.css';
 import './Marketplace.css';
@@ -52,17 +53,20 @@ class Marketplace extends Component {
               { /* JINGLES RENDER (TODO - Create component) */ }
               <div className="songs-section">
                 <div className="songs-count">
-                  { totalJingles } jingles created
+                  { totalJingles } Jingles
                 </div>
 
                 <div className="songs-wrapper">
                   { jingles.map((jingle) => (<SingleJingle key={jingle.jingleId} {...jingle} />)) }
                 </div>
 
-                <Pagination
-                  pageCount={Math.round(totalJingles / jinglesPerPage)}
-                  onPageChange={onMarketplacePaginationChange}
-                />
+                {
+                  jingles.length === MARKETPLACE_JINNGLES_PER_PAGE &&
+                  <Pagination
+                    pageCount={Math.round(totalJingles / jinglesPerPage)}
+                    onPageChange={onMarketplacePaginationChange}
+                  />
+                }
               </div>
             </div>
           </div>
