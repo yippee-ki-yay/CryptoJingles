@@ -109,9 +109,16 @@ class Compose extends Component {
     );
 
     selectedSongSources = selectedSongSources.map(({ source }) =>
-      new Promise((resolve) => { const sound = new Sound(source, () => { resolve(sound); }); }));
+      new Promise((resolve) => { const sound = new Sound(source, () => {
+        resolve(sound);
+      }); }));
 
     Promise.all(selectedSongSources).then((sources) => {
+      const longestSound = sources.reduce((prev, current) => (
+        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+
+      longestSound.on('stop', () => { this.setState({ playing: false }); });
+
       const group = new Group(sources);
       group.play();
 

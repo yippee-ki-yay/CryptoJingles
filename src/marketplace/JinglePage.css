@@ -86,7 +86,37 @@
     opacity: 0.8;
 }
 
+.jingle-page-img {
+    position: relative;
+    margin-right: 45px;
+}
+
+.jingle-page-img:hover .overlay {
+    visibility: visible;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.jingle-page-img .overlay {
+    position: absolute;
+    transition: 0.2s ease-in;
+    display: flex;
+    visibility: hidden;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    height: 250px;
+    width:100%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.jingle-page-img .overlay .play, .jingle-page-img .overlay .stop {
+    color: white;
+    cursor: pointer;
+    font-size: 65px;
+}
+
 .jingle-page-img .jingle-image-wrapper {
-    margin-right: 50px;
     height: 250px;
 }
+

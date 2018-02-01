@@ -20,6 +20,11 @@ class SingleJingle extends Component {
     }));
 
     Promise.all(sampleSrcs).then((sources) => {
+      const longestSound = sources.reduce((prev, current) => (
+        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+
+      longestSound.on('stop', () => { this.setState({ start: false }); });
+
       const sound = new Group(sources);
 
       sound.on('stop', () => {

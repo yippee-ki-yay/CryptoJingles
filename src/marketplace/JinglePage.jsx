@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { Sound, Group} from 'pizzicato';
 import JingleImage from '../components/JingleImage/JingleImage';
 
 import { marketplaceSetSingleSong } from '../actions/audioActions';
@@ -18,23 +19,40 @@ class JinglePage extends Component {
     this.state = {
       jingle: null,
       isOwner: false,
-      account: ''
-    }
+      account: '',
+      start: false
+    };
+
+    this.playSound = this.playSound.bind(this);
+    this.stopSound = this.stopSound.bind(this);
   }
 
   async componentDidMount() {
-
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
+    const account = window.web3.eth.accounts[0];
+    const isOwner = jingleData.data.owner === account;
 
-    console.log('jingleData', jingleData);
+    const jingleSrcs = jingleData.data.sampleTypes.map((sampleType) =>
+      new Promise((resolve) => {
+        const sound = new Sound(getJingleMetadata(sampleType).source, () => {
+          resolve(sound);
+        });
+      }));
 
-    window.web3.eth.getAccounts((err, res) => {
-      const isOwner = (jingleData.data.owner === res[0]) ? true : false;
-  
+    Promise.all(jingleSrcs).then((sources) => {
+      const longestSound = sources.reduce((prev, current) => (
+        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+
+      longestSound.on('stop', () => { this.setState({ start: false }); });
+
+      const sound = new Group(sources);
+
       this.setState({
         jingle: jingleData.data,
+        sound,
+        start: false,
         isOwner,
-        account: res[0]
+        account
       });
     });
   }
@@ -66,7 +84,7 @@ class JinglePage extends Component {
     this.props.removePendingTx(id);
 
     console.log('Jingle has been set for sale');
-  }
+  };
 
   cancelSale = async () => {
     const jingle = this.state.jingle;
@@ -79,7 +97,17 @@ class JinglePage extends Component {
     this.props.removePendingTx(id);
 
     console.log('You canceled the sale!');
-  }
+  };
+
+  playSound = () => {
+    this.state.sound.play();
+    this.setState({ start: true });
+  };
+
+  stopSound = () => {
+    this.state.sound.stop();
+    this.setState({ start: false });
+  };
 
   render() {
     const { jingle, isOwner } = this.state;
@@ -96,6 +124,19 @@ class JinglePage extends Component {
                 <div className="jingle-details-wrapper">
                   <div className="buy-options">
                     <div className="jingle-page-img">
+                      <div className="overlay">
+                        {
+                          !this.state.start &&
+                          <span onClick={ this.playSound }>
+                            <i className="material-icons play">play_circle_outline</i>
+                          </span>
+                        }
+                        {
+                          this.state.start &&
+                          <span onClick={ this.stopSound }><i className="material-icons stop">cancel</i></span>
+                        }
+                      </div>
+
                       <JingleImage id={jingle.jingleId} width={250} height={250} />
                     </div>
 
