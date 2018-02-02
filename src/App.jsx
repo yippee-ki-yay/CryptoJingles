@@ -36,7 +36,10 @@ class App extends Component {
                   <Link to="/marketplace">Marketplace</Link>
                 </li>
                 <li>
-                  <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Profile</Link>
+                  {
+                    window.web3.eth && 
+                    <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Profile</Link>
+                  }
                 </li>
               </ul>
 
