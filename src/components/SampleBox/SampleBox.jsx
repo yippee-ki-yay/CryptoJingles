@@ -4,6 +4,7 @@ import { DragSource } from 'react-dnd';
 import Pizzicato from 'pizzicato';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
+import LoadingIcon from '../Decorative/LoadingIcon';
 import { playAudio } from '../../actions/audioActions';
 
 import './SampleBox.css';
@@ -25,22 +26,36 @@ class SampleBox extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { start: false };
-
-    const sound = new Pizzicato.Sound(props.source, () => {
-      sound.on('stop', () => {
-        this.setState({ start: false });
-      });
-      this.state = { sound, start: false };
-    });
+    this.state = {
+      start: false,
+      loading: false,
+      sound: null,
+    };
 
     this.stopSound = this.stopSound.bind(this);
     this.playSound = this.playSound.bind(this);
+    this.loadSample = this.loadSample.bind(this);
   }
 
   componentWillUnmount() { this.stopSound(); }
 
+  loadSample() {
+    this.setState({ loading: true });
+
+    const sound = new Pizzicato.Sound(this.props.source, () => {
+      sound.on('stop', () => { this.setState({ start: false }); });
+
+      this.setState({ sound, start: false, loading: false });
+      this.playSound();
+    });
+  }
+
   playSound = () => {
+    if (this.state.sound === null) {
+      this.loadSample();
+      return
+    }
+
     this.state.sound.play();
     this.setState({ start: true });
   };
@@ -61,13 +76,20 @@ class SampleBox extends Component {
     return connectDragSource(
         <div style={{ opacity, ...style }}>
             <div className="well bs-component sample-component">
-                <div className="jingle-header">
-                    <span className="text-success name-tag">{isDropped ? <s>{name}</s> : name}</span>
-                    <span className="id-tag pull-right"> #{ this.props.id } </span>
-                </div>
+              <div className="jingle-header">
+                <span className="text-success name-tag">{isDropped ? <s>{name}</s> : name}</span>
+                <span className="id-tag pull-right"> #{ this.props.id } </span>
+              </div>
 
-                { !this.state.start && <span onClick={ this.playSound }><PlayIcon /></span>}
-                { this.state.start && <span onClick={ this.stopSound }><StopIcon /></span>}
+              { this.state.loading && <LoadingIcon /> }
+              {
+                !this.state.loading && !this.state.start &&
+                <span onClick={ this.playSound }><PlayIcon /></span>
+              }
+              {
+                !this.state.loading && this.state.start &&
+                <span onClick={ this.stopSound }><StopIcon /></span>
+              }
             </div>
         </div>
     )
