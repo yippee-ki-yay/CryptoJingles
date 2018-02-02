@@ -5,13 +5,12 @@ import axios from 'axios';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../components/JingleImage/JingleImage';
 
-import { marketplaceSetSingleSong } from '../actions/audioActions';
-
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 
 import './JinglePage.css';
 import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
+import LoadingIcon from '../components/Decorative/LoadingIcon';
 
 class JinglePage extends Component {
   constructor(props ) {
@@ -19,38 +18,28 @@ class JinglePage extends Component {
 
     this.state = {
       jingle: null,
+      loading: false,
       isOwner: false,
       account: '',
       start: false,
+      sound: null,
       salePrice: undefined,
     };
+
+    this.stopSound = this.stopSound.bind(this);
+    this.playSound = this.playSound.bind(this);
+    this.loadJingle = this.loadJingle.bind(this);
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
     const account = window.web3.eth.accounts[0];
     const isOwner = jingleData.data.owner === account;
-
-    const jingleSrcs = jingleData.data.sampleTypes.map((sampleType) =>
-      new Promise((resolve) => {
-        const sound = new Sound(getJingleMetadata(sampleType).source, () => {
-          resolve(sound);
-        });
-      }));
-
-    Promise.all(jingleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current) => (
-        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
-
-      longestSound.on('stop', () => { this.setState({ start: false }); });
-
-      this.setState({
-        jingle: jingleData.data,
-        sound: new Group(sources),
-        isOwner,
-        account
-      });
-    });
+    this.setState({
+      jingle: jingleData.data,
+      account,
+      isOwner
+    })
   }
 
   componentWillUnmount() { this.stopSound(); }
@@ -105,12 +94,43 @@ class JinglePage extends Component {
     this.setState({ salePrice: window.web3.toWei(e.target.value) });
   };
 
+  loadJingle = () => {
+    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType) =>
+      new Promise((resolve) => {
+        const sound = new Sound(getJingleMetadata(sampleType).source, () => {
+          resolve(sound);
+        });
+      }));
+
+    this.setState({ loading: true });
+
+    Promise.all(jingleSrcs).then((sources) => {
+      const longestSound = sources.reduce((prev, current) => (
+        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+
+      longestSound.on('stop', () => { this.setState({ start: false }); });
+
+      this.setState({
+        sound: new Group(sources),
+        loading: false,
+      });
+
+      this.playSound();
+    });
+  };
+
   playSound = () => {
+    if (this.state.sound === null) {
+      this.loadJingle();
+      return
+    }
+
     this.state.sound.play();
     this.setState({ start: true });
   };
 
   stopSound = () => {
+    if (!this.state.sound) return;
     this.state.sound.stop();
     this.setState({ start: false });
   };
@@ -131,14 +151,15 @@ class JinglePage extends Component {
                   <div className="buy-options">
                     <div className="jingle-page-img">
                       <div className="overlay">
+                        { this.state.loading && <LoadingIcon /> }
                         {
-                          !this.state.start &&
+                          !this.state.start && !this.state.loading &&
                           <span onClick={ this.playSound }>
                             <i className="material-icons play">play_circle_outline</i>
                           </span>
                         }
                         {
-                          this.state.start &&
+                          this.state.start && !this.state.loading &&
                           <span onClick={ this.stopSound }><i className="material-icons stop">cancel</i></span>
                         }
                       </div>
@@ -221,5 +242,5 @@ class JinglePage extends Component {
   }
 }
 
-export default connect(null, { marketplaceSetSingleSong, addPendingTx, removePendingTx })(JinglePage);
+export default connect(null, { addPendingTx, removePendingTx })(JinglePage);
 

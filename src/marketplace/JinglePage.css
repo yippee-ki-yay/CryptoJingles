@@ -163,3 +163,12 @@
     font-weight: bold;
 }
 
+.single-jingle-wrapper #load, .single-jingle-wrapper .loading-icon-wrapper {
+    width: 61px;
+}
+
+.single-jingle-wrapper #load #loading-inner {
+    width: 58px;
+    stroke: #fff;
+}
+
