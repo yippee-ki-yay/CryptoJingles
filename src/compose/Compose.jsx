@@ -5,11 +5,12 @@ import update from 'immutability-helper';
 import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getJingleSlots } from '../getMockData';
+import { getSapleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import PlayIcon from '../components/Decorative/PlayIcon';
 import StopIcon from '../components/Decorative/StopIcon';
+import LoadingIcon from '../components/Decorative/LoadingIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
@@ -25,26 +26,28 @@ class Compose extends Component {
 
     this.state = {
       loading: true,
-      jingleSlots: getJingleSlots(),
+      loadingGroup: false,
+      updatedSlots: false,
+      sampleSlots: getSapleSlots(),
       droppedBoxIds: [],
       playing: false,
       group: null,
-      myJingles: [],
-      jinglesInstance: null,
-      accounts: [],
+      mySamples: [],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.isDropped = this.isDropped.bind(this);
-    this.startStopSong = this.startStopSong.bind(this);
+    this.playSound = this.playSound.bind(this);
+    this.stopSound = this.stopSound.bind(this);
+    this.loadGroup = this.loadGroup.bind(this);
     this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
   }
 
   async componentWillMount() {
-    const myJingles = await getSamples();
+    const mySamples = await getSamples();
 
-    this.setState({ myJingles, loading: false });
+    this.setState({ mySamples, loading: false });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,10 +70,12 @@ class Compose extends Component {
   handleDrop(index, item) {
     this.setState(
       update(this.state, {
-        jingleSlots: { [index]: { lastDroppedItem: { $set: item, }, }, },
+        sampleSlots: { [index]: { lastDroppedItem: { $set: item, }, }, },
         droppedBoxIds: item.id ? { $push: [item.id] } : {},
       })
-    )
+    );
+
+    this.setState({ updatedSlots: true });
   }
 
   /**
@@ -86,10 +91,12 @@ class Compose extends Component {
 
     this.setState(
       update(this.state, {
-        jingleSlots: { [index]: { lastDroppedItem: { $set: null } } },
+        sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
         droppedBoxIds: { $set: droppedBoxIds }
       }),
-    )
+    );
+
+    this.setState({ updatedSlots: true });
   }
 
   /**
@@ -101,21 +108,17 @@ class Compose extends Component {
   isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1 }
 
   /**
-   * Fires when the user starts or stops the composed song
+   * Creates group sound
    *
    */
-  startStopSong() {
-    if (this.state.group !== null) {
-      this.state.group.stop();
-      this.setState({ playing: false, group: null });
-      return;
-    }
-
-    let selectedSongSources = this.state.jingleSlots.filter((slot) => slot.lastDroppedItem !== null);
+  loadGroup() {
+    let selectedSongSources = this.state.sampleSlots.filter((slot) => slot.lastDroppedItem !== null);
 
     selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
-      this.state.myJingles.find((sample) => lastDroppedItem.id === sample.id)
+      this.state.mySamples.find((sample) => lastDroppedItem.id === sample.id)
     );
+
+    this.setState({ loadingGroup: true });
 
     selectedSongSources = selectedSongSources.map(({ source }) =>
       new Promise((resolve) => { const sound = new Sound(source, () => {
@@ -128,21 +131,37 @@ class Compose extends Component {
 
       longestSound.on('stop', () => { this.setState({ playing: false }); });
 
-      const group = new Group(sources);
-      group.play();
-
-      group.on('stop', () => {
-        this.setState({ playing: false });
+      this.setState({
+        group: new Group(sources),
+        loadingGroup: false,
+        updatedSlots: false
       });
-      this.setState({ playing: true, group })
+      this.playSound();
     });
+  }
+
+  playSound() {
+    if (this.state.updatedSlots || (!this.state.group && (this.state.droppedBoxIds.length > 0))) {
+      this.loadGroup();
+      return
+    }
+
+    this.state.group.play();
+    this.setState({ playing: true });
+  }
+
+  stopSound() {
+    if (!this.state.group) return;
+
+    this.state.group.stop();
+    this.setState({ playing: false });
   }
 
   createSong = async () => {
     const id = Math.floor(Math.random() * 6) + 1;
 
     try {
-      const selectedSongSources = this.state.myJingles.filter(({ id }) =>
+      const selectedSongSources = this.state.mySamples.filter(({ id }) =>
         this.state.droppedBoxIds.find((selectedId) => id === selectedId)
       );
 
@@ -160,9 +179,9 @@ class Compose extends Component {
 
       this.setState({ loading: true });
 
-      const myJingles = await getSamples();
+      const mySamples = await getSamples();
 
-      this.setState({ myJingles, loading: false, jingleSlots: getJingleSlots() });
+      this.setState({ mySamples, loading: false, sampleSlots: getSapleSlots() });
 
       this.props.removePendingTx(id);
       console.log(res);
@@ -184,7 +203,7 @@ class Compose extends Component {
               <div className="sort-samples-wrapper">
                 <div>
                   {
-                    this.state.jingleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                    this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
                       <SampleSlot
                         key={`item-${index}`}
                         index={index}
@@ -198,12 +217,16 @@ class Compose extends Component {
                   }
 
                   <div>
-                         <span
-                           className="compose-play"
-                           onClick={this.startStopSong}
-                         >
-                           { !this.state.playing && <PlayIcon />}
-                           { this.state.playing && <StopIcon />}
+                         <span className="compose-play">
+                           { this.state.loadingGroup && <LoadingIcon /> }
+                           {
+                             !this.state.playing && !this.state.loadingGroup &&
+                             <span onClick={this.playSound}><PlayIcon /></span>
+                           }
+                           {
+                             this.state.playing && !this.state.loadingGroup &&
+                             <span onClick={this.stopSound}><StopIcon /></span>
+                           }
                          </span>
                   </div>
                 </div>
@@ -236,7 +259,7 @@ class Compose extends Component {
             }
 
             {
-              (this.state.myJingles.length === 0) &&
+              (this.state.mySamples.length === 0) &&
               !this.state.loading &&
               <div>
                 { /* TODO - insert buy sample form here */ }
@@ -251,14 +274,14 @@ class Compose extends Component {
             }
 
             {
-              (this.state.myJingles.length > 0) &&
+              (this.state.mySamples.length > 0) &&
               !this.state.loading &&
               <div className="samples-slider">
                 <h2>Your samples:</h2>
 
                 <div className="compose-samples-wrapper">
                   {
-                    this.state.myJingles.map((sample) => (
+                    this.state.mySamples.map((sample) => (
                       <SampleBox
                         draggable
                         key={sample.id}

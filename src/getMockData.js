@@ -245,7 +245,7 @@ export const getJingleFromJingleId = (jingleId) => {
   }
 };
 
-export const getJingleSlots = () => [
+export const getSapleSlots = () => [
   { accepts: [COMPOSE], lastDroppedItem: null },
   { accepts: [COMPOSE], lastDroppedItem: null },
   { accepts: [COMPOSE], lastDroppedItem: null },
