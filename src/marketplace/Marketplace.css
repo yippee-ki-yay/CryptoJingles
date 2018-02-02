@@ -33,6 +33,15 @@
     margin: 5px;
 }
 
+.single-song #load, .single-song  .loading-icon-wrapper {
+    width: 45px;
+}
+
+.single-song #load #loading-inner {
+    width: 43px;
+    stroke: #fff;
+}
+
 .single-song .header-label {
     position: absolute;
     top: 10px;

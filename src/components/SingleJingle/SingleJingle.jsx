@@ -4,20 +4,33 @@ import { playAudio } from '../../actions/audioActions';
 import { Link } from 'react-router';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../../components/JingleImage/JingleImage';
+import LoadingIcon from '../../components/Decorative/LoadingIcon';
 import { getJingleMetadata } from '../../getMockData';
 
 class SingleJingle extends Component {
   constructor (props) {
     super(props);
 
-    this.state = { start: false };
+    this.state = {
+      start: false,
+      loading: false,
+      sound: null
+    };
+
+    this.stopSound = this.stopSound.bind(this);
+    this.playSound = this.playSound.bind(this);
+    this.loadJingle = this.loadJingle.bind(this);
   }
 
-  componentDidMount() {
+  componentWillUnmount() { this.stopSound(); }
+
+  loadJingle() {
     const sampleSrcs = this.props.sampleTypes.map((sampleType) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
-    }));
+      }));
+
+    this.setState({ loading: true });
 
     Promise.all(sampleSrcs).then((sources) => {
       const longestSound = sources.reduce((prev, current) => (
@@ -27,22 +40,25 @@ class SingleJingle extends Component {
 
       const sound = new Group(sources);
 
-      sound.on('stop', () => {
-        this.setState({ start: false });
-      });
+      sound.on('stop', () => { this.setState({ start: false }); });
 
-      this.state = { sound, start: false };
+      this.setState({ sound, start: false, loading: false });
+      this.playSound();
     });
   }
 
-  componentWillUnmount() { this.stopSound(); }
-
   playSound = () => {
+    if (this.state.sound === null) {
+      this.loadJingle();
+      return
+    }
+
     this.state.sound.play();
     this.setState({ start: true });
   };
 
   stopSound = () => {
+    if (!this.state.sound) return;
     this.state.sound.stop();
     this.setState({ start: false });
   };
@@ -64,14 +80,15 @@ class SingleJingle extends Component {
         </div>
 
         <div className="overlay">
+          { this.state.loading && <LoadingIcon /> }
           {
-            !this.state.start &&
+            !this.state.start && !this.state.loading &&
             <span onClick={ this.playSound }>
               <i className="material-icons play">play_circle_outline</i>
             </span>
           }
           {
-            this.state.start &&
+            this.state.start && !this.state.loading &&
             <span onClick={ this.stopSound }><i className="material-icons stop">cancel</i></span>
           }
           <Link to={`/jingle/${jingleId}`}>
