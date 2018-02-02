@@ -221,7 +221,12 @@ class Compose extends Component {
                            { this.state.loadingGroup && <LoadingIcon /> }
                            {
                              !this.state.playing && !this.state.loadingGroup &&
-                             <span onClick={this.playSound}><PlayIcon /></span>
+                             <span
+                               className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
+                               onClick={this.playSound}
+                             >
+                               <PlayIcon />
+                             </span>
                            }
                            {
                              this.state.playing && !this.state.loadingGroup &&
@@ -242,7 +247,12 @@ class Compose extends Component {
                     onChange={this.handleJingleNameChange}
                   />
 
-                  <button type="submit" className="btn buy-button" onClick={ this.createSong }>
+                  <button
+                    type="submit"
+                    className="btn buy-button"
+                    onClick={ this.createSong }
+                    disabled={this.state.droppedBoxIds.length !== 5}
+                  >
                     Submit
                   </button>
                 </div>
