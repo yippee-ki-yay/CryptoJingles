@@ -12,8 +12,8 @@ let getWeb3 = () => {
 
     window.web3.version.getNetwork((err, netId) => {
       console.log(netId);
-      if (netId !== "3") {
-        alert("Wrong network please switch to ropsten!");
+      if (netId !== "1") {
+        alert("Wrong network please switch to mainnet!");
       }
     })
 
