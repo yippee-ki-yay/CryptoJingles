@@ -26,8 +26,6 @@ contract Jingle is Ownable, ERC721 {
     uint public numOfJingles;
     
     address public cryptoJingles;
-    bool public cryptoJinglesSet = false;
-    bool public marketplaceSet = false;
     Marketplace public marketplaceContract;
     
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
@@ -86,14 +84,7 @@ contract Jingle is Ownable, ERC721 {
     }
     
     function approveAndSell(uint _jingleId, uint _amount) public {
-        require(tokensForOwner[_jingleId] != 0x0);
-        require(ownerOf(_jingleId) == msg.sender);
-        require(address(marketplaceContract) != msg.sender);
-        
-        if (_getApproved(_jingleId) != 0x0 || address(marketplaceContract) != 0x0) {
-            tokensForApproved[_jingleId] = address(marketplaceContract);
-            Approval(msg.sender, address(marketplaceContract), _jingleId);
-        }
+        approve(address(marketplaceContract), _jingleId);
         
         marketplaceContract.sell(msg.sender, _jingleId, _amount);
     }
@@ -197,16 +188,14 @@ contract Jingle is Ownable, ERC721 {
     
     // Owner functions 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
-        require(cryptoJinglesSet == false);
+        require(_cryptoJingles == 0x0);
         
         cryptoJingles = _cryptoJingles;
-        cryptoJinglesSet = true;
     }
     
     function setMarketplaceContract(address _marketplace) public onlyOwner {
-        require(marketplaceSet == false);
+        require(address(marketplaceContract) == 0x0);
         
         marketplaceContract = Marketplace(_marketplace);
-        marketplaceSet = true;
     }
 }

@@ -15,8 +15,7 @@ contract Sample is Ownable {
     uint public numOfSamples;
     
     address public cryptoJingles;
-    bool cryptoJinglesSet = false;
-    
+
     SampleStorage public sampleStorage;
     
     event Mint(address indexed _to, uint256 indexed _tokenId);
@@ -41,11 +40,6 @@ contract Sample is Ownable {
         numOfSamples++;
     }
     
-    function setSampleType(uint _sampleId, uint _sampleType) public onlyCryptoJingles {
-        tokenType[_sampleId] = _sampleType;
-    }
-    
-    //TODO: check this again
     // find who owns that sample and at what position is it in the owners arr 
     // Swap that token with the last one in arr and delete the end of arr
     function removeSample(address _owner, uint _sampleId) public onlyCryptoJingles {
@@ -106,9 +100,8 @@ contract Sample is Ownable {
      // Owner functions 
     // Set the crypto jingles contract can 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
-        require(cryptoJinglesSet == false);
+        require(_cryptoJingles == 0x0);
         
         cryptoJingles = _cryptoJingles;
-        cryptoJinglesSet = true;
     }
 }
