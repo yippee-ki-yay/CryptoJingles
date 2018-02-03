@@ -79,11 +79,11 @@ contract Marketplace is Ownable {
         // transfer money to seller
         uint price = sellOrders[_jingleId].price;
         
-        uint percentage = (price / 100) * OWNERS_CUT;
+        uint threePercent = (price / 100) * OWNERS_CUT;
         
-        sellOrders[_jingleId].seller.transfer(price - percentage);
+        sellOrders[_jingleId].seller.transfer(price - threePercent);
         
-        ownerBalance += percentage;
+        ownerBalance += threePercent;
         
         //fire and event
         Bought(_jingleId, msg.sender, msg.value);

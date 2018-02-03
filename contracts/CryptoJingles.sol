@@ -24,7 +24,7 @@ contract CryptoJingles is Ownable {
     uint numOfPurchases;
     
     uint MAX_SAMPLES_PER_PURCHASE = 15;
-    uint SAMPLE_PRICE = 1000000000000000;
+    uint SAMPLE_PRICE = 10 ** 15;
     uint SAMPLES_PER_JINGLE = 5;
     uint NUM_SAMPLE_RANGE = 1000;
     
@@ -55,7 +55,6 @@ contract CryptoJingles is Ownable {
     }
     
     function composeJingle(string name, uint[5] samples) public {
-        require(samples.length == SAMPLES_PER_JINGLE);
         require(jingleContract.uniqueJingles(keccak256(samples)) == false);
         
         //check if you own all the 5 samples 
