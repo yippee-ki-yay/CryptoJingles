@@ -18,11 +18,9 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
     // false for all jingles, true to get jingles on sale
     const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/${(category.value === 'sale').toString()}`);
 
-    console.log(num);
-
     dispatch({ type: SET_MARKETPLACE_JINGLES, payload: { jingles: response.data, num: num.data } })
   } catch (err) {
-    console.error('Get marketplace jingles error:', err); // TODO Handle this in the future
+    // console.error('Get marketplace jingles error:', err); // TODO Handle this in the future
   }
 };
 

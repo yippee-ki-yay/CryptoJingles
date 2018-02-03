@@ -7,15 +7,13 @@ import Marketplace from '../../../build/contracts/Marketplace.json';
 
 let getWeb3 = () => {
   if (typeof web3 !== 'undefined') {
-    console.log('Injected web3 detected.');
     window.web3 = new Web3(web3.currentProvider); // eslint-disable-line
 
     window.web3.version.getNetwork((err, netId) => {
-      console.log(netId);
       if (netId !== "3") {
         alert("Wrong network please switch to ropsten!");
       }
-    })
+    });
 
     const cryptoJinglesContract = contract(CryptoJingles);
     cryptoJinglesContract.setProvider(window.web3.currentProvider);
@@ -28,9 +26,7 @@ let getWeb3 = () => {
     const marketplaceContract = contract(Marketplace);
     marketplaceContract.setProvider(window.web3.currentProvider);
     window.marketplaceContract = marketplaceContract.at(MarketplaceAddress);
-
   } else {
-    console.log('No web3 instance injected, using Local web3.');
     window.web3 = new Web3.providers.HttpProvider('http://localhost:8545')
   }
 
