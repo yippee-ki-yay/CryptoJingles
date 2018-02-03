@@ -13,7 +13,7 @@ import StopIcon from '../components/Decorative/StopIcon';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
-import { addPendingTx, removePendingTx } from '../actions/appActions';
+import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
 
 import '../util/config';
@@ -163,7 +163,7 @@ class Compose extends Component {
   }
 
   createSong = async () => {
-    const id = Math.floor(Math.random() * 6) + 1;
+    const id = guid();
 
     try {
       const selectedSongSources = this.state.mySamples.filter(({ id }) =>
@@ -178,7 +178,7 @@ class Compose extends Component {
       }
 
       const name = this.state.jingleName;
-      this.props.addPendingTx(id, 'Create jingle');
+      this.props.addPendingTx(id, 'Compose jingle');
       
       const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
 

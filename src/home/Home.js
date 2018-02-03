@@ -5,7 +5,7 @@ import "./Home.css";
 import soundwawe from './soundwawe.svg';
 import { Link } from 'react-router';
 
-class Home extends Component {
+class Home extends Component {A
   constructor(props) {
     super(props);
 
@@ -26,7 +26,7 @@ class Home extends Component {
         <div className="explanation-page">
           <h2>How does it work?</h2>
           <div>This is a game based on the Ethereum blockchain. 
-            Every jingle you composed is unique and stored on the blockchain as a token.
+            Every jingle you compose is unique and stored on the blockchain as a token.
             Playing the game is easy and can be explained in 3 steps:
             </div>
             <ul>

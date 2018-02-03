@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../components/JingleImage/JingleImage';
 
-import { addPendingTx, removePendingTx } from '../actions/appActions';
+import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { getColorForRarity } from '../actions/profileActions';
 
 import './JinglePage.css';
@@ -53,7 +53,7 @@ class JinglePage extends Component {
   purchase = async () => {
     const jingle = this.state.jingle;
 
-    const id = 1;
+    const id = guid();
     this.props.addPendingTx(id, 'Buy Jingle');
     await window.marketplaceContract.buy(jingle.jingleId, {from: this.state.account, value: jingle.price});
     this.props.removePendingTx(id);
@@ -71,7 +71,7 @@ class JinglePage extends Component {
 
     const jingle = this.state.jingle;
 
-    const id = 1;
+    const id = guid();
     this.props.addPendingTx(id, 'Sell Jingle');
     await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: this.state.account});
     this.props.removePendingTx(id);
@@ -85,7 +85,7 @@ class JinglePage extends Component {
   cancelSale = async () => {
     const jingle = this.state.jingle;
 
-    const id = 1;
+    const id = guid();
     this.props.addPendingTx(id, 'Cancel Sale');
     await window.marketplaceContract.cancel(jingle.jingleId, {from: this.state.account});
     this.props.removePendingTx(id);

@@ -45,7 +45,6 @@ class PendingTxDropdown extends Component {
                     this.props.pendingTxs.map(({ tx, type}) => (
                       <div className="pending-single" key={tx}>
                         <span className="type">{ type }</span>
-                        { tx }
                       </div>
                     ))
                   }

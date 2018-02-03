@@ -5,7 +5,7 @@ import {
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
-import { addPendingTx, removePendingTx } from '../actions/appActions';
+import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
 import { SAMPLE_PRICE } from '../util/config';
 import { API_URL } from '../util/config';
 
@@ -95,7 +95,7 @@ export const getAuthor = () => async (dispatch, getState) => {
  * @return {Function}
  */
 export const submitEditAuthorForm = () => async (dispatch, getState) => {
-  const id = Math.floor(Math.random() * 6) + 1; // TODO - replace this with pending tx length
+  const id = guid();
   try {
     const address = web3.eth.accounts[0]; // eslint-disable-line
     const newAuthorName = getState().profile.authorEdit;
@@ -153,7 +153,7 @@ export const getSamplesForUser = () => async (dispatch, getState) => {
  * @return {Function}
  */
 export const buySamples = () => async (dispatch, getState) => {
-  const id = Math.floor(Math.random() * 6) + 1; // TODO - replace this with pending tx length
+  const id = guid();
 
   try {
     const account = web3.eth.accounts[0]; // eslint-disable-line

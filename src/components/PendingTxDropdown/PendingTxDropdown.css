@@ -7,6 +7,11 @@
 }
 
 .pending-tx-dropdown-wrapper .dropdown-header {
+    color: black;
+    font-size: 18px;
+}
+
+.pending-tx-dropdown-wrapper .dropdown-header {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -24,11 +29,12 @@
 
 .pending-tx-dropdown-wrapper .dropdown-wrapper {
     position: absolute;
+    font-size: 18px;
     top: 50px;
-    left: 0;
-    width: 140%;
+    right: 0;
+    width: 120%;
     background: #fff;
-    border: 1px solid lightgray;
+    border: 1px solid #d2d2d2;
 }
 
 .pending-single {
@@ -36,9 +42,13 @@
     width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 5px;
+    padding: 10px;
 }
 
 .pending-single .type {
     margin-right: 5px;
+}
+
+.pending-tx-dropdown-wrapper .dropdown-wrapper .pending-single:not(:last-child) {
+    border-bottom: 1px solid #d2d2d2;
 }
