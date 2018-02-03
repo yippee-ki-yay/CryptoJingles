@@ -15,9 +15,11 @@ const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, 
 const style = {
   margin: '14px 10px 7px 10px',
   width: '175px',
+  height: '230px',
   float: 'left',
   cursor: 'move',
-  position: 'relative'
+  position: 'relative',
+  background: '#fff',
 };
 
 @DragSource(props => props.type, boxSource, (connect, monitor) => ({
@@ -101,6 +103,7 @@ class SampleBox extends Component {
                   { rarity === 0 && 'Common' }
                   { rarity === 1 && 'Rare' }
                   { rarity === 2 && 'Legendary' }
+                  { rarity === 3 && 'Mythical' }
                 </span>
               </div>
             </div>

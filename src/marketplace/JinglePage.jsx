@@ -6,6 +6,7 @@ import { Sound, Group} from 'pizzicato';
 import JingleImage from '../components/JingleImage/JingleImage';
 
 import { addPendingTx, removePendingTx } from '../actions/appActions';
+import { getColorForRarity } from '../actions/profileActions';
 
 import './JinglePage.css';
 import { API_URL } from '../util/config';
@@ -224,9 +225,19 @@ class JinglePage extends Component {
                       <h4>Samples</h4>
                       <div className="samples">
                         {
-                          jingle.sampleTypes.map((type, i) => 
-                            <span key={ i } className="sample">{ getJingleMetadata(type).name }</span>
-                          )
+                          jingle.sampleTypes.map((type, i) => {
+                            const sample = getJingleMetadata(type);
+                            const background = getColorForRarity(sample.rarity);
+
+                            return(
+                              <span
+                                key={ i }
+                                className="sample"
+                              >
+                                { sample.name }
+                              </span>
+                            )
+                          })
                         }
                       </div>
                     </div>

@@ -87,6 +87,7 @@ class SampleBox2 extends Component {
                 { rarity === 0 && 'Common' }
                 { rarity === 1 && 'Rare' }
                 { rarity === 2 && 'Legendary' }
+                { rarity === 3 && 'Mythical' }
               </span>
             </div>
           </div>

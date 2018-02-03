@@ -130,6 +130,8 @@ export const getColorForRarity = (rarity) => {
       return '#734488'; // 492645
     case 2:
       return '#FFDF00';
+    case 3:
+      return '#99ff00';
     default:
       return '#000';
   }

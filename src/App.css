@@ -9,6 +9,7 @@ div {
 
 .header-wrapper {
     background: white;
+    margin-top: 10px;
 }
 
 .navbar-default .navbar-nav > li > a,
@@ -16,6 +17,7 @@ div {
 .navbar-default .navbar-nav > li > a:focus,
 .navbar-default .navbar-brand:focus {
     color: black;
+    font-size: 18px;
 }
 
 .navbar-default .navbar-toggle .icon-bar {
@@ -42,4 +44,17 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 
 .navbar-collapse.collapsing, .navbar-collapse.collapse.in {
     border-bottom: 1px solid black;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand span {
+    margin-right: 10px;
+}
+
+.children-wrapper {
+    margin-top: 10px;
 }
