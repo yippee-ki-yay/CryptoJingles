@@ -18,28 +18,26 @@ contract SampleStorage is Ownable {
     uint public numOfRare;
     
     function SampleStorage() public {
-        //JUST FOR TEST DATA:
-        numOfCommon = 12;
-        numOfMedium = 6;
-        numOfRare = 2;
+        numOfCommon = 60;
+        numOfMedium = 30;
+        numOfRare = 10;
+        
+        numOfSampleTypes = 99;
     }
     
-    
-    // 4 distinct rarity types 
-    // Common range - 0
-    // Medium range - 1
-    // Rare range - 2
-    function addNewSampleType(string _ipfsHash, uint _rarityType) public onlyOwner {
+    function addNewSampleType(string _ipfsHash, uint _rarityType, bool newTypes) public onlyOwner {
         
-        if (_rarityType == 0) {
-            numOfCommon++;
-        } else if (_rarityType == 1) {
-            numOfMedium++;
-        } else {
-            numOfRare++;
+        if (newTypes) {
+            if (_rarityType == 0) {
+                numOfCommon++;
+            } else if (_rarityType == 1) {
+                numOfMedium++;
+            } else {
+                numOfRare++;
+            }
         }
         
-        sampleTypes[numOfSampleTypes + 1] = Sample({
+        sampleTypes[numOfSampleTypes] = Sample({
            ipfsHash: _ipfsHash,
            rarity: _rarityType
         });
@@ -50,11 +48,12 @@ contract SampleStorage is Ownable {
     function getType(uint _randomNum) public view returns (uint) {
         uint range = 0;
         
+        
         if (_randomNum > 0 && _randomNum < 600) {
             range = 600 / numOfCommon;
             return _randomNum / range;
             
-        } else if (_randomNum >= 600 && _randomNum < 900) {
+        } else if(_randomNum >= 600 && _randomNum < 900) {
             range = 300 / numOfMedium;
             return _randomNum / range;
         } else {
@@ -62,4 +61,5 @@ contract SampleStorage is Ownable {
             return _randomNum / range;
         }
     }
+    
 }

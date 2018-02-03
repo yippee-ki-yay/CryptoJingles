@@ -23,7 +23,7 @@ contract CryptoJingles is Ownable {
 
     uint numOfPurchases;
     
-    uint MAX_SAMPLES_PER_PURCHASE = 30;
+    uint MAX_SAMPLES_PER_PURCHASE = 15;
     uint SAMPLE_PRICE = 1000000000000000;
     uint SAMPLES_PER_JINGLE = 5;
     uint NUM_SAMPLE_RANGE = 1000;
@@ -37,19 +37,19 @@ contract CryptoJingles is Ownable {
         jingleContract = Jingle(_jingle);
     }
     
-    function buyJingle(uint numSamples) public payable {
-        require(numSamples <= MAX_SAMPLES_PER_PURCHASE);
-        require(msg.value >= (SAMPLE_PRICE * numSamples));
+    function buySamples(uint _numSamples, address _to) public payable {
+        require(_numSamples <= MAX_SAMPLES_PER_PURCHASE);
+        require(msg.value >= (SAMPLE_PRICE * _numSamples));
         
-         for (uint i = 0; i < numSamples; ++i) {
+         for (uint i = 0; i < _numSamples; ++i) {
             
             bytes32 blockHash = block.blockhash(block.number - 1);
             
             uint randomNum = randomGen(blockHash, i);
-            sampleContract.mint(msg.sender, randomNum);
+            sampleContract.mint(_to, randomNum);
         }
         
-        Purchased(msg.sender, block.number, numSamples, numOfPurchases);
+        Purchased(_to, block.number, _numSamples, numOfPurchases);
         
         numOfPurchases++;
     }
@@ -79,6 +79,7 @@ contract CryptoJingles is Ownable {
         jingleContract.composeJingle(msg.sender, samples, sampleTypes, name, authors[msg.sender]);
     }
     
+    // Addresses can set their name when composing jingles
     function setAuthorName(string _name) public {
         authors[msg.sender] = _name;
     }
@@ -87,7 +88,7 @@ contract CryptoJingles is Ownable {
         return (uint(keccak256(blockHash, block.timestamp, numOfPurchases, seed )) % NUM_SAMPLE_RANGE);
     }
     
-    // Run with the money
+    // The only ether kept on this contract are owner money for samples
     function withdraw(uint _amount) public onlyOwner {
         require(_amount <= this.balance);
         
