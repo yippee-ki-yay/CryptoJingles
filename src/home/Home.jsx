@@ -20,7 +20,7 @@ class Home extends Component {
       jingle: {
         author: 'Soundtoshi Nakajingles',
         jingleId: 7,
-        name: 'catch name',
+        name: 'Catchy name',
         onSale: false,
         owner: "0x93cdb0a93fc36f6a53ed21ecf6305ab80d06beca",
         price: 0,
@@ -69,9 +69,9 @@ class Home extends Component {
             <div className="sample-text">
               Currently there are 100 sound samples available in the game with the possibility to add more in the
               future. A sample can be one of 4 types of rarity: common, rare, legendary and mythical. Rarer the sample,
-              better the sound. Ovde napises nesto o odnosu retkosti Nenade.
-              Every sound sample is hosted on IPFS and referenced on the main smart contract. Sammples have a fixed
-              price of * dodati tacnu cenu * and can't be traded. In order to compose a jingle you need at least 5
+              better the sound. There are currently 59 common sounds, 30 rare, 10 legendary and only 1 mythical!
+              Every sound sample is hosted on IPFS and referenced on the main smart contract. Samples have a fixed
+              price of 0.001Ξ and can't be traded. In order to compose a jingle you need at least 5
               samples. When a sample is used to compose a jingle it becomes a part of it and you can't use it in
               other jingles.
             </div>
@@ -99,7 +99,11 @@ class Home extends Component {
           <div className="description">
             <h3>Jingles</h3>
             <div className="sample-text">
-              Napisi tekst o jinglovima
+            Every jingle is unique both by it’s sound but also with a generated image specific for that jingle.
+            When you create a jingle nobody else can create that same jingle.
+            Jingles are tradable items you can put them on sale on our Marketplace for whatever
+            price you think it’s worth. You can put them on sale for free but we do take a 3% cut on a successful sale.
+            Every jingle also has an author and a name, which users are free to set and it’s saved on the blockchain.
             </div>
           </div>
         </div>
@@ -107,13 +111,9 @@ class Home extends Component {
         <div className="separator" />
 
         <div>
-          Zakljucak i linkovi
-        </div>
-
-        <div>
-          <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Reddit</Link>
-          <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Discord</Link>
-          <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Medium</Link>
+          <a href="https://www.reddit.com/r/CryptoJingles/">Reddit</a>
+          <a href="https://www.reddit.com/r/CryptoJingles/">Medium</a>
+          <a href="https://discord.gg/F6PW2Tx">Discord</a>
         </div>
       </div>
     )
