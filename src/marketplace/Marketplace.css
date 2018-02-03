@@ -1,6 +1,7 @@
 .marketplace-wrapper {
     background: white;
     display: flex;
+    margin-top: 20px;
 }
 
 .marketplace-play-wrapper {
@@ -13,6 +14,7 @@
 
 .marketplace-wrapper .songs-wrapper {
     padding: 10px;
+    padding-left: 0;
     width: 100%;
     justify-content: flex-start;
     display: flex;
@@ -30,7 +32,7 @@
     position:relative;
     flex-direction: column;
     width: 200px;
-    margin: 5px;
+    margin: 10px 10px 5px 10px;
 }
 
 .single-song #load, .single-song  .loading-icon-wrapper {
@@ -102,11 +104,11 @@
     border-right: 1px solid black;
     color: black;
     padding: 20px;
+    padding-left: 0;
     flex: 1;
-    flex-basis: 300px;
-    min-width: 300px;
-    max-width: 300px;
-    margin-left: 6px;
+    flex-basis: 240px;
+    min-width: 240px;
+    max-width: 240px;
     margin-right: 10px;
     margin-bottom: 20px;
 }

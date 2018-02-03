@@ -114,6 +114,27 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
 };
 
 // SAMPLES TODO - create separate reducer & actions for this
+
+/**
+ * Return color based on sample rarity
+ *
+ * @param {Number} rarity
+ *
+ * @return {String}
+ */
+export const getColorForRarity = (rarity) => {
+  switch (rarity) {
+    case 0:
+      return '#005792';
+    case 1:
+      return '#734488'; // 492645
+    case 2:
+      return '#FFDF00';
+    default:
+      return '#000';
+  }
+};
+
 /**
  * Gets all samples from the contract for the current address
  *

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { DropTarget } from 'react-dnd';
+import { getJingleMetadata } from '../../getMockData';
+import { getColorForRarity } from '../../actions/profileActions';
 
 import './SampleSlot.css';
 
 const style = {
-  height: '17rem',
-  width: '17rem',
+  height: '230px',
+  width: '175px',
   marginRight: '1.5rem',
   marginBottom: '1.5rem',
-  color: 'white',
-  padding: '1rem',
   textAlign: 'center',
   lineHeight: 'normal',
   float: 'left'
@@ -31,29 +31,57 @@ class SampleSlot extends Component {
 
   render() {
     const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop } = this.props;
+    let jingle = null;
 
     const isActive = isOver && canDrop;
+    let rarityColor = null;
 
-    let backgroundColor = '#222';
+    const additionalStyle = {
+      backgroundColor: '#fff',
+      color: '#626972'
+    };
 
     if (isActive || lastDroppedItem) {
-      backgroundColor = '#48BA95';
+      additionalStyle.backgroundColor = '#9c9c9c';
+      additionalStyle.color = '#fff';
     } else if (canDrop) {
-      backgroundColor = '#8a8a8a';
+      additionalStyle.backgroundColor = '#DEDEDE';
+      additionalStyle.color = '#fff';
+    }
+
+    if (lastDroppedItem) {
+      jingle = getJingleMetadata(lastDroppedItem.type);
+      additionalStyle.backgroundColor = '#fff';
+      additionalStyle.border = 'none';
+      rarityColor = getColorForRarity(jingle.rarity);
     }
 
     return connectDropTarget(
-      <div className="jingle-slot" style={{ ...style, backgroundColor }}>
+      <div className="jingle-slot" style={{ ...style, ...additionalStyle }}>
         {
           lastDroppedItem &&
-          <div className="cancel-btn" onClick={cancelDrop}>
-            <i className="material-icons">close</i>
+          <div>
+            <div className="top" style={{ backgroundColor: rarityColor }}>
+              <div className="cancel-btn" onClick={cancelDrop}>
+                <i className="material-icons">close</i>
+              </div>
+            </div>
+            <div className="bottom">
+              <div className="name-tag">{ lastDroppedItem.name }</div>
+
+              <div className="id-tag">
+                <span>#{ lastDroppedItem.type } - </span>
+                <span style={{ color: rarityColor }}>
+                  { jingle.rarity === 0 && 'Common' }
+                  { jingle.rarity === 1 && 'Rare' }
+                  { jingle.rarity === 2 && 'Legendary' }
+                </span>
+              </div>
+            </div>
           </div>
         }
 
-        { !lastDroppedItem && 'Drop sound sample here'  }
-
-        { lastDroppedItem && (<p>{lastDroppedItem.name} (#{lastDroppedItem.id})</p>) }
+        { !lastDroppedItem && <div className="empty-slot">Drag & drop sound sample here</div>  }
       </div>
     );
   }

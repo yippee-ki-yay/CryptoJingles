@@ -24,7 +24,7 @@ class Marketplace extends Component {
     const { changeMarketplaceCategory, changeMarketplaceSorting, onMarketplacePaginationChange } = this.props;
 
       return (
-          <div className="marketplace-page-wrapper">
+          <div className="marketplace-page-wrapper container">
             <div className="marketplace-wrapper">
 
               { /* SIDEBAR RENDER (TODO - Create component) */ }

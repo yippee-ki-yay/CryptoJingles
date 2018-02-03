@@ -38,10 +38,11 @@
   display: flex;
   max-width: 100%;
   overflow-x: auto;
+  height: 290px;
 }
 
 .compose-play {
-  height: 17rem;
+  height: 230px;
   display: flex;
   align-items: center;
   justify-content: center;

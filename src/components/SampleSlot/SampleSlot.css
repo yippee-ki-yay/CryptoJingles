@@ -16,15 +16,55 @@
 
 .jingle-slot {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border: 1px solid #d5d5d5;
+    font-size: 16px;
 }
 
 .cancel-btn {
-    position: absolute;
-    top: 7px;
-    right: 7px;
     cursor: pointer;
+}
+
+.cancel-btn i {
+    font-size: 45px;
+}
+
+.jingle-slot .top {
+    clip-path: polygon(0 0, 1634px 0, 130px 90%, 0 99%);
+    overflow: hidden;
+    position: relative;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jingle-slot .bottom {
+    height: 100px;
+    padding: 10px;
+    position: relative;
+}
+
+.jingle-slot .id-tag {
+    font-size: 20px;
+    font-weight: bold;
+    font-style: italic;
+    color: #C0C7D1;
+    position: absolute;
+    bottom: 5px;
+}
+
+.jingle-slot .name-tag {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #43474e;
+    text-align: left;
+}
+
+.empty-slot {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -6,16 +6,18 @@ import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { playAudio } from '../../actions/audioActions';
+import { getColorForRarity } from '../../actions/profileActions';
 
 import './SampleBox.css';
 
-const boxSource = { beginDrag(props) { return { name: props.name, id: props.id }} };
+const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }} };
 
 const style = {
-  marginRight: '1.5rem',
-  width: '350px',
-  marginBottom: '1.5rem',
+  margin: '14px 10px 7px 10px',
+  width: '175px',
+  float: 'left',
   cursor: 'move',
+  position: 'relative'
 };
 
 @DragSource(props => props.type, boxSource, (connect, monitor) => ({
@@ -67,30 +69,42 @@ class SampleBox extends Component {
   };
 
   render() {
-    const { name, isDropped, isDragging, connectDragSource } = this.props;
-    const opacity = isDragging ? 0.4 : 1;
+    const { name, isDropped, isDragging, connectDragSource, rarity, jingleType } = this.props;
+    const opacity = isDragging || isDropped ? 0.4 : 1;
 
     if (isDropped) style.pointerEvents = 'none';
     if (!isDropped) style.pointerEvents = 'initial';
 
+    let background = getColorForRarity(rarity);
+
     return connectDragSource(
         <div style={{ opacity, ...style }}>
-            <div className="well bs-component sample-component">
-              <div className="jingle-header">
-                <span className="text-success name-tag">{isDropped ? <s>{name}</s> : name}</span>
-                <span className="id-tag pull-right"> #{ this.props.id } </span>
-              </div>
-
-              { this.state.loading && <LoadingIcon /> }
+          <div className={`sample-wrapper`} style={{ width: '175px' }}>
+            <div className="top" style={{ background }}>
+              { this.state.loading && <div><LoadingIcon /></div> }
               {
                 !this.state.loading && !this.state.start &&
-                <span onClick={ this.playSound }><PlayIcon /></span>
+                <div onClick={ this.playSound }><PlayIcon /></div>
               }
               {
                 !this.state.loading && this.state.start &&
-                <span onClick={ this.stopSound }><StopIcon /></span>
+                <div onClick={ this.stopSound }><StopIcon /></div>
               }
             </div>
+
+            <div className="bottom">
+              <div className="name-tag">{ name }</div>
+
+              <div className="id-tag">
+                <span>#{ jingleType } - </span>
+                <span style={{ color: background }}>
+                  { rarity === 0 && 'Common' }
+                  { rarity === 1 && 'Rare' }
+                  { rarity === 2 && 'Legendary' }
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
     )
   }

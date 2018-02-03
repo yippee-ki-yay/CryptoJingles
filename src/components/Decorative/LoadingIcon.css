@@ -9,7 +9,7 @@
 
 #load #loading-inner {
     animation: loading-circle 2s linear infinite;
-    stroke: #51BBA7;
+    stroke: #fff;
     fill: transparent;
     stroke-dashoffset: 0;
     stroke-dasharray: 300;

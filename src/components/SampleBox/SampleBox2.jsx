@@ -5,14 +5,13 @@ import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { playAudio } from '../../actions/audioActions';
+import { getColorForRarity } from '../../actions/profileActions';
 
 import './SampleBox.css';
 
 const style = {
-  marginRight: '1.5rem',
-  width: '150px',
-  marginBottom: '1.5rem',
-  cursor: 'move',
+  margin: '14px 25px 7px 25px',
+  width: '175px',
   float: 'left',
 };
 
@@ -61,25 +60,36 @@ class SampleBox2 extends Component {
   };
 
   render() {
-    const { name, id } = this.props;
+    const { name, jingleType, rarity } = this.props;
+    let background = getColorForRarity(rarity);
 
     return (
       <div style={{ ...style }}>
-        <div className="well bs-component">
-          <div className="jingle-header">
-            <span className="text-success name-tag">{ name }</span>
-            <span className="id-tag pull-right"> #{ id } </span>
+        <div className="sample-wrapper">
+            <div className="top" style={{ background }}>
+            { this.state.loading && <div><LoadingIcon /></div> }
+            {
+              !this.state.loading && !this.state.start &&
+              <div onClick={ this.playSound }><PlayIcon /></div>
+            }
+            {
+              !this.state.loading && this.state.start &&
+              <div onClick={ this.stopSound }><StopIcon /></div>
+            }
           </div>
 
-          { this.state.loading && <LoadingIcon /> }
-          {
-            !this.state.loading && !this.state.start &&
-            <span onClick={ this.playSound }><PlayIcon /></span>
-          }
-          {
-            !this.state.loading && this.state.start &&
-            <span onClick={ this.stopSound }><StopIcon /></span>
-          }
+          <div className="bottom">
+            <div className="name-tag">{ name }</div>
+
+            <div className="id-tag">
+              <span>#{ jingleType } - </span>
+              <span style={{ color: background }}>
+                { rarity === 0 && 'Common' }
+                { rarity === 1 && 'Rare' }
+                { rarity === 2 && 'Legendary' }
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     )
