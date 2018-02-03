@@ -21,7 +21,7 @@ import img14 from './mockImages/render_14.png';
 export const getJingleMetadata = (jingleType) => {
   switch (parseInt(jingleType)) {
     case 0:
-      return { type: COMPOSE, name: 'Bass Groove', source: 'https://gateway.ipfs.io/ipfs/Qmd4zeoyJGS4m1R84ygZpmghwjfm1k8JKrWu2VwLAC5cmU', rarity: 0 };
+      return { type: COMPOSE, name: 'Bitconneeeeeeeeeeeeeect', source: 'https://gateway.ipfs.io/ipfs/QmNwkhCvN4VSVF4o2FD6uBYEwFqnoVdQ6KARXt6KUCaCvu', rarity: 0 };
     case 1:
       return { type: COMPOSE, name: 'Boomin Melody', source: 'https://gateway.ipfs.io/ipfs/QmQ8JGd3TSHDKXt7voHWWKY9vZBYWh4q7W5VsjnbY8G5EH', rarity: 0 };
     case 2:
