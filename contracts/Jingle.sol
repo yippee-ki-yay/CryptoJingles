@@ -27,6 +27,7 @@ contract Jingle is Ownable, ERC721 {
     
     address public cryptoJingles;
     bool public cryptoJinglesSet = false;
+    bool public marketplaceSet = false;
     Marketplace public marketplaceContract;
     
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
@@ -203,6 +204,9 @@ contract Jingle is Ownable, ERC721 {
     }
     
     function setMarketplaceContract(address _marketplace) public onlyOwner {
+        require(marketplaceSet == false);
+        
         marketplaceContract = Marketplace(_marketplace);
+        marketplaceSet = true;
     }
 }

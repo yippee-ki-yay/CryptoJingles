@@ -160,7 +160,7 @@ export const buySamples = () => async (dispatch, getState) => {
     const numJinglesToBuy = getState().profile.numSamplesToBuy;
 
     dispatch(addPendingTx(id, 'Buy sample'));
-    await window.contract.buyJingle(parseInt(numJinglesToBuy, 10), {from: account, value: numJinglesToBuy * SAMPLE_PRICE});
+    await window.contract.buySamples(parseInt(numJinglesToBuy, 10), account, {from: account, value: numJinglesToBuy * SAMPLE_PRICE});
     dispatch(removePendingTx(id));
 
     dispatch(getSamplesForUser(account));
