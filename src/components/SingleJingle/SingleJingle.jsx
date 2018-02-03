@@ -67,38 +67,42 @@ class SingleJingle extends Component {
     const { jingleId, author, name, onSale, price } = this.props;
     return (
       <div key={jingleId} className="single-song">
-        {
-          onSale &&
-          <div className="header-label">
-            <span>On sale for:</span>
-            {window.web3.fromWei(price, 'ether').slice(0, 8)}Ξ
-          </div>
-        }
-
-        <div className="jingle-image-container">
-          <JingleImage width={200} height={200} id={jingleId} />
-        </div>
-
-        <div className="overlay">
-          { this.state.loading && <LoadingIcon /> }
+        <div className="jingle-image-actions">
           {
-            !this.state.start && !this.state.loading &&
-            <span onClick={ this.playSound }>
+            onSale &&
+            <div className="header-label">
+              <span>On sale for:</span>
+              {window.web3.fromWei(price, 'ether').slice(0, 8)}Ξ
+            </div>
+          }
+
+          <div className="jingle-image-container">
+            <JingleImage width={200} height={200} id={jingleId} />
+          </div>
+
+          <div className="overlay">
+            { this.state.loading && <LoadingIcon /> }
+            {
+              !this.state.start && !this.state.loading &&
+              <span onClick={ this.playSound }>
               <i className="material-icons play">play_circle_outline</i>
             </span>
-          }
-          {
-            this.state.start && !this.state.loading &&
-            <span onClick={ this.stopSound }><i className="material-icons stop">cancel</i></span>
-          }
-          <Link to={`/jingle/${jingleId}`}>
-            <i className="material-icons open">open_in_new</i>
-          </Link>
+            }
+            {
+              this.state.start && !this.state.loading &&
+              <span onClick={ this.stopSound }><i className="material-icons stop">cancel</i></span>
+            }
+            <Link to={`/jingle/${jingleId}`}>
+              <i className="material-icons open">open_in_new</i>
+            </Link>
+          </div>
         </div>
 
-        #{ jingleId }
-        <div>{ author }</div>
-        <div>{ name }</div>
+        <div className="jingle-footer">
+          <div>#{ jingleId }</div>
+          <div>{ author }</div>
+          <div>{ name }</div>
+        </div>
       </div>
     )
   }
