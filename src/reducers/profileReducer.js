@@ -20,7 +20,7 @@ const INITIAL_STATE = {
   jingleSortingOptions: SORTING_OPTIONS,
   jingleCategory: CATEGORY_OPTIONS[0],
   jingleCategories: CATEGORY_OPTIONS,
-  numSamplesToBuy: 1,
+  numSamplesToBuy: 5,
   loading: true,
   jinglesPerPage: MARKETPLACE_JINGLES_PER_PAGE
 };
