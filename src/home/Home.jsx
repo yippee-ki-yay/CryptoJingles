@@ -111,7 +111,19 @@ class Home extends Component {
           </div>
         </div>
 
-        <div className="separator last-separator" />
+        <div className="separator" />
+
+        <div className="explanation-section">
+          <div className="left">
+            <h2>What is next?</h2>
+          </div>
+          <div className="right">
+            Crypto Jingles is under active development and we plan to add new features soon.
+            Stay tuned in to find out more.
+          </div>
+        </div>
+
+        <div className="separator" />
 
         <div className="home-footer">
           Fell free to ask us anything on
