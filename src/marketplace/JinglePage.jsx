@@ -33,6 +33,11 @@ class JinglePage extends Component {
   }
 
   async componentWillMount() {
+    if (!window.web3.eth) {
+      this.setState({ loading: false });
+      return;
+    }
+
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
     const account = window.web3.eth.accounts[0];
     const isOwner = jingleData.data.owner === account;
@@ -141,6 +146,23 @@ class JinglePage extends Component {
 
     return (
       <div className="container single-jingle-wrapper">
+        {
+          !window.web3.eth &&
+          <div className="jingle-page-no-mm">
+            <h1 className="buy-samples-link mm-link">
+              Install
+              <a
+                target="_blank"
+                rel="noopener"
+                href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+              >
+                MetaMask
+              </a>
+              in order to see jingle page
+            </h1>
+          </div>
+        }
+
         <div className="row">
           <div className="col-md-2" />
           <div className="col-md-8 row-wrapper-jingle">
