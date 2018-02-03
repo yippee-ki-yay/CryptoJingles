@@ -7,8 +7,6 @@ module.exports = function (seed) {
     seed = String(Math.floor(Math.random() * 1000000));
   }
 
-  console.log('Seed:', seed);
-
   var randomFunc = seedRandom(seed);
   var random = createRandomRange(randomFunc);
 

@@ -78,8 +78,6 @@ class JinglePage extends Component {
 
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
     this.setState({ jingle: jingleData.data, });
-
-    console.log('Jingle has been set for sale');
   };
 
   cancelSale = async () => {
@@ -92,8 +90,6 @@ class JinglePage extends Component {
 
     const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
     this.setState({ jingle: jingleData.data, });
-
-    console.log('You canceled the sale!');
   };
 
   handleSalePriceChange = (e) => {

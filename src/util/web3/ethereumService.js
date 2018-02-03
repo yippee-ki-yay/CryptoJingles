@@ -54,6 +54,6 @@ export const getSamples = (_address = null) =>
       return jingles.map(j => j.valueOf());
 
     } catch(err) {
-      console.log(err);
+      // console.log(err);
     }
-  }
+  };

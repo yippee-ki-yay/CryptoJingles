@@ -55,10 +55,6 @@ class Compose extends Component {
     this.setState({ mySamples, loading: false });
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
-  }
-
   componentWillUnmount() {
     if (this.state.group === null) return;
 
@@ -189,7 +185,6 @@ class Compose extends Component {
       this.setState({ mySamples, loading: false, sampleSlots: getSapleSlots() });
 
       this.props.removePendingTx(id);
-      console.log(res);
     } catch (err) {
       this.props.removePendingTx(id);
     }

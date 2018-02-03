@@ -84,7 +84,7 @@ export const getAuthor = () => async (dispatch, getState) => {
 
     dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: author });
   } catch(err) {
-    console.log('Get author error', err);
+    // console.log('Get author error', err);
     // TODO - Handle this
   }
 };
