@@ -75,6 +75,7 @@ class SampleSlot extends Component {
                   { jingle.rarity === 0 && 'Common' }
                   { jingle.rarity === 1 && 'Rare' }
                   { jingle.rarity === 2 && 'Legendary' }
+                  { jingle.rarity === 2 && 'Mythical' }
                 </span>
               </div>
             </div>

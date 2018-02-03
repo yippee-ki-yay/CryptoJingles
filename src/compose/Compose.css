@@ -61,6 +61,10 @@
   color: black;
 }
 
+.compose-play #load #loading-inner {
+  stroke: #d5d5d5;
+}
+
 .form-horizontal.create-jingle-form {
   display: flex;
   justify-content: space-between;

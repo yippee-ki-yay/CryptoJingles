@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
 import AudioPlayer from './components/AudioPlayer/AudioPlayer';
+import Logo from './components/Decorative/Logo';
 
 // Styles
 import './css/bootstrap.min.css';
@@ -19,7 +20,10 @@ class App extends Component {
         <header className="navbar navbar-default navbar-fixed-top header-wrapper">
           <div className="container">
             <div className="navbar-header">
-              <Link to="/" className="navbar-brand">Crypto Jingles</Link>
+              <Link to="/" className="navbar-brand">
+                <span><Logo /></span>
+                Crypto Jingles
+              </Link>
               <button className="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
@@ -50,7 +54,9 @@ class App extends Component {
           </div>
         </header>
 
-        {this.props.children}
+        <div className="children-wrapper">
+          {this.props.children}
+        </div>
 
         <AudioPlayer />
       </div>
