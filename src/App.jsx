@@ -13,6 +13,10 @@ import './css/theme.min.css';
 import './App.css';
 
 class App extends Component {
+  componentDidMount() {
+    if (window.web3.eth && !window.web3.eth.accounts[0]) alert('Unlock MetaMask in order to use Crypto Jingles');
+  }
+
   render() {
 
     return (

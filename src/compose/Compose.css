@@ -115,3 +115,7 @@
 .disabled-play svg:hover {
   opacity: 0.5;
 }
+
+.mm-link a {
+  margin-right: 10px;
+}

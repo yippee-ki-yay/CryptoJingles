@@ -21,7 +21,7 @@ let getWeb3 = () => {
     const marketplaceContract = contract(Marketplace);
     marketplaceContract.setProvider(window.web3.currentProvider);
     window.marketplaceContract = marketplaceContract.at(MarketplaceAddress);
-    
+
   } else {
     console.log('No web3 instance injected, using Local web3.');
     window.web3 = new Web3.providers.HttpProvider('http://localhost:8545')

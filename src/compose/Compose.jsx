@@ -45,6 +45,11 @@ class Compose extends Component {
   }
 
   async componentWillMount() {
+    if (!window.web3.eth) {
+      this.setState({ loading: false });
+      return;
+    }
+
     const mySamples = await getSamples();
 
     this.setState({ mySamples, loading: false });
@@ -237,70 +242,94 @@ class Compose extends Component {
                 </div>
               </div>
 
-              <form onSubmit={(e) => {e.preventDefault(); }} className="form-horizontal create-jingle-form">
-                <h4>Compose jingle:</h4>
-                <div>
-                  <input
-                    className="form-control"
-                    placeholder="Jingle name"
-                    type="text"
-                    onChange={this.handleJingleNameChange}
-                  />
+              {
+                window.web3.eth &&
+                <form onSubmit={(e) => {e.preventDefault(); }} className="form-horizontal create-jingle-form">
+                  <h4>Compose jingle:</h4>
+                  <div>
+                    <input
+                      className="form-control"
+                      placeholder="Jingle name"
+                      type="text"
+                      onChange={this.handleJingleNameChange}
+                    />
 
-                  <button
-                    type="submit"
-                    className="btn buy-button"
-                    onClick={ this.createSong }
-                    disabled={this.state.droppedBoxIds.length !== 5}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
+                    <button
+                      type="submit"
+                      className="btn buy-button"
+                      onClick={ this.createSong }
+                      disabled={this.state.droppedBoxIds.length !== 5}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              }
             </div>
 
             <div className="separator" />
 
             {
-              this.state.loading &&
-              <div className="loader-wrapper">
-                <BoxLoader />
-              </div>
+              !window.web3.eth &&
+              <h1 className="buy-samples-link mm-link">
+                Install
+                <a
+                  target="_blank"
+                  rel="noopener"
+                  href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+                >
+                  MetaMask
+                </a>
+                in order to see your samples
+              </h1>
             }
 
             {
-              (this.state.mySamples.length === 0) &&
-              !this.state.loading &&
+              window.web3.eth &&
               <div>
-                { /* TODO - insert buy sample form here */ }
+
+                {
+                  this.state.loading &&
+                  <div className="loader-wrapper">
+                    <BoxLoader />
+                  </div>
+                }
+
+                {
+                  (this.state.mySamples.length === 0) &&
+                  !this.state.loading &&
+                  <div>
+                    { /* TODO - insert buy sample form here */ }
                     <h1 className="no-samples-heading">
-                  <span>You do not own any Sound Samples yet!</span>
+                      <span>You do not own any Sound Samples yet!</span>
 
-                  <span className="buy-samples-link">
-                    <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Buy samples here.</Link>
-                  </span>
-                </h1>
-              </div>
-            }
+                      <span className="buy-samples-link">
+                        <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Buy samples here.</Link>
+                      </span>
+                    </h1>
+                  </div>
+                }
 
-            {
-              (this.state.mySamples.length > 0) &&
-              !this.state.loading &&
-              <div className="samples-slider">
-                <h2>Your samples:</h2>
+                {
+                  (this.state.mySamples.length > 0) &&
+                  !this.state.loading &&
+                  <div className="samples-slider">
+                    <h2>Your samples:</h2>
 
-                <div className="compose-samples-wrapper">
-                  {
-                    this.state.mySamples.map((sample) => (
-                      <SampleBox
-                        draggable
-                        key={sample.id}
-                        isDropped={this.isDropped(sample.id)}
-                        {...sample}
-                      />)
-                    )
-                  }
-                </div>
+                    <div className="compose-samples-wrapper">
+                      {
+                        this.state.mySamples.map((sample) => (
+                          <SampleBox
+                            draggable
+                            key={sample.id}
+                            isDropped={this.isDropped(sample.id)}
+                            {...sample}
+                          />)
+                        )
+                      }
+                    </div>
+                  </div>
+                }
               </div>
             }
           </div>
