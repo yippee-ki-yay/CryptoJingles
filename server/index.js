@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 
 const db = require('./db');
-const routes = require('./rou tes');
+const routes = require('./routes');
 const marketplaceAbi = require("../build/contracts/Marketplace");
 const jinglesAbi = require("../build/contracts/Jingle");
 
