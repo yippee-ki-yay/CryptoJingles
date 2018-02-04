@@ -10,11 +10,7 @@ let getWeb3 = () => {
     window.web3 = new Web3(web3.currentProvider); // eslint-disable-line
 
     window.web3.version.getNetwork((err, netId) => {
-      console.log(netId);
-      if (netId !== "1") {
-        alert("Wrong network please switch to mainnet!");
-      }
-
+      if (netId !== "1") alert("Wrong network please switch to mainnet!");
     });
 
     const cryptoJinglesContract = contract(CryptoJingles);
