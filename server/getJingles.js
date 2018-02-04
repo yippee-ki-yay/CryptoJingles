@@ -8,6 +8,7 @@ const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplace
 const jinglesAbi = require("../build/contracts/Jingle");
 const jinglesAddress = "0x5af7af54e8bc34b293e356ef11fffe51d6f9ae78";
 const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
+const jingleCtrl = require('./controllers/jingles.controller');
 
 (() => {
   jinglesContract.Composed({}, { fromBlock: '5025886', toBlock: 'latest' })
@@ -19,8 +20,17 @@ const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
       const jingles = event
                       .filter(_jingle => _jingle.type === 'mined')
-                      .map(_jingle => _jingle.args);
+                      .map(_jingle => _jingle.args)
+                      .map(_jingle => ({ ..._jingle, jingleId: parseFloat(_jingle.jingleId.valueOf()), }))
+                      .map(_jingle => new Promise(async (resolve) => {
+                        const saved = await jingleCtrl.addJingle(_jingle);
+                        resolve(saved);
+                      }));
 
       console.log('GET JINGLES SUCCESS', jingles);
+
+      Promise.all(jingles).then((_jingles) => {
+        console.log('WROTE TO DB SUCCESS', _jingles);
+      })
     });
 })();
