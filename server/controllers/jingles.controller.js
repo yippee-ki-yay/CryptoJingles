@@ -151,9 +151,9 @@ module.exports.getJinglesForSale = async (req, res) => {
 module.exports.addJingle = async (jingleData) => {
     try {
 
-        const find = await Jingle.find({jingleId: jingleData.jingleId});
+        const find = await Jingle.findOne({jingleId: parseInt(jingleData.jingleId)});
 
-        console.log('Found jingle', jingleData.jingleId);
+        console.log('Found jingle', find);
 
         if (!find) {
             const jingle = new Jingle(jingleData);
@@ -169,6 +169,16 @@ module.exports.addJingle = async (jingleData) => {
         console.log(err);
         console.log('ERROR WHILE SAVING JINGLE', jingleData.jingleId, err);
         return false;
+    }
+};
+
+module.exports.jingleNum = async () => {
+    try {
+        const numJingles = Jingle.find({}).count();
+
+        return numJingles;
+    } catch(err) {
+        console.log(err);
     }
 };
 
