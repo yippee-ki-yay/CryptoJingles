@@ -23,7 +23,22 @@ const jingleCtrl = require('./controllers/jingles.controller');
                       .map(_jingle => _jingle.args)
                       .map(_jingle => ({ ..._jingle, jingleId: parseFloat(_jingle.jingleId.valueOf()), }))
                       .map(_jingle => new Promise(async (resolve) => {
-                        const saved = await jingleCtrl.addJingle(_jingle);
+
+                        const samples = _jingle.samples.map(s => s.valueOf());
+                        const sampleTypes = _jingle.jingleTypes.map(s => s.valueOf());
+
+                        const saved = await jingleCtrl.addJingle(
+                          {
+                            jingleId: _jingle.jingleId.valueOf(),
+                            name: _jingle.name,
+                            author: _jingle.author,
+                            owner: _jingle.owner,
+                            samples,
+                            sampleTypes,
+                            onSale: false,
+                            price: 0
+                          }
+                        );
                         resolve(saved);
                       }));
 
@@ -31,6 +46,6 @@ const jingleCtrl = require('./controllers/jingles.controller');
 
       Promise.all(jingles).then((_jingles) => {
         console.log('WROTE TO DB SUCCESS', _jingles);
-      })
+      });
     });
 })();
