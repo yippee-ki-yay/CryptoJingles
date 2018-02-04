@@ -150,11 +150,16 @@ module.exports.getJinglesForSale = async (req, res) => {
 // Server only method not exposed in api
 module.exports.addJingle = async (jingleData) => {
     try {
-        const jingle = new Jingle(jingleData);
 
-        await jingle.save();
+        const find = await Jingle.find({jingleId: jingleData.jingleId});
 
-        return true;
+        if (!find) {
+            const jingle = new Jingle(jingleData);
+
+            await jingle.save();
+    
+            return true;
+        }
 
     } catch(err) {
         console.log(err);
