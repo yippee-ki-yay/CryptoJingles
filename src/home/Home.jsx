@@ -19,12 +19,12 @@ class Home extends Component {
       sample4: { jingleType: 0, ...getJingleMetadata(0) },
       jingle: {
         author: 'Soundtoshi Nakajingles',
-        jingleId: 7,
-        name: 'Catchy name',
+        jingleId: 0,
+        name: 'First',
         onSale: false,
         owner: "0x93cdb0a93fc36f6a53ed21ecf6305ab80d06beca",
         price: 0,
-        sampleTypes: ["56", "1", "16", "19", "84"]
+        sampleTypes: ["73", "75", "84", "7", "32"]
       },
     };
   }
