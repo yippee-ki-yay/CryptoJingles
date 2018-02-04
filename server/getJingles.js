@@ -28,8 +28,7 @@ const jingleCtrl = require('./controllers/jingles.controller');
                         const samples = _jingle.samples.map(s => s.valueOf());
                         const sampleTypes = _jingle.jingleTypes.map(s => s.valueOf());
 
-                        const saved = await jingleCtrl.addJingle(
-                          {
+                        const saved = await jingleCtrl.addJingle({
                             jingleId: _jingle.jingleId.valueOf(),
                             name: _jingle.name,
                             author: _jingle.author,
@@ -38,8 +37,7 @@ const jingleCtrl = require('./controllers/jingles.controller');
                             sampleTypes,
                             onSale: false,
                             price: 0
-                          }
-                        );
+                        });
                         resolve(saved);
                       }));
 

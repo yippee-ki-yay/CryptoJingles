@@ -153,19 +153,24 @@ module.exports.addJingle = async (jingleData) => {
 
         const find = await Jingle.find({jingleId: jingleData.jingleId});
 
+        console.log('Found jingle', jingleData.jingleId);
+
         if (!find) {
             const jingle = new Jingle(jingleData);
 
             await jingle.save();
-    
+
+            console.log('Saved jingle', jingleData.jingleId);
+
             return true;
         }
 
     } catch(err) {
         console.log(err);
+        console.log('ERROR WHILE SAVING JINGLE', jingleData.jingleId, err);
         return false;
     }
-}
+};
 
 module.exports.setForSale = async (order) => {
     try {
