@@ -6,7 +6,7 @@ import './AudioPlayer.css';
 
 class AudioPlayer extends Component {
   componentDidMount() {
-    plyr.setup($('#audio1'), {}); // eslint-disable-line
+    // plyr.setup($('#audio1'), {}); // eslint-disable-line
   }
 
   componentWillReceiveProps(newProps) {
