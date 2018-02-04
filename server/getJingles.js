@@ -1,5 +1,7 @@
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.decenter.com'));
+
+const db = require('./db');
 const routes = require('./routes');
 
 const marketplaceAbi = require("../build/contracts/Marketplace");
