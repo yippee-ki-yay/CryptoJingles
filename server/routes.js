@@ -10,5 +10,6 @@ router.get('/jingle/:jingleId', jingleCtrl.getJingle);
 router.get('/jingles/pagination/:page/filter/:filter', jingleCtrl.getJingles);
 router.get('/jingles/sale/:page/filter/:filter', jingleCtrl.getJinglesForSale);
 router.get('/jingles/count/filter/:filter/sale/:sale', jingleCtrl.getJingleNum);
+//router.get('/jingles/populate', jingleCtrl.populate);
 
 module.exports = router;
