@@ -100,8 +100,8 @@ class SingleJingle extends Component {
 
         <div className="jingle-footer">
           <div>#{ jingleId }</div>
-          <div>{ author }</div>
-          <div>{ name }</div>
+          <div className="jingle-footer-author">{ author }</div>
+          <div className="jingle-footer-name">{ name }</div>
         </div>
       </div>
     )

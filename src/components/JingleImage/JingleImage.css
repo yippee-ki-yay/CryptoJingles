@@ -10,3 +10,10 @@
 .jingle-footer {
     margin-top: 10px;
 }
+
+.jingle-footer-name, .jingle-footer-author {
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
