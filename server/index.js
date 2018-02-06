@@ -16,7 +16,7 @@ const app = express();
 const marketplaceAddress = "0x31337c5b1580d8c5fa6880ea34e323364165ed17";
 const jinglesAddress = "0x9430a9881ded68c90471dd2304b1073aba088f59";
 
-const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io"));
+const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.decenter.com"));
 
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 

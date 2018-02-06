@@ -27,28 +27,40 @@ class JinglePage extends Component {
       salePrice: undefined,
     };
 
+    this.loadPage = this.loadPage.bind(this);
     this.stopSound = this.stopSound.bind(this);
     this.playSound = this.playSound.bind(this);
     this.loadJingle = this.loadJingle.bind(this);
   }
 
-  async componentWillMount() {
+  componentWillMount() {
+    this.loadPage(this.props.params.id);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.params.id === this.props.params.id) return;
+
+    this.loadPage(newProps.params.id);
+  }
+
+  componentWillUnmount() { this.stopSound(); }
+
+  loadPage = async (id) => {
     if (!window.web3.eth) {
       this.setState({ loading: false });
       return;
     }
 
-    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
+    const jingleData = await axios(`${API_URL}/jingle/${id}`);
     const account = window.web3.eth.accounts[0];
     const isOwner = jingleData.data.owner === account;
+
     this.setState({
       jingle: jingleData.data,
       account,
       isOwner
-    })
-  }
-
-  componentWillUnmount() { this.stopSound(); }
+    });
+  };
 
   purchase = async () => {
     const jingle = this.state.jingle;
