@@ -13,10 +13,10 @@ const jinglesAbi = require("../build/contracts/Jingle");
 const jingleCtrl = require('./controllers/jingles.controller');
 
 const app = express();
-const marketplaceAddress = "0xb8e392da7abb836cff06d827531a7e5f1b00bed2";
-const jinglesAddress = "0x5af7af54e8bc34b293e356ef11fffe51d6f9ae78";
+const marketplaceAddress = "0x9a79d53779ae78c16bb12e211f5f4b9b7b044127";
+const jinglesAddress = "0x16da262892feac8c024f6cfc9756d65b0ba673fa";
 
-const web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io"));
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io"));
 
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
