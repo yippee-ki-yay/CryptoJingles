@@ -24,7 +24,7 @@ class Profile extends Component {
   componentWillReceiveProps(newProps) {
     if (newProps.params.address === this.props.params.address) return;
 
-    this.props.setProfileAddress(this.props.params.address);
+    this.props.setProfileAddress(newProps.params.address);
     this.props.getAuthor();
     this.props.checkIfOwnerProfile();
   }
