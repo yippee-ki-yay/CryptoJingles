@@ -54,7 +54,7 @@ contract CryptoJingles is Ownable {
         numOfPurchases++;
     }
     
-    function composeJingle(string name, uint[5] samples) public {
+    function composeJingle(string name, uint[5] samples, uint[5] volumes, uint[5] delays) public {
         require(jingleContract.uniqueJingles(keccak256(samples)) == false);
         
         //check if you own all the 5 samples 
@@ -75,7 +75,8 @@ contract CryptoJingles is Ownable {
         }
         
         //create a new jingle containing those 5 samples
-        jingleContract.composeJingle(msg.sender, samples, sampleTypes, name, authors[msg.sender]);
+        jingleContract.composeJingle(msg.sender, samples, sampleTypes, name,
+                            authors[msg.sender], volumes, delays);
     }
     
     // Addresses can set their name when composing jingles

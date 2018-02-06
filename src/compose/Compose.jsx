@@ -175,8 +175,11 @@ class Compose extends Component {
 
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');
+
+      const volumes = [100, 100, 100, 100, 100];
+      const delay = [0, 0, 0, 0, 0];
       
-      const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
+      const res = await window.contract.composeJingle(name, jingleIds, volumes, delay, { from: window.web3.eth.accounts[0] });
 
       this.setState({ loading: true });
 
