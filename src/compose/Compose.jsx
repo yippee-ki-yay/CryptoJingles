@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContextProvider } from 'react-dnd';
+import withScrolling from 'react-dnd-scrollzone';
 import update from 'immutability-helper';
 import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
@@ -19,7 +20,10 @@ import { playAudio } from '../actions/audioActions';
 import '../util/config';
 import './Compose.css';
 
-@DragDropContext(HTML5Backend)
+const ScrollingComponent = withScrolling('div');
+
+console.log('ScrollingComponent', ScrollingComponent);
+
 class Compose extends Component {
   constructor(props) {
     super(props);
@@ -178,7 +182,7 @@ class Compose extends Component {
 
       const volumes = [100, 100, 100, 100, 100];
       const delay = [0, 0, 0, 0, 0];
-      
+
       const res = await window.contract.composeJingle(name, jingleIds, volumes, delay, { from: window.web3.eth.accounts[0] });
 
       this.setState({ loading: true });
@@ -201,6 +205,7 @@ class Compose extends Component {
 
   render() {
       return (
+        <DragDropContextProvider backend={HTML5Backend}>
           <div className="container">
             <div className="compose-top-wrapper">
               <div className="sort-samples-wrapper">
@@ -314,23 +319,26 @@ class Compose extends Component {
                   <div className="samples-slider">
                     <h2>Your samples:</h2>
 
-                    <div className="compose-samples-wrapper">
-                      {
-                        this.state.mySamples.map((sample) => (
-                          <SampleBox
-                            draggable
-                            key={sample.id}
-                            isDropped={this.isDropped(sample.id)}
-                            {...sample}
-                          />)
-                        )
-                      }
+                    <div>
+                      <ScrollingComponent className="compose-samples-wrapper">
+                        {
+                          this.state.mySamples.map((sample) => (
+                              <SampleBox
+                                draggable
+                                key={sample.id}
+                                isDropped={this.isDropped(sample.id)}
+                                {...sample}
+                              />
+                          ))
+                        }
+                      </ScrollingComponent>
                     </div>
                   </div>
                 }
               </div>
             }
           </div>
+        </DragDropContextProvider>
       )
   }
 }
