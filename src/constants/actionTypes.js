@@ -47,3 +47,4 @@ export const SET_PENDING_AUTHOR = 'set_pending_author';
 export const AUTHOR_EDIT_SUCCESS = 'author_edit_success';
 export const SET_MY_JINGLES_PAGE = 'set_my_jingles_page';
 export const SET_PROFILE_ADDRESS = 'set_profile_address';
+export const SET_MY_SAMPLES_SORTING = 'set_my_samples_sorting';
