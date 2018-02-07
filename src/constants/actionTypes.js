@@ -1,4 +1,10 @@
 export const CATEGORY_OPTIONS = [{ value: 'pagination', label: 'All jingles' }, { value: 'sale', label: 'For sale' }];
+export const SAMPLE_SORTING_OPTIONS = [
+  { value: '-rarity', label: 'Rarest first' },
+  { value: 'rarity', label: 'Least rare first' },
+  { value: '-length', label: 'Longest first' },
+  { value: 'length', label: 'Shortest first' },
+];
 export const SORTING_OPTIONS = [
   { value: '-time', label: 'Newest first' },
   { value: 'time', label: 'Oldest first' },

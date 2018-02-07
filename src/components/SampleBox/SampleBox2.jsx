@@ -10,7 +10,7 @@ import { getColorForRarity } from '../../actions/profileActions';
 import './SampleBox.css';
 
 const style = {
-  margin: '14px 25px 7px 25px',
+  margin: '14px 27px 7px 26px',
   width: '175px',
   float: 'left',
 };

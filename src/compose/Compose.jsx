@@ -6,7 +6,7 @@ import update from 'immutability-helper';
 import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getSapleSlots } from '../getMockData';
+import { getSampleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import PlayIcon from '../components/Decorative/PlayIcon';
@@ -14,8 +14,10 @@ import StopIcon from '../components/Decorative/StopIcon';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
+import SortSamples from '../components/SortSamples/SortSamples';
 import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
+import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
 
 import '../util/config';
 import './Compose.css';
@@ -30,11 +32,13 @@ class Compose extends Component {
       loading: true,
       loadingGroup: false,
       updatedSlots: false,
-      sampleSlots: getSapleSlots(),
+      sampleSlots: getSampleSlots(),
       droppedBoxIds: [],
       playing: false,
       group: null,
       mySamples: [],
+      sortingOptions: SAMPLE_SORTING_OPTIONS,
+      selectedSort: SAMPLE_SORTING_OPTIONS[0],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -44,6 +48,7 @@ class Compose extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.loadGroup = this.loadGroup.bind(this);
     this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
+    this.onComposeSamplesSort = this.onComposeSamplesSort.bind(this);
   }
 
   async componentWillMount() {
@@ -55,6 +60,7 @@ class Compose extends Component {
     const mySamples = await getSamples();
 
     this.setState({ mySamples, loading: false });
+    this.onComposeSamplesSort(this.state.selectedSort);
   }
 
   componentWillUnmount() {
@@ -187,7 +193,7 @@ class Compose extends Component {
 
       const mySamples = await getSamples();
 
-      this.setState({ mySamples, loading: false, sampleSlots: getSapleSlots() });
+      this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
 
       this.props.removePendingTx(id);
     } catch (err) {
@@ -200,6 +206,39 @@ class Compose extends Component {
     if (val > 30) return;
     this.setState({ jingleName: val });
   }
+
+  onComposeSamplesSort = (option) => {
+    let { mySamples, selectedSort } = this.state;
+
+    if (!this.state.mySamples) return;
+
+    switch (option.value) {
+      case '-rarity': {
+        mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
+        selectedSort = SAMPLE_SORTING_OPTIONS[0];
+        break;
+      }
+      case 'rarity': {
+        mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
+        selectedSort = SAMPLE_SORTING_OPTIONS[1];
+        break;
+      }
+      case '-length': {
+        mySamples = mySamples.sort((a, b) => b.length - a.length);
+        selectedSort = SAMPLE_SORTING_OPTIONS[2];
+        break;
+      }
+      case 'length': {
+        mySamples = mySamples.sort((a, b) => a.length - b.length);
+        selectedSort = SAMPLE_SORTING_OPTIONS[3];
+        break;
+      }
+      default:
+        break;
+    }
+
+    this.setState({ mySamples, selectedSort });
+  };
 
   render() {
       return (
@@ -271,6 +310,12 @@ class Compose extends Component {
 
               <div className="separator" />
 
+              <SortSamples
+                value={this.state.selectedSort}
+                options={this.state.sortingOptions}
+                onSortChange={this.onComposeSamplesSort}
+              />
+
               {
                 !window.web3.eth &&
                 <h1 className="buy-samples-link mm-link">
@@ -316,8 +361,6 @@ class Compose extends Component {
                     (this.state.mySamples.length > 0) &&
                     !this.state.loading &&
                     <div className="samples-slider">
-                      <h2>Your samples:</h2>
-
                       <div className="compose-samples-wrapper">
                           {
                             this.state.mySamples.map((sample) => (

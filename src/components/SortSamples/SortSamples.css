@@ -1,0 +1,30 @@
+.sort-samples-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.sort-samples-container .Dropdown-root {
+    width: 180px;
+}
+
+.sort-samples-container .sort-wrapper {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sort-container h2 {
+    margin: 0;
+}
+
+.sort-samples-container .sort-wrapper  .sort-wrapper-label {
+    margin-bottom: 0;
+    margin-right: 20px;
+}
