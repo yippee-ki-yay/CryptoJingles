@@ -12,6 +12,7 @@
   "dependencies": {
     "audioconcat": "^0.1.3",
     "cors": "^2.8.4",
+    "lodash": "^4.17.5",
     "mongoose": "^5.0.1"
   }
 }

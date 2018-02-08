@@ -16,13 +16,56 @@ const app = express();
 const marketplaceAddress = "0xb8e392da7abb836cff06d827531a7e5f1b00bed2";
 const jinglesAddress = "0x5af7af54e8bc34b293e356ef11fffe51d6f9ae78";
 
-const web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io"));
+const _ = require('lodash');
+
+const web3 = new Web3(new Web3.providers.HttpProvider("https://monthly-superb-cod.quiknode.io/fe26e4e5-2f80-4f19-b6fb-f21e4851d233/v5WwMVIHrg8ppsDCS-6Weg==/"));
 
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
 const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
 (async () => {
+
+    const marketplace = {};
+
+    marketplaceContract.allEvents({ fromBlock: '5025886', toBlock: 'latest' }).get(async (err, events) => {
+        addMarketplaceEvents(events, marketplace);
+
+        for (const key of Object.keys(marketplace)) {
+            const eventList = marketplace[key];
+
+            let numOrders = 0;
+            let numCancels = 0;
+
+            eventList.forEach(e => {
+                if(e.event === 'SellOrder') {
+                    numOrders++;
+                } else {
+                    numCancels++;
+                }
+            });
+
+            const e = eventList[eventList.length - 1];
+            console.log(e);
+
+            if (numOrders > numCancels) {
+                //add
+                await putOnSale(eventList[eventList.length - 1].args);
+            } else {
+                // cancel
+                const jingleId = e.args.jingleId.valueOf();
+                const buyer = e.args.buyer;
+
+                if(e.event === 'Bought') {
+                    await boughtJingle(e);
+                } else {
+                    await cancelJingle(e);
+                }
+            }
+
+        }
+    });
+
     jingles.Composed(async (err, res) => {
         await addJingle(res);
     });
@@ -57,6 +100,19 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
     });
 
 })();
+
+function addMarketplaceEvents(events, marketplace) {
+    events.forEach(event => {
+        const jingleId = event.args.jingleId.valueOf();
+
+        if (marketplace[jingleId]) {
+            marketplace[jingleId].push(event);
+        } else {
+            marketplace[jingleId] = [];
+            marketplace[jingleId].push(event);
+        }
+    });
+}
 
 async function putOnSale(res) {
     const order = {
