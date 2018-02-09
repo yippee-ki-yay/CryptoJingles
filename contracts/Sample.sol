@@ -40,6 +40,7 @@ contract Sample is Ownable {
         numOfSamples++;
     }
     
+    //TODO: check this again
     // find who owns that sample and at what position is it in the owners arr 
     // Swap that token with the last one in arr and delete the end of arr
     function removeSample(address _owner, uint _sampleId) public onlyCryptoJingles {
@@ -100,7 +101,7 @@ contract Sample is Ownable {
      // Owner functions 
     // Set the crypto jingles contract can 
     function setCryptoJinglesContract(address _cryptoJingles) public onlyOwner {
-        require(_cryptoJingles == 0x0);
+        require(cryptoJingles == 0x0);
         
         cryptoJingles = _cryptoJingles;
     }

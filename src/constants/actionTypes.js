@@ -1,7 +1,7 @@
 export const CATEGORY_OPTIONS = [{ value: 'pagination', label: 'All jingles' }, { value: 'sale', label: 'For sale' }];
 export const SORTING_OPTIONS = [
-  { value: '-time', label: 'Newest first' },
-  { value: 'time', label: 'Oldest first' },
+  { value: '-jingleId', label: 'Newest first' },
+  { value: 'jingleId', label: 'Oldest first' },
   { value: '-price', label: 'Most expensive first' },
   { value: 'price', label: 'Cheapest first' }
 ];
