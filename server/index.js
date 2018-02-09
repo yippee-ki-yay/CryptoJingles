@@ -26,46 +26,6 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
 (async () => {
 
-    const marketplace = {};
-
-    marketplaceContract.allEvents({ fromBlock: '5025886', toBlock: 'latest' }).get(async (err, events) => {
-        addMarketplaceEvents(events, marketplace);
-
-        for (const key of Object.keys(marketplace)) {
-            const eventList = marketplace[key];
-
-            let numOrders = 0;
-            let numCancels = 0;
-
-            eventList.forEach(e => {
-                if(e.event === 'SellOrder') {
-                    numOrders++;
-                } else {
-                    numCancels++;
-                }
-            });
-
-            const e = eventList[eventList.length - 1];
-            console.log(e);
-
-            if (numOrders > numCancels) {
-                //add
-                await putOnSale(eventList[eventList.length - 1].args);
-            } else {
-                // cancel
-                const jingleId = e.args.jingleId.valueOf();
-                const buyer = e.args.buyer;
-
-                if(e.event === 'Bought') {
-                    await boughtJingle(e);
-                } else {
-                    await cancelJingle(e);
-                }
-            }
-
-        }
-    });
-
     jingles.Composed(async (err, res) => {
         await addJingle(res);
     });
@@ -100,19 +60,6 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
     });
 
 })();
-
-function addMarketplaceEvents(events, marketplace) {
-    events.forEach(event => {
-        const jingleId = event.args.jingleId.valueOf();
-
-        if (marketplace[jingleId]) {
-            marketplace[jingleId].push(event);
-        } else {
-            marketplace[jingleId] = [];
-            marketplace[jingleId].push(event);
-        }
-    });
-}
 
 async function putOnSale(res) {
     const order = {

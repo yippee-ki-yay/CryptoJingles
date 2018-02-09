@@ -200,6 +200,10 @@ module.exports.setForSale = async (order) => {
 
         const jingle = await Jingle.findOne({jingleId: order.jingleId});
 
+        if(!jingle) {
+            return;
+        }
+
         jingle.onSale = true;
         jingle.price = order.price;
 
