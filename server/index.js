@@ -16,13 +16,19 @@ const app = express();
 const marketplaceAddress = "0x31337c5b1580d8c5fa6880ea34e323364165ed17";
 const jinglesAddress = "0x9430a9881ded68c90471dd2304b1073aba088f59";
 
+
 const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.decenter.com"));
+
+const _ = require('lodash');
+
+//const web3 = new Web3(new Web3.providers.HttpProvider("https://monthly-superb-cod.quiknode.io/fe26e4e5-2f80-4f19-b6fb-f21e4851d233/v5WwMVIHrg8ppsDCS-6Weg==/"));
 
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
 const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 
 (async () => {
+
     jingles.Composed(async (err, res) => {
         await addJingle(res);
     });

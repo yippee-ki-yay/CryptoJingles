@@ -63,10 +63,97 @@ async function update() {
         return;
       }
     });
+
+
+    const marketplace = {};
+
+    marketplaceContract.allEvents({ fromBlock: '5025886', toBlock: 'latest' }).get(async (err, events) => {
+        addMarketplaceEvents(events, marketplace);
+
+        for (const key of Object.keys(marketplace)) {
+            const eventList = marketplace[key];
+
+            let numOrders = 0;
+            let numCancels = 0;
+
+            eventList.forEach(e => {
+                if(e.event === 'SellOrder') {
+                    numOrders++;
+                } else {
+                    numCancels++;
+                }
+            });
+
+            const e = eventList[eventList.length - 1];
+
+            if (numOrders > numCancels) {
+                //add
+                await putOnSale(eventList[eventList.length - 1]);
+            } else {
+                // cancel
+
+                if(e.event === 'Bought') {
+                    await boughtJingle(e);
+                } else {
+                    await cancelJingle(e);
+                }
+            }
+
+        }
+    });
+}
+
+async function boughtJingle(res) {
+  const jingleId = res.args.jingleId.valueOf();
+  const buyer = res.args.buyer;
+
+  const updated = await jingleCtrl.removeFromSale(jingleId, buyer);
+
+  if (updated) {
+      console.log('Sell Order removed (bought)');
+  }
+}
+
+async function putOnSale(res) {
+  const order = {
+      jingleId: res.args.jingleId.valueOf(),
+      price: res.args.price.valueOf(),
+  };
+
+ const updated = await jingleCtrl.setForSale(order);
+
+ if (updated) {
+     console.log('Jingle set for sale');
+ }
+}
+
+async function cancelJingle(res) {
+  const jingleId = res.args.jingleId.valueOf();
+  const owner = res.args.owner;
+
+  const updated = await jingleCtrl.removeFromSale(jingleId, owner);
+
+  if (updated) {
+      console.log('Sell Order removed (canceled)');
+  }
+}
+
+
+function addMarketplaceEvents(events, marketplace) {
+  events.forEach(event => {
+      const jingleId = event.args.jingleId.valueOf();
+
+      if (marketplace[jingleId]) {
+          marketplace[jingleId].push(event);
+      } else {
+          marketplace[jingleId] = [];
+          marketplace[jingleId].push(event);
+      }
+  });
 }
 
 (async () => {
 setInterval(async () => {
   update();
-}, 1000*60*6);
+}, 1000*6);
 })();

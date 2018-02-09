@@ -147,6 +147,18 @@ module.exports.getJinglesForSale = async (req, res) => {
     }
 }
 
+module.exports.getOnSaleJingles = async () => {
+    try {
+
+        const jinglesOfSale = await Jingle.find({onSale: true}).select('jingleId');
+
+        return jinglesOfSale;
+
+    } catch(err) {
+        console.log(err);
+    }
+}
+
 // Server only method not exposed in api
 module.exports.addJingle = async (jingleData) => {
     try {
@@ -188,6 +200,10 @@ module.exports.setForSale = async (order) => {
 
         const jingle = await Jingle.findOne({jingleId: order.jingleId});
 
+        if(!jingle) {
+            return;
+        }
+
         jingle.onSale = true;
         jingle.price = order.price;
 
@@ -207,7 +223,41 @@ module.exports.removeFromSale = async (jingleId, buyer) => {
 
         jingle.onSale = false;
         jingle.price = 0;
-        jingle.owner = buyer;
+        jingle.buyer = buyer;
+
+        await jingle.save();
+
+        return true;
+
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+
+module.exports.removeFromSale = async (jingleId, buyer) => {
+    try {
+        const jingle = await Jingle.findOne({jingleId: jingleId});
+
+        jingle.onSale = false;
+        jingle.price = 0;
+        jingle.buyer = buyer;
+
+        await jingle.save();
+
+        return true;
+
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+module.exports.cancelJingle = async (jingleId) => {
+    try {
+        const jingle = await Jingle.findOne({jingleId: jingleId});
+
+        jingle.onSale = false;
+        jingle.price = 0;
 
         await jingle.save();
 
