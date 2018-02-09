@@ -13,7 +13,7 @@ import './SampleBox.css';
 const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }} };
 
 const style = {
-  margin: '14px 10px 7px 10px',
+  margin: '14px 27px 7px 26px',
   width: '175px',
   height: '230px',
   float: 'left',

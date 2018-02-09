@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContextProvider } from 'react-dnd';
+import withScrolling from 'react-dnd-scrollzone';
 import update from 'immutability-helper';
 import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { getSapleSlots } from '../getMockData';
+import { getSampleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
 import PlayIcon from '../components/Decorative/PlayIcon';
@@ -13,13 +14,16 @@ import StopIcon from '../components/Decorative/StopIcon';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
 import SampleBox from '../components/SampleBox/SampleBox';
 import SampleSlot from '../components/SampleSlot/SampleSlot';
+import SortSamples from '../components/SortSamples/SortSamples';
 import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
+import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
 
 import '../util/config';
 import './Compose.css';
 
-@DragDropContext(HTML5Backend)
+const ScrollingComponent = withScrolling('div');
+
 class Compose extends Component {
   constructor(props) {
     super(props);
@@ -28,11 +32,13 @@ class Compose extends Component {
       loading: true,
       loadingGroup: false,
       updatedSlots: false,
-      sampleSlots: getSapleSlots(),
+      sampleSlots: getSampleSlots(),
       droppedBoxIds: [],
       playing: false,
       group: null,
       mySamples: [],
+      sortingOptions: SAMPLE_SORTING_OPTIONS,
+      selectedSort: SAMPLE_SORTING_OPTIONS[0],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -42,6 +48,7 @@ class Compose extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.loadGroup = this.loadGroup.bind(this);
     this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
+    this.onComposeSamplesSort = this.onComposeSamplesSort.bind(this);
   }
 
   async componentWillMount() {
@@ -53,6 +60,7 @@ class Compose extends Component {
     const mySamples = await getSamples();
 
     this.setState({ mySamples, loading: false });
+    this.onComposeSamplesSort(this.state.selectedSort);
   }
 
   componentWillUnmount() {
@@ -174,15 +182,15 @@ class Compose extends Component {
       }
 
       const name = this.state.jingleName;
-      this.props.addPendingTx(id, 'Compose jingle');
-      
+      this.props.addPendingTx(id, 'Compose jingle');      
       const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
+
 
       this.setState({ loading: true });
 
       const mySamples = await getSamples();
 
-      this.setState({ mySamples, loading: false, sampleSlots: getSapleSlots() });
+      this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
 
       this.props.removePendingTx(id);
     } catch (err) {
@@ -196,138 +204,179 @@ class Compose extends Component {
     this.setState({ jingleName: val });
   }
 
+  onComposeSamplesSort = (option) => {
+    let { mySamples, selectedSort } = this.state;
+
+    if (!this.state.mySamples) return;
+
+    switch (option.value) {
+      case '-rarity': {
+        mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
+        selectedSort = SAMPLE_SORTING_OPTIONS[0];
+        break;
+      }
+      case 'rarity': {
+        mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
+        selectedSort = SAMPLE_SORTING_OPTIONS[1];
+        break;
+      }
+      case '-length': {
+        mySamples = mySamples.sort((a, b) => b.length - a.length);
+        selectedSort = SAMPLE_SORTING_OPTIONS[2];
+        break;
+      }
+      case 'length': {
+        mySamples = mySamples.sort((a, b) => a.length - b.length);
+        selectedSort = SAMPLE_SORTING_OPTIONS[3];
+        break;
+      }
+      default:
+        break;
+    }
+
+    this.setState({ mySamples, selectedSort });
+  };
+
   render() {
       return (
-          <div className="container">
-            <div className="compose-top-wrapper">
-              <div className="sort-samples-wrapper">
-                <div>
-                  {
-                    this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
-                      <SampleSlot
-                        key={`item-${index}`}
-                        index={index}
-                        accepts={accepts}
-                        lastDroppedItem={lastDroppedItem}
-                        id={index}
-                        onDrop={item => this.handleDrop(index, item)}
-                        cancelDrop={item => this.handleCancel(index, item)}
-                      />
-                    )
-                  }
-
+        <DragDropContextProvider backend={HTML5Backend}>
+          <ScrollingComponent className="scroll-wrapper">
+            <div className="container">
+              <div className="compose-top-wrapper">
+                <div className="sort-samples-wrapper">
                   <div>
-                         <span className="compose-play">
-                           { this.state.loadingGroup && <LoadingIcon /> }
-                           {
-                             !this.state.playing && !this.state.loadingGroup &&
-                             <span
-                               className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
-                               onClick={this.playSound}
-                             >
-                               <PlayIcon />
-                             </span>
-                           }
-                           {
-                             this.state.playing && !this.state.loadingGroup &&
-                             <span onClick={this.stopSound}><StopIcon /></span>
-                           }
-                         </span>
+                    {
+                      this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                        <SampleSlot
+                          key={`item-${index}`}
+                          index={index}
+                          accepts={accepts}
+                          lastDroppedItem={lastDroppedItem}
+                          id={index}
+                          onDrop={item => this.handleDrop(index, item)}
+                          cancelDrop={item => this.handleCancel(index, item)}
+                        />
+                      )
+                    }
+
+                    <div>
+                           <span className="compose-play">
+                             { this.state.loadingGroup && <LoadingIcon /> }
+                             {
+                               !this.state.playing && !this.state.loadingGroup &&
+                               <span
+                                 className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
+                                 onClick={this.playSound}
+                               >
+                                 <PlayIcon />
+                               </span>
+                             }
+                             {
+                               this.state.playing && !this.state.loadingGroup &&
+                               <span onClick={this.stopSound}><StopIcon /></span>
+                             }
+                           </span>
+                    </div>
                   </div>
                 </div>
+
+                {
+                  window.web3.eth &&
+                  <form onSubmit={(e) => {e.preventDefault(); }} className="form-horizontal create-jingle-form">
+                    <h4>Compose jingle:</h4>
+                    <div>
+                      <input
+                        className="form-control"
+                        placeholder="Jingle name"
+                        type="text"
+                        onChange={this.handleJingleNameChange}
+                      />
+
+                      <button
+                        type="submit"
+                        className="btn buy-button"
+                        onClick={ this.createSong }
+                        disabled={this.state.droppedBoxIds.length !== 5}
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </form>
+                }
               </div>
+
+              <div className="separator" />
+
+              <SortSamples
+                value={this.state.selectedSort}
+                options={this.state.sortingOptions}
+                onSortChange={this.onComposeSamplesSort}
+              />
+
+              {
+                !window.web3.eth &&
+                <h1 className="buy-samples-link mm-link">
+                  Install
+                  <a
+                    target="_blank"
+                    rel="noopener"
+                    href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+                  >
+                    MetaMask
+                  </a>
+                  in order to see your samples
+                </h1>
+              }
 
               {
                 window.web3.eth &&
-                <form onSubmit={(e) => {e.preventDefault(); }} className="form-horizontal create-jingle-form">
-                  <h4>Compose jingle:</h4>
-                  <div>
-                    <input
-                      className="form-control"
-                      placeholder="Jingle name"
-                      type="text"
-                      onChange={this.handleJingleNameChange}
-                    />
+                <div>
 
-                    <button
-                      type="submit"
-                      className="btn buy-button"
-                      onClick={ this.createSong }
-                      disabled={this.state.droppedBoxIds.length !== 5}
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </form>
+                  {
+                    this.state.loading &&
+                    <div className="loader-wrapper">
+                      <BoxLoader />
+                    </div>
+                  }
+
+                  {
+                    (this.state.mySamples.length === 0) &&
+                    !this.state.loading &&
+                    <div>
+                      { /* TODO - insert buy sample form here */ }
+                      <h1 className="no-samples-heading">
+                        <span>You do not own any Sound Samples yet!</span>
+
+                        <span className="buy-samples-link">
+                          <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Buy samples here.</Link>
+                        </span>
+                      </h1>
+                    </div>
+                  }
+
+                  {
+                    (this.state.mySamples.length > 0) &&
+                    !this.state.loading &&
+                    <div className="samples-slider">
+                      <div className="compose-samples-wrapper">
+                          {
+                            this.state.mySamples.map((sample) => (
+                                <SampleBox
+                                  draggable
+                                  key={sample.id}
+                                  isDropped={this.isDropped(sample.id)}
+                                  {...sample}
+                                />
+                            ))
+                          }
+                      </div>
+                    </div>
+                  }
+                </div>
               }
             </div>
-
-            <div className="separator" />
-
-            {
-              !window.web3.eth &&
-              <h1 className="buy-samples-link mm-link">
-                Install
-                <a
-                  target="_blank"
-                  rel="noopener"
-                  href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-                >
-                  MetaMask
-                </a>
-                in order to see your samples
-              </h1>
-            }
-
-            {
-              window.web3.eth &&
-              <div>
-
-                {
-                  this.state.loading &&
-                  <div className="loader-wrapper">
-                    <BoxLoader />
-                  </div>
-                }
-
-                {
-                  (this.state.mySamples.length === 0) &&
-                  !this.state.loading &&
-                  <div>
-                    { /* TODO - insert buy sample form here */ }
-                    <h1 className="no-samples-heading">
-                      <span>You do not own any Sound Samples yet!</span>
-
-                      <span className="buy-samples-link">
-                        <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Buy samples here.</Link>
-                      </span>
-                    </h1>
-                  </div>
-                }
-
-                {
-                  (this.state.mySamples.length > 0) &&
-                  !this.state.loading &&
-                  <div className="samples-slider">
-                    <h2>Your samples:</h2>
-
-                    <div className="compose-samples-wrapper">
-                      {
-                        this.state.mySamples.map((sample) => (
-                          <SampleBox
-                            draggable
-                            key={sample.id}
-                            isDropped={this.isDropped(sample.id)}
-                            {...sample}
-                          />)
-                        )
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            }
-          </div>
+          </ScrollingComponent>
+        </DragDropContextProvider>
       )
   }
 }

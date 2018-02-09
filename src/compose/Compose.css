@@ -36,9 +36,20 @@
 
 .compose-samples-wrapper {
   display: flex;
-  max-width: 100%;
-  overflow-x: auto;
-  height: 290px;
+  width: 100%;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.scroll-wrapper {
+  height: calc(100vh - 60px);
+  overflow: auto;
+}
+
+.compose-samples-wrapper:after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
 .compose-play {

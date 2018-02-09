@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SampleBox2 from '../components/SampleBox/SampleBox2';
 import BoxLoader from '../components/Decorative/BoxLoader';
-import { getSamplesForUser, buySamples, handleNumSamplesToBuyChange } from '../actions/profileActions';
+import SortSamples from '../components/SortSamples/SortSamples';
+import {
+  getSamplesForUser, buySamples, handleNumSamplesToBuyChange, onMySamplesSort
+} from '../actions/profileActions';
 
 import './MySamples.css';
 
@@ -18,8 +21,10 @@ class MySamples extends Component {
   }
 
   render() {
-      const { isOwner, mySamples, loading, numSamplesToBuy } = this.props;
-      const { buySamples, handleNumSamplesToBuyChange } = this.props;
+      const {
+        isOwner, mySamples, loading, numSamplesToBuy, selectedMySampleSort, mySamplesSortingOptions
+      } = this.props;
+      const { buySamples, handleNumSamplesToBuyChange, onMySamplesSort } = this.props;
 
       return (
           <div className="my-jingles-wrapper">
@@ -51,6 +56,12 @@ class MySamples extends Component {
               </div>
             }
 
+            <SortSamples
+              value={selectedMySampleSort}
+              options={mySamplesSortingOptions}
+              onSortChange={onMySamplesSort}
+            />
+
             <div className="samples-wrapper">
               { loading && <div className="loader-wrapper"><BoxLoader /></div> }
 
@@ -80,13 +91,17 @@ class MySamples extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  mySamples: state.profile.mySamples,
-  numSamplesToBuy: state.profile.numSamplesToBuy,
-  loading: state.profile.loading,
-  isOwner: state.profile.isOwner
+const mapStateToProps = ({ profile }) => ({
+  mySamples: profile.mySamples,
+  numSamplesToBuy: profile.numSamplesToBuy,
+  loading: profile.loading,
+  isOwner: profile.isOwner,
+  selectedMySampleSort: profile.selectedMySampleSort,
+  mySamplesSortingOptions: profile.mySamplesSortingOptions,
 });
 
-const mapDispatchToProps = { getSamplesForUser, buySamples, handleNumSamplesToBuyChange };
+const mapDispatchToProps = {
+  getSamplesForUser, buySamples, handleNumSamplesToBuyChange, onMySamplesSort
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MySamples);

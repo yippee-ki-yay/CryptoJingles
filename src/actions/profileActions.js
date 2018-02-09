@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
-  SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS
+  SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
+  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
@@ -114,6 +115,46 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
 };
 
 // SAMPLES TODO - create separate reducer & actions for this
+/**
+ * Sorts profile samples by selected sort option TODO - unify this with compose tab sorting
+ *
+ * @param {Object} option { label, value }
+ * @return {Function}
+ */
+export const onMySamplesSort = ({ value }) => (dispatch, getState) => {
+  const profileState = getState().profile;
+  let mySamples = [...profileState.mySamples];
+  let selectedMySampleSort = Object.assign({}, profileState.selectedMySampleSort);
+
+  if (!mySamples) return;
+
+  switch (value) {
+    case '-rarity': {
+      mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
+      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[0];
+      break;
+    }
+    case 'rarity': {
+      mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
+      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[1];
+      break;
+    }
+    case '-length': {
+      mySamples = mySamples.sort((a, b) => b.length - a.length);
+      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[2];
+      break;
+    }
+    case 'length': {
+      mySamples = mySamples.sort((a, b) => a.length - b.length);
+      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[3];
+      break;
+    }
+    default:
+      break;
+  }
+
+  dispatch({ type: SET_MY_SAMPLES_SORTING, payload: { mySamples, selectedMySampleSort } })
+};
 
 /**
  * Return color based on sample rarity
@@ -145,6 +186,7 @@ export const getColorForRarity = (rarity) => {
 export const getSamplesForUser = () => async (dispatch, getState) => {
   const mySamples = await getSamples(getState().profile.profileAddress);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
+  dispatch(onMySamplesSort(getState().profile.selectedMySampleSort));
 };
 
 /**

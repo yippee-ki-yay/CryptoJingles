@@ -2,7 +2,7 @@ import {
   PROFILE_TABS, SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SORTING_OPTIONS, CATEGORY_OPTIONS, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT,
   TOGGLE_PROFILE_AUTHOR, SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE,
-  SET_PROFILE_ADDRESS, MARKETPLACE_JINGLES_PER_PAGE
+  SET_PROFILE_ADDRESS, MARKETPLACE_JINGLES_PER_PAGE, SET_MY_SAMPLES_SORTING, SAMPLE_SORTING_OPTIONS
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
@@ -22,7 +22,9 @@ const INITIAL_STATE = {
   jingleCategories: CATEGORY_OPTIONS,
   numSamplesToBuy: 5,
   loading: true,
-  jinglesPerPage: MARKETPLACE_JINGLES_PER_PAGE
+  jinglesPerPage: MARKETPLACE_JINGLES_PER_PAGE,
+  mySamplesSortingOptions: SAMPLE_SORTING_OPTIONS,
+  selectedMySampleSort: SAMPLE_SORTING_OPTIONS[0],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -71,6 +73,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_PROFILE_ADDRESS:
       return { ...state, profileAddress: payload };
+
+    case SET_MY_SAMPLES_SORTING:
+      return { ...state, ...payload };
 
     default:
       return state;
