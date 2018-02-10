@@ -84,7 +84,7 @@ class SampleSlot extends Component {
               {/* <div className="name-tag">{ lastDroppedItem.name }</div> */}
 
               <div className="name-tag">
-                Volume control!
+              { lastDroppedItem.name }
                 <Slider
                   min={0}
                   max={100}

@@ -122,7 +122,7 @@ class Compose extends Component {
    * Creates group sound
    *
    */
-  loadGroup() {
+  loadGroup(cb) {
     let selectedSongSources = this.state.sampleSlots.filter((slot) => slot.lastDroppedItem !== null);
 
     selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
@@ -148,18 +148,22 @@ class Compose extends Component {
         loadingGroup: false,
         updatedSlots: false
       });
-      this.playSound();
+      //this.playSound();
+
+      cb();
     });
   }
 
   playSound() {
-    if (this.state.updatedSlots || (!this.state.group && (this.state.droppedBoxIds.length > 0))) {
-      this.loadGroup();
-      return
-    }
+    this.loadGroup(() => {
+      this.state.group.play();
+      this.setState({ playing: true });
+    });
 
-    this.state.group.play();
-    this.setState({ playing: true });
+    // if (this.state.updatedSlots || (!this.state.group && (this.state.droppedBoxIds.length > 0))) {
+    //   this.loadGroup();
+    //   return
+    // }
   }
 
   stopSound() {
