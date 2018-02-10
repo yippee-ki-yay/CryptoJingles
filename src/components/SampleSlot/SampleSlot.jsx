@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { DropTarget } from 'react-dnd';
+import { connect } from 'react-redux';
+import Slider from 'react-rangeslider';
+import 'react-rangeslider/lib/index.css';
 import { getJingleMetadata } from '../../getMockData';
 import { getColorForRarity } from '../../actions/profileActions';
+
+import { updateVolume } from '../../actions/composeActions';
 
 import './SampleSlot.css';
 
@@ -26,11 +31,20 @@ class SampleSlot extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      volumeValue: 50
+    };
+  }
+
+  handleChange = (value) => {
+    this.setState({
+      volumeValue: value
+    });
+    
   }
 
   render() {
-    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop } = this.props;
+    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop, updateVolume, index } = this.props;
     let jingle = null;
 
     const isActive = isOver && canDrop;
@@ -67,7 +81,18 @@ class SampleSlot extends Component {
               </div>
             </div>
             <div className="bottom">
-              <div className="name-tag">{ lastDroppedItem.name }</div>
+              {/* <div className="name-tag">{ lastDroppedItem.name }</div> */}
+
+              <div className="name-tag">
+                Volume control!
+                <Slider
+                  min={0}
+                  max={100}
+                  value={this.state.volumeValue}
+                  onChange={this.handleChange}
+                  onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
+                />
+              </div>
 
               <div className="id-tag">
                 <span>#{ lastDroppedItem.type } - </span>
@@ -88,4 +113,12 @@ class SampleSlot extends Component {
   }
 }
 
-export default SampleSlot;
+const mapStateToProps = (state) => ({
+  volumes: state.compose.volumes,
+});
+
+const mapDispatchToProps = {
+  updateVolume
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SampleSlot);

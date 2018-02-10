@@ -6,6 +6,7 @@ import update from 'immutability-helper';
 import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+
 import { getSampleSlots } from '../getMockData';
 import { getSamples } from '../util/web3/ethereumService';
 import BoxLoader from '../components/Decorative/BoxLoader';
@@ -17,6 +18,7 @@ import SampleSlot from '../components/SampleSlot/SampleSlot';
 import SortSamples from '../components/SortSamples/SortSamples';
 import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
+import { getVolumes } from '../actions/composeActions';
 import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
 
 import '../util/config';
@@ -129,8 +131,9 @@ class Compose extends Component {
 
     this.setState({ loadingGroup: true });
 
-    selectedSongSources = selectedSongSources.map(({ source }) =>
+    selectedSongSources = selectedSongSources.map(({ source }, i) =>
       new Promise((resolve) => { const sound = new Sound(source, () => {
+        sound.volume = this.props.volumes[i] / 100;
         resolve(sound);
       }); }));
 
@@ -169,6 +172,8 @@ class Compose extends Component {
   createSong = async () => {
     const id = guid();
 
+    console.log(this.props.volumes);
+
     try {
       const selectedSongSources = this.state.mySamples.filter(({ id }) =>
         this.state.droppedBoxIds.find((selectedId) => id === selectedId)
@@ -184,7 +189,6 @@ class Compose extends Component {
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');      
       const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
-
 
       this.setState({ loading: true });
 
@@ -381,4 +385,9 @@ class Compose extends Component {
   }
 }
 
-export default connect(null, { addPendingTx, removePendingTx, playAudio })(Compose);
+const mapStateToProps = (state) => ({
+  volumes: state.compose.volumes,
+});
+
+
+export default connect(mapStateToProps, { addPendingTx, removePendingTx, playAudio })(Compose);
