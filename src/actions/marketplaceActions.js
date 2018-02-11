@@ -11,12 +11,19 @@ import {
  * @return {Function}
  */
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
+  const address = window.web3.eth.accounts[0];
   const { currentPage, category, sorting, } = getState().marketplace;
 
   try {
     // TODO - export this to Api.js
     const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
-    const jingles = response.data.map(jingle => ({ ...jingle, liked: false }));
+
+    const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
+    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
+
+    const jingles = response.data.map((_jingle, index) => ({
+      ..._jingle, liked: likedJinglesResponse.data[index]
+    }));
 
     // false for all jingles, true to get jingles on sale
     const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/${(category.value === 'sale').toString()}`);
@@ -73,12 +80,12 @@ export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
  *
  * @return {Function}
  */
-export const likeUnLikeJingle = (jingleId, action) => async (dispatch, getState) => {
+export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch, getState) => {
   const actionString = action ? 'like' : 'unlike';
   const address = window.web3.eth.accounts[0];
 
   try {
-    const response = await axios.post(`${API_URL}/jingles/${actionString}`, { address, jingleId });
+    const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
     const jingles = [...getState().marketplace.jingles];
     const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
 

@@ -303,8 +303,6 @@ const updateLikeUnlikeJingle = (jingleId, address, action) =>
       jingle.likes = likes;
     }
 
-    console.log('jingle.likes', jingle.likes);
-
     await jingle.save();
     resolve(jingle.likeCount);
   });
@@ -328,6 +326,74 @@ module.exports.likeUnLikeJingle = async (req, res, action) => {
   try {
     const likeCount = await updateLikeUnlikeJingle(jingleId, address, action);
     res.send({ likeCount });
+  } catch(error) {
+    res.status(500).send({ error });
+  }
+};
+
+/**
+ * Gets jingle from database and checks
+ * if the given address is in its like array
+ *
+ * @param {Number} jingleId
+ * @param {String} address
+ * @return {Promise}
+ */
+const didAddressLikeJingle = (address, jingleId) =>
+  new Promise(async (resolve, reject) => {
+    const jingle = await Jingle.findOne({ jingleId });
+
+    if (!jingle) {
+        reject(`Jingle #${jingleId} does not exist`);
+        return;
+    }
+
+    resolve(jingle.likes.includes(address));
+  });
+
+/**
+ * Checks if jingleIds were liked by an address
+ *
+ * @param {Object} req
+ * @param {Object} res
+ */
+module.exports.checkIfLikedJingles = (req, res) => {
+  let { address, jingleIds } = req.params;
+  jingleIds = jingleIds.split(',').map(Number);
+
+  // TODO add middleware that checks if all query params or body params are present
+  if (!address || !jingleIds) {
+    res.status(500).send({ error: 'Invalid params' });
+    return;
+  }
+
+  const promiseMap = jingleIds.map(jingleId => didAddressLikeJingle(address, jingleId));
+
+  // TODO - create try/catch error function that has a Promise for paramm
+  try {
+    Promise.all(promiseMap).then((data) => { res.send(data); });
+  } catch(error) {
+    res.status(500).send({ error });
+  }
+};
+
+/**
+ * Checks if jingleId were liked by an address
+ *
+ * @param {Object} req
+ * @param {Object} res
+ */
+module.exports.checkIfLikedJingle = async (req, res) => {
+  const { address, jingleId } = req.params;
+
+  if (!address || !jingleId) {
+    res.status(500).send({ error: 'Invalid params' });
+    return;
+  }
+
+  try {
+    const result = await didAddressLikeJingle(address, jingleId);
+    res.send(result);
   } catch(error) {
     res.status(500).send({ error });
   }

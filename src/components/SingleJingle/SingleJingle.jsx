@@ -7,7 +7,7 @@ import LoadingIcon from '../../components/Decorative/LoadingIcon';
 import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
 import { playAudio } from '../../actions/audioActions';
-import { likeUnLikeJingle } from '../../actions/marketplaceActions';
+import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 
 class SingleJingle extends Component {
   constructor (props) {
@@ -121,7 +121,7 @@ class SingleJingle extends Component {
 }
 
 const mapDispatchToProps = {
-  likeUnLikeJingle, playAudio
+  likeUnLikeMarketplaceJingle, playAudio
 };
 
 export default connect(null, mapDispatchToProps)(SingleJingle);

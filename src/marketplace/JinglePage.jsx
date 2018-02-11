@@ -4,14 +4,14 @@ import { Link } from 'react-router';
 import axios from 'axios';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../components/JingleImage/JingleImage';
-
+import Heart from '../components/Decorative/Heart';
 import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { getColorForRarity } from '../actions/profileActions';
-
-import './JinglePage.css';
 import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
+
+import './JinglePage.css';
 
 class JinglePage extends Component {
   constructor(props ) {
@@ -31,6 +31,7 @@ class JinglePage extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.playSound = this.playSound.bind(this);
     this.loadJingle = this.loadJingle.bind(this);
+    this.likeUnlikeJingle = this.likeUnlikeJingle.bind(this);
   }
 
   componentWillMount() {
@@ -45,63 +46,72 @@ class JinglePage extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
+  getJingle = (jingleId) => new Promise(async (resolve) => {
+    const address = window.web3.eth.accounts[0];
+
+    let jingleData = await axios(`${API_URL}/jingle/${jingleId}`);
+    jingleData = jingleData.data;
+
+    const likedJinglesResponse = await axios(`${API_URL}/jingle/check-liked/${address}/${jingleId}`);
+    jingleData.liked = likedJinglesResponse.data;
+
+    resolve(jingleData);
+  });
+
   loadPage = async (id) => {
     if (!window.web3.eth) {
       this.setState({ loading: false });
       return;
     }
 
-    const jingleData = await axios(`${API_URL}/jingle/${id}`);
+    const jingle = await this.getJingle(id);
     const account = window.web3.eth.accounts[0];
-    const isOwner = jingleData.data.owner === account;
+    const isOwner = jingle.owner === account;
 
-    this.setState({
-      jingle: jingleData.data,
-      account,
-      isOwner
-    });
+    this.setState({ jingle, account, isOwner });
   };
 
   purchase = async () => {
-    const jingle = this.state.jingle;
+    let jingle = this.state.jingle;
+    const account = window.web3.eth.accounts[0];
 
     const id = guid();
     this.props.addPendingTx(id, 'Buy Jingle');
-    await window.marketplaceContract.buy(jingle.jingleId, {from: this.state.account, value: jingle.price});
+    await window.marketplaceContract.buy(jingle.jingleId, {from: account, value: jingle.price});
     this.props.removePendingTx(id);
 
-    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
-    const account = window.web3.eth.accounts[0];
-    const isOwner = jingleData.data.owner === account;
+    jingle = await this.getJingle(jingle.jingleId);
 
-    this.setState({ jingle: jingleData.data, isOwner });
+    const isOwner = jingle.owner === account;
+
+    this.setState({ jingle, isOwner });
   };
 
   sell = async () => {
     let amount = this.state.salePrice;
     if (amount && (amount <= 0)) return;
 
-    const jingle = this.state.jingle;
+    let jingle = this.state.jingle;
 
     const id = guid();
     this.props.addPendingTx(id, 'Sell Jingle');
-    await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: this.state.account});
+    await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: window.web3.eth.accounts[0]});
     this.props.removePendingTx(id);
 
-    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
-    this.setState({ jingle: jingleData.data, });
+    jingle = await this.getJingle(jingle.jingleId);
+    this.setState({ jingle });
   };
 
   cancelSale = async () => {
-    const jingle = this.state.jingle;
+    let jingle = this.state.jingle;
 
     const id = guid();
     this.props.addPendingTx(id, 'Cancel Sale');
-    await window.marketplaceContract.cancel(jingle.jingleId, {from: this.state.account});
+    await window.marketplaceContract.cancel(jingle.jingleId, {from: window.web3.eth.accounts[0]});
     this.props.removePendingTx(id);
 
-    const jingleData = await axios(`${API_URL}/jingle/${this.props.params.id}`);
-    this.setState({ jingle: jingleData.data, });
+    jingle = await this.getJingle(jingle.jingle);
+    this.setState({ jingle });
   };
 
   handleSalePriceChange = (e) => {
@@ -147,6 +157,25 @@ class JinglePage extends Component {
     if (!this.state.sound) return;
     this.state.sound.stop();
     this.setState({ start: false });
+  };
+
+  likeUnlikeJingle = async (jingleId, action) => {
+    const actionString = action ? 'like' : 'unlike';
+    const address = window.web3.eth.accounts[0];
+
+    try {
+      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
+
+      this.setState({
+        jingle: {
+          ...this.state.jingle,
+          likeCount: response.data.likeCount,
+          liked: action
+        }
+      })
+    } catch (err) {
+      // TODO Handle this in the future
+    }
   };
 
   render() {
@@ -196,6 +225,14 @@ class JinglePage extends Component {
                       </div>
 
                       <JingleImage id={jingle.jingleId} width={250} height={250} />
+                    </div>
+
+                    <div className="liked-section">
+                      <span onClick={() => { this.likeUnlikeJingle(jingle.jingleId, jingle) }}>
+                        <Heart active={jingle.liked} size="40" />
+                      </span>
+
+                      { jingle.likeCount }
                     </div>
 
                     {
