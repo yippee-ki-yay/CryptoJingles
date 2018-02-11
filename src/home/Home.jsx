@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
+import axios from 'axios';
 import { getJingleMetadata } from '../getMockData';
+import {API_URL} from '../util/config';
 import SampleBox2 from '../components/SampleBox/SampleBox2';
 import SingleJingle from '../components/SingleJingle/SingleJingle';
 
-import '../util/config';
 import "./Home.css";
 import bigLogo from './bigLogo.png';
-import { Link } from 'react-router';
+
 
 class Home extends Component {
   constructor(props) {
@@ -17,17 +19,44 @@ class Home extends Component {
       sample2: { jingleType: 67, ...getJingleMetadata(67) },
       sample3: { jingleType: 90, ...getJingleMetadata(90) },
       sample4: { jingleType: 0, ...getJingleMetadata(0) },
-      jingle: {
-        author: 'Soundtoshi Nakajingles',
-        jingleId: 0,
-        name: 'First',
-        onSale: false,
-        owner: "0x93cdb0a93fc36f6a53ed21ecf6305ab80d06beca",
-        price: 0,
-        sampleTypes: ["73", "75", "84", "7", "32"]
-      },
+      jingle: null,
     };
+
+    this.likeUnlikeHomeJingle = this.likeUnlikeHomeJingle.bind(this);
   }
+
+  async componentWillMount() {
+    const address = window.web3.eth.accounts[0];
+
+    const jingleData = await axios(`${API_URL}/jingle/${30}`);
+    const jingle = jingleData.data;
+
+    const likedJinglesResponse = await axios(`${API_URL}/jingle/check-liked/${address}/${30}`);
+    jingle.liked = likedJinglesResponse.data;
+    this.setState({ jingle });
+  };
+
+  likeUnlikeHomeJingle = async () => {
+    const { jingleId } = this.state.jingle;
+    const action = !this.state.jingle.liked;
+
+    const actionString = action ? 'like' : 'unlike';
+    const address = window.web3.eth.accounts[0];
+
+    try {
+      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
+
+      this.setState({
+        jingle: {
+          ...this.state.jingle,
+          likeCount: response.data.likeCount,
+          liked: action
+        }
+      })
+    } catch (err) {
+      // TODO Handle this in the future
+    }
+  };
 
   render() {
     return(
@@ -91,8 +120,8 @@ class Home extends Component {
 
         <div className="explanation-section-2">
           <div className="home-samples-wrapper">
-            <div className="home-samples">
-              <SingleJingle {...this.state.jingle} />
+            <div className="home-samples" onClick={this.likeUnlikeHomeJingle}>
+              { this.state.jingle && <SingleJingle {...this.state.jingle} /> }
             </div>
           </div>
 
