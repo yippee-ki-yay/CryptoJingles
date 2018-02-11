@@ -57,7 +57,11 @@ class Marketplace extends Component {
                 </div>
 
                 <div className="songs-wrapper">
-                  { jingles.map((jingle) => (<SingleJingle key={jingle.jingleId} {...jingle} />)) }
+                  { jingles.map((jingle) => (
+                    <SingleJingle
+                      type="marketplace"
+                      key={jingle.jingleId} {...jingle}
+                    />)) }
                 </div>
 
                 {
