@@ -228,7 +228,7 @@ class JinglePage extends Component {
                     </div>
 
                     <div className="liked-section">
-                      <span onClick={() => { this.likeUnlikeJingle(jingle.jingleId, jingle) }}>
+                      <span onClick={() => { this.likeUnlikeJingle(jingle.jingleId, !jingle.liked) }}>
                         <Heart active={jingle.liked} size="40" />
                       </span>
 
