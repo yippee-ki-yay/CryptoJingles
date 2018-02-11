@@ -98,7 +98,7 @@ export const getAuthor = () => async (dispatch, getState) => {
 export const submitEditAuthorForm = () => async (dispatch, getState) => {
   const id = guid();
   try {
-    const address = web3.eth.accounts[0]; // eslint-disable-line
+    const address = window.web3.eth.accounts[0];
     const newAuthorName = getState().profile.authorEdit;
 
     dispatch(addPendingTx(id, 'Edit author name'));
@@ -198,7 +198,7 @@ export const buySamples = () => async (dispatch, getState) => {
   const id = guid();
 
   try {
-    const account = web3.eth.accounts[0]; // eslint-disable-line
+    const account = window.web3.eth.accounts[0];
     const numJinglesToBuy = getState().profile.numSamplesToBuy;
 
     dispatch(addPendingTx(id, 'Buy sample'));

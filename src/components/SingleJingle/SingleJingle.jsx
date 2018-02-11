@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { playAudio } from '../../actions/audioActions';
 import { Link } from 'react-router';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../../components/JingleImage/JingleImage';
 import LoadingIcon from '../../components/Decorative/LoadingIcon';
+import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
+import { playAudio } from '../../actions/audioActions';
+import { likeUnLikeJingle } from '../../actions/marketplaceActions';
 
 class SingleJingle extends Component {
   constructor (props) {
@@ -64,7 +66,8 @@ class SingleJingle extends Component {
   };
 
   render() {
-    const { jingleId, author, name, onSale, price } = this.props;
+    const { jingleId, author, name, onSale, price, likeCount, liked } = this.props;
+    const { likeUnLikeJingle } = this.props;
     return (
       <div key={jingleId} className="single-song">
         <div className="jingle-image-actions">
@@ -99,7 +102,16 @@ class SingleJingle extends Component {
         </div>
 
         <div className="jingle-footer">
-          <div>#{ jingleId }</div>
+          <div className="id-likes-wrapper">
+            <span>#{ jingleId }</span>
+            <span>
+              <span onClick={() => { likeUnLikeJingle(jingleId, !liked); }}>
+                <Heart active={liked} size="30" />
+              </span>
+              <span>{ likeCount }</span>
+            </span>
+
+          </div>
           <div className="jingle-footer-author">{ author }</div>
           <div className="jingle-footer-name">{ name }</div>
         </div>
@@ -108,4 +120,8 @@ class SingleJingle extends Component {
   }
 }
 
-export default connect(null, { playAudio })(SingleJingle);
+const mapDispatchToProps = {
+  likeUnLikeJingle, playAudio
+};
+
+export default connect(null, mapDispatchToProps)(SingleJingle);

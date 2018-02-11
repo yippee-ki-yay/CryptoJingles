@@ -28,6 +28,7 @@ export const SET_MARKETPLACE_JINGLES = 'set_marketplace_jingles';
 export const SET_MARKETPLACE_CATEGORY = 'set_marketplace_category';
 export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
 export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';
+export const MARKETPLACE_LIKE_UNLIKE_JINGLE = 'marketplace_like_unlike_jingle';
 
 export const SET_SINGLE_AUDIO = 'set_single_audio';
 
