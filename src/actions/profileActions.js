@@ -232,14 +232,19 @@ export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
  */
 export const getJinglesForUser = () => async (dispatch, getState) => {
   const { currentJinglesPage, jingleCategory, jingleSorting, profileAddress } = getState().profile;
+  let jingles = [];
+
   const response = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
-
   const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
-  const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${window.web3.eth.accounts[0]}/${jingleIds}`);
 
-  const jingles = response.data.map((_jingle, index) => ({
-    ..._jingle, liked: likedJinglesResponse.data[index]
-  }));
+  if (jingleIds.length > 0) {
+    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${window.web3.eth.accounts[0]}/${jingleIds}`);
+    jingles = response.data.map((_jingle, index) => ({
+      ..._jingle, liked: likedJinglesResponse.data[index]
+    }));
+  } else {
+    jingles = response.data;
+  }
 
   // false for all jingles, true to get jingles on sale
   const num = await axios(`${API_URL}/jingles/count/owner/${profileAddress}/sale/${(jingleCategory.value === 'sale').toString()}`);
