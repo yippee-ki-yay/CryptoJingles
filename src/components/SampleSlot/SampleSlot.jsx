@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import { connect } from 'react-redux';
 import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css';
 import { getJingleMetadata } from '../../getMockData';
 import { getColorForRarity } from '../../actions/profileActions';
 
-import { updateVolume } from '../../actions/composeActions';
+import { updateVolume, updateDelay } from '../../actions/composeActions';
 
 import './SampleSlot.css';
 
@@ -32,19 +31,21 @@ class SampleSlot extends Component {
     super(props);
 
     this.state = {
-      volumeValue: 50
+      volumeValue: 50,
+      delayValue: 0
     };
   }
 
   handleChange = (value) => {
-    this.setState({
-      volumeValue: value
-    });
-    
+    this.setState({ volumeValue: value });
+  }
+
+  handleDelayChange = (value) => {
+    this.setState({ delayValue: parseFloat(value.toFixed(1)) });
   }
 
   render() {
-    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop, updateVolume, index } = this.props;
+    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop, updateVolume, updateDelay, index } = this.props;
     let jingle = null;
 
     const isActive = isOver && canDrop;
@@ -70,6 +71,9 @@ class SampleSlot extends Component {
       rarityColor = getColorForRarity(jingle.rarity);
     }
 
+    const formatVolume = value => value + '%';
+    const formatDelay = value => value.toFixed(1) + 's';
+
     return connectDropTarget(
       <div className="jingle-slot" style={{ ...style, ...additionalStyle }}>
         {
@@ -89,12 +93,25 @@ class SampleSlot extends Component {
                   min={0}
                   max={100}
                   value={this.state.volumeValue}
+                  format={formatVolume}
                   onChange={this.handleChange}
                   onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
                 />
+
+                <div className="slider-horizontal">
+                <Slider
+                  min={0}
+                  max={4}
+                  step={0.1}
+                  format={formatDelay}
+                  value={this.state.delayValue}
+                  onChange={this.handleDelayChange}
+                  onChangeComplete={() => updateDelay({delay: this.state.delayValue, index})}
+                />
+                </div>
               </div>
 
-              <div className="id-tag">
+              {/* <div className="id-tag">
                 <span>#{ lastDroppedItem.type } - </span>
                 <span style={{ color: rarityColor }}>
                   { jingle.rarity === 0 && 'Common' }
@@ -102,7 +119,7 @@ class SampleSlot extends Component {
                   { jingle.rarity === 2 && 'Legendary' }
                   { jingle.rarity === 3 && 'Mythical' }
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
         }
@@ -115,10 +132,12 @@ class SampleSlot extends Component {
 
 const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
+  delays: state.compose.delays,
 });
 
 const mapDispatchToProps = {
-  updateVolume
+  updateVolume,
+  updateDelay,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleSlot);

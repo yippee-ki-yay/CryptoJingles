@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { playAudio } from '../../actions/audioActions';
 import { Link } from 'react-router';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../../components/JingleImage/JingleImage';
@@ -27,10 +28,17 @@ class SingleJingle extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
+  playWithDelay(group, delays) {
+    group.sounds.forEach((sound, i) => {
+      sound.play(delays[i]);
+    });
+  }
+
   loadJingle() {
-    const sampleSrcs = this.props.sampleTypes.map((sampleType) =>
+    const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
+        sound.volume = this.props.volumes[i];
       }));
 
     this.setState({ loading: true });
@@ -56,7 +64,7 @@ class SingleJingle extends Component {
       return
     }
 
-    this.state.sound.play();
+    this.playWithDelay(this.state.sound, this.props.delays);
     this.setState({ start: true });
   };
 
@@ -126,8 +134,13 @@ class SingleJingle extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  volumes: state.compose.volumes,
+  delays: state.compose.delays,
+});
+
 const mapDispatchToProps = {
   likeUnLikeMarketplaceJingle, likeUnLikeProfileJingle, playAudio
 };
 
-export default connect(null, mapDispatchToProps)(SingleJingle);
+export default connect(mapStateToProps, mapDispatchToProps)(SingleJingle);
