@@ -7,7 +7,6 @@ import JingleImage from '../../components/JingleImage/JingleImage';
 import LoadingIcon from '../../components/Decorative/LoadingIcon';
 import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
-import { playAudio } from '../../actions/audioActions';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
 

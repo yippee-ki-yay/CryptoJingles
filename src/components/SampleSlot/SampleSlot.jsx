@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import { connect } from 'react-redux';
 import InputRange from 'react-input-range';
-import 'react-input-range/lib/css/index.css';
 import { getJingleMetadata } from '../../getMockData';
 import { getColorForRarity } from '../../actions/profileActions';
 
@@ -94,30 +93,39 @@ class SampleSlot extends Component {
 
               <div className="name-tag">
               { lastDroppedItem.name }
-                <InputRange
-                  minValue={0}
-                  maxValue={100}
-                  value={this.state.volumeValue}
-                  formatLabel={formatVolume}
-                  onChange={this.handleChange}
-                  onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
-                />
 
-                <InputRange
-                  minValue={0}
-                  maxValue={4}
-                  step={0.1}
-                  formatLabel={formatDelay}
-                  value={this.state.delayValue}
-                  onChange={this.handleDelayChange}
-                  onChangeComplete={() => updateDelay({delay: this.state.delayValue, index})}
-                />
+              <div className='slider-group'>
+                <div className='slider'>
+                  <InputRange
+                    minValue={0}
+                    maxValue={100}
+                    value={this.state.volumeValue}
+                    formatLabel={formatVolume}
+                    onChange={this.handleChange}
+                    onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
+                  />
+                </div>
 
-                <InputRange
-                  value={this.state.range}
-                  onChange={value => this.setState({ range: value })}
-                  onChangeComplete={value => console.log(value)} />
+                <div className='slider'>
+                  <InputRange
+                    minValue={0}
+                    maxValue={4}
+                    step={0.1}
+                    formatLabel={formatDelay}
+                    value={this.state.delayValue}
+                    onChange={this.handleDelayChange}
+                    onChangeComplete={() => updateDelay({delay: this.state.delayValue, index})}
+                  />
+                </div>
+
+                <div className='slider'>
+                  <InputRange
+                    value={this.state.range}
+                    onChange={value => this.setState({ range: value })}
+                    onChangeComplete={value => console.log(value)} />
+                </div>
               </div>
+            </div>
 
               {/* <div className="id-tag">
                 <span>#{ lastDroppedItem.type } - </span>
