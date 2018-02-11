@@ -8,6 +8,7 @@ export const SAMPLE_SORTING_OPTIONS = [
 export const SORTING_OPTIONS = [
   { value: '-jingleId', label: 'Newest first' },
   { value: 'jingleId', label: 'Oldest first' },
+  { value: '-likeCount', label: 'Most loved' },
   { value: '-price', label: 'Most expensive first' },
   { value: 'price', label: 'Cheapest first' }
 ];
