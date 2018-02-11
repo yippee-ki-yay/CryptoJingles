@@ -60,6 +60,8 @@ class SingleJingle extends Component {
       return
     }
 
+    console.log(this.props.delays);
+
     this.playWithDelay(this.state.sound, this.props.delays);
     this.setState({ start: true });
   };
