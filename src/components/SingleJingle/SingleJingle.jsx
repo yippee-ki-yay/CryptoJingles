@@ -5,7 +5,11 @@ import { Link } from 'react-router';
 import { Sound, Group} from 'pizzicato';
 import JingleImage from '../../components/JingleImage/JingleImage';
 import LoadingIcon from '../../components/Decorative/LoadingIcon';
+import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
+import { playAudio } from '../../actions/audioActions';
+import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
+import { likeUnLikeProfileJingle } from '../../actions/profileActions';
 
 class SingleJingle extends Component {
   constructor (props) {
@@ -72,8 +76,14 @@ class SingleJingle extends Component {
     this.setState({ start: false });
   };
 
+  likeJingle = (jingleId, action) => {
+    if (this.props.type === 'marketplace') this.props.likeUnLikeMarketplaceJingle(jingleId, action);
+    if (this.props.type === 'profile') this.props.likeUnLikeProfileJingle(jingleId, action);
+  };
+
   render() {
-    const { jingleId, author, name, onSale, price } = this.props;
+    const { jingleId, author, name, onSale, price, likeCount, liked } = this.props;
+
     return (
       <div key={jingleId} className="single-song">
         <div className="jingle-image-actions">
@@ -108,7 +118,16 @@ class SingleJingle extends Component {
         </div>
 
         <div className="jingle-footer">
-          <div>#{ jingleId }</div>
+          <div className="id-likes-wrapper">
+            <span>#{ jingleId }</span>
+            <span>
+              <span onClick={() => { this.likeJingle(jingleId, !liked); }}>
+                <Heart active={liked} size="30" />
+              </span>
+              <span>{ likeCount }</span>
+            </span>
+
+          </div>
           <div className="jingle-footer-author">{ author }</div>
           <div className="jingle-footer-name">{ name }</div>
         </div>
@@ -122,4 +141,8 @@ const mapStateToProps = (state) => ({
   delays: state.compose.delays,
 });
 
-export default connect(mapStateToProps, { playAudio })(SingleJingle);
+const mapDispatchToProps = {
+  likeUnLikeMarketplaceJingle, likeUnLikeProfileJingle, playAudio
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleJingle);

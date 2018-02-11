@@ -83,7 +83,7 @@ class MyJingles extends Component {
                     {
                       myJingles.map((jingle) =>
                         (
-                          <SingleJingle key={jingle.jingleId} {...jingle} />
+                          <SingleJingle key={jingle.jingleId} {...jingle} type="profile" />
                         )
                       )
                     }

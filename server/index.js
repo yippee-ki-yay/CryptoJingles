@@ -4,6 +4,7 @@
 const Web3 = require('web3');
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const db = require('./db');
 const routes = require('./routes');
@@ -13,6 +14,9 @@ const jinglesAbi = require("../build/contracts/Jingle");
 const jingleCtrl = require('./controllers/jingles.controller');
 
 const app = express();
+app.use( bodyParser.json() );
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const marketplaceAddress = "0x31337c5b1580d8c5fa6880ea34e323364165ed17";
 const jinglesAddress = "0x9430a9881ded68c90471dd2304b1073aba088f59";
 

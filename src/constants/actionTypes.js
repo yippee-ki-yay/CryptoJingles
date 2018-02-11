@@ -28,6 +28,7 @@ export const SET_MARKETPLACE_JINGLES = 'set_marketplace_jingles';
 export const SET_MARKETPLACE_CATEGORY = 'set_marketplace_category';
 export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
 export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';
+export const MARKETPLACE_LIKE_UNLIKE_JINGLE = 'marketplace_like_unlike_jingle';
 
 export const SET_SINGLE_AUDIO = 'set_single_audio';
 
@@ -48,7 +49,8 @@ export const AUTHOR_EDIT_SUCCESS = 'author_edit_success';
 export const SET_MY_JINGLES_PAGE = 'set_my_jingles_page';
 export const SET_PROFILE_ADDRESS = 'set_profile_address';
 export const SET_MY_SAMPLES_SORTING = 'set_my_samples_sorting';
+export const PROFILE_LIKE_UNLIKE_JINGLE = 'profile_like_unlike_jingle';
 
 //Compose actions
-export const UPDATE_VOLUME = 'update_volume;'
+export const UPDATE_VOLUME = 'update_volume';
 export const UPDATE_DELAY = 'update_delay';

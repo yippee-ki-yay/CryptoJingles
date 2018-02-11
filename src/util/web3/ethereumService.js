@@ -49,7 +49,7 @@ export const getSamples = (_address = null) =>
 
       const jinglesInstance = await jinglesContract.at(JingleAddress);
 
-      const jingles = await jinglesInstance.getAllJingles.call(web3.eth.accounts[0]);
+      const jingles = await jinglesInstance.getAllJingles.call(window.web3.eth.accounts[0]);
 
       return jingles.map(j => j.valueOf());
 

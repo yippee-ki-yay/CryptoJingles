@@ -10,6 +10,8 @@ const jingleSchema = new mongoose.Schema({
     samples: {type: Array, required: true},
     sampleTypes: {type: Array, required: true},
     time: {type: Date, default: Date.now},
+    likeCount: {type: Number, default: 0, required: true},
+    likes: [{ type: String, required: true }]
 });
 
 mongoose.model('Jingle', jingleSchema);

@@ -9,7 +9,7 @@ module.exports.getJinglesForOwner = async (req, res) => {
     const filter = req.params.filter;
 
     try {
-        const jingles = await Jingle.find({owner: req.params.owner})
+        const jingles = await Jingle.find({owner: req.params.owner}, '-likes')
                                     .limit(JINGLES_PER_PAGE)
                                     .skip(JINGLES_PER_PAGE * pageNum)
                                     .sort(filter)
@@ -21,7 +21,7 @@ module.exports.getJinglesForOwner = async (req, res) => {
     } catch(err) {
         console.log(err);
     }
-}
+};
 
 module.exports.getJinglesOnSaleForOwner = async (req, res) => {
 
@@ -29,7 +29,7 @@ module.exports.getJinglesOnSaleForOwner = async (req, res) => {
     const filter = req.params.filter;
 
     try {
-        const jingles = await Jingle.find({owner: req.params.owner, onSale: true})
+        const jingles = await Jingle.find({owner: req.params.owner, onSale: true}, '-likes')
                                     .limit(JINGLES_PER_PAGE)
                                     .skip(JINGLES_PER_PAGE * pageNum)
                                     .sort(filter)
@@ -70,7 +70,7 @@ module.exports.getJingle = async (req, res) => {
     try {
         const jingleId = req.params.jingleId;
 
-        const jingle = await Jingle.findOne({jingleId: jingleId});
+        const jingle = await Jingle.findOne({jingleId: jingleId}, '-likes');
 
         console.log(jingle);
 
@@ -90,7 +90,7 @@ module.exports.getJingles = async (req, res) => {
 
         console.log('Getting orders', pageNum, filter);
 
-        const orders = await Jingle.find({})
+        const orders = await Jingle.find({}, '-likes')
                                   .limit(JINGLES_PER_PAGE)
                                   .skip(JINGLES_PER_PAGE * pageNum)
                                   .sort(filter)
@@ -133,7 +133,7 @@ module.exports.getJinglesForSale = async (req, res) => {
 
         console.log('Getting orders', pageNum, filter);
 
-        const orders = await Jingle.find({onSale: true})
+        const orders = await Jingle.find({onSale: true}, '-likes')
                                   .limit(JINGLES_PER_PAGE)
                                   .skip(JINGLES_PER_PAGE * pageNum)
                                   .sort(filter)
@@ -150,7 +150,7 @@ module.exports.getJinglesForSale = async (req, res) => {
 module.exports.getOnSaleJingles = async () => {
     try {
 
-        const jinglesOfSale = await Jingle.find({onSale: true}).select('jingleId');
+        const jinglesOfSale = await Jingle.find({onSale: true}, '-likes').select('jingleId');
 
         return jinglesOfSale;
 
@@ -267,4 +267,134 @@ module.exports.cancelJingle = async (jingleId) => {
         console.log(err);
         return false;
     }
-}
+};
+
+/**
+ * Based on action, increments or deduces a jingles likeCount.
+ * Likes are limited to a user address that has at least bought 5 samples.
+ *
+ * TODO - implement limit to user that has bought at least 5 samples
+ *
+ * @param {Number} jingleId
+ * @param {String} address
+ * @param {Boolean} action - true = like, false = dislike
+ * @return {Promise}
+ */
+const updateLikeUnlikeJingle = (jingleId, address, action) =>
+  new Promise (async (resolve, reject) => {
+    const jingle = await Jingle.findOne({ jingleId });
+
+    if ((action === true) && jingle.likes.includes(address)) {
+      reject('Already performed this action.');
+      return;
+    }
+
+    if ((action === false) && !jingle.likes.includes(address)) {
+      reject('Jingle was not liked prior to this action.');
+      return;
+    }
+
+    jingle.likeCount = action ? jingle.likeCount + 1 : jingle.likeCount - 1;
+
+    if (action === true) jingle.likes.push(address);
+    if (action === false) {
+      const likes = jingle.likes.slice();
+      likes.splice(likes.findIndex(_address => _address === address), 1);
+      jingle.likes = likes;
+    }
+
+    await jingle.save();
+    resolve(jingle.likeCount);
+  });
+
+// TODO - format and separate error code and message
+/**
+ * Updates jingles likeCount if params are present
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Boolean} action - true = like, false = dislike
+ */
+module.exports.likeUnLikeJingle = async (req, res, action) => {
+  const { jingleId, address } = req.body;
+
+  if (!address || !jingleId) {
+    res.status(500).send({ error: 'Invalid params' });
+    return;
+  }
+
+  try {
+    const likeCount = await updateLikeUnlikeJingle(jingleId, address, action);
+    res.send({ likeCount });
+  } catch(error) {
+    res.status(500).send({ error });
+  }
+};
+
+/**
+ * Gets jingle from database and checks
+ * if the given address is in its like array
+ *
+ * @param {Number} jingleId
+ * @param {String} address
+ * @return {Promise}
+ */
+const didAddressLikeJingle = (address, jingleId) =>
+  new Promise(async (resolve, reject) => {
+    const jingle = await Jingle.findOne({ jingleId });
+
+    if (!jingle) {
+        reject(`Jingle #${jingleId} does not exist`);
+        return;
+    }
+
+    resolve(jingle.likes.includes(address));
+  });
+
+/**
+ * Checks if jingleIds were liked by an address
+ *
+ * @param {Object} req
+ * @param {Object} res
+ */
+module.exports.checkIfLikedJingles = (req, res) => {
+  let { address, jingleIds } = req.params;
+  jingleIds = jingleIds.split(',').map(Number);
+
+  // TODO add middleware that checks if all query params or body params are present
+  if (!address || !jingleIds) {
+    res.status(500).send({ error: 'Invalid params' });
+    return;
+  }
+
+  const promiseMap = jingleIds.map(jingleId => didAddressLikeJingle(address, jingleId));
+
+  // TODO - create try/catch error function that has a Promise for paramm
+  try {
+    Promise.all(promiseMap).then((data) => { res.send(data); });
+  } catch(error) {
+    res.status(500).send({ error });
+  }
+};
+
+/**
+ * Checks if jingleId were liked by an address
+ *
+ * @param {Object} req
+ * @param {Object} res
+ */
+module.exports.checkIfLikedJingle = async (req, res) => {
+  const { address, jingleId } = req.params;
+
+  if (!address || !jingleId) {
+    res.status(500).send({ error: 'Invalid params' });
+    return;
+  }
+
+  try {
+    const result = await didAddressLikeJingle(address, jingleId);
+    res.send(result);
+  } catch(error) {
+    res.status(500).send({ error });
+  }
+};

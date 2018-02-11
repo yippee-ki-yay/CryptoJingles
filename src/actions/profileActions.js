@@ -3,7 +3,7 @@ import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
-  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING
+  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE,
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
@@ -98,7 +98,7 @@ export const getAuthor = () => async (dispatch, getState) => {
 export const submitEditAuthorForm = () => async (dispatch, getState) => {
   const id = guid();
   try {
-    const address = web3.eth.accounts[0]; // eslint-disable-line
+    const address = window.web3.eth.accounts[0];
     const newAuthorName = getState().profile.authorEdit;
 
     dispatch(addPendingTx(id, 'Edit author name'));
@@ -198,7 +198,7 @@ export const buySamples = () => async (dispatch, getState) => {
   const id = guid();
 
   try {
-    const account = web3.eth.accounts[0]; // eslint-disable-line
+    const account = window.web3.eth.accounts[0];
     const numJinglesToBuy = getState().profile.numSamplesToBuy;
 
     dispatch(addPendingTx(id, 'Buy sample'));
@@ -232,12 +232,19 @@ export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
  */
 export const getJinglesForUser = () => async (dispatch, getState) => {
   const { currentJinglesPage, jingleCategory, jingleSorting, profileAddress } = getState().profile;
-  const res = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
+  const response = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
+
+  const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
+  const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${window.web3.eth.accounts[0]}/${jingleIds}`);
+
+  const jingles = response.data.map((_jingle, index) => ({
+    ..._jingle, liked: likedJinglesResponse.data[index]
+  }));
 
   // false for all jingles, true to get jingles on sale
   const num = await axios(`${API_URL}/jingles/count/owner/${profileAddress}/sale/${(jingleCategory.value === 'sale').toString()}`);
 
-  dispatch({ type: SET_PROFILE_JINGLES, payload: { jingles: res.data, num: num.data } });
+  dispatch({ type: SET_PROFILE_JINGLES, payload: { jingles, num: num.data } });
 };
 
 /**
@@ -276,4 +283,31 @@ export const changeProfileJinglesSorting = (payload) => (dispatch) => {
 export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
   dispatch({ type: SET_MY_JINGLES_PAGE, payload: pageNum + 1 });
   dispatch(getJinglesForUser());
+};
+
+/**
+ * Updates jingle like count based on jingleId.
+ *
+ * @param {Number} jingleId
+ * @param {Boolean} action - true = like, false = dislike
+ *
+ * @return {Function}
+ */
+// TODO - extract this to util function that takes dispatchType & collection
+export const likeUnLikeProfileJingle = (jingleId, action) => async (dispatch, getState) => {
+  const actionString = action ? 'like' : 'unlike';
+  const address = window.web3.eth.accounts[0];
+
+  try {
+    const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
+    const jingles = [...getState().profile.myJingles];
+    const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
+
+    jingles[jingleIndex].likeCount = response.data.likeCount;
+    jingles[jingleIndex].liked = action;
+
+    dispatch({ type: PROFILE_LIKE_UNLIKE_JINGLE, payload: jingles });
+  } catch (err) {
+    // TODO Handle this in the future
+  }
 };

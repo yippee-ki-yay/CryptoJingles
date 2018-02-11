@@ -176,3 +176,15 @@
     text-align: center;
 }
 
+.single-jingle-wrapper .liked-section  {
+    margin: 10px 45px -10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.single-jingle-wrapper .liked-section span {
+    display: flex;
+    align-items: center;
+}
+
