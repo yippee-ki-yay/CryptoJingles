@@ -51,3 +51,4 @@ export const SET_MY_SAMPLES_SORTING = 'set_my_samples_sorting';
 
 //Compose actions
 export const UPDATE_VOLUME = 'update_volume;'
+export const UPDATE_DELAY = 'update_delay';

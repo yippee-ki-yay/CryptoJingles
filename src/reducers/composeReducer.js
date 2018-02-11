@@ -1,7 +1,8 @@
-import { UPDATE_VOLUME } from '../constants/actionTypes';
+import { UPDATE_VOLUME, UPDATE_DELAY } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
-  volumes: [50, 50, 50, 50, 50]
+  volumes: [50, 50, 50, 50, 50],
+  delays: [0, 0, 0, 0, 0]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -12,6 +13,12 @@ export default (state = INITIAL_STATE, action) => {
 
        newState.volumes[payload.index] = payload.volume;
        return newState;
+
+    case UPDATE_DELAY:
+      const updatedState = Object.assign({}, state);
+
+      updatedState.delays[payload.index] = payload.delay;
+      return updatedState;
 
     default:
       return state;
