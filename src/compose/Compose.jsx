@@ -183,7 +183,7 @@ class Compose extends Component {
   createSong = async () => {
     const id = guid();
 
-    console.log(this.props.volumes);
+    const {volumes, delays} = this.props;
 
     try {
       const selectedSongSources = this.state.mySamples.filter(({ id }) =>
@@ -199,7 +199,7 @@ class Compose extends Component {
 
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');      
-      const res = await window.contract.composeJingle(name, jingleIds, { from: window.web3.eth.accounts[0] });
+      const res = await window.contract.composeJingle(name, jingleIds, volumes, delays, { from: window.web3.eth.accounts[0] });
 
       //const effects = await 
 

@@ -22,6 +22,8 @@ contract Jingle is Ownable, ERC721 {
     mapping(bytes32 => bool) public uniqueJingles;
     
     mapping(uint => uint[]) public soundEffects;
+    mapping(uint => uint[]) public volumes;
+    mapping(uint => uint[]) public delays;
     
     uint public numOfJingles;
     
@@ -90,7 +92,7 @@ contract Jingle is Ownable, ERC721 {
     }
     
     function composeJingle(address _owner, uint[5] jingles, 
-            uint[5] jingleTypes, string name, string author) public onlyCryptoJingles {
+    uint[5] jingleTypes, string name, string author, uint[5] _volumes, uint[5] _delays) public onlyCryptoJingles {
         
         uint _jingleId = numOfJingles;
         
@@ -101,6 +103,8 @@ contract Jingle is Ownable, ERC721 {
         tokensOwned[_owner].push(_jingleId);
         
         samplesInJingle[_jingleId] = jingles;
+        volumes[_jingleId] = _volumes;
+        delays[_jingleId] = _delays;
         
         tokenPosInArr[_jingleId] = tokensOwned[_owner].length - 1;
         

@@ -24,10 +24,17 @@ class SingleJingle extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
+  playWithDelay(group, delays) {
+    group.sounds.forEach((sound, i) => {
+      sound.play(delays[i]);
+    });
+  }
+
   loadJingle() {
-    const sampleSrcs = this.props.sampleTypes.map((sampleType) =>
+    const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
+        sound.volume = this.props.volumes[i];
       }));
 
     this.setState({ loading: true });
@@ -53,7 +60,7 @@ class SingleJingle extends Component {
       return
     }
 
-    this.state.sound.play();
+    this.playWithDelay(this.state.sound, this.props.delays);
     this.setState({ start: true });
   };
 
@@ -108,4 +115,9 @@ class SingleJingle extends Component {
   }
 }
 
-export default connect(null, { playAudio })(SingleJingle);
+const mapStateToProps = (state) => ({
+  volumes: state.compose.volumes,
+  delays: state.compose.delays,
+});
+
+export default connect(mapStateToProps, { playAudio })(SingleJingle);

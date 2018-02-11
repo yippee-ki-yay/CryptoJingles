@@ -1,15 +1,15 @@
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://monthly-superb-cod.quiknode.io/fe26e4e5-2f80-4f19-b6fb-f21e4851d233/v5WwMVIHrg8ppsDCS-6Weg==/'));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.decenter.com'));
 
 const db = require('./db');
 const routes = require('./routes');
 
 const marketplaceAbi = require("../build/contracts/Marketplace");
-const marketplaceAddress = "0xb8e392da7abb836cff06d827531a7e5f1b00bed2";
+const marketplaceAddress = "0x31337c5b1580d8c5fa6880ea34e323364165ed17";
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
 const jinglesAbi = require("../build/contracts/Jingle");
-const jinglesAddress = "0x5af7af54e8bc34b293e356ef11fffe51d6f9ae78";
+const jinglesAddress = "0x9430a9881ded68c90471dd2304b1073aba088f59";
 const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
 
@@ -20,6 +20,8 @@ async function update() {
         console.log('GET JINGLES ERROR', error);
         return;
       }
+
+      console.log(event);
 
       let mined = event.filter(_jingle => _jingle.type === 'mined');
 
