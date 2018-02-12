@@ -3,6 +3,9 @@ const Jingle = mongoose.model('Jingle');
 
 const JINGLES_PER_PAGE = 10;
 
+require('../models/users.model');
+const userCtrl = require('./users.controller');
+
 module.exports.getJinglesForOwner = async (req, res) => {
 
     const pageNum = parseInt(req.params.page) - 1;

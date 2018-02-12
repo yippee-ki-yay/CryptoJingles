@@ -10,8 +10,9 @@ const db = require('./db');
 const routes = require('./routes');
 const marketplaceAbi = require("../build/contracts/Marketplace");
 const jinglesAbi = require("../build/contracts/Jingle");
-
+const cryptoJinglesAbi = require("../build/contracts/CryptoJingles");
 const jingleCtrl = require('./controllers/jingles.controller');
+const userCtrl = require('./controllers/users.controller');
 
 const app = express();
 app.use( bodyParser.json() );
@@ -19,17 +20,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const marketplaceAddress = "0x31337c5b1580d8c5fa6880ea34e323364165ed17";
 const jinglesAddress = "0x9430a9881ded68c90471dd2304b1073aba088f59";
-
+const cryptoJinglesAddress = "0xb956c4f01c4d52be118bdddfe440a533e73281d1";
 
 const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.decenter.com"));
 
 const _ = require('lodash');
 
-//const web3 = new Web3(new Web3.providers.HttpProvider("https://monthly-superb-cod.quiknode.io/fe26e4e5-2f80-4f19-b6fb-f21e4851d233/v5WwMVIHrg8ppsDCS-6Weg==/"));
-
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
 const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
+const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAddress);
 
 (async () => {
 
@@ -49,22 +49,32 @@ const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
         await cancelJingle(res);
     });
 
-    //BACKUP LISTEN
-    marketplaceContract.allEvents(async (err, res) => {
-        if (res.event === 'SellOrder') {
-            await putOnSale(res);
-        } else if(res.event === 'Bought') {
-            await boughtJingle(res);
-        } else if(res.event === 'Canceled') {
-            await cancelJingle(res);
-        }
+    cryptoJingles.Purchased(async (err, res) => {
+
+        const address = res.args.user;
+        const numSamples = res.args.numJingles.valueOf();
+
+        console.log(address, numSamples);
+
+        await userCtrl.setNumSamplesBought(address, numSamples);
     });
 
-    jingles.allEvents(async (err, res) => {
-        if (res.event === 'Composed') {
-            await addJingle(res);
-        }
-    });
+    //BACKUP LISTEN
+    // marketplaceContract.allEvents(async (err, res) => {
+    //     if (res.event === 'SellOrder') {
+    //         await putOnSale(res);
+    //     } else if(res.event === 'Bought') {
+    //         await boughtJingle(res);
+    //     } else if(res.event === 'Canceled') {
+    //         await cancelJingle(res);
+    //     }
+    // });
+
+    // jingles.allEvents(async (err, res) => {
+    //     if (res.event === 'Composed') {
+    //         await addJingle(res);
+    //     }
+    // });
 
 })();
 
