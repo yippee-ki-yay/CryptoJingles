@@ -13,17 +13,22 @@ import {
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
   const address = window.web3.eth.accounts[0];
   const { currentPage, category, sorting, } = getState().marketplace;
+  let jingles = [];
 
   try {
     // TODO - export this to Api.js
     const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
 
     const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
-    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
 
-    const jingles = response.data.map((_jingle, index) => ({
-      ..._jingle, liked: likedJinglesResponse.data[index]
-    }));
+    if (jingleIds.length > 0) {
+      const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
+      jingles = response.data.map((_jingle, index) => ({
+        ..._jingle, liked: likedJinglesResponse.data[index]
+      }));
+    } else {
+      jingles = response.data;
+    }
 
     // false for all jingles, true to get jingles on sale
     const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/${(category.value === 'sale').toString()}`);
@@ -81,20 +86,20 @@ export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
  * @return {Function}
  */
 export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch, getState) => {
-  const actionString = action ? 'like' : 'unlike';
-  const address = window.web3.eth.accounts[0];
+    const actionString = action ? 'like' : 'unlike';
+    const address = window.web3.eth.accounts[0];
 
-  try {
-    const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
-    const jingles = [...getState().marketplace.jingles];
-    const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
+    try {
+      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
+      const jingles = [...getState().marketplace.jingles];
+      const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
 
-    jingles[jingleIndex].likeCount = response.data.likeCount;
-    jingles[jingleIndex].liked = action;
+      jingles[jingleIndex].likeCount = response.data.likeCount;
+      jingles[jingleIndex].liked = action;
 
-    dispatch({ type: MARKETPLACE_LIKE_UNLIKE_JINGLE, payload: jingles });
-  } catch (err) {
-    // TODO Handle this in the future
-  }
+      dispatch({ type: MARKETPLACE_LIKE_UNLIKE_JINGLE, payload: jingles });
+    } catch (err) {
+      // TODO Handle this in the future
+    }
 };
 
