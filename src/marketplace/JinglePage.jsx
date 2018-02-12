@@ -119,10 +119,11 @@ class JinglePage extends Component {
   };
 
   loadJingle = () => {
-    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType) =>
+    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => {
           resolve(sound);
+          sound.volume = parseInt(this.state.jingle.settings[i]) / 100;
         });
       }));
 
@@ -149,9 +150,19 @@ class JinglePage extends Component {
       return
     }
 
-    this.state.sound.play();
+    let delays = this.state.jingle.settings.slice(5, 11);
+
+    delays = delays.map(d => parseInt(d));
+
+    this.playWithDelay(this.state.sound, delays);
     this.setState({ start: true });
   };
+
+  playWithDelay(group, delays) {
+    group.sounds.forEach((sound, i) => {
+      sound.play(delays[i]);
+    });
+  }
 
   stopSound = () => {
     if (!this.state.sound) return;

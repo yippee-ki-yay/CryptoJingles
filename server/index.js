@@ -18,9 +18,9 @@ const app = express();
 app.use( bodyParser.json() );
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const marketplaceAddress = "0x31337c5b1580d8c5fa6880ea34e323364165ed17";
-const jinglesAddress = "0x9430a9881ded68c90471dd2304b1073aba088f59";
-const cryptoJinglesAddress = "0xb956c4f01c4d52be118bdddfe440a533e73281d1";
+const marketplaceAddress = "0xc7ec37cd0d01a0c3c9000e97c942b82bd09323b7";
+const jinglesAddress = "0xb5840ed01397573f2112c3f254302d779b749025";
+const cryptoJinglesAddress = "0xf1c371e1396111d528fe64adb4f6a5ade73ba089";
 
 const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.decenter.com"));
 
@@ -50,6 +50,10 @@ const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAd
     });
 
     cryptoJingles.Purchased(async (err, res) => {
+
+        if (!res.args) {
+            return;
+        }
 
         const address = res.args.user;
         const numSamples = res.args.numJingles.valueOf();
@@ -104,6 +108,7 @@ async function cancelJingle(res) {
 
 async function addJingle(res) {
     const samples = res.args.samples.map(s => s.valueOf());
+    const settings = res.args.settings.map(s => s.valueOf());
 
     const sampleTypes = res.args.jingleTypes.map(s => s.valueOf());
 
@@ -115,7 +120,8 @@ async function addJingle(res) {
         samples,
         sampleTypes,
         onSale: false,
-        price: 0
+        price: 0,
+        settings,
     };
 
     const saved = await jingleCtrl.addJingle(jingleData);

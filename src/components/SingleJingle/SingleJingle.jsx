@@ -34,10 +34,12 @@ class SingleJingle extends Component {
   }
 
   loadJingle() {
+   console.log(this.props.settings);
+
     const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
-        sound.volume = this.props.volumes[i];
+        sound.volume = parseInt(this.props.settings[i]) / 100;
       }));
 
     this.setState({ loading: true });
@@ -63,9 +65,11 @@ class SingleJingle extends Component {
       return
     }
 
-    console.log(this.props.delays);
+    let delays = this.props.settings.slice(5, 11);
 
-    this.playWithDelay(this.state.sound, this.props.delays);
+    delays = delays.map(d => parseInt(d));
+
+    this.playWithDelay(this.state.sound, delays);
     this.setState({ start: true });
   };
 

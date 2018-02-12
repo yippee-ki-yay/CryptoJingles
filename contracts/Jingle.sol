@@ -22,8 +22,7 @@ contract Jingle is Ownable, ERC721 {
     mapping(bytes32 => bool) public uniqueJingles;
     
     mapping(uint => uint[]) public soundEffects;
-    mapping(uint => uint[]) public volumes;
-    mapping(uint => uint[]) public delays;
+    mapping(uint => uint[20]) public settings;
     
     uint public numOfJingles;
     
@@ -33,8 +32,8 @@ contract Jingle is Ownable, ERC721 {
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     event EffectAdded(uint indexed jingleId, uint[] effectParams);
-    event Composed(uint indexed jingleId, address indexed owner, 
-                uint[5] samples, uint[5] jingleTypes, string name, string author);
+    event Composed(uint indexed jingleId, address indexed owner, uint[5] samples, uint[5] jingleTypes,
+            string name, string author, uint8[20] settings);
     
     modifier onlyCryptoJingles() {
         require(msg.sender == cryptoJingles);
@@ -92,7 +91,7 @@ contract Jingle is Ownable, ERC721 {
     }
     
     function composeJingle(address _owner, uint[5] jingles, 
-    uint[5] jingleTypes, string name, string author, uint[5] _volumes, uint[5] _delays) public onlyCryptoJingles {
+    uint[5] jingleTypes, string name, string author, uint8[20] _settings) public onlyCryptoJingles {
         
         uint _jingleId = numOfJingles;
         
@@ -103,8 +102,7 @@ contract Jingle is Ownable, ERC721 {
         tokensOwned[_owner].push(_jingleId);
         
         samplesInJingle[_jingleId] = jingles;
-        volumes[_jingleId] = _volumes;
-        delays[_jingleId] = _delays;
+        settings[_jingleId] = _settings;
         
         tokenPosInArr[_jingleId] = tokensOwned[_owner].length - 1;
         
@@ -117,7 +115,8 @@ contract Jingle is Ownable, ERC721 {
             author: author
         });
         
-        Composed(numOfJingles, _owner, jingles, jingleTypes, name, author);
+        Composed(numOfJingles, _owner, jingles, jingleTypes, 
+        name, author, _settings);
         
         numOfJingles++;
     }
