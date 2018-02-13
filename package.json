@@ -50,6 +50,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "canvas": "^1.6.9",
     "clamp": "^1.0.1",
     "color-luminance": "^2.1.0",
     "fastclick": "^1.0.6",
@@ -58,7 +59,9 @@
     "howler": "^2.0.8",
     "immutability-helper": "^2.4.0",
     "lerp": "^1.0.3",
+    "map-limit": "^0.0.1",
     "new-array": "^1.0.0",
+    "pad-left": "^2.1.0",
     "pizzicato": "^0.6.3",
     "prop-types": "^15.6.0",
     "raf-loop": "^1.1.3",
