@@ -1,8 +1,9 @@
-import { UPDATE_VOLUME, UPDATE_DELAY } from '../constants/actionTypes';
+import { UPDATE_VOLUME, UPDATE_DELAY, UPDATE_CUTS } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   volumes: [50, 50, 50, 50, 50],
-  delays: [0, 0, 0, 0, 0]
+  delays: [0, 0, 0, 0, 0],
+  cuts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,6 +20,14 @@ export default (state = INITIAL_STATE, action) => {
 
       updatedState.delays[payload.index] = payload.delay;
       return updatedState;
+
+    case UPDATE_CUTS:
+      const cutState = Object.assign({}, state);
+
+      cutState.cuts[payload.index] = payload.cuts.min;
+      cutState.cuts[payload.index + 5] = payload.cuts.max;
+
+      return cutState;
 
     default:
       return state;

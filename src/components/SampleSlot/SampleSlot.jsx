@@ -5,7 +5,7 @@ import InputRange from 'react-input-range';
 import { getJingleMetadata } from '../../getMockData';
 import { getColorForRarity } from '../../actions/profileActions';
 
-import { updateVolume, updateDelay } from '../../actions/composeActions';
+import { updateVolume, updateDelay, updateCuts } from '../../actions/composeActions';
 
 import './SampleSlot.css';
 
@@ -48,8 +48,16 @@ class SampleSlot extends Component {
     this.setState({ delayValue: parseFloat(value.toFixed(1)) });
   }
 
+  handleCutsChange = (value) => {
+    this.setState({ range: { 
+      min: parseFloat(value.min.toFixed(1)), 
+      max: parseFloat(value.max.toFixed(1))
+    }});
+  }
+
   render() {
-    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop, updateVolume, updateDelay, index } = this.props;
+    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop,
+       updateVolume, updateDelay, updateCuts, index } = this.props;
     let jingle = null;
 
     const isActive = isOver && canDrop;
@@ -75,8 +83,15 @@ class SampleSlot extends Component {
       rarityColor = getColorForRarity(jingle.rarity);
     }
 
+    let maxLength = 10;
+
+    if (lastDroppedItem) {
+      maxLength = getJingleMetadata(lastDroppedItem.type).length;
+    }
+
     const formatVolume = value => value + '%';
     const formatDelay = value => value.toFixed(1) + 's';
+    const formatCut = value => value.toFixed(1) + 's';
 
     return connectDropTarget(
       <div className="jingle-slot" style={{ ...style, ...additionalStyle }}>
@@ -120,9 +135,13 @@ class SampleSlot extends Component {
 
                 <div className='slider'>
                   <InputRange
+                    minValue={0}
+                    maxValue={maxLength}
                     value={this.state.range}
-                    onChange={value => this.setState({ range: value })}
-                    onChangeComplete={value => console.log(value)} />
+                    formatLabel={formatCut}
+                    step={0.1}
+                    onChange={this.handleCutsChange}
+                    onChangeComplete={value => updateCuts({cuts: this.state.range, index})} />
                 </div>
               </div>
             </div>
@@ -154,6 +173,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   updateVolume,
   updateDelay,
+  updateCuts,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SampleSlot);

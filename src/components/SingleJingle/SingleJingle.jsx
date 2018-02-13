@@ -27,14 +27,33 @@ class SingleJingle extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
-  playWithDelay(group, delays) {
+  playWithDelay(group, settings) {
+
+    let delays = settings.slice(5, 11);
+    let startCuts = settings.slice(10, 16);
+    let endCuts = settings.slice(15, 21);
+
+    delays = delays.map(d => parseInt(d) / 10);
+    startCuts = startCuts.map(d => parseInt(d) / 10);
+    endCuts = endCuts.map(d => parseInt(d) / 10);
+
     group.sounds.forEach((sound, i) => {
-      sound.play(delays[i]);
+      sound.play(delays[i], startCuts[i]);
+
+      const length = sound.getRawSourceNode().buffer.duration;
+
+      const whenToStop = (length + delays[i]) - endCuts[i];
+
+      setTimeout(() => {
+        sound.stop();
+      }, whenToStop * 1000);
+
     });
   }
 
   loadJingle() {
-   console.log(this.props.settings);
+    let delays = this.props.settings.slice(5, 11);
+    delays = delays.map(d => parseInt(d));
 
     const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
@@ -45,8 +64,8 @@ class SingleJingle extends Component {
     this.setState({ loading: true });
 
     Promise.all(sampleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current) => (
-        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+      const longestSound = sources.reduce((prev, current, i) => (
+        (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
 
       longestSound.on('stop', () => { this.setState({ start: false }); });
 
@@ -65,11 +84,9 @@ class SingleJingle extends Component {
       return
     }
 
-    let delays = this.props.settings.slice(5, 11);
+    console.log('Play');
 
-    delays = delays.map(d => parseInt(d));
-
-    this.playWithDelay(this.state.sound, delays);
+    this.playWithDelay(this.state.sound, this.props.settings);
     this.setState({ start: true });
   };
 

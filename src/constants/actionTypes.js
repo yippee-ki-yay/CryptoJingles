@@ -55,3 +55,4 @@ export const PROFILE_LIKE_UNLIKE_JINGLE = 'profile_like_unlike_jingle';
 //Compose actions
 export const UPDATE_VOLUME = 'update_volume';
 export const UPDATE_DELAY = 'update_delay';
+export const UPDATE_CUTS = 'update_cuts';
