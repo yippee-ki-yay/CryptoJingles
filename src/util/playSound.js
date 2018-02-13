@@ -4,8 +4,6 @@ export const playWithDelay = (group, settings) => {
     let startCuts = settings.slice(10, 16);
     let endCuts = settings.slice(15, 21);
 
-    console.log(group.sounds);
-
     delays = delays.map(d => parseInt(d) / 10);
     startCuts = startCuts.map(d => parseInt(d) / 10);
     endCuts = endCuts.map(d => parseInt(d) / 10);
@@ -18,28 +16,26 @@ export const playWithDelay = (group, settings) => {
 
             const length = sound.getRawSourceNode().buffer.duration;
 
-            const whenToStop = (length + delays[i]) - endCuts[i];
+            let whenToStop = length + delays[i];
 
-            console.log(length, whenToStop);
-
+            if (startCuts[i] !== 0) {
+                whenToStop = (endCuts[i] - startCuts[i]) + delays[i];
+            } else if (endCuts[i] !== 0) {
+                whenToStop = ((length) - (length - endCuts[i])) + delays[i];
+            }
+            
             setTimeout(() => {
                 sound.stop();
             }, whenToStop * 1000);
         }
     }
+  }
 
-    // group.sounds.forEach((sound, i) => {
-    //   sound.play(delays[i], startCuts[i]);
+  export const createSettings = (props) => {
+    let { volumes, delays, cuts } = props;
 
-    //   const length = sound.getRawSourceNode().buffer.duration;
+    delays = delays.map(d => d * 10);
+    cuts = cuts.map(c => c * 10);
 
-    //   const whenToStop = (length + delays[i]) - endCuts[i];
-
-    //   console.log(length, delays[i], endCuts[i]);
-
-    //   setTimeout(() => {
-    //     sound.stop();
-    //   }, whenToStop * 1000);
-
-    // });
+    return [...volumes, ...delays, ...cuts];
   }

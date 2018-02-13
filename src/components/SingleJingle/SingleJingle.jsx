@@ -9,6 +9,7 @@ import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
+import { playWithDelay } from '../../util/playSound';
 
 class SingleJingle extends Component {
   constructor (props) {
@@ -26,30 +27,6 @@ class SingleJingle extends Component {
   }
 
   componentWillUnmount() { this.stopSound(); }
-
-  playWithDelay(group, settings) {
-
-    let delays = settings.slice(5, 11);
-    let startCuts = settings.slice(10, 16);
-    let endCuts = settings.slice(15, 21);
-
-    delays = delays.map(d => parseInt(d) / 10);
-    startCuts = startCuts.map(d => parseInt(d) / 10);
-    endCuts = endCuts.map(d => parseInt(d) / 10);
-
-    group.sounds.forEach((sound, i) => {
-      sound.play(delays[i], startCuts[i]);
-
-      const length = sound.getRawSourceNode().buffer.duration;
-
-      const whenToStop = (length + delays[i]) - endCuts[i];
-
-      setTimeout(() => {
-        sound.stop();
-      }, whenToStop * 1000);
-
-    });
-  }
 
   loadJingle() {
     let delays = this.props.settings.slice(5, 11);
@@ -84,9 +61,7 @@ class SingleJingle extends Component {
       return
     }
 
-    console.log('Play');
-
-    this.playWithDelay(this.state.sound, this.props.settings);
+    playWithDelay(this.state.sound, this.props.settings);
     this.setState({ start: true });
   };
 

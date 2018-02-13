@@ -20,7 +20,7 @@ import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
 import { getVolumes } from '../actions/composeActions';
 import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
-import { playWithDelay } from '../util/playSound';
+import { playWithDelay, createSettings } from '../util/playSound';
 
 import '../util/config';
 import './Compose.css';
@@ -160,9 +160,7 @@ class Compose extends Component {
 
   playSound() {
     this.loadGroup(() => {
-      const settings = this.createSettings(this.props);
-
-      console.log(settings);
+      const settings = createSettings(this.props);
 
       playWithDelay(this.state.group, settings);
       this.setState({ playing: true });
@@ -174,15 +172,6 @@ class Compose extends Component {
 
     this.state.group.stop();
     this.setState({ playing: false });
-  }
-
-  createSettings(props) {
-    let { volumes, delays, cuts } = this.props;
-
-    delays = delays.map(d => d * 10);
-    cuts = cuts.map(c => c * 10);
-
-    return [...volumes, ...delays, ...cuts];
   }
 
   createSong = async () => {
@@ -202,7 +191,7 @@ class Compose extends Component {
         return;
       }
 
-      const settings = this.createSettings(this.props);
+      const settings = createSettings(this.props);
 
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');      
