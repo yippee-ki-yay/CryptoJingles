@@ -1,16 +1,30 @@
-// PROBLEM WHEN there is less than 5 samples
-export const playWithDelay = (group, settings) => {
+export const playWithDelay = (group, settings, samplesPos) => {
     let delays = settings.slice(5, 11);
     let startCuts = settings.slice(10, 16);
     let endCuts = settings.slice(15, 21);
+
+    if (!samplesPos) {
+        samplesPos = [
+            { lastDroppedItem: true },
+            { lastDroppedItem: true },
+            { lastDroppedItem: true },
+            { lastDroppedItem: true },
+            { lastDroppedItem: true },
+        ];
+    }
 
     delays = delays.map(d => parseInt(d) / 10);
     startCuts = startCuts.map(d => parseInt(d) / 10);
     endCuts = endCuts.map(d => parseInt(d) / 10);
 
+    let longest = 0;
+
+    let soundIndex = 0;
+    let longestSound = null;
+
     for(let i = 0; i < 5; ++i) {
-        if (group.sounds[i]) {
-            const sound = group.sounds[i];
+        if (samplesPos[i].lastDroppedItem) {
+            const sound = group.sounds[soundIndex];
 
             sound.play(delays[i], startCuts[i]);
 
@@ -23,12 +37,21 @@ export const playWithDelay = (group, settings) => {
             } else if (endCuts[i] !== 0) {
                 whenToStop = ((length) - (length - endCuts[i])) + delays[i];
             }
+
+            if (whenToStop > longest) {
+                longest = whenToStop;
+                longestSound = sound;
+            }
             
             setTimeout(() => {
                 sound.stop();
             }, whenToStop * 1000);
+
+            soundIndex++;
         }
     }
+
+    return longestSound;
   }
 
   export const createSettings = (props) => {

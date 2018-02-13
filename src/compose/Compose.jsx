@@ -20,7 +20,7 @@ import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
 import { getVolumes } from '../actions/composeActions';
 import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
-import { playWithDelay, createSettings } from '../util/playSound';
+import { playWithDelay, createSettings } from '../util/soundHelper';
 
 import '../util/config';
 import './Compose.css';
@@ -134,8 +134,6 @@ class Compose extends Component {
 
     this.setState({ loadingGroup: true });
 
-    console.log(this.props.volumes);
-
     selectedSongSources = selectedSongSources.map(({ source }, i) =>
       new Promise((resolve) => { const sound = new Sound(source, () => {
         sound.volume = this.props.volumes[i] / 100;
@@ -162,7 +160,7 @@ class Compose extends Component {
     this.loadGroup(() => {
       const settings = createSettings(this.props);
 
-      playWithDelay(this.state.group, settings);
+      playWithDelay(this.state.group, settings, this.state.sampleSlots);
       this.setState({ playing: true });
     });
   }

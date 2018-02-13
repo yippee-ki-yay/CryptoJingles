@@ -9,7 +9,7 @@ import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
-import { playWithDelay } from '../../util/playSound';
+import { playWithDelay } from '../../util/soundHelper';
 
 class SingleJingle extends Component {
   constructor (props) {

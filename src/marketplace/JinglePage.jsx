@@ -10,7 +10,7 @@ import { getColorForRarity } from '../actions/profileActions';
 import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
-import { playWithDelay, createSettings } from '../util/playSound';
+import { playWithDelay } from '../util/soundHelper';
 
 import './JinglePage.css';
 
@@ -133,10 +133,10 @@ class JinglePage extends Component {
     const delays = this.props.delays;
 
     Promise.all(jingleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current, i) => (
-        (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
+      // const longestSound = sources.reduce((prev, current, i) => (
+      //   (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
 
-      longestSound.on('stop', () => { this.setState({ start: false }); });
+      // longestSound.on('stop', () => { this.setState({ start: false }); });
 
       this.setState({
         sound: new Group(sources),
@@ -150,10 +150,15 @@ class JinglePage extends Component {
   playSound = () => {
     if (this.state.sound === null) {
       this.loadJingle();
-      return
+      return;
     }
 
-    playWithDelay(this.state.sound, this.state.jingle.settings);
+    const sound = playWithDelay(this.state.sound, this.state.jingle.settings);
+
+    console.log(sound);
+
+    sound.on('stop', () => { this.setState({ start: false }); });
+
     this.setState({ start: true });
   };
 
