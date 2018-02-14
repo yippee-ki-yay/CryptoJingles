@@ -1,36 +1,36 @@
-var mapLimit = require('map-limit');
-var newArray = require('new-array');
-var Canvas = require('canvas');
-var Image = Canvas.Image;
-var padLeft = require('pad-left');
-var assign = require('object-assign');
+const mapLimit = require('map-limit');
+const newArray = require('new-array');
+const Canvas = require('canvas');
+const Image = Canvas.Image;
+const padLeft = require('pad-left');
+const assign = require('object-assign');
 
-var path = require('path');
-var createRenderer = require('./createRenderer');
-var fs = require('fs');
+const path = require('path');
+const createRenderer = require('./createRenderer');
+const fs = require('fs');
 
 module.exports = function (opt, cb) {
-  var renderer;
-  var pixelRatio = typeof opt.pixelRatio === 'number' ? opt.pixelRatio : 1;
-  var canvas = new Canvas(opt.width * pixelRatio, opt.height * pixelRatio);
-  var context = canvas.getContext('2d');
+  let renderer;
+  const pixelRatio = typeof opt.pixelRatio === 'number' ? opt.pixelRatio : 1;
+  const canvas = new Canvas(opt.width * pixelRatio, opt.height * pixelRatio);
+  const context = canvas.getContext('2d');
 
-  var steps = opt.steps;
-  var frameDigits = String(steps).length;
-  var seedName = typeof opt.seedName !== 'undefined' ? ('_' + opt.seedName) : '';
-  var filename = (opt.filename || 'render') + seedName;
-  var outputDir = opt.outputDir || process.cwd();
-  var frame = 0;
-  var interval = typeof opt.interval === 'number' ? opt.interval : 0.0001;
-  var cwd = opt.cwd || process.cwd();
+  const steps = opt.steps;
+  const frameDigits = String(steps).length;
+  const seedName = typeof opt.seedName !== 'undefined' ? ('_' + opt.seedName) : '';
+  const filename = (opt.filename || 'render') + seedName;
+  const outputDir = opt.outputDir || process.cwd();
+  let frame = 0;
+  const interval = typeof opt.interval === 'number' ? opt.interval : 0.0001;
+  const cwd = opt.cwd || process.cwd();
 
   fs.readFile(path.resolve(cwd, opt.backgroundSrc), (err, buffer) => {
     if (err) return cb(err);
-    var backgroundImage = new Image();
+    const backgroundImage = new Image();
     backgroundImage.src = buffer;
 
-    var debugLuma = opt.debugLuma;
-    var asVideoFrames = opt.asVideoFrames;
+    const debugLuma = opt.debugLuma;
+    const asVideoFrames = opt.asVideoFrames;
 
     renderer = createRenderer(assign(opt, {
       backgroundImage: backgroundImage,
@@ -48,7 +48,7 @@ module.exports = function (opt, cb) {
 
   function render () {
     renderer.clear();
-    for (var i = 0; i < steps + 1; i++) {
+    for (let i = 0; i < steps + 1; i++) {
       renderer.step(interval);
       frame++;
     }
@@ -58,8 +58,7 @@ module.exports = function (opt, cb) {
   function renderAsync () {
     renderer.clear();
 
-    var array = newArray(steps);
-    var i = 0;
+    const array = newArray(steps);
     mapLimit(array, 1, (item, next) => {
       renderer.step(interval);
       outputCanvas(true, next);
@@ -70,8 +69,8 @@ module.exports = function (opt, cb) {
   }
 
   function outputCanvas (isAsync, cb) {
-    var stamp = isAsync ? ('_' + padLeft(frame, frameDigits, '0')) : '';
-    var filePath = path.resolve(outputDir, filename + stamp + '.png');
+    const stamp = isAsync ? ('_' + padLeft(frame, frameDigits, '0')) : '';
+    const filePath = path.resolve(outputDir, filename + stamp + '.png');
     fs.writeFile(filePath, canvas.toBuffer(), cb);
   }
 };
