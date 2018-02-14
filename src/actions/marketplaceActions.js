@@ -11,7 +11,6 @@ import {
  * @return {Function}
  */
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
-  const address = window.web3.eth.accounts[0];
   const { currentPage, category, sorting, } = getState().marketplace;
   let jingles = [];
 
@@ -21,14 +20,20 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
 
     const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
 
-    if (jingleIds.length > 0) {
+    if (window.web3.eth && jingleIds.length > 0) {
+      const address = window.web3.eth.accounts[0];
+
       const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
       jingles = response.data.map((_jingle, index) => ({
         ..._jingle, liked: likedJinglesResponse.data[index]
       }));
-    } else {
-      jingles = response.data;
     }
+
+    if (!window.web3.eth && jingleIds.length > 0) {
+      jingles = response.data.map((_jingle, index) => ({ ..._jingle, liked: false }));
+    }
+
+    if (jingleIds.length === 0) jingles = response.data;
 
     // false for all jingles, true to get jingles on sale
     const num = await axios(`${API_URL}/jingles/count/filter/${sorting.value}/sale/${(category.value === 'sale').toString()}`);

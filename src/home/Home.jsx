@@ -21,41 +21,13 @@ class Home extends Component {
       sample4: { jingleType: 0, ...getJingleMetadata(0) },
       jingle: null,
     };
-
-    this.likeUnlikeHomeJingle = this.likeUnlikeHomeJingle.bind(this);
   }
 
   async componentWillMount() {
-    const address = window.web3.eth.accounts[0];
-
     const jingleData = await axios(`${API_URL}/jingle/${30}`);
     const jingle = jingleData.data;
 
-    const likedJinglesResponse = await axios(`${API_URL}/jingle/check-liked/${address}/${30}`);
-    jingle.liked = likedJinglesResponse.data;
     this.setState({ jingle });
-  };
-
-  likeUnlikeHomeJingle = async () => {
-    const { jingleId } = this.state.jingle;
-    const action = !this.state.jingle.liked;
-
-    const actionString = action ? 'like' : 'unlike';
-    const address = window.web3.eth.accounts[0];
-
-    try {
-      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
-
-      this.setState({
-        jingle: {
-          ...this.state.jingle,
-          likeCount: response.data.likeCount,
-          liked: action
-        }
-      })
-    } catch (err) {
-      // TODO Handle this in the future
-    }
   };
 
   render() {
@@ -68,7 +40,7 @@ class Home extends Component {
           </div>
 
           <div className="btn-wrapper">
-            <Link to={`/profile/${window.web3.eth.accounts[0]}`}>
+            <Link to={window.web3.eth ? `/profile/${window.web3.eth.accounts[0]}` : '/marketplace'}>
               <button className="btn buy-button">
                 Start jamming!
               </button>
@@ -120,7 +92,7 @@ class Home extends Component {
 
         <div className="explanation-section-2">
           <div className="home-samples-wrapper">
-            <div className="home-samples" onClick={this.likeUnlikeHomeJingle}>
+            <div className="home-samples">
               { this.state.jingle && <SingleJingle {...this.state.jingle} /> }
             </div>
           </div>

@@ -148,8 +148,8 @@ class Profile extends Component {
 
         {
           !isValidProfile &&
-          <div className="profile-invalid-address">
-            Provided Address is not valid
+          <div className="not-valid-message">
+            Provided address is not valid.
           </div>
         }
       </div>

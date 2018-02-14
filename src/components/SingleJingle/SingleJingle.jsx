@@ -10,6 +10,7 @@ import { getJingleMetadata } from '../../getMockData';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
 import { playWithDelay } from '../../util/soundHelper';
+import { formatSalePrice } from '../../actions/utils';
 
 class SingleJingle extends Component {
   constructor (props) {
@@ -86,7 +87,7 @@ class SingleJingle extends Component {
             onSale &&
             <div className="header-label">
               <span>On sale for:</span>
-              {window.web3.fromWei(price, 'ether').slice(0, 8)}Ξ
+              {formatSalePrice(price)}Ξ
             </div>
           }
 
