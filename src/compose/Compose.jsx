@@ -189,11 +189,13 @@ class Compose extends Component {
         return;
       }
 
+      const addresses = await window.web3.eth.getAccounts();
+
       const settings = createSettings(this.props);
 
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');      
-      const res = await window.contract.composeJingle(name, jingleIds, settings, { from: window.web3.eth.accounts[0] });
+      const res = await window.contract.composeJingle(name, jingleIds, settings, { from: addresses[0] });
 
       this.setState({ loading: true });
 

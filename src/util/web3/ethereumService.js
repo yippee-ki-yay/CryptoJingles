@@ -26,7 +26,8 @@ export const parseSamples = (samples) => {
 
 export const getSamples = (_address = null) =>
   new Promise(async (resolve) => {
-    const addresss = _address || window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+    const address = _address || addresses[0];
 
     //setup contracts
     const samplesContract = contract(Sample);
@@ -37,7 +38,7 @@ export const getSamples = (_address = null) =>
 
     const samplesInstance = await samplesContract.at(SampleAddress);
 
-    const samples = await samplesInstance.getAllSamplesForOwner(addresss);
+    const samples = await samplesInstance.getAllSamplesForOwner(address);
 
     resolve(parseSamples(samples));
   });
@@ -47,9 +48,11 @@ export const getSamples = (_address = null) =>
       const jinglesContract = contract(Jingle);
       jinglesContract.setProvider(web3.currentProvider);
 
+      const addresses = await window.web3.eth.getAccounts();
+
       const jinglesInstance = await jinglesContract.at(JingleAddress);
 
-      const jingles = await jinglesInstance.getAllJingles.call(window.web3.eth.accounts[0]);
+      const jingles = await jinglesInstance.getAllJingles.call(addresses[0]);
 
       return jingles.map(j => j.valueOf());
 

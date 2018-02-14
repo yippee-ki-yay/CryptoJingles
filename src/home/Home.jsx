@@ -26,7 +26,8 @@ class Home extends Component {
   }
 
   async componentWillMount() {
-    const address = window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+    const address = addresses[0];
 
     const jingleData = await axios(`${API_URL}/jingle/${30}`);
     const jingle = jingleData.data;
@@ -41,7 +42,8 @@ class Home extends Component {
     const action = !this.state.jingle.liked;
 
     const actionString = action ? 'like' : 'unlike';
-    const address = window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+    const address = addresses[0];
 
     try {
       const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });

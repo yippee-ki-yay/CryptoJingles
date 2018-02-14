@@ -48,7 +48,9 @@ class JinglePage extends Component {
   componentWillUnmount() { this.stopSound(); }
 
   getJingle = (jingleId) => new Promise(async (resolve) => {
-    const address = window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+
+    const address = addresses[0];
 
     let jingleData = await axios(`${API_URL}/jingle/${jingleId}`);
     jingleData = jingleData.data;
@@ -66,15 +68,20 @@ class JinglePage extends Component {
     }
 
     const jingle = await this.getJingle(id);
-    const account = window.web3.eth.accounts[0];
-    const isOwner = jingle.owner === account;
+    const addresses = await window.web3.eth.getAccounts();
 
-    this.setState({ jingle, account, isOwner });
+    const address = addresses[0];
+
+    const isOwner = jingle.owner === address;
+
+    this.setState({ jingle, address, isOwner });
   };
 
   purchase = async () => {
     let jingle = this.state.jingle;
-    const account = window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+
+    const account = addresses[0];
 
     const id = guid();
     this.props.addPendingTx(id, 'Buy Jingle');
@@ -94,9 +101,11 @@ class JinglePage extends Component {
 
     let jingle = this.state.jingle;
 
+    const addresses = await window.web3.eth.getAccounts();
+
     const id = guid();
     this.props.addPendingTx(id, 'Sell Jingle');
-    await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: window.web3.eth.accounts[0]});
+    await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: addresses[0]});
     this.props.removePendingTx(id);
 
     jingle = await this.getJingle(jingle.jingleId);
@@ -106,9 +115,11 @@ class JinglePage extends Component {
   cancelSale = async () => {
     let jingle = this.state.jingle;
 
+    const addresses = await window.web3.eth.getAccounts();
+
     const id = guid();
     this.props.addPendingTx(id, 'Cancel Sale');
-    await window.marketplaceContract.cancel(jingle.jingleId, {from: window.web3.eth.accounts[0]});
+    await window.marketplaceContract.cancel(jingle.jingleId, {from: addresses[0]});
     this.props.removePendingTx(id);
 
     jingle = await this.getJingle(jingle.jingle);
@@ -169,12 +180,33 @@ class JinglePage extends Component {
     this.setState({ start: false });
   };
 
+  signString = (account, stringToSign) =>
+    new Promise((resolve, reject) => {
+      const msgParams = [{
+        type: 'string',
+        name: 'Message',
+        value: stringToSign,
+      }];
+
+      window.web3.givenProvider.sendAsync({
+        method: 'eth_signTypedData',
+        params: [msgParams, account],
+        from: account,
+      }, (err, data) => {
+        if (err || data.error) return reject(data.error);
+        return resolve(data.result);
+      });
+  });
+
   likeUnlikeJingle = async (jingleId, action) => {
     const actionString = action ? 'like' : 'unlike';
-    const address = window.web3.eth.accounts[0];
-
+    
     try {
-      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
+      const addresses = await window.web3.eth.getAccounts();
+
+      const sig = await this.signString(addresses[0], "CryptoJingles");
+
+      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address: addresses[0], jingleId, sig });
 
       this.setState({
         jingle: {
@@ -184,7 +216,7 @@ class JinglePage extends Component {
         }
       })
     } catch (err) {
-      // TODO Handle this in the future
+      console.log(err);
     }
   };
 

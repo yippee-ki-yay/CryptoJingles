@@ -11,7 +11,9 @@ import {
  * @return {Function}
  */
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
-  const address = window.web3.eth.accounts[0];
+  const addresses = await window.web3.eth.getAccounts();
+  const address = addresses[0];
+
   const { currentPage, category, sorting, } = getState().marketplace;
   let jingles = [];
 
@@ -87,7 +89,9 @@ export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
  */
 export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch, getState) => {
     const actionString = action ? 'like' : 'unlike';
-    const address = window.web3.eth.accounts[0];
+
+    const addresses = await window.web3.eth.getAccounts();
+    const address = addresses[0];
 
     try {
       const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
