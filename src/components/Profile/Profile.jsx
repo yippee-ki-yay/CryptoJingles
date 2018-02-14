@@ -11,7 +11,7 @@ import {
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
-import './Profile.css';
+import './Profile.scss';
 import profilePlaceholder from './profile-placeholder.png';
 
 // TODO - add proptypes
