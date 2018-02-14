@@ -3,12 +3,23 @@ import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
-  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE,
+  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
 import { SAMPLE_PRICE } from '../util/config';
 import { API_URL } from '../util/config';
+
+
+/**
+ * Dispatches action to show that the profile address URL param
+ * is not valid and that there can't be any profile with that address
+ *
+ * @return {Function}
+ */
+export const setInvalidProfile = (pageNum) => (dispatch) => {
+  dispatch({ type: SET_INVALID_PROFILE });
+};
 
 /**
  * Sets the profile address to be equal to the route para

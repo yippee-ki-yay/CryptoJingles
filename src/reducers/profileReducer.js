@@ -3,10 +3,11 @@ import {
   SET_PROFILE_JINGLES, SORTING_OPTIONS, CATEGORY_OPTIONS, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT,
   TOGGLE_PROFILE_AUTHOR, SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE,
   SET_PROFILE_ADDRESS, MARKETPLACE_JINGLES_PER_PAGE, SET_MY_SAMPLES_SORTING, SAMPLE_SORTING_OPTIONS,
-  PROFILE_LIKE_UNLIKE_JINGLE
+  PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
+  isValidProfile: true,
   author: 'Satoshi Nakajingles',
   authorEdit: 'Satoshi Nakajingles',
   editAuthorActive: false,
@@ -33,6 +34,9 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_ACTIVE_PROFILE_TAB:
       return { ...state, tabs: payload, loading: true };
+
+    case SET_INVALID_PROFILE:
+      return { ...state, isValidProfile: false };
 
     case SET_PROFILE_SAMPLES:
       return { ...state, mySamples: payload, loading: false };
@@ -73,7 +77,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, currentJinglesPage: payload };
 
     case SET_PROFILE_ADDRESS:
-      return { ...state, profileAddress: payload };
+      return { ...INITIAL_STATE, profileAddress: payload };
 
     case SET_MY_SAMPLES_SORTING:
       return { ...state, ...payload };

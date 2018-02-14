@@ -116,3 +116,9 @@
     cursor: pointer;
     color: #239D60;
 }
+
+.profile-invalid-address {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 100px;
+}

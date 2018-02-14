@@ -52,6 +52,7 @@
     "axios": "^0.17.1",
     "clamp": "^1.0.1",
     "color-luminance": "^2.1.0",
+    "ethereum-address": "^0.0.4",
     "fastclick": "^1.0.6",
     "gh-pages": "^1.0.0",
     "gl-vec2": "^1.0.0",

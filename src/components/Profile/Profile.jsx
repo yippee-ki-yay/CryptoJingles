@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ethereumAddress from 'ethereum-address';
 import MySamples from '../../mySamples/MySamples';
 import MyJingles from '../../myJingles/MyJingles';
 import MySongs from '../MySongs/MySongs';
 import MyAlbums from '../MyAlbums/MyAlbums';
 import {
   setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
-  setProfileAddress
+  setProfileAddress, setInvalidProfile
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
@@ -16,6 +17,8 @@ import profilePlaceholder from './profile-placeholder.png';
 // TODO - add proptypes
 class Profile extends Component {
   componentWillMount() {
+    if (!this.isValidProfile(this.props.params.address)) return;
+
     this.props.setProfileAddress(this.props.params.address);
     this.props.getAuthor();
     this.props.checkIfOwnerProfile();
@@ -23,26 +26,39 @@ class Profile extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.params.address === this.props.params.address) return;
+    if (!this.isValidProfile(newProps.params.address)) return;
 
     this.props.setProfileAddress(newProps.params.address);
     this.props.getAuthor();
     this.props.checkIfOwnerProfile();
   }
 
+  isValidProfile = (address) => {
+    const isValid = ethereumAddress.isAddress(address);
+    if (isValid) return true;
+
+    this.props.setInvalidProfile();
+    return false;
+  };
+
   render() {
-    const { tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm } = this.props;
+    const {
+      tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile
+    } = this.props;
     const { setActiveTab, toggleEditAuthor, onEditAuthorChange } = this.props;
     const activeTab = tabs.find((_tab) => _tab.active).value;
 
     return (
       <div className="container profile-wrapper">
-
-        { /* TODO - create component out of this, fix html layout */  }
-        <div className="profile-info-wrapper">
-          <div className="profile-image-wrapper">
-            <img src={profilePlaceholder} alt="profile image"/>
-            <div>
-              <h2>
+        { /* TODO - create component out of this, fix html layout */ }
+        {
+          isValidProfile &&
+          <div>
+            <div className="profile-info-wrapper">
+              <div className="profile-image-wrapper">
+                <img src={profilePlaceholder} alt="profile placeholder"/>
+                <div>
+                  <h2>
                 <span className="author">
                   { !isOwner && author}
 
@@ -90,35 +106,44 @@ class Profile extends Component {
                     </div>
                   }
                 </span>
-              </h2>
-              <h4>{ params.address }</h4>
-            </div>
-          </div>
-
-          <div className="separator" />
-
-          { /* TODO - create component out of this */  }
-          <div className="tabs-wrapper">
-            {
-              tabs.map(({ label, value, active }) => (
-                <div
-                  key={ value }
-                  className={`tab ${active ? 'active' : ''}`}
-                  onClick={() => { setActiveTab(value); }}
-                >
-                  { label }
+                  </h2>
+                  <h4>{ params.address }</h4>
                 </div>
-              ))
-            }
+              </div>
+
+              <div className="separator" />
+
+              { /* TODO - create component out of this */  }
+              <div className="tabs-wrapper">
+                {
+                  tabs.map(({ label, value, active }) => (
+                    <div
+                      key={ value }
+                      className={`tab ${active ? 'active' : ''}`}
+                      onClick={() => { setActiveTab(value); }}
+                    >
+                      { label }
+                    </div>
+                  ))
+                }
+              </div>
+
+              <div className="separator" />
+            </div>
+
+            { activeTab === tabs[0].value && <MySamples address={this.props.params.address} />  }
+            { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} />  }
+            { activeTab === tabs[2].value && <MySongs />  }
+            { activeTab === tabs[3].value && <MyAlbums /> }
           </div>
+        }
 
-          <div className="separator" />
-        </div>
-
-        { activeTab === tabs[0].value && <MySamples address={this.props.params.address} />  }
-        { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} />  }
-        { activeTab === tabs[2].value && <MySongs />  }
-        { activeTab === tabs[3].value && <MyAlbums /> }
+        {
+          !isValidProfile &&
+          <div className="profile-invalid-address">
+            Provided Address is not valid
+          </div>
+        }
       </div>
     )
   }
@@ -129,12 +154,13 @@ const mapStateToProps = (state) => ({
   editAuthorActive: state.profile.editAuthorActive,
   isOwner: state.profile.isOwner,
   author: state.profile.author,
-  authorEdit: state.profile.authorEdit
+  authorEdit: state.profile.authorEdit,
+  isValidProfile: state.profile.isValidProfile
 });
 
 const mapDispatchToProps = {
   setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
-  setProfileAddress
+  setProfileAddress, setInvalidProfile
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
