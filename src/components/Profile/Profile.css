@@ -116,3 +116,19 @@
     cursor: pointer;
     color: #239D60;
 }
+
+.profile-invalid-address {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 100px;
+}
+
+.profile-info-wrapper .etherscan-link  {
+    color: black;
+    transition: 0.1s ease-in;
+    text-decoration: none;
+}
+
+.profile-info-wrapper .etherscan-link:hover {
+    opacity: 0.6;
+}

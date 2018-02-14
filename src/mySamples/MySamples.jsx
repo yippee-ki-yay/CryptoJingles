@@ -62,6 +62,12 @@ class MySamples extends Component {
               onSortChange={onMySamplesSort}
             />
 
+            {
+              (mySamples.length > 0) &&
+              !loading &&
+              <div className="my-jingles-num">{ mySamples.length } samples</div>
+            }
+
             <div className="samples-wrapper">
               { loading && <div className="loader-wrapper"><BoxLoader /></div> }
 
