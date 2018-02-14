@@ -175,8 +175,6 @@ class Compose extends Component {
   createSong = async () => {
     const id = guid();
 
-    
-
     try {
       const selectedSongSources = this.state.mySamples.filter(({ id }) =>
         this.state.droppedBoxIds.find((selectedId) => id === selectedId)
@@ -321,6 +319,12 @@ class Compose extends Component {
                 options={this.state.sortingOptions}
                 onSortChange={this.onComposeSamplesSort}
               />
+
+              {
+                (this.state.mySamples.length > 0) &&
+                !this.state.loading &&
+                <div className="my-jingles-num">{ this.state.mySamples.length } samples</div>
+              }
 
               {
                 !window.web3.eth &&
