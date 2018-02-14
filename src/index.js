@@ -21,12 +21,12 @@ import store from './store';
 // Initialize react-router-redux.
 const history = syncHistoryWithStore(hashHistory, store);
 
-const startApp = () => {
+const startApp = async () => {
   if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', () => { FastClick.attach(document.body); }, false);
   }
 
-  getWeb3();
+  await getWeb3(store.dispatch);
 
   ReactDOM.render((
     <div>

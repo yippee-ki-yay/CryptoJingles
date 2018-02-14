@@ -78,7 +78,7 @@ class SingleJingle extends Component {
   };
 
   render() {
-    const { jingleId, author, name, onSale, price, likeCount, liked } = this.props;
+    const { jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM } = this.props;
 
     return (
       <div key={jingleId} className="single-song">
@@ -118,7 +118,7 @@ class SingleJingle extends Component {
             <span>#{ jingleId }</span>
             <span>
               <span onClick={() => { this.likeJingle(jingleId, !liked); }}>
-                <Heart active={liked} size="30" />
+                <Heart active={liked} size="30" canLike={hasMM && !lockedMM} />
               </span>
               <span>{ likeCount }</span>
             </span>
@@ -135,6 +135,8 @@ class SingleJingle extends Component {
 const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
+  hasMM: state.app.hasMM,
+  lockedMM: state.app.lockedMM,
 });
 
 const mapDispatchToProps = {

@@ -1,6 +1,7 @@
 /* eslint-disable */
 // TODO - set web3 as eslint global
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
 import AudioPlayer from './components/AudioPlayer/AudioPlayer';
@@ -13,13 +14,8 @@ import './css/theme.min.css';
 import './App.css';
 
 class App extends Component {
-  componentDidMount() {
-    //TODO: check in a diff. way
-    // if (!window.web3.eth && !window.web3.eth.accounts[0]) alert('Unlock MetaMask in order to use Crypto Jingles');
-  }
-
   render() {
-
+    const { lockedMM, hasMM, address } = this.props;
     return (
       <div>
         <header className="navbar navbar-default navbar-fixed-top header-wrapper">
@@ -46,8 +42,8 @@ class App extends Component {
                 </li>
                 <li>
                   {
-                    window.web3.eth && 
-                    <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Profile</Link>
+                    hasMM && !lockedMM &&
+                    <Link to={`/profile/${address}`}>Profile</Link>
                   }
                 </li>
               </ul>
@@ -69,4 +65,10 @@ class App extends Component {
   }
 }
 
-export default App
+const mapStateToProps = state => ({
+  hasMM: state.app.hasMM,
+  lockedMM: state.app.lockedMM,
+  address: state.app.address,
+});
+
+export default connect(mapStateToProps)(App);

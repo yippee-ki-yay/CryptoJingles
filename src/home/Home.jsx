@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import axios from 'axios';
 import { getJingleMetadata } from '../getMockData';
@@ -8,7 +9,6 @@ import SingleJingle from '../components/SingleJingle/SingleJingle';
 
 import "./Home.css";
 import bigLogo from './bigLogo.png';
-
 
 class Home extends Component {
   constructor(props) {
@@ -31,6 +31,8 @@ class Home extends Component {
   };
 
   render() {
+    const { lockedMM, hasMM, address } = this.props;
+
     return(
       <div className="container home">
         <div className="homepage-main">
@@ -40,7 +42,7 @@ class Home extends Component {
           </div>
 
           <div className="btn-wrapper">
-            <Link to={window.web3.eth ? `/profile/${window.web3.eth.accounts[0]}` : '/marketplace'}>
+            <Link to={hasMM && !lockedMM ? `/profile/${address}` : '/marketplace'}>
               <button className="btn buy-button">
                 Start jamming!
               </button>
@@ -138,4 +140,10 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+  hasMM: state.app.hasMM,
+  lockedMM: state.app.lockedMM,
+  address: state.app.address,
+});
+
+export default connect(mapStateToProps)(Home);

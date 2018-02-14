@@ -52,15 +52,11 @@ export const setActiveTab = (value) => (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const checkIfOwnerProfile = async () => async (dispatch, getState) => {
-  const addresses = await window.web3.eth.getAccounts();
+export const checkIfOwnerProfile = () => async (dispatch, getState) => {
+  const state = getState();
+  const isOwner = state.profile.profileAddress === state.app.address;
 
-
-  dispatch({
-    type: SET_PROFILE_IS_OWNER,
-    payload: {
-      isOwner: addresses[0] === getState().profile.profileAddress,
-    }});
+  dispatch({ type: SET_PROFILE_IS_OWNER, payload: { isOwner }});
 };
 
 /**
@@ -112,10 +108,10 @@ export const getAuthor = () => async (dispatch, getState) => {
 export const submitEditAuthorForm = () => async (dispatch, getState) => {
   const id = guid();
   try {
-    const addresses = await window.web3.eth.getAccounts();
-    const address = addresses[0];
+    const state = getState();
+    const address = state.app.address;
 
-    const newAuthorName = getState().profile.authorEdit;
+    const newAuthorName = state.profile.authorEdit;
 
     dispatch(addPendingTx(id, 'Edit author name'));
     dispatch({ type: SET_PENDING_AUTHOR });
@@ -197,10 +193,11 @@ export const getColorForRarity = (rarity) => {
 /**
  * Gets all samples from the contract for the current address
  *
+ * @param {String} address
  * @return {Function}
  */
-export const getSamplesForUser = () => async (dispatch, getState) => {
-  const mySamples = await getSamples(getState().profile.profileAddress);
+export const getSamplesForUser = (address) => async (dispatch, getState) => {
+  const mySamples = await getSamples(address);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
   dispatch(onMySamplesSort(getState().profile.selectedMySampleSort));
 };
@@ -214,16 +211,16 @@ export const buySamples = () => async (dispatch, getState) => {
   const id = guid();
 
   try {
-    const addresses = await window.web3.eth.getAccounts();
-    const account = addresses[0];
+    const state = getState();
+    const address = state.app.address;
 
-    const numJinglesToBuy = getState().profile.numSamplesToBuy;
+    const numJinglesToBuy = state.profile.numSamplesToBuy;
 
     dispatch(addPendingTx(id, 'Buy sample'));
-    await window.contract.buySamples(parseInt(numJinglesToBuy, 10), account, {from: account, value: numJinglesToBuy * SAMPLE_PRICE});
+    await window.contract.buySamples(parseInt(numJinglesToBuy, 10), address, {from: address, value: numJinglesToBuy * SAMPLE_PRICE});
     dispatch(removePendingTx(id));
 
-    dispatch(getSamplesForUser(account));
+    dispatch(getSamplesForUser(address));
   } catch(err) {
     dispatch(removePendingTx(id));
   }
@@ -255,10 +252,10 @@ export const getJinglesForUser = () => async (dispatch, getState) => {
   const response = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
   const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
 
-  const addresses = await window.web3.eth.getAccounts();
+  const { address } = getState().app;
 
   if (jingleIds.length > 0) {
-    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${addresses[0]}/${jingleIds}`);
+    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
     jingles = response.data.map((_jingle, index) => ({
       ..._jingle, liked: likedJinglesResponse.data[index]
     }));
@@ -319,11 +316,9 @@ export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
  * @return {Function}
  */
 // TODO - extract this to util function that takes dispatchType & collection
-export const likeUnLikeProfileJingle = async (jingleId, action) => async (dispatch, getState) => {
+export const likeUnLikeProfileJingle = (jingleId, action) => async (dispatch, getState) => {
   const actionString = action ? 'like' : 'unlike';
-
-  const addresses = await window.web3.eth.getAccounts();
-  const address = addresses[0];
+  const { address } = getState().app;
 
   try {
     const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });

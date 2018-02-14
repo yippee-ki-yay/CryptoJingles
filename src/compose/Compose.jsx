@@ -55,12 +55,12 @@ class Compose extends Component {
   }
 
   async componentWillMount() {
-    if (!window.web3.eth) {
+    if (!this.props.hasMM || this.props.lockedMM) {
       this.setState({ loading: false });
       return;
     }
 
-    const mySamples = await getSamples();
+    const mySamples = await getSamples(this.props.address);
 
     this.setState({ mySamples, loading: false });
     this.onComposeSamplesSort(this.state.selectedSort);
@@ -187,17 +187,15 @@ class Compose extends Component {
         return;
       }
 
-      const addresses = await window.web3.eth.getAccounts();
-
       const settings = createSettings(this.props);
 
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');      
-      const res = await window.contract.composeJingle(name, jingleIds, settings, { from: addresses[0] });
+      const res = await window.contract.composeJingle(name, jingleIds, settings, { from: this.props.address });
 
       this.setState({ loading: true });
 
-      const mySamples = await getSamples();
+      const mySamples = await getSamples(this.props.address);
 
       this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
 
@@ -247,6 +245,8 @@ class Compose extends Component {
   };
 
   render() {
+    const { hasMM, lockedMM } = this.props;
+
       return (
         <DragDropContextProvider backend={HTML5Backend}>
           <ScrollingComponent className="scroll-wrapper">
@@ -290,7 +290,7 @@ class Compose extends Component {
                 </div>
 
                 {
-                  window.web3.eth &&
+                  (hasMM && !lockedMM) &&
                   <form onSubmit={(e) => {e.preventDefault(); }} className="form-horizontal create-jingle-form">
                     <h4>Compose jingle:</h4>
                     <div>
@@ -329,7 +329,7 @@ class Compose extends Component {
               }
 
               {
-                !window.web3.eth &&
+                (!hasMM && !lockedMM) &&
                 <h1 className="buy-samples-link mm-link">
                   Install
                   <a
@@ -339,12 +339,19 @@ class Compose extends Component {
                   >
                     MetaMask
                   </a>
-                  in order to see your samples
+                  in order to see your samples.
                 </h1>
               }
 
               {
-                window.web3.eth &&
+                (hasMM && lockedMM) &&
+                <h1 className="buy-samples-link mm-link">
+                  Please unlock your MetaMask account.
+                </h1>
+              }
+
+              {
+                (hasMM && !lockedMM) &&
                 <div>
 
                   {
@@ -363,7 +370,7 @@ class Compose extends Component {
                         <span>You do not own any Sound Samples yet!</span>
 
                         <span className="buy-samples-link">
-                          <Link to={`/profile/${window.web3.eth.accounts[0]}`}>Buy samples here.</Link>
+                          <Link to={`/profile/${this.props.address}`}>Buy samples here.</Link>
                         </span>
                       </h1>
                     </div>
@@ -400,7 +407,9 @@ const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
   cuts: state.compose.cuts,
+  hasMM: state.app.hasMM,
+  lockedMM: state.app.lockedMM,
+  address: state.app.address,
 });
-
 
 export default connect(mapStateToProps, { addPendingTx, removePendingTx, playAudio })(Compose);

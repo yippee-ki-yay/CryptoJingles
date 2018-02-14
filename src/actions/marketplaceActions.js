@@ -12,6 +12,7 @@ import {
  */
 export const getMarketplaceJingles = () => async (dispatch, getState) => {
   const { currentPage, category, sorting, } = getState().marketplace;
+  const { hasMM, lockedMM, address } = getState().app;
   let jingles = [];
 
   try {
@@ -20,17 +21,14 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
 
     const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
 
-    if (window.web3.eth && jingleIds.length > 0) {
-      const addresses = await window.web3.eth.getAccounts();
-      const address = addresses[0];
-
+    if ((hasMM && !lockedMM) && jingleIds.length > 0) {
       const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
       jingles = response.data.map((_jingle, index) => ({
         ..._jingle, liked: likedJinglesResponse.data[index]
       }));
     }
 
-    if (!window.web3.eth && jingleIds.length > 0) {
+    if ((!hasMM || lockedMM) && jingleIds.length > 0) {
       jingles = response.data.map((_jingle, index) => ({ ..._jingle, liked: false }));
     }
 
@@ -93,12 +91,12 @@ export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
  */
 export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch, getState) => {
     const actionString = action ? 'like' : 'unlike';
-    const addresses = await window.web3.eth.getAccounts();
-    const address = addresses[0];
+    const state = getState();
+    const address = state.app.address;
 
     try {
       const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
-      const jingles = [...getState().marketplace.jingles];
+      const jingles = [...state.marketplace.jingles];
       const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
 
       jingles[jingleIndex].likeCount = response.data.likeCount;

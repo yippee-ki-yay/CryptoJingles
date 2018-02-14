@@ -1,4 +1,4 @@
-import { ADD_PENDING_TX, REMOVE_PENDING_TX } from '../constants/actionTypes';
+import { ADD_PENDING_TX, REMOVE_PENDING_TX, INIT_APP } from '../constants/actionTypes';
 
 export const addPendingTx = (tx, type) => (dispatch) => {
   dispatch({ type: ADD_PENDING_TX, payload: { tx, type } });
@@ -17,7 +17,36 @@ export const removePendingTx = (tx) => (dispatch, getState) => {
  *
  * @return {String}
  */
+// TODO - export this to utils
 export const guid = () => {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
+};
+
+/**
+ * Sends action to init full app
+ *
+ * @return {String} address
+ */
+export const initAppWithMM = (address) => (dispatch) => {
+  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: false, address } });
+};
+
+/**
+ * Sends action to init app with locked MM
+ *
+ * @return {String} address
+ */
+export const initAppWithLockedMM = () => (dispatch) => {
+  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: true, address: '' } });
+};
+
+/**
+ * Sends action to init basic app without
+ * ethereum interaction
+ *
+ * @return {String} address
+ */
+export const initAppWithoutMM = () => (dispatch) => {
+  dispatch({ type: INIT_APP, payload: { hasMM: false, lockedMM: false, address: '' } });
 };

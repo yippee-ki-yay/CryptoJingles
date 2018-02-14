@@ -127,6 +127,11 @@
   opacity: 0.5;
 }
 
+.mm-link {
+  border-top: 1px solid black;
+  padding-top: 30px;
+}
+
 .mm-link a {
   margin-right: 10px;
 }

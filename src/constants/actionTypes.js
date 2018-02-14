@@ -24,6 +24,12 @@ export const PROFILE_TABS = [
 export const MARKETPLACE_JINNGLES_PER_PAGE = 10;
 // TODO put everything above this comment in a constants file
 
+// App action types
+export const INIT_APP = 'init_app';
+export const ADD_PENDING_TX = 'add_pending_tx';
+export const REMOVE_PENDING_TX = 'remove_pending_tx';
+
+// Marketplace action types
 export const CHANGE_MARKETPLACE_PAGE = 'change_marketplace_page';
 export const SET_MARKETPLACE_JINGLES = 'set_marketplace_jingles';
 export const SET_MARKETPLACE_CATEGORY = 'set_marketplace_category';
@@ -31,11 +37,10 @@ export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
 export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';
 export const MARKETPLACE_LIKE_UNLIKE_JINGLE = 'marketplace_like_unlike_jingle';
 
+// Audio action types
 export const SET_SINGLE_AUDIO = 'set_single_audio';
 
-export const ADD_PENDING_TX = 'add_pending_tx';
-export const REMOVE_PENDING_TX = 'remove_pending_tx';
-
+// Profile action types
 export const SET_ACTIVE_PROFILE_TAB = 'set_active_profile_tab';
 export const SET_INVALID_PROFILE = 'set_invalid_profile';
 export const SET_PROFILE_SAMPLES = 'set_profile_samples';

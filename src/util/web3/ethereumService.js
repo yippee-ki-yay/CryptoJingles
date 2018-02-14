@@ -24,11 +24,8 @@ export const parseSamples = (samples) => {
   return mySamples;
 };
 
-export const getSamples = (_address = null) =>
+export const getSamples = (address) =>
   new Promise(async (resolve) => {
-    const addresses = await window.web3.eth.getAccounts();
-    const address = _address || addresses[0];
-
     //setup contracts
     const samplesContract = contract(Sample);
     samplesContract.setProvider(window.web3.currentProvider);
@@ -42,21 +39,3 @@ export const getSamples = (_address = null) =>
 
     resolve(parseSamples(samples));
   });
-
-  export const getJingles = async (web3) => {
-    try {
-      const jinglesContract = contract(Jingle);
-      jinglesContract.setProvider(web3.currentProvider);
-
-      const addresses = await window.web3.eth.getAccounts();
-
-      const jinglesInstance = await jinglesContract.at(JingleAddress);
-
-      const jingles = await jinglesInstance.getAllJingles.call(addresses[0]);
-
-      return jingles.map(j => j.valueOf());
-
-    } catch(err) {
-      // console.log(err);
-    }
-  };

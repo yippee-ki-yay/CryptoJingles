@@ -1,6 +1,11 @@
-#heart-svg:hover #heart {
+#heart-svg:not(.no-like):hover #heart {
     fill: #E2264D;
 }
+
+#heart-svg.no-like {
+    cursor: auto;
+}
+
 #heart-svg #heart{transform-origin:center; animation:animateHeartOut .3s linear forwards; transition: 0.2s ease-in;}
 #heart-svg #main-circ{transform-origin:29.5px 29.5px;}
 

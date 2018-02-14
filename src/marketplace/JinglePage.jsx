@@ -11,7 +11,7 @@ import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
 import { playWithDelay } from '../util/soundHelper';
-import { formatSalePrice } from '../actions/utils';
+import { formatSalePrice, formatToWei } from '../actions/utils';
 
 import './JinglePage.css';
 
@@ -50,6 +50,8 @@ class JinglePage extends Component {
   componentWillUnmount() { this.stopSound(); }
 
   getJingle = (jingleId) => new Promise(async (resolve) => {
+    const { address, lockedMM, hasMM } = this.props;
+
     let jingleData = await axios(`${API_URL}/jingle/${jingleId}`);
     jingleData = jingleData.data;
 
@@ -58,10 +60,8 @@ class JinglePage extends Component {
       return;
     }
 
-    if (!window.web3.eth) jingleData.liked = false;
+    if (!hasMM || lockedMM) jingleData.liked = false;
     else {
-      const addresses = await window.web3.eth.getAccounts();
-      const address = addresses[0];
       const likedJinglesResponse = await axios(`${API_URL}/jingle/check-liked/${address}/${jingleId}`);
       jingleData.liked = likedJinglesResponse.data;
     }
@@ -70,10 +70,7 @@ class JinglePage extends Component {
   });
 
   loadPage = async (id) => {
-    if (!window.web3.eth) {
-      this.setState({ loading: false });
-      return;
-    }
+    const { address } = this.props;
 
     const jingle = await this.getJingle(id);
 
@@ -82,18 +79,14 @@ class JinglePage extends Component {
       return
     }
 
-    const addresses = await window.web3.eth.getAccounts();
-    const account = addresses[0];
+    const isOwner = jingle.owner === address;
 
-    const isOwner = jingle.owner === account;
-
-    this.setState({ jingle, account, isOwner, validJingle: true });
+    this.setState({ jingle, account: address, isOwner, validJingle: true });
   };
 
   purchase = async () => {
     let jingle = this.state.jingle;
-    const addresses = await window.web3.eth.getAccounts();
-    const account = addresses[0];
+    const account = this.props.address;
 
     const id = guid();
     this.props.addPendingTx(id, 'Buy Jingle');
@@ -112,11 +105,10 @@ class JinglePage extends Component {
     if (amount && (amount <= 0)) return;
 
     let jingle = this.state.jingle;
-    const addresses = await window.web3.eth.getAccounts();
 
     const id = guid();
     this.props.addPendingTx(id, 'Sell Jingle');
-    await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: addresses[0]});
+    await window.jingleContract.approveAndSell(jingle.jingleId, amount, {from: this.props.address});
     this.props.removePendingTx(id);
 
     jingle = await this.getJingle(jingle.jingleId);
@@ -126,11 +118,9 @@ class JinglePage extends Component {
   cancelSale = async () => {
     let jingle = this.state.jingle;
 
-    const addresses = await window.web3.eth.getAccounts();
-
     const id = guid();
     this.props.addPendingTx(id, 'Cancel Sale');
-    await window.marketplaceContract.cancel(jingle.jingleId, {from: addresses[0]});
+    await window.marketplaceContract.cancel(jingle.jingleId, {from: this.props.address});
     this.props.removePendingTx(id);
 
     jingle = await this.getJingle(jingle.jingle);
@@ -138,7 +128,7 @@ class JinglePage extends Component {
   };
 
   handleSalePriceChange = (e) => {
-    this.setState({ salePrice: window.web3.toWei(e.target.value) });
+    this.setState({ salePrice: formatToWei(e.target.value) });
   };
 
   loadJingle = () => {
@@ -213,11 +203,10 @@ class JinglePage extends Component {
     const actionString = action ? 'like' : 'unlike';
 
     try {
-      const addresses = await window.web3.eth.getAccounts();
+      const address = this.props.address;
+      const sig = await this.signString(address, "CryptoJingles");
 
-      const sig = await this.signString(addresses[0], "CryptoJingles");
-
-      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address: addresses[0], jingleId, sig });
+      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId, sig });
 
       this.setState({
         jingle: {
@@ -233,29 +222,12 @@ class JinglePage extends Component {
 
   render() {
     const { jingle, isOwner, validJingle } = this.state;
-
+    const { hasMM, lockedMM } = this.props;
     return (
       <div className="container single-jingle-wrapper">
         {
           validJingle &&
           <div>
-            {
-              !window.web3.eth &&
-              <div className="jingle-page-no-mm">
-                <h1 className="buy-samples-link mm-link">
-                  Install
-                  <a
-                    target="_blank"
-                    rel="noopener"
-                    href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-                  >
-                    MetaMask
-                  </a>
-                  in order to see jingle page
-                </h1>
-              </div>
-            }
-
             <div className="row">
               <div className="col-md-2" />
               <div className="col-md-8 row-wrapper-jingle">
@@ -284,9 +256,9 @@ class JinglePage extends Component {
                         </div>
 
                         <div className="liked-section">
-                      <span onClick={() => { this.likeUnlikeJingle(jingle.jingleId, !jingle.liked) }}>
-                        <Heart active={jingle.liked} size="40" />
-                      </span>
+                          <span onClick={() => { this.likeUnlikeJingle(jingle.jingleId, !jingle.liked) }}>
+                            <Heart active={jingle.liked} size="40" canLike={hasMM && !lockedMM} />
+                          </span>
 
                           { jingle.likeCount }
                         </div>
@@ -300,6 +272,7 @@ class JinglePage extends Component {
                             </h3>
                             {
                               !isOwner &&
+                              (hasMM && !lockedMM) &&
                               <button type="submit" className="btn buy-button" onClick={ this.purchase }>
                                 Purchase
                               </button>
@@ -310,6 +283,7 @@ class JinglePage extends Component {
                         {
                           !jingle.onSale &&
                           isOwner &&
+                          (hasMM && !lockedMM) &&
                           <form className="sell-form" onSubmit={(e) => e.preventDefault()}>
                             <input
                               className="form-control"
@@ -324,7 +298,10 @@ class JinglePage extends Component {
                           </form>
                         }
                         {
-                          jingle.onSale && isOwner && <button className="btn buy-button" onClick={ this.cancelSale }>Cancel Sale</button>
+                          jingle.onSale &&
+                          (hasMM && !lockedMM) &&
+                          isOwner &&
+                          <button className="btn buy-button" onClick={ this.cancelSale }>Cancel Sale</button>
                         }
                       </div>
 
@@ -388,7 +365,10 @@ class JinglePage extends Component {
 const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
-  cuts: state.compose.cuts
+  cuts: state.compose.cuts,
+  hasMM: state.app.hasMM,
+  lockedMM: state.app.lockedMM,
+  address: state.app.address,
 });
 
 export default connect(mapStateToProps, { addPendingTx, removePendingTx })(JinglePage);
