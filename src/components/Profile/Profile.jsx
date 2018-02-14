@@ -107,7 +107,15 @@ class Profile extends Component {
                   }
                 </span>
                   </h2>
-                  <h4>{ params.address }</h4>
+                  <h4>
+                    <a
+                      className="etherscan-link"
+                      href={`https://etherscan.io/address/${params.address}`}
+                      target="_blank"
+                      rel="noopener">
+                      { params.address }
+                    </a>
+                  </h4>
                 </div>
               </div>
 
