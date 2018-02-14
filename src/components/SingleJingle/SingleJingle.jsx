@@ -9,6 +9,7 @@ import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
+import { playWithDelay } from '../../util/soundHelper';
 
 class SingleJingle extends Component {
   constructor (props) {
@@ -27,24 +28,21 @@ class SingleJingle extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
-  playWithDelay(group, delays) {
-    group.sounds.forEach((sound, i) => {
-      sound.play(delays[i]);
-    });
-  }
-
   loadJingle() {
+    let delays = this.props.settings.slice(5, 11);
+    delays = delays.map(d => parseInt(d));
+
     const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
-        sound.volume = this.props.volumes[i];
+        sound.volume = parseInt(this.props.settings[i]) / 100;
       }));
 
     this.setState({ loading: true });
 
     Promise.all(sampleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current) => (
-        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+      const longestSound = sources.reduce((prev, current, i) => (
+        (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
 
       longestSound.on('stop', () => { this.setState({ start: false }); });
 
@@ -63,9 +61,7 @@ class SingleJingle extends Component {
       return
     }
 
-    console.log(this.props.delays);
-
-    this.playWithDelay(this.state.sound, this.props.delays);
+    playWithDelay(this.state.sound, this.props.settings);
     this.setState({ start: true });
   };
 

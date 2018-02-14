@@ -20,6 +20,7 @@ import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 import { playAudio } from '../actions/audioActions';
 import { getVolumes } from '../actions/composeActions';
 import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
+import { playWithDelay, createSettings } from '../util/soundHelper';
 
 import '../util/config';
 import './Compose.css';
@@ -129,6 +130,8 @@ class Compose extends Component {
       this.state.mySamples.find((sample) => lastDroppedItem.id === sample.id)
     );
 
+    const delays = this.props.delays;
+
     this.setState({ loadingGroup: true });
 
     selectedSongSources = selectedSongSources.map(({ source }, i) =>
@@ -138,8 +141,8 @@ class Compose extends Component {
       }); }));
 
     Promise.all(selectedSongSources).then((sources) => {
-      const longestSound = sources.reduce((prev, current) => (
-      prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+      const longestSound = sources.reduce((prev, current, i) => (
+        (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
 
       longestSound.on('stop', () => { this.setState({ playing: false }); });
 
@@ -148,7 +151,6 @@ class Compose extends Component {
         loadingGroup: false,
         updatedSlots: false
       });
-      //this.playSound();
 
       cb();
     });
@@ -156,15 +158,11 @@ class Compose extends Component {
 
   playSound() {
     this.loadGroup(() => {
-      console.log(this.props);
-      this.playWithDelay(this.state.group, this.props.delays);
+      const settings = createSettings(this.props);
+
+      playWithDelay(this.state.group, settings, this.state.sampleSlots);
       this.setState({ playing: true });
     });
-
-    // if (this.state.updatedSlots || (!this.state.group && (this.state.droppedBoxIds.length > 0))) {
-    //   this.loadGroup();
-    //   return
-    // }
   }
 
   stopSound() {
@@ -174,16 +172,10 @@ class Compose extends Component {
     this.setState({ playing: false });
   }
 
-  playWithDelay(group, delays) {
-    group.sounds.forEach((sound, i) => {
-      sound.play(delays[i]);
-    });
-  }
-
   createSong = async () => {
     const id = guid();
 
-    const {volumes, delays} = this.props;
+    
 
     try {
       const selectedSongSources = this.state.mySamples.filter(({ id }) =>
@@ -197,11 +189,11 @@ class Compose extends Component {
         return;
       }
 
+      const settings = createSettings(this.props);
+
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');      
-      const res = await window.contract.composeJingle(name, jingleIds, volumes, delays, { from: window.web3.eth.accounts[0] });
-
-      //const effects = await 
+      const res = await window.contract.composeJingle(name, jingleIds, settings, { from: window.web3.eth.accounts[0] });
 
       this.setState({ loading: true });
 
@@ -401,6 +393,7 @@ class Compose extends Component {
 const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
+  cuts: state.compose.cuts,
 });
 
 

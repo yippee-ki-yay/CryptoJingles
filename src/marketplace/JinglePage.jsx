@@ -10,6 +10,7 @@ import { getColorForRarity } from '../actions/profileActions';
 import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
+import { playWithDelay } from '../util/soundHelper';
 
 import './JinglePage.css';
 
@@ -119,20 +120,23 @@ class JinglePage extends Component {
   };
 
   loadJingle = () => {
-    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType) =>
+    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => {
           resolve(sound);
+          sound.volume = parseInt(this.state.jingle.settings[i]) / 100;
         });
       }));
 
     this.setState({ loading: true });
 
-    Promise.all(jingleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current) => (
-        prev.getRawSourceNode().buffer.duration > current.getRawSourceNode().buffer.duration) ? prev : current);
+    const delays = this.props.delays;
 
-      longestSound.on('stop', () => { this.setState({ start: false }); });
+    Promise.all(jingleSrcs).then((sources) => {
+      // const longestSound = sources.reduce((prev, current, i) => (
+      //   (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
+
+      // longestSound.on('stop', () => { this.setState({ start: false }); });
 
       this.setState({
         sound: new Group(sources),
@@ -146,12 +150,18 @@ class JinglePage extends Component {
   playSound = () => {
     if (this.state.sound === null) {
       this.loadJingle();
-      return
+      return;
     }
 
-    this.state.sound.play();
+    const sound = playWithDelay(this.state.sound, this.state.jingle.settings);
+
+    console.log(sound);
+
+    sound.on('stop', () => { this.setState({ start: false }); });
+
     this.setState({ start: true });
   };
+
 
   stopSound = () => {
     if (!this.state.sound) return;
@@ -320,5 +330,11 @@ class JinglePage extends Component {
   }
 }
 
-export default connect(null, { addPendingTx, removePendingTx })(JinglePage);
+const mapStateToProps = (state) => ({
+  volumes: state.compose.volumes,
+  delays: state.compose.delays,
+  cuts: state.compose.cuts
+});
+
+export default connect(mapStateToProps, { addPendingTx, removePendingTx })(JinglePage);
 
