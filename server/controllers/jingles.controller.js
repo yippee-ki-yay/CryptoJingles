@@ -6,6 +6,8 @@ const JINGLES_PER_PAGE = 10;
 require('../models/users.model');
 const userCtrl = require('./users.controller');
 
+const signature = require('../signature');
+
 module.exports.getJinglesForOwner = async (req, res) => {
 
     const pageNum = parseInt(req.params.page) - 1;
@@ -283,9 +285,19 @@ module.exports.cancelJingle = async (jingleId) => {
  * @param {Boolean} action - true = like, false = dislike
  * @return {Promise}
  */
-const updateLikeUnlikeJingle = (jingleId, address, action) =>
+const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
   new Promise (async (resolve, reject) => {
     const jingle = await Jingle.findOne({ jingleId });
+
+    console.log(sig);
+
+    const isValid = signature.isValidSignature(address, sig);
+
+    console.log(isValid);
+
+    if (!isValid) {
+        reject(isValid);
+    }
 
     if ((action === true) && jingle.likes.includes(address)) {
       reject('Already performed this action.');
@@ -319,7 +331,7 @@ const updateLikeUnlikeJingle = (jingleId, address, action) =>
  * @param {Boolean} action - true = like, false = dislike
  */
 module.exports.likeUnLikeJingle = async (req, res, action) => {
-  const { jingleId, address } = req.body;
+  const { jingleId, address, sig } = req.body;
 
   if (!address || !jingleId) {
     res.status(500).send({ error: 'Invalid params' });
@@ -327,7 +339,7 @@ module.exports.likeUnLikeJingle = async (req, res, action) => {
   }
 
   try {
-    const likeCount = await updateLikeUnlikeJingle(jingleId, address, action);
+    const likeCount = await updateLikeUnlikeJingle(jingleId, address, sig, action);
     res.send({ likeCount });
   } catch(error) {
     res.status(500).send({ error });

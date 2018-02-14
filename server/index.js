@@ -33,6 +33,7 @@ const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAd
 
 (async () => {
 
+
     jingles.Composed(async (err, res) => {
         await addJingle(res);
     });

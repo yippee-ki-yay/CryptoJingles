@@ -14,6 +14,7 @@ import './App.css';
 
 class App extends Component {
   componentDidMount() {
+    //TODO: check in a diff. way
     // if (!window.web3.eth && !window.web3.eth.accounts[0]) alert('Unlock MetaMask in order to use Crypto Jingles');
   }
 

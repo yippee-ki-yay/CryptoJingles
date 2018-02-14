@@ -52,11 +52,14 @@ export const setActiveTab = (value) => (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const checkIfOwnerProfile = () => (dispatch, getState) => {
+export const checkIfOwnerProfile = async () => async (dispatch, getState) => {
+  const addresses = await window.web3.eth.getAccounts();
+
+
   dispatch({
     type: SET_PROFILE_IS_OWNER,
     payload: {
-      isOwner: window.web3.eth.accounts[0] === getState().profile.profileAddress,
+      isOwner: addresses[0] === getState().profile.profileAddress,
     }});
 };
 
@@ -109,7 +112,9 @@ export const getAuthor = () => async (dispatch, getState) => {
 export const submitEditAuthorForm = () => async (dispatch, getState) => {
   const id = guid();
   try {
-    const address = window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+    const address = addresses[0];
+
     const newAuthorName = getState().profile.authorEdit;
 
     dispatch(addPendingTx(id, 'Edit author name'));
@@ -209,7 +214,9 @@ export const buySamples = () => async (dispatch, getState) => {
   const id = guid();
 
   try {
-    const account = window.web3.eth.accounts[0];
+    const addresses = await window.web3.eth.getAccounts();
+    const account = addresses[0];
+
     const numJinglesToBuy = getState().profile.numSamplesToBuy;
 
     dispatch(addPendingTx(id, 'Buy sample'));
@@ -248,8 +255,10 @@ export const getJinglesForUser = () => async (dispatch, getState) => {
   const response = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
   const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
 
+  const addresses = await window.web3.eth.getAccounts();
+
   if (jingleIds.length > 0) {
-    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${window.web3.eth.accounts[0]}/${jingleIds}`);
+    const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${addresses[0]}/${jingleIds}`);
     jingles = response.data.map((_jingle, index) => ({
       ..._jingle, liked: likedJinglesResponse.data[index]
     }));
@@ -310,9 +319,11 @@ export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
  * @return {Function}
  */
 // TODO - extract this to util function that takes dispatchType & collection
-export const likeUnLikeProfileJingle = (jingleId, action) => async (dispatch, getState) => {
+export const likeUnLikeProfileJingle = async (jingleId, action) => async (dispatch, getState) => {
   const actionString = action ? 'like' : 'unlike';
-  const address = window.web3.eth.accounts[0];
+
+  const addresses = await window.web3.eth.getAccounts();
+  const address = addresses[0];
 
   try {
     const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
