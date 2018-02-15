@@ -119,8 +119,6 @@ class Profile extends Component {
                 </div>
               </div>
 
-              <div className="separator" />
-
               { /* TODO - create component out of this */  }
               <div className="tabs-wrapper">
                 {
@@ -135,8 +133,6 @@ class Profile extends Component {
                   ))
                 }
               </div>
-
-              <div className="separator" />
             </div>
 
             { activeTab === tabs[0].value && <MySamples address={this.props.params.address} />  }
