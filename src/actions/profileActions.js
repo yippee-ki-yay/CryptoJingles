@@ -9,7 +9,7 @@ import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
 import { SAMPLE_PRICE } from '../util/config';
 import { API_URL } from '../util/config';
-
+import { likeUnlikeJingle } from '../actions/utils';
 
 /**
  * Dispatches action to show that the profile address URL param
@@ -315,19 +315,19 @@ export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
  *
  * @return {Function}
  */
-// TODO - extract this to util function that takes dispatchType & collection
 export const likeUnLikeProfileJingle = (jingleId, action) => async (dispatch, getState) => {
-  const actionString = action ? 'like' : 'unlike';
-  const { address } = getState().app;
+  const state = getState();
+  const { address } = state.app;
 
   try {
-    const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
-    const jingles = [...getState().profile.myJingles];
+    const likeData = await likeUnlikeJingle(jingleId, action, address);
+
+    if (!likeData) return;
+
+    const jingles = [...state.profile.myJingles];
     const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
 
-    jingles[jingleIndex].likeCount = response.data.likeCount;
-    jingles[jingleIndex].liked = action;
-
+    jingles[jingleIndex] = { ...jingles[jingleIndex], ...likeData };
     dispatch({ type: PROFILE_LIKE_UNLIKE_JINGLE, payload: jingles });
   } catch (err) {
     // TODO Handle this in the future

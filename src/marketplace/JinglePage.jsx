@@ -11,7 +11,7 @@ import { API_URL } from '../util/config';
 import { getJingleMetadata } from '../getMockData';
 import LoadingIcon from '../components/Decorative/LoadingIcon';
 import { playWithDelay } from '../util/soundHelper';
-import { formatSalePrice, formatToWei } from '../actions/utils';
+import { formatSalePrice, formatToWei, likeUnlikeJingle } from '../actions/utils';
 
 import './JinglePage.css';
 
@@ -34,7 +34,7 @@ class JinglePage extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.playSound = this.playSound.bind(this);
     this.loadJingle = this.loadJingle.bind(this);
-    this.likeUnlikeJingle = this.likeUnlikeJingle.bind(this);
+    this.jingleLikeUnlike = this.jingleLikeUnlike.bind(this);
   }
 
   componentWillMount() {
@@ -181,43 +181,9 @@ class JinglePage extends Component {
     this.setState({ start: false });
   };
 
-  signString = (account, stringToSign) =>
-    new Promise((resolve, reject) => {
-      const msgParams = [{
-        type: 'string',
-        name: 'Message',
-        value: stringToSign,
-      }];
-
-      window.web3.givenProvider.sendAsync({
-        method: 'eth_signTypedData',
-        params: [msgParams, account],
-        from: account,
-      }, (err, data) => {
-        if (err || data.error) return reject(data.error);
-        return resolve(data.result);
-      });
-  });
-
-  likeUnlikeJingle = async (jingleId, action) => {
-    const actionString = action ? 'like' : 'unlike';
-
-    try {
-      const address = this.props.address;
-      const sig = await this.signString(address, "CryptoJingles");
-
-      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId, sig });
-
-      this.setState({
-        jingle: {
-          ...this.state.jingle,
-          likeCount: response.data.likeCount,
-          liked: action
-        }
-      })
-    } catch (err) {
-      // TODO Handle this in the future
-    }
+  jingleLikeUnlike = async (jingleId, action) => {
+    const likeData = await likeUnlikeJingle(jingleId, action, this.props.address);
+    if (likeData) this.setState({ jingle: { ...this.state.jingle, ...likeData } })
   };
 
   render() {
@@ -256,7 +222,7 @@ class JinglePage extends Component {
                         </div>
 
                         <div className="liked-section">
-                          <span onClick={() => { this.likeUnlikeJingle(jingle.jingleId, !jingle.liked) }}>
+                          <span onClick={() => { this.jingleLikeUnlike(jingle.jingleId, !jingle.liked) }}>
                             <Heart active={jingle.liked} size="40" canLike={hasMM && !lockedMM} />
                           </span>
 

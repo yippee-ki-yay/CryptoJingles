@@ -282,6 +282,7 @@ module.exports.cancelJingle = async (jingleId) => {
  *
  * @param {Number} jingleId
  * @param {String} address
+ * @param {String} sig
  * @param {Boolean} action - true = like, false = dislike
  * @return {Promise}
  */
@@ -289,14 +290,15 @@ const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
   new Promise (async (resolve, reject) => {
     const jingle = await Jingle.findOne({ jingleId });
 
-    console.log(sig);
+    console.log('Signature', sig);
 
     const isValid = signature.isValidSignature(address, sig);
 
-    console.log(isValid);
+    console.log('Is valid signature', isValid);
 
     if (!isValid) {
-        reject(isValid);
+        reject(!isValid);
+        return;
     }
 
     if ((action === true) && jingle.likes.includes(address)) {

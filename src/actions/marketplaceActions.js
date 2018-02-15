@@ -4,6 +4,7 @@ import {
   SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_JINGLES, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE,
   MARKETPLACE_LIKE_UNLIKE_JINGLE
 } from '../constants/actionTypes';
+import { likeUnlikeJingle } from '../actions/utils';
 
 /**
  * Gets all jingles for category and sort option fromm the server and then sets it in the state
@@ -90,18 +91,17 @@ export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
  * @return {Function}
  */
 export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch, getState) => {
-    const actionString = action ? 'like' : 'unlike';
     const state = getState();
-    const address = state.app.address;
+    const { address } = state.app;
 
     try {
-      const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId });
+      const likeData = await likeUnlikeJingle(jingleId, action, address);
+      if (!likeData) return;
+
       const jingles = [...state.marketplace.jingles];
       const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
 
-      jingles[jingleIndex].likeCount = response.data.likeCount;
-      jingles[jingleIndex].liked = action;
-
+      jingles[jingleIndex] = { ...jingles[jingleIndex], ...likeData };
       dispatch({ type: MARKETPLACE_LIKE_UNLIKE_JINGLE, payload: jingles });
     } catch (err) {
       // TODO Handle this in the future
