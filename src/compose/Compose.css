@@ -19,7 +19,7 @@
 }
 
 .separator {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #d1d1d1;
   width: 100%;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .compose-left-column {
-  border-right: 1px solid black;
+  border-right: 1px solid #d1d1d1;
   padding-right: 20px;
   margin-right: 20px;
   text-align: right;
@@ -104,7 +104,7 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #d1d1d1;
 }
 
 .form-horizontal.create-jingle-form div {
