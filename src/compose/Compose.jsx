@@ -252,42 +252,6 @@ class Compose extends Component {
           <ScrollingComponent className="scroll-wrapper">
             <div className="container">
               <div className="compose-top-wrapper">
-                <div className="sort-samples-wrapper">
-                  <div>
-                    {
-                      this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
-                        <SampleSlot
-                          key={`item-${index}`}
-                          index={index}
-                          accepts={accepts}
-                          lastDroppedItem={lastDroppedItem}
-                          id={index}
-                          onDrop={item => this.handleDrop(index, item)}
-                          cancelDrop={item => this.handleCancel(index, item)}
-                        />
-                      )
-                    }
-
-                    <div>
-                           <span className="compose-play">
-                             { this.state.loadingGroup && <LoadingIcon /> }
-                             {
-                               !this.state.playing && !this.state.loadingGroup &&
-                               <span
-                                 className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
-                                 onClick={this.playSound}
-                               >
-                                 <PlayIcon />
-                               </span>
-                             }
-                             {
-                               this.state.playing && !this.state.loadingGroup &&
-                               <span onClick={this.stopSound}><StopIcon /></span>
-                             }
-                           </span>
-                    </div>
-                  </div>
-                </div>
 
                 {
                   (hasMM && !lockedMM) &&
@@ -312,6 +276,50 @@ class Compose extends Component {
                     </div>
                   </form>
                 }
+
+                <div className="sort-samples-wrapper">
+                  <div className="compose-left-column">
+
+                    <div className="compose-play">
+                      { this.state.loadingGroup && <LoadingIcon /> }
+                      {
+                        !this.state.playing && !this.state.loadingGroup &&
+                        <span
+                          className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
+                          onClick={this.playSound}
+                        >
+                           <PlayIcon />
+                         </span>
+                      }
+                      {
+                        this.state.playing && !this.state.loadingGroup &&
+                        <span onClick={this.stopSound}><StopIcon /></span>
+                      }
+                    </div>
+
+                    <div className="slot-options">
+                      <div>Volume</div>
+                      <div>Delay</div>
+                      <div>Cut</div>
+                    </div>
+                  </div>
+
+                  <div className="sample-slots-wrapper">
+                    {
+                      this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                        <SampleSlot
+                          key={`item-${index}`}
+                          index={index}
+                          accepts={accepts}
+                          lastDroppedItem={lastDroppedItem}
+                          id={index}
+                          onDrop={item => this.handleDrop(index, item)}
+                          cancelDrop={item => this.handleCancel(index, item)}
+                        />
+                      )
+                    }
+                  </div>
+                </div>
               </div>
 
               <div className="separator" />

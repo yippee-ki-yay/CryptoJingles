@@ -24,7 +24,8 @@
 }
 
 .sort-samples-wrapper {
-  margin: 50px 0 20px 0;
+  margin: 20px 0 20px 0;
+  display: flex;
 }
 
 .sort-samples-wrapper:after {
@@ -33,6 +34,28 @@
   display:block;
 }
 
+.compose-left-column {
+  border-right: 1px solid black;
+  padding-right: 20px;
+  margin-right: 20px;
+  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.compose-left-column .loading-icon-wrapper {
+  width: 80px;
+}
+
+.slot-options {
+  margin-bottom: 10px;
+}
+
+.slot-options div {
+  margin-top: 33px;
+  font-size: 16px;
+}
 
 .compose-samples-wrapper {
   display: flex;
@@ -53,14 +76,14 @@
 }
 
 .compose-play {
-  height: 230px;
-  display: flex;
+  margin-top: 74px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
 .compose-play svg {
-  width: 100px;
+  width: 80px !important;
 }
 
 .compose-play svg:hover {
@@ -77,9 +100,11 @@
 }
 
 .form-horizontal.create-jingle-form {
+  margin-top: 50px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid black;
 }
 
 .form-horizontal.create-jingle-form div {

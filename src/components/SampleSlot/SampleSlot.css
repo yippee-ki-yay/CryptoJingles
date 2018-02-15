@@ -16,9 +16,16 @@
 
 .jingle-slot {
     position: relative;
+    height: 230px;
+    width: 175px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     border: 1px solid #d5d5d5;
     font-size: 16px;
+}
+
+.sample-slots-wrapper .jingle-slot-wrapper:not(:last-child) {
+    margin-right: 3.6rem;
+    margin-bottom: 1.5rem;
 }
 
 .cancel-btn {
@@ -55,6 +62,7 @@
 }
 
 .jingle-slot .name-tag {
+    margin-top: 10px;
     font-size: 18px;
     color: #43474e;
     text-align: left;
@@ -69,12 +77,16 @@
 }
 
 .slider-group {
+    margin-top: 25px;
+    width: 175px;
+    padding: 6px 6px 0 6px;
+}
 
+.slider-group .slider:not(:last-child) {
+    padding-bottom: 45px;
 }
 
 .slider {
-    padding-bottom: 10px;
-
 }
 
 .input-range__slider {
@@ -125,13 +137,18 @@
 
 .input-range__label--value {
   position: absolute;
-  top: -1.8rem; }
+  top: -2.2rem;
+}
 
 .input-range__label-container {
   left: -50%;
-  position: relative; }
-  .input-range__label--max .input-range__label-container {
-    left: 50%; }
+  position: relative;
+    font-size: 12px;
+}
+
+.input-range__label--max .input-range__label-container {
+    left: 50%;
+}
 
 .input-range__track {
   background: #eeeeee;

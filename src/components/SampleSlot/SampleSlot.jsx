@@ -10,10 +10,6 @@ import { updateVolume, updateDelay, updateCuts } from '../../actions/composeActi
 import './SampleSlot.css';
 
 const style = {
-  height: '230px',
-  width: '175px',
-  marginRight: '1.5rem',
-  marginBottom: '1.5rem',
   textAlign: 'center',
   lineHeight: 'normal',
   float: 'left'
@@ -42,18 +38,18 @@ class SampleSlot extends Component {
 
   handleChange = (value) => {
     this.setState({ volumeValue: value });
-  }
+  };
 
   handleDelayChange = (value) => {
     this.setState({ delayValue: parseFloat(value.toFixed(1)) });
-  }
+  };
 
   handleCutsChange = (value) => {
     this.setState({ range: { 
       min: parseFloat(value.min.toFixed(1)), 
       max: parseFloat(value.max.toFixed(1))
     }});
-  }
+  };
 
   render() {
     const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop,
@@ -69,10 +65,10 @@ class SampleSlot extends Component {
     };
 
     if (isActive || lastDroppedItem) {
-      additionalStyle.backgroundColor = '#9c9c9c';
+      additionalStyle.backgroundColor = '#DEDEDE';
       additionalStyle.color = '#fff';
     } else if (canDrop) {
-      additionalStyle.backgroundColor = '#DEDEDE';
+      additionalStyle.backgroundColor = '#B3B3B3';
       additionalStyle.color = '#fff';
     }
 
@@ -94,72 +90,74 @@ class SampleSlot extends Component {
     const formatCut = value => value.toFixed(1) + 's';
 
     return connectDropTarget(
-      <div className="jingle-slot" style={{ ...style, ...additionalStyle }}>
-        {
-          lastDroppedItem &&
-          <div>
-            <div className="top" style={{ backgroundColor: rarityColor }}>
-              <div className="cancel-btn" onClick={cancelDrop}>
-                <i className="material-icons">close</i>
-              </div>
-            </div>
-            <div className="bottom">
-              {/* <div className="name-tag">{ lastDroppedItem.name }</div> */}
-
-              <div className="name-tag">
-              { lastDroppedItem.name }
-
-              <div className='slider-group'>
-                <div className='slider'>
-                  <InputRange
-                    minValue={0}
-                    maxValue={100}
-                    value={this.state.volumeValue}
-                    formatLabel={formatVolume}
-                    onChange={this.handleChange}
-                    onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
-                  />
-                </div>
-
-                <div className='slider'>
-                  <InputRange
-                    minValue={0}
-                    maxValue={4}
-                    step={0.1}
-                    formatLabel={formatDelay}
-                    value={this.state.delayValue}
-                    onChange={this.handleDelayChange}
-                    onChangeComplete={() => updateDelay({delay: this.state.delayValue, index})}
-                  />
-                </div>
-
-                <div className='slider'>
-                  <InputRange
-                    minValue={0}
-                    maxValue={maxLength}
-                    value={this.state.range}
-                    formatLabel={formatCut}
-                    step={0.1}
-                    onChange={this.handleCutsChange}
-                    onChangeComplete={value => updateCuts({cuts: this.state.range, index})} />
+      <div className="jingle-slot-wrapper" style={{ ...style }}>
+        <div className="jingle-slot" style={{ ...additionalStyle }}>
+          {
+            lastDroppedItem &&
+            <div>
+              <div className="top" style={{ backgroundColor: rarityColor }}>
+                <div className="cancel-btn" onClick={cancelDrop}>
+                  <i className="material-icons">close</i>
                 </div>
               </div>
-            </div>
+              <div className="bottom">
+                {/* <div className="name-tag">{ lastDroppedItem.name }</div> */}
 
-              {/* <div className="id-tag">
-                <span>#{ lastDroppedItem.type } - </span>
-                <span style={{ color: rarityColor }}>
+                <div className="name-tag">
+                  { lastDroppedItem.name }
+                </div>
+
+                <div className="id-tag">
+                  <span>#{ lastDroppedItem.type } - </span>
+                  <span style={{ color: rarityColor }}>
                   { jingle.rarity === 0 && 'Common' }
-                  { jingle.rarity === 1 && 'Rare' }
-                  { jingle.rarity === 2 && 'Legendary' }
-                  { jingle.rarity === 3 && 'Mythical' }
+                    { jingle.rarity === 1 && 'Rare' }
+                    { jingle.rarity === 2 && 'Legendary' }
+                    { jingle.rarity === 3 && 'Mythical' }
                 </span>
-              </div> */}
+                </div>
+              </div>
             </div>
-          </div>
-        }
+          }
 
-        { !lastDroppedItem && <div className="empty-slot">Drag & drop sound sample here</div>  }
+          { !lastDroppedItem && <div className="empty-slot">Drag & drop sound sample here</div>  }
+        </div>
+
+        <div className='slider-group'>
+          <div className='slider'>
+            <InputRange
+              minValue={0}
+              maxValue={100}
+              value={this.state.volumeValue}
+              formatLabel={formatVolume}
+              onChange={this.handleChange}
+              onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
+            />
+          </div>
+
+          <div className='slider'>
+            <InputRange
+              minValue={0}
+              maxValue={4}
+              step={0.1}
+              formatLabel={formatDelay}
+              value={this.state.delayValue}
+              onChange={this.handleDelayChange}
+              onChangeComplete={() => updateDelay({delay: this.state.delayValue, index})}
+            />
+          </div>
+
+          <div className='slider'>
+            <InputRange
+              minValue={0}
+              maxValue={maxLength}
+              value={this.state.range}
+              formatLabel={formatCut}
+              step={0.1}
+              onChange={this.handleCutsChange}
+              onChangeComplete={value => updateCuts({cuts: this.state.range, index})} />
+          </div>
+        </div>
       </div>
     );
   }
