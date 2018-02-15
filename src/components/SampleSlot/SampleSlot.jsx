@@ -96,7 +96,7 @@ class SampleSlot extends Component {
             lastDroppedItem &&
             <div>
               <div className="top" style={{ backgroundColor: rarityColor }}>
-                <div className="cancel-btn" onClick={cancelDrop}>
+                <div className="cancel-btn" onClick={() => {cancelDrop(lastDroppedItem);}}>
                   <i className="material-icons">close</i>
                 </div>
               </div>
