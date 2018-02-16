@@ -52,28 +52,30 @@
 
 .tabs-wrapper {
     display: flex;
+    margin: 20px 0;
     justify-content: space-around;
 }
 
 .tabs-wrapper .tab {
-    padding: 5px 30px;
+    height: 50px;
     color: black;
     font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    border-radius: 5px;
     transition: 0.2s ease-in;
+    flex-grow: 1;
+    border: 1px solid black;
 }
 
-.tabs-wrapper .tab:hover {
-    opacity: 0.7;
+.tabs-wrapper .tab:not(:last-child) {
+    border-right: 0;
 }
 
-.tabs-wrapper .tab.active, .tabs-wrapper .tab:hover {
-    background: #16add8;
-    color: white;
+/*.tabs-wrapper .tab:hover*/
+.tabs-wrapper .tab.active {
+    border-bottom: 5px solid black;
 }
 
 .edit-author-wrapper {
