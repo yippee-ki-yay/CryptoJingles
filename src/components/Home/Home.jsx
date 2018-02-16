@@ -130,13 +130,34 @@ class Home extends Component {
 
         <div className="home-footer">
           Fell free to ask us anything on
-          <a className="reddit" href="https://www.reddit.com/r/CryptoJingles/"  target="_blank" rel="noopener">Reddit</a>,
-          <a className="medium" href="https://medium.com/@cryptojingles"  target="_blank" rel="noopener">Medium</a> or
-          <a className="discord" href="https://discord.gg/F6PW2Tx"  target="_blank" rel="noopener">Discord</a>,
-          we will gladly answer all questions.
+          <a
+            className="reddit"
+            href="https://www.reddit.com/r/CryptoJingles/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Reddit
+          </a>
+          ,
+          <a
+            className="medium"
+            href="https://medium.com/@cryptojingles"
+            rel="noopener noreferrer"
+          >
+            Medium
+          </a>
+          or
+          <a
+            className="discord"
+            href="https://discord.gg/F6PW2Tx"
+            rel="noopener noreferrer"
+          >
+            Discord
+          </a>
+          , we will gladly answer all questions.
         </div>
       </div>
-    )
+    );
   }
 }
 

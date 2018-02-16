@@ -112,7 +112,8 @@ class Profile extends Component {
                       className="etherscan-link"
                       href={`https://etherscan.io/address/${params.address}`}
                       target="_blank"
-                      rel="noopener">
+                      rel="noopener noreferrer"
+                    >
                       { params.address }
                     </a>
                   </h4>
