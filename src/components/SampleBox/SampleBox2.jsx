@@ -7,7 +7,7 @@ import LoadingIcon from '../Decorative/LoadingIcon';
 import { playAudio } from '../../actions/audioActions';
 import { getColorForRarity } from '../../actions/profileActions';
 
-import './SampleBox.css';
+// import './SampleBox.css';
 
 const style = {
   margin: '14px 27px 7px 26px',

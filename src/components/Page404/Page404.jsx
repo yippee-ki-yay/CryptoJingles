@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import './Page404.css';
+import './Page404.scss';
 
 const MyAlbums = () => (
   <div className="container page404-wrapper">

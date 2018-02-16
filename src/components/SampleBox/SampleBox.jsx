@@ -8,7 +8,7 @@ import LoadingIcon from '../Decorative/LoadingIcon';
 import { playAudio } from '../../actions/audioActions';
 import { getColorForRarity } from '../../actions/profileActions';
 
-import './SampleBox.css';
+import './SampleBox.scss';
 
 const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }} };
 

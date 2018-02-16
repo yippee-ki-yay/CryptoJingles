@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SampleBox2 from '../components/SampleBox/SampleBox2';
-import BoxLoader from '../components/Decorative/BoxLoader';
-import SortSamples from '../components/SortSamples/SortSamples';
+import SampleBox2 from '../../SampleBox/SampleBox2';
+import BoxLoader from '../../Decorative/BoxLoader';
+import SortSamples from '../../SortSamples/SortSamples';
 import {
   getSamplesForUser, buySamples, handleNumSamplesToBuyChange, onMySamplesSort
-} from '../actions/profileActions';
+} from '../../../actions/profileActions';
 
-import './MySamples.css';
+import './MySamples.scss';
 
 class MySamples extends Component {
   async componentWillMount() {

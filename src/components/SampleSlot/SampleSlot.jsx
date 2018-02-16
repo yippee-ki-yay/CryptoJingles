@@ -7,7 +7,7 @@ import { getColorForRarity } from '../../actions/profileActions';
 
 import { updateVolume, updateDelay, updateCuts } from '../../actions/composeActions';
 
-import './SampleSlot.css';
+import './SampleSlot.scss';
 
 const style = {
   textAlign: 'center',

@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import axios from 'axios';
 import { Sound, Group} from 'pizzicato';
-import JingleImage from '../components/JingleImage/JingleImage';
-import Heart from '../components/Decorative/Heart';
-import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
-import { getColorForRarity } from '../actions/profileActions';
-import { API_URL } from '../util/config';
-import { getJingleMetadata } from '../getMockData';
-import LoadingIcon from '../components/Decorative/LoadingIcon';
-import { playWithDelay } from '../util/soundHelper';
-import { formatSalePrice, formatToWei, likeUnlikeJingle } from '../actions/utils';
+import JingleImage from '../JingleImage/JingleImage';
+import Heart from '../Decorative/Heart';
+import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
+import { getColorForRarity } from '../../actions/profileActions';
+import { API_URL } from '../../util/config';
+import { getJingleMetadata } from '../../getMockData';
+import LoadingIcon from '../Decorative/LoadingIcon';
+import { playWithDelay } from '../../util/soundHelper';
+import { formatSalePrice, formatToWei, likeUnlikeJingle } from '../../actions/utils';
 
-import './JinglePage.css';
+import './JinglePage.scss';
 
 class JinglePage extends Component {
   constructor(props ) {

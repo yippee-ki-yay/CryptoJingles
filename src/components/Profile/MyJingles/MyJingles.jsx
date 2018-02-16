@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown';
 import { connect } from 'react-redux';
-import BoxLoader from '../components/Decorative/BoxLoader';
-import Pagination from '../components/Pagination/Pagination';
-import SingleJingle from '../components/SingleJingle/SingleJingle';
+import BoxLoader from '../../Decorative/BoxLoader';
+import Pagination from '../../Pagination/Pagination';
+import SingleJingle from '../../SingleJingle/SingleJingle';
 import {
   getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange
-} from '../actions/profileActions';
-import { MARKETPLACE_JINGLES_PER_PAGE } from '../constants/actionTypes';
+} from '../../../actions/profileActions';
+import { MARKETPLACE_JINGLES_PER_PAGE } from '../../../constants/actionTypes';
 
-import './MyJingles.css';
+import './MyJingles.scss';
 
 class MyJingles extends Component {
   async componentWillMount() {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
-import './PendingTxDropdown.css';
+import './PendingTxDropdown.scss';
 
 class PendingTxDropdown extends Component {
   constructor(props) {

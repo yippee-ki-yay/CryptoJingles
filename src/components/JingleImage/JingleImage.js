@@ -3,7 +3,7 @@ import createLoop from 'raf-loop';
 import createConfig from './config';
 import createRenderer  from './createRenderer';
 
-import './JingleImage.css';
+// import './JingleImage.css';
 
 const letterbox = (element, parent) => {
   let aspect = element.width / element.height;

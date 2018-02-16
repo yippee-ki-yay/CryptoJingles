@@ -4,14 +4,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
-import AudioPlayer from './components/AudioPlayer/AudioPlayer';
 import Logo from './components/Decorative/Logo';
 
 // Styles
 import './css/bootstrap.min.css';
 import './css/custom.min.css';
 import './css/theme.min.css';
-import './App.css';
+import './App.scss';
 
 class App extends Component {
   render() {
@@ -58,8 +57,6 @@ class App extends Component {
         <div className="children-wrapper">
           {this.props.children}
         </div>
-
-        <AudioPlayer />
       </div>
     );
   }

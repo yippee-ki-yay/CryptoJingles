@@ -2,16 +2,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropdown from 'react-dropdown';
-import SingleJingle from '../components/SingleJingle/SingleJingle';
-import Pagination from '../components/Pagination/Pagination';
+import SingleJingle from '../SingleJingle/SingleJingle';
+import Pagination from '../Pagination/Pagination';
 import {
   getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting,
   onMarketplacePaginationChange
-} from '../actions/marketplaceActions';
-import { MARKETPLACE_JINGLES_PER_PAGE, MARKETPLACE_JINNGLES_PER_PAGE } from '../constants/actionTypes';
+} from '../../actions/marketplaceActions';
+import { MARKETPLACE_JINGLES_PER_PAGE } from '../../constants/actionTypes';
 
 import 'react-dropdown/style.css';
-import './Marketplace.css';
+import './Marketplace.scss';
 
 // TODO - Add prototypes
 class Marketplace extends Component {

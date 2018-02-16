@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './LoadingIcon.css';
+import './LoadingIcon.scss';
 
 const PlayIcon = () => (
   <div className="loading-icon-wrapper">
