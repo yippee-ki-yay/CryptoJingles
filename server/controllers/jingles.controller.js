@@ -276,9 +276,8 @@ module.exports.cancelJingle = async (jingleId) => {
 
 /**
  * Based on action, increments or deduces a jingles likeCount.
- * Likes are limited to a user address that has at least bought 5 samples.
+ * Likes are limited to a user address that has at least  samples.
  *
- * TODO - implement limit to user that has bought at least 5 samples
  *
  * @param {Number} jingleId
  * @param {String} address
@@ -295,6 +294,10 @@ const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
     const isValid = signature.isValidSignature(address, sig);
 
     console.log('Is valid signature', isValid);
+
+    if (!userCtrl.userExists(address)) {
+        reject('User has 0 samples');
+    }
 
     if (!isValid) {
         reject(!isValid);

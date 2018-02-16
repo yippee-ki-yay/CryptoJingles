@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.decenter.com'));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io'));
 
 const db = require('./db');
 const routes = require('./routes');
@@ -14,7 +14,7 @@ const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
 
 async function update() {
-  jinglesContract.Composed({}, { fromBlock: '5025886', toBlock: 'latest' })
+  jinglesContract.Composed({}, { fromBlock: '1025886', toBlock: 'latest' })
     .get(async (error, event) => {
       if (error) {
         console.log('GET JINGLES ERROR', error);
@@ -154,8 +154,8 @@ function addMarketplaceEvents(events, marketplace) {
   });
 }
 
-(async () => {
-setInterval(async () => {
+// (async () => {
+// setInterval(async () => {
   update();
-}, 1000*6);
-})();
+// }, 1000*6);
+// })();
