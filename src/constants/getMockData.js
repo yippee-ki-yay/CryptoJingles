@@ -1,4 +1,4 @@
-import { COMPOSE } from './constants/sampleTypes';
+import { COMPOSE } from './sampleTypes';
 
 export const getJingleMetadata = (jingleType) => {
   switch (parseInt(jingleType, 10)) {

@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import web3Reducer from './util/web3/web3Reducer';
-import audioReducer from './reducers/audioReducer';
-import appReducer from './reducers/appReducer';
-import marketplaceReducer from './reducers/marketplaceReducer';
-import profileReducer from './reducers/profileReducer';
-import composeReducer from './reducers/composeReducer';
+import web3Reducer from '../util/web3/web3Reducer';
+import audioReducer from './audioReducer';
+import appReducer from './appReducer';
+import marketplaceReducer from './marketplaceReducer';
+import profileReducer from './profileReducer';
+import composeReducer from './composeReducer';
 
 const reducer = combineReducers({
   routing: routerReducer,

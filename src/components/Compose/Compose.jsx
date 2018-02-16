@@ -7,7 +7,7 @@ import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import { getSampleSlots } from '../../getMockData';
+import { getSampleSlots } from '../../constants/getMockData';
 import { getSamples } from '../../util/web3/ethereumService';
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';

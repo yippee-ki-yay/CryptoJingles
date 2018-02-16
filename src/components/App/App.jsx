@@ -3,11 +3,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import PendingTxDropdown from './components/PendingTxDropdown/PendingTxDropdown';
-import Logo from './components/Decorative/Logo';
+import PendingTxDropdown from '../PendingTxDropdown/PendingTxDropdown';
+import Logo from '../Decorative/Logo';
 
 // Styles
-import './css/bootstrap.min.css';
+import '../../css/bootstrap.min.css';
 import './css/custom.min.css';
 import './css/theme.min.css';
 import './App.scss';

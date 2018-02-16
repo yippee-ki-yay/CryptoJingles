@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import axios from 'axios';
-import { getJingleMetadata } from '../../getMockData';
+import { getJingleMetadata } from '../../constants/getMockData';
 import {API_URL} from '../../util/config';
 import SampleBox2 from '../SampleBox/SampleBox2';
 import SingleJingle from '../SingleJingle/SingleJingle';

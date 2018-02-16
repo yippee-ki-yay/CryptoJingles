@@ -1,7 +1,7 @@
 import contract from 'truffle-contract';
 
 import { SampleAddress, CryptoJinglesAddress, JingleAddress } from '../config';
-import { getJingleMetadata } from '../../getMockData';
+import { getJingleMetadata } from '../../constants/getMockData';
 
 import Sample from '../../../build/contracts/Sample.json';
 import Jingle from '../../../build/contracts/Jingle.json';
