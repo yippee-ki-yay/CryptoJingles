@@ -10,11 +10,13 @@ contract Sample is Ownable {
     mapping (address => uint[]) internal tokensOwned;
     mapping (uint => uint) internal tokenPosInArr;
     
-    mapping (uint => uint) public tokenType;
+    mapping (uint => uint32) public tokenType;
     
     uint public numOfSamples;
     
     address public cryptoJingles;
+    address public sampleRegistry;
+
 
     SampleStorage public sampleStorage;
     
@@ -31,7 +33,7 @@ contract Sample is Ownable {
     
     function mint(address _owner, uint _randomNum) public onlyCryptoJingles {
         
-        uint sampleType = sampleStorage.getType(_randomNum);
+        uint32 sampleType = sampleStorage.getType(_randomNum);
         
         addSample(_owner, sampleType, numOfSamples);
         
@@ -40,9 +42,16 @@ contract Sample is Ownable {
         numOfSamples++;
     }
     
-    //TODO: check this again
-    // find who owns that sample and at what position is it in the owners arr 
-    // Swap that token with the last one in arr and delete the end of arr
+    function mintForSampleRegitry(address _owner, uint32 _type) public {
+        require(msg.sender == sampleRegistry);
+        
+        addSample(_owner, _type, numOfSamples);
+        
+        Mint(_owner, numOfSamples);
+        
+        numOfSamples++;
+    }
+    
     function removeSample(address _owner, uint _sampleId) public onlyCryptoJingles {
         uint length = tokensOwned[_owner].length;
         uint index = tokenPosInArr[_sampleId];
@@ -88,7 +97,7 @@ contract Sample is Ownable {
     
     // Internal functions of the contract
     
-    function addSample(address _owner, uint _sampleType, uint _sampleId) internal {
+    function addSample(address _owner, uint32 _sampleType, uint _sampleId) internal {
         tokensForOwner[_sampleId] = _owner;
         
         tokensOwned[_owner].push(_sampleId);
@@ -104,5 +113,9 @@ contract Sample is Ownable {
         require(cryptoJingles == 0x0);
         
         cryptoJingles = _cryptoJingles;
+    }
+    
+    function setSampleRegistry(address _sampleRegistry) public onlyOwner {
+        sampleRegistry = _sampleRegistry;
     }
 }

@@ -21,7 +21,7 @@ contract Jingle is Ownable, ERC721 {
     
     mapping(bytes32 => bool) public uniqueJingles;
     
-    mapping(uint => uint[]) public soundEffects;
+    mapping(uint => uint8[]) public soundEffects;
     mapping(uint => uint[20]) public settings;
     
     uint public numOfJingles;
@@ -31,16 +31,13 @@ contract Jingle is Ownable, ERC721 {
     
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-    event EffectAdded(uint indexed jingleId, uint[] effectParams);
-    event Composed(uint indexed jingleId, address indexed owner, uint[5] samples, uint[5] jingleTypes,
+    event EffectAdded(uint indexed jingleId, uint8[] effectParams);
+    event Composed(uint indexed jingleId, address indexed owner, uint32[5] samples, uint32[5] jingleTypes,
             string name, string author, uint8[20] settings);
     
     modifier onlyCryptoJingles() {
         require(msg.sender == cryptoJingles);
         _;
-    }
-    
-    function Jingle() public {
     }
     
     function transfer(address _to, uint256 _jingleId) public {
@@ -90,8 +87,8 @@ contract Jingle is Ownable, ERC721 {
         marketplaceContract.sell(msg.sender, _jingleId, _amount);
     }
     
-    function composeJingle(address _owner, uint[5] jingles, 
-    uint[5] jingleTypes, string name, string author, uint8[20] _settings) public onlyCryptoJingles {
+    function composeJingle(address _owner, uint32[5] jingles, 
+    uint32[5] jingleTypes, string name, string author, uint8[20] _settings) public onlyCryptoJingles {
         
         uint _jingleId = numOfJingles;
         
@@ -121,7 +118,7 @@ contract Jingle is Ownable, ERC721 {
         numOfJingles++;
     }
     
-    function addSoundEffect(uint _jingleId, uint[] _effectParams) external {
+    function addSoundEffect(uint _jingleId, uint8[] _effectParams) external {
         require(msg.sender == ownerOf(_jingleId));
         
         soundEffects[_jingleId] = _effectParams;

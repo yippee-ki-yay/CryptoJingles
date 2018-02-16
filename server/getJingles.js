@@ -5,11 +5,11 @@ const db = require('./db');
 const routes = require('./routes');
 
 const marketplaceAbi = require("../build/contracts/Marketplace");
-const marketplaceAddress = "0xc7ec37cd0d01a0c3c9000e97c942b82bd09323b7";
+const marketplaceAddress = "0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5";
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
 const jinglesAbi = require("../build/contracts/Jingle");
-const jinglesAddress = "0xb5840ed01397573f2112c3f254302d779b749025";
+const jinglesAddress = "0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf";
 const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
 

@@ -40,6 +40,7 @@ contract CryptoJingles is Ownable {
     function buySamples(uint _numSamples, address _to) public payable {
         require(_numSamples <= MAX_SAMPLES_PER_PURCHASE);
         require(msg.value >= (SAMPLE_PRICE * _numSamples));
+        require(_to != 0x0);
         
          for (uint i = 0; i < _numSamples; ++i) {
             
@@ -54,8 +55,10 @@ contract CryptoJingles is Ownable {
         numOfPurchases++;
     }
     
-    function composeJingle(string name, uint[5] samples, uint8[20] settings) public {
+    function composeJingle(string name, uint32[5] samples, uint8[20] settings) public {
         require(jingleContract.uniqueJingles(keccak256(samples)) == false);
+        
+        uint32[5] memory sampleTypes;
         
         //check if you own all the 5 samples 
         for (uint i = 0; i < SAMPLES_PER_JINGLE; ++i) {
@@ -64,14 +67,9 @@ contract CryptoJingles is Ownable {
             require(isOwner == true && isAlreadyUsed[samples[i]] == false);
             
             isAlreadyUsed[samples[i]] = true;
-        }
-        
-        uint[5] memory sampleTypes;
-        
-        // remove all the samples from your Ownership
-        for (uint j = 0; j < SAMPLES_PER_JINGLE; ++j) {
-            sampleTypes[j] = sampleContract.tokenType(samples[j]);
-            sampleContract.removeSample(msg.sender, samples[j]);
+            
+            sampleTypes[i] = sampleContract.tokenType(samples[i]);
+            sampleContract.removeSample(msg.sender, samples[i]);
         }
         
         //create a new jingle containing those 5 samples

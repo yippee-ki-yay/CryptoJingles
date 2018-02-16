@@ -18,9 +18,9 @@ const app = express();
 app.use( bodyParser.json() );
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const marketplaceAddress = "0xc7ec37cd0d01a0c3c9000e97c942b82bd09323b7";
-const jinglesAddress = "0xb5840ed01397573f2112c3f254302d779b749025";
-const cryptoJinglesAddress = "0xf1c371e1396111d528fe64adb4f6a5ade73ba089";
+const marketplaceAddress = "0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5";
+const jinglesAddress = "0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf";
+const cryptoJinglesAddress = "0x3351ef3166ed2ddd8acb1e37362dda6275869b8c";
 
 const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.decenter.com"));
 
