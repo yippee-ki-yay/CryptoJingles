@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './Heart.css'
+import './Heart.scss';
 
 const Heart = ({ active, size, canLike }) => (
   <svg id="heart-svg" width={`${size}px`} className={`${active && 'active'} ${!canLike && 'no-like'}`} viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">

@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 
-import './SortSamples.css';
+import './SortSamples.scss';
 
 const SortSamples = ({ options, onSortChange, value }) => (
   <div className="sort-samples-container">

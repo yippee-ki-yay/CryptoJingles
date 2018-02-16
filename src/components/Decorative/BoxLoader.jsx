@@ -1,6 +1,7 @@
+
 import React from 'react';
 
-import './BoxLoader.css';
+import './BoxLoader.scss';
 
 const BoxLoader = () => (
   <span className="loader"><span className="loader-inner" /></span>

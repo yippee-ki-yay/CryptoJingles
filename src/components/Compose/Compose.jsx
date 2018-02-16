@@ -7,23 +7,23 @@ import { Sound, Group} from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import { getSampleSlots } from '../getMockData';
-import { getSamples } from '../util/web3/ethereumService';
-import BoxLoader from '../components/Decorative/BoxLoader';
-import PlayIcon from '../components/Decorative/PlayIcon';
-import StopIcon from '../components/Decorative/StopIcon';
-import LoadingIcon from '../components/Decorative/LoadingIcon';
-import SampleBox from '../components/SampleBox/SampleBox';
-import SampleSlot from '../components/SampleSlot/SampleSlot';
-import SortSamples from '../components/SortSamples/SortSamples';
-import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
-import { playAudio } from '../actions/audioActions';
-import { getVolumes } from '../actions/composeActions';
-import { SAMPLE_SORTING_OPTIONS } from '../constants/actionTypes';
-import { playWithDelay, createSettings } from '../util/soundHelper';
+import { getSampleSlots } from '../../getMockData';
+import { getSamples } from '../../util/web3/ethereumService';
+import BoxLoader from '../Decorative/BoxLoader';
+import PlayIcon from '../Decorative/PlayIcon';
+import StopIcon from '../Decorative/StopIcon';
+import LoadingIcon from '../Decorative/LoadingIcon';
+import SampleBox from '../SampleBox/SampleBox';
+import SampleSlot from '../SampleSlot/SampleSlot';
+import SortSamples from '../SortSamples/SortSamples';
+import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
+import { playAudio } from '../../actions/audioActions';
+import { getVolumes } from '../../actions/composeActions';
+import { SAMPLE_SORTING_OPTIONS } from '../../constants/actionTypes';
+import { playWithDelay, createSettings } from '../../util/soundHelper';
 
-import '../util/config';
-import './Compose.css';
+import '../../util/config';
+import './Compose.scss';
 
 const ScrollingComponent = withScrolling('div');
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
 
-import './Pagination.css';
+import './Pagination.scss';
 
 // TODO - Add prototypes, style component, test with more jingles
 const Pagination = ({ pageCount, range = 10, onPageChange }) => (

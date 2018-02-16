@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ethereumAddress from 'ethereum-address';
-import MySamples from '../../mySamples/MySamples';
-import MyJingles from '../../myJingles/MyJingles';
-import MySongs from '../MySongs/MySongs';
-import MyAlbums from '../MyAlbums/MyAlbums';
+import MySamples from './MySamples/MySamples';
+import MyJingles from './MyJingles/MyJingles';
+import MySongs from './MySongs/MySongs';
+import MyAlbums from './MyAlbums/MyAlbums';
 import {
   setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
   setProfileAddress, setInvalidProfile
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
-import './Profile.css';
+import './Profile.scss';
 import profilePlaceholder from './profile-placeholder.png';
 
 // TODO - add proptypes

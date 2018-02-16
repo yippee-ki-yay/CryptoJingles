@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { playAudio } from '../../actions/audioActions';
 
-import './AudioPlayer.css';
+import './AudioPlayer.scss';
 
 class AudioPlayer extends Component {
   componentDidMount() {

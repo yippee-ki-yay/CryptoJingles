@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import axios from 'axios';
-import { getJingleMetadata } from '../getMockData';
-import {API_URL} from '../util/config';
-import SampleBox2 from '../components/SampleBox/SampleBox2';
-import SingleJingle from '../components/SingleJingle/SingleJingle';
+import { getJingleMetadata } from '../../getMockData';
+import {API_URL} from '../../util/config';
+import SampleBox2 from '../SampleBox/SampleBox2';
+import SingleJingle from '../SingleJingle/SingleJingle';
 
-import "./Home.css";
+import "./Home.scss";
 import bigLogo from './bigLogo.png';
 
 class Home extends Component {
