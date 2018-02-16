@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { playAudio } from '../../actions/audioActions';
 import { Link } from 'react-router';
 import { Sound, Group} from 'pizzicato';
-import JingleImage from '../../components/JingleImage/JingleImage';
+import JingleImage from '../JingleImage/JingleImage';
 import LoadingIcon from '../../components/Decorative/LoadingIcon';
 import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../getMockData';
