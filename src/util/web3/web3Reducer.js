@@ -1,16 +1,10 @@
+// TODO - user this instead of window.
 const initialState = {
-  web3Instance: null
-}
+  web3Instance: null,
+};
 
-const web3Reducer = (state = initialState, action) => {
-  if (action.type === 'WEB3_INITIALIZED')
-  {
-    return Object.assign({}, state, {
-      web3Instance: action.payload.web3Instance
-    })
-  }
+const web3Reducer = (state = initialState, action) => (
+  (action.type === 'WEB3_INITIALIZED') ? { ...state, web3Instance: action.payload.web3Instance } : state
+);
 
-  return state
-}
-
-export default web3Reducer
+export default web3Reducer;
