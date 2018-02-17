@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
 import './PendingTxDropdown.scss';
@@ -42,7 +43,7 @@ class PendingTxDropdown extends Component {
                 this.state.open &&
                 <div className="dropdown-wrapper">
                   {
-                    this.props.pendingTxs.map(({ tx, type}) => (
+                    this.props.pendingTxs.map(({ tx, type }) => (
                       <div className="pending-single" key={tx}>
                         <span className="type">{ type }</span>
                       </div>
@@ -54,12 +55,16 @@ class PendingTxDropdown extends Component {
           }
         </div>
       </OutsideAlerter>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
-  pendingTxs: state.app.pendingTxs
+PendingTxDropdown.propTypes = {
+  pendingTxs: PropTypes.array.isRequired,
+};
+
+const mapStateToProps = state => ({
+  pendingTxs: state.app.pendingTxs,
 });
 
 export default connect(mapStateToProps)(PendingTxDropdown);
