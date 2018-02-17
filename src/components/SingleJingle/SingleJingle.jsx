@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { playAudio } from '../../actions/audioActions';
 import { Link } from 'react-router';
-import { Sound, Group} from 'pizzicato';
+import { Sound, Group } from 'pizzicato';
+import PropTypes from 'prop-types';
 import JingleImage from '../JingleImage/JingleImage';
 import LoadingIcon from '../../components/Decorative/LoadingIcon';
 import Heart from '../../components/Decorative/Heart';
@@ -13,13 +13,13 @@ import { playWithDelay } from '../../util/soundHelper';
 import { formatSalePrice } from '../../actions/utils';
 
 class SingleJingle extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       start: false,
       loading: false,
-      sound: null
+      sound: null,
     };
 
     this.stopSound = this.stopSound.bind(this);
@@ -31,19 +31,21 @@ class SingleJingle extends Component {
 
   loadJingle() {
     let delays = this.props.settings.slice(5, 11);
-    delays = delays.map(d => parseInt(d));
+    delays = delays.map(d => parseInt(d, 10));
 
     const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
-        sound.volume = parseInt(this.props.settings[i]) / 100;
+        sound.volume = parseInt(this.props.settings[i], 10) / 100;
       }));
 
     this.setState({ loading: true });
 
     Promise.all(sampleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current, i) => (
-        (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
+      const longestSound = sources.reduce((prev, current, i) => ((
+        (prev.getRawSourceNode().buffer.duration + delays[i]) >
+        (current.getRawSourceNode().buffer.duration) + delays[i]) ?
+        prev : current));
 
       longestSound.on('stop', () => { this.setState({ start: false }); });
 
@@ -59,7 +61,7 @@ class SingleJingle extends Component {
   playSound = () => {
     if (this.state.sound === null) {
       this.loadJingle();
-      return
+      return;
     }
 
     playWithDelay(this.state.sound, this.props.settings);
@@ -78,7 +80,9 @@ class SingleJingle extends Component {
   };
 
   render() {
-    const { jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM } = this.props;
+    const {
+      jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM,
+    } = this.props;
 
     return (
       <div key={jingleId} className="single-song">
@@ -99,13 +103,13 @@ class SingleJingle extends Component {
             { this.state.loading && <LoadingIcon /> }
             {
               !this.state.start && !this.state.loading &&
-              <span onClick={ this.playSound }>
-              <i className="material-icons play">play_circle_outline</i>
-            </span>
+              <span onClick={this.playSound}>
+                <i className="material-icons play">play_circle_outline</i>
+              </span>
             }
             {
               this.state.start && !this.state.loading &&
-              <span onClick={ this.stopSound }><i className="material-icons stop">cancel</i></span>
+              <span onClick={this.stopSound}><i className="material-icons stop">cancel</i></span>
             }
             <Link to={`/jingle/${jingleId}`}>
               <i className="material-icons open">open_in_new</i>
@@ -128,19 +132,34 @@ class SingleJingle extends Component {
           <div className="jingle-footer-name">{ name }</div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
+SingleJingle.propTypes = {
+  likeUnLikeMarketplaceJingle: PropTypes.func.isRequired,
+  likeUnLikeProfileJingle: PropTypes.func.isRequired,
+  hasMM: PropTypes.bool.isRequired,
+  lockedMM: PropTypes.bool.isRequired,
+  settings: PropTypes.array.isRequired,
+  sampleTypes: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired,
+  jingleId: PropTypes.number.isRequired,
+  author: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onSale: PropTypes.bool.isRequired,
+  price: PropTypes.number.isRequired,
+  likeCount: PropTypes.number.isRequired,
+  liked: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
 });
 
-const mapDispatchToProps = {
-  likeUnLikeMarketplaceJingle, likeUnLikeProfileJingle, playAudio
-};
+const mapDispatchToProps = { likeUnLikeMarketplaceJingle, likeUnLikeProfileJingle };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleJingle);
