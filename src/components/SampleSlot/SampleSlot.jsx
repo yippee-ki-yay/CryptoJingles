@@ -128,6 +128,7 @@ class SampleSlot extends Component {
             <InputRange
               minValue={0}
               maxValue={100}
+              disabled={!lastDroppedItem}
               value={this.state.volumeValue}
               formatLabel={formatVolume}
               onChange={this.handleChange}
@@ -139,6 +140,7 @@ class SampleSlot extends Component {
             <InputRange
               minValue={0}
               maxValue={4}
+              disabled={!lastDroppedItem}
               step={0.1}
               formatLabel={formatDelay}
               value={this.state.delayValue}
@@ -151,6 +153,7 @@ class SampleSlot extends Component {
             <InputRange
               minValue={0}
               maxValue={maxLength}
+              disabled={!lastDroppedItem}
               value={this.state.range}
               formatLabel={formatCut}
               step={0.1}
