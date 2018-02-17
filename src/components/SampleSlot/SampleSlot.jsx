@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import { connect } from 'react-redux';
 import InputRange from 'react-input-range';
@@ -12,7 +13,7 @@ import './SampleSlot.scss';
 const style = {
   textAlign: 'center',
   lineHeight: 'normal',
-  float: 'left'
+  float: 'left',
 };
 
 const dropTarget = { drop(props, monitor) { props.onDrop(monitor.getItem()); } };
@@ -31,8 +32,8 @@ class SampleSlot extends Component {
       delayValue: 0,
       range: {
         min: 0,
-        max: 10
-      }
+        max: 10,
+      },
     };
   }
 
@@ -45,15 +46,19 @@ class SampleSlot extends Component {
   };
 
   handleCutsChange = (value) => {
-    this.setState({ range: { 
-      min: parseFloat(value.min.toFixed(1)), 
-      max: parseFloat(value.max.toFixed(1))
-    }});
+    this.setState({
+      range: {
+        min: parseFloat(value.min.toFixed(1)),
+        max: parseFloat(value.max.toFixed(1)),
+      },
+    });
   };
 
   render() {
-    const { isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop,
-       updateVolume, updateDelay, updateCuts, index } = this.props;
+    const {
+      isOver, canDrop, connectDropTarget, lastDroppedItem, cancelDrop,
+      updateVolume, updateDelay, updateCuts, index,
+    } = this.props;
     let jingle = null;
 
     const isActive = isOver && canDrop;
@@ -61,7 +66,7 @@ class SampleSlot extends Component {
 
     const additionalStyle = {
       backgroundColor: '#fff',
-      color: '#626972'
+      color: '#626972',
     };
 
     if (isActive || lastDroppedItem) {
@@ -85,18 +90,18 @@ class SampleSlot extends Component {
       maxLength = getJingleMetadata(lastDroppedItem.type).length;
     }
 
-    const formatVolume = value => value + '%';
-    const formatDelay = value => value.toFixed(1) + 's';
-    const formatCut = value => value.toFixed(1) + 's';
+    const formatVolume = value => `${value}%`;
+    const formatDelay = value => `${value.toFixed(1)}s`;
+    const formatCut = value => `${value.toFixed(1)}s`;
 
-    return connectDropTarget(
+    return connectDropTarget((() => (
       <div className="jingle-slot-wrapper" style={{ ...style }}>
         <div className="jingle-slot" style={{ ...additionalStyle }}>
           {
             lastDroppedItem &&
             <div>
               <div className="top" style={{ backgroundColor: rarityColor }}>
-                <div className="cancel-btn" onClick={() => {cancelDrop(lastDroppedItem);}}>
+                <div className="cancel-btn" onClick={() => { cancelDrop(lastDroppedItem); }}>
                   <i className="material-icons">close</i>
                 </div>
               </div>
@@ -110,21 +115,21 @@ class SampleSlot extends Component {
                 <div className="id-tag">
                   <span>#{ lastDroppedItem.type } - </span>
                   <span style={{ color: rarityColor }}>
-                  { jingle.rarity === 0 && 'Common' }
+                    { jingle.rarity === 0 && 'Common' }
                     { jingle.rarity === 1 && 'Rare' }
                     { jingle.rarity === 2 && 'Legendary' }
                     { jingle.rarity === 3 && 'Mythical' }
-                </span>
+                  </span>
                 </div>
               </div>
             </div>
           }
 
-          { !lastDroppedItem && <div className="empty-slot">Drag & drop sound sample here</div>  }
+          { !lastDroppedItem && <div className="empty-slot">Drag & drop sound sample here</div> }
         </div>
 
-        <div className='slider-group'>
-          <div className='slider'>
+        <div className="slider-group">
+          <div className="slider">
             <InputRange
               minValue={0}
               maxValue={100}
@@ -132,11 +137,11 @@ class SampleSlot extends Component {
               value={this.state.volumeValue}
               formatLabel={formatVolume}
               onChange={this.handleChange}
-              onChangeComplete={() => updateVolume({volume: this.state.volumeValue, index})}
+              onChangeComplete={() => updateVolume({ volume: this.state.volumeValue, index })}
             />
           </div>
 
-          <div className='slider'>
+          <div className="slider">
             <InputRange
               minValue={0}
               maxValue={4}
@@ -145,11 +150,11 @@ class SampleSlot extends Component {
               formatLabel={formatDelay}
               value={this.state.delayValue}
               onChange={this.handleDelayChange}
-              onChangeComplete={() => updateDelay({delay: this.state.delayValue, index})}
+              onChangeComplete={() => updateDelay({ delay: this.state.delayValue, index })}
             />
           </div>
 
-          <div className='slider'>
+          <div className="slider">
             <InputRange
               minValue={0}
               maxValue={maxLength}
@@ -158,18 +163,33 @@ class SampleSlot extends Component {
               formatLabel={formatCut}
               step={0.1}
               onChange={this.handleCutsChange}
-              onChangeComplete={value => updateCuts({cuts: this.state.range, index})} />
+              onChangeComplete={() => updateCuts({ cuts: this.state.range, index })}
+            />
           </div>
         </div>
       </div>
-    );
+    ))());
   }
 }
 
-const mapStateToProps = (state) => ({
-  volumes: state.compose.volumes,
-  delays: state.compose.delays,
-});
+SampleSlot.defaultProps = {
+  connectDropTarget: () => {},
+  isOver: false,
+  canDrop: false,
+  lastDroppedItem: null,
+};
+
+SampleSlot.propTypes = {
+  index: PropTypes.number.isRequired,
+  connectDropTarget: PropTypes.func,
+  cancelDrop: PropTypes.func.isRequired,
+  isOver: PropTypes.bool,
+  canDrop: PropTypes.bool,
+  lastDroppedItem: PropTypes.object,
+  updateVolume: PropTypes.func.isRequired,
+  updateDelay: PropTypes.func.isRequired,
+  updateCuts: PropTypes.func.isRequired,
+};
 
 const mapDispatchToProps = {
   updateVolume,
@@ -177,4 +197,4 @@ const mapDispatchToProps = {
   updateCuts,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SampleSlot);
+export default connect(null, mapDispatchToProps)(SampleSlot);

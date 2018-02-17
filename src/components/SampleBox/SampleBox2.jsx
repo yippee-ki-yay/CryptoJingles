@@ -102,7 +102,7 @@ SampleBox2.propTypes = {
   source: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   rarity: PropTypes.number.isRequired,
-  jingleType: PropTypes.string.isRequired,
+  jingleType: PropTypes.number.isRequired,
 };
 
 export default connect(null, { playAudio })(SampleBox2);

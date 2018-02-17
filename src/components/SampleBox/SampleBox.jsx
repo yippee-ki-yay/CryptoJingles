@@ -126,7 +126,7 @@ SampleBox.propTypes = {
   isDropped: PropTypes.bool.isRequired,
   isDragging: PropTypes.bool,
   rarity: PropTypes.number.isRequired,
-  jingleType: PropTypes.string.isRequired,
+  jingleType: PropTypes.number.isRequired,
 };
 
 export default SampleBox;
