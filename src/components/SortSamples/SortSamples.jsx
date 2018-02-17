@@ -1,5 +1,6 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
+import PropTypes from 'prop-types';
 
 import './SortSamples.scss';
 
@@ -21,5 +22,11 @@ const SortSamples = ({ options, onSortChange, value }) => (
     <div className="separator" />
   </div>
 );
+
+SortSamples.propTypes = {
+  onSortChange: PropTypes.func.isRequired,
+  options: PropTypes.array.isRequired,
+  value: PropTypes.object.isRequired,
+};
 
 export default SortSamples;
