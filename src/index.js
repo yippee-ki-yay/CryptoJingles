@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 // Layouts
-import App from './App';
+import App from './components/App/App';
 import Home from './components/Home/Home';
 import Profile from './components/Profile/Profile';
 import Marketplace from './components/Marketplace/Marketplace';

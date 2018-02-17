@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DropTarget } from 'react-dnd';
 import { connect } from 'react-redux';
 import InputRange from 'react-input-range';
-import { getJingleMetadata } from '../../getMockData';
+import { getJingleMetadata } from '../../constants/getMockData';
 import { getColorForRarity } from '../../actions/profileActions';
 
 import { updateVolume, updateDelay, updateCuts } from '../../actions/composeActions';

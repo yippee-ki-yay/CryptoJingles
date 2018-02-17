@@ -8,7 +8,7 @@ import Heart from '../Decorative/Heart';
 import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
 import { getColorForRarity } from '../../actions/profileActions';
 import { API_URL } from '../../util/config';
-import { getJingleMetadata } from '../../getMockData';
+import { getJingleMetadata } from '../../constants/getMockData';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { playWithDelay } from '../../util/soundHelper';
 import { formatSalePrice, formatToWei, likeUnlikeJingle } from '../../actions/utils';

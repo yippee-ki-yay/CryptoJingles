@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import createLoop from 'raf-loop';
-import createConfig from './config';
-import createRenderer  from './createRenderer';
+import createConfig from '../../../jingleImageGeneration/createConfigClient';
+import createRenderer  from '../../../jingleImageGeneration/createRenderer';
 
-// import './JingleImage.css';
+import './JingleImage.scss';
 
 const letterbox = (element, parent) => {
   let aspect = element.width / element.height;
