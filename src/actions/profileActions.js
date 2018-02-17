@@ -3,12 +3,11 @@ import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
-  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE
+  SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
-import { SAMPLE_PRICE } from '../util/config';
-import { API_URL } from '../util/config';
+import { SAMPLE_PRICE, API_URL } from '../util/config';
 import { likeUnlikeJingle } from '../actions/utils';
 
 /**
@@ -17,9 +16,7 @@ import { likeUnlikeJingle } from '../actions/utils';
  *
  * @return {Function}
  */
-export const setInvalidProfile = (pageNum) => (dispatch) => {
-  dispatch({ type: SET_INVALID_PROFILE });
-};
+export const setInvalidProfile = () => (dispatch) => { dispatch({ type: SET_INVALID_PROFILE }); };
 
 /**
  * Sets the profile address to be equal to the route para
@@ -28,7 +25,7 @@ export const setInvalidProfile = (pageNum) => (dispatch) => {
  *
  * @return {Function}
  */
-export const setProfileAddress = (address) => (dispatch) => {
+export const setProfileAddress = address => (dispatch) => {
   dispatch({ type: SET_PROFILE_ADDRESS, payload: address });
 };
 
@@ -39,10 +36,10 @@ export const setProfileAddress = (address) => (dispatch) => {
  *
  * @return {Function}
  */
-export const setActiveTab = (value) => (dispatch, getState) => {
+export const setActiveTab = value => (dispatch, getState) => {
   const tabs = [...getState().profile.tabs];
-  tabs[tabs.findIndex((_tab) => _tab.active)].active = false;
-  tabs[tabs.findIndex((_tab) => _tab.value === value)].active = true;
+  tabs[tabs.findIndex(_tab => _tab.active)].active = false;
+  tabs[tabs.findIndex(_tab => _tab.value === value)].active = true;
   dispatch({ type: SET_ACTIVE_PROFILE_TAB, payload: tabs });
 };
 
@@ -56,7 +53,7 @@ export const checkIfOwnerProfile = () => async (dispatch, getState) => {
   const state = getState();
   const isOwner = state.profile.profileAddress === state.app.address;
 
-  dispatch({ type: SET_PROFILE_IS_OWNER, payload: { isOwner }});
+  dispatch({ type: SET_PROFILE_IS_OWNER, payload: { isOwner } });
 };
 
 /**
@@ -68,7 +65,7 @@ export const checkIfOwnerProfile = () => async (dispatch, getState) => {
  * @return {Function}
  */
 export const onEditAuthorChange = ({ target }) => (dispatch) => {
-  dispatch({ type: SET_PROFILE_AUTHOR_EDIT, payload: target.value })
+  dispatch({ type: SET_PROFILE_AUTHOR_EDIT, payload: target.value });
 };
 
 /**
@@ -79,7 +76,7 @@ export const onEditAuthorChange = ({ target }) => (dispatch) => {
  *
  * @return {Function}
  */
-export const toggleEditAuthor = (hideOrShow) => (dispatch) => {
+export const toggleEditAuthor = hideOrShow => (dispatch) => {
   dispatch({ type: TOGGLE_PROFILE_AUTHOR, payload: hideOrShow });
 };
 
@@ -94,7 +91,7 @@ export const getAuthor = () => async (dispatch, getState) => {
     author = author || getState().profile.author;
 
     dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: author });
-  } catch(err) {
+  } catch (err) {
     // console.log('Get author error', err);
     // TODO - Handle this
   }
@@ -109,7 +106,7 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
   const id = guid();
   try {
     const state = getState();
-    const address = state.app.address;
+    const { address } = state.app;
 
     const newAuthorName = state.profile.authorEdit;
 
@@ -120,7 +117,7 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
 
     dispatch(removePendingTx(id));
     dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: newAuthorName });
-  } catch(err) {
+  } catch (err) {
     dispatch(removePendingTx(id));
     dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: getState().profile.author });
   }
@@ -165,7 +162,7 @@ export const onMySamplesSort = ({ value }) => (dispatch, getState) => {
       break;
   }
 
-  dispatch({ type: SET_MY_SAMPLES_SORTING, payload: { mySamples, selectedMySampleSort } })
+  dispatch({ type: SET_MY_SAMPLES_SORTING, payload: { mySamples, selectedMySampleSort } });
 };
 
 /**
@@ -196,7 +193,7 @@ export const getColorForRarity = (rarity) => {
  * @param {String} address
  * @return {Function}
  */
-export const getSamplesForUser = (address) => async (dispatch, getState) => {
+export const getSamplesForUser = address => async (dispatch, getState) => {
   const mySamples = await getSamples(address);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
   dispatch(onMySamplesSort(getState().profile.selectedMySampleSort));
@@ -212,16 +209,17 @@ export const buySamples = () => async (dispatch, getState) => {
 
   try {
     const state = getState();
-    const address = state.app.address;
+    const { address } = state.app;
 
     const numJinglesToBuy = state.profile.numSamplesToBuy;
 
     dispatch(addPendingTx(id, 'Buy sample'));
-    await window.contract.buySamples(parseInt(numJinglesToBuy, 10), address, {from: address, value: numJinglesToBuy * SAMPLE_PRICE});
+    const txParams = { from: address, value: numJinglesToBuy * SAMPLE_PRICE };
+    await window.contract.buySamples(parseInt(numJinglesToBuy, 10), address, txParams);
     dispatch(removePendingTx(id));
 
     dispatch(getSamplesForUser(address));
-  } catch(err) {
+  } catch (err) {
     dispatch(removePendingTx(id));
   }
 };
@@ -246,10 +244,16 @@ export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
  * @return {Function}
  */
 export const getJinglesForUser = () => async (dispatch, getState) => {
-  const { currentJinglesPage, jingleCategory, jingleSorting, profileAddress } = getState().profile;
+  const {
+    currentJinglesPage, jingleCategory, jingleSorting, profileAddress,
+  } = getState().profile;
   let jingles = [];
 
-  const response = await axios(`${API_URL}/jingles/${jingleCategory.value}/${profileAddress}/page/${currentJinglesPage}/filter/${jingleSorting.value}`);
+  const category = jingleCategory.value;
+  const activeSort = jingleSorting.value;
+  const query = `${API_URL}/jingles/${category}/${profileAddress}/page/${currentJinglesPage}/filter/${activeSort}`;
+  const response = await axios(query);
+
   const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
 
   const { address } = getState().app;
@@ -257,14 +261,15 @@ export const getJinglesForUser = () => async (dispatch, getState) => {
   if (jingleIds.length > 0) {
     const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
     jingles = response.data.map((_jingle, index) => ({
-      ..._jingle, liked: likedJinglesResponse.data[index]
+      ..._jingle, liked: likedJinglesResponse.data[index],
     }));
   } else {
     jingles = response.data;
   }
 
   // false for all jingles, true to get jingles on sale
-  const num = await axios(`${API_URL}/jingles/count/owner/${profileAddress}/sale/${(jingleCategory.value === 'sale').toString()}`);
+  const query2 = `${API_URL}/jingles/count/owner/${profileAddress}/sale/${(category === 'sale').toString()}`;
+  const num = await axios(query2);
 
   dispatch({ type: SET_PROFILE_JINGLES, payload: { jingles, num: num.data } });
 };
@@ -277,7 +282,7 @@ export const getJinglesForUser = () => async (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const changeProfileJinglesCategory = (payload) => (dispatch) => {
+export const changeProfileJinglesCategory = payload => (dispatch) => {
   dispatch({ type: SET_PROFILE_JINGLES_CATEGORY, payload });
   dispatch(getJinglesForUser());
 };
@@ -290,7 +295,7 @@ export const changeProfileJinglesCategory = (payload) => (dispatch) => {
  *
  * @return {Function}
  */
-export const changeProfileJinglesSorting = (payload) => (dispatch) => {
+export const changeProfileJinglesSorting = payload => (dispatch) => {
   dispatch({ type: SET_PROFILE_JINGLES_SORT, payload });
   dispatch(getJinglesForUser());
 };
@@ -302,7 +307,7 @@ export const changeProfileJinglesSorting = (payload) => (dispatch) => {
  *
  * @return {Function}
  */
-export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
+export const onMyJinglesPaginationChange = pageNum => (dispatch) => {
   dispatch({ type: SET_MY_JINGLES_PAGE, payload: pageNum + 1 });
   dispatch(getJinglesForUser());
 };
