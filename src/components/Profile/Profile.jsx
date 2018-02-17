@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import ethereumAddress from 'ethereum-address';
 import MySamples from './MySamples/MySamples';
 import MyJingles from './MyJingles/MyJingles';
@@ -7,14 +8,13 @@ import MySongs from './MySongs/MySongs';
 import MyAlbums from './MyAlbums/MyAlbums';
 import {
   setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
-  setProfileAddress, setInvalidProfile
+  setProfileAddress, setInvalidProfile,
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
 
 import './Profile.scss';
 import profilePlaceholder from './profile-placeholder.png';
 
-// TODO - add proptypes
 class Profile extends Component {
   componentWillMount() {
     if (!this.isValidProfile(this.props.params.address)) return;
@@ -43,10 +43,10 @@ class Profile extends Component {
 
   render() {
     const {
-      tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile
+      tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile,
     } = this.props;
     const { setActiveTab, toggleEditAuthor, onEditAuthorChange } = this.props;
-    const activeTab = tabs.find((_tab) => _tab.active).value;
+    const activeTab = tabs.find(_tab => _tab.active).value;
 
     return (
       <div className="container profile-wrapper">
@@ -56,13 +56,13 @@ class Profile extends Component {
           <div>
             <div className="profile-info-wrapper">
               <div className="profile-image-wrapper">
-                <img src={profilePlaceholder} alt="profile placeholder"/>
+                <img src={profilePlaceholder} alt="profile placeholder" />
                 <div>
                   <h2>
-                <span className="author">
-                  { !isOwner && author}
+                    <span className="author">
+                      { !isOwner && author}
 
-                  {
+                      {
                     isOwner &&
                     <div>
                       {
@@ -79,33 +79,33 @@ class Profile extends Component {
                         editAuthorActive &&
                         <div className="edit-author-wrapper">
                           <OutsideAlerter onClickOutside={() => { toggleEditAuthor(false); }}>
-                            <form onSubmit={(e) => {e.preventDefault(); }}>
-                          <span>
-                              <input
-                                maxLength="30"
-                                autoFocus
-                                onChange={onEditAuthorChange}
-                                type="text"
-                                value={authorEdit}
-                              />
-                            <span>
+                            <form onSubmit={(e) => { e.preventDefault(); }}>
                               <span>
-                                <button type="submit" onClick={submitEditAuthorForm}>
-                                  <i className="material-icons save">save</i>
-                                </button>
+                                <input
+                                  maxLength="30"
+                                  autoFocus
+                                  onChange={onEditAuthorChange}
+                                  type="text"
+                                  value={authorEdit}
+                                />
+                                <span>
+                                  <span>
+                                    <button type="submit" onClick={submitEditAuthorForm}>
+                                      <i className="material-icons save">save</i>
+                                    </button>
+                                  </span>
+                                  <span onClick={() => { toggleEditAuthor(false); }}>
+                                    <i className="material-icons close-icon">close</i>
+                                  </span>
+                                </span>
                               </span>
-                              <span onClick={() => { toggleEditAuthor(false); }}>
-                                <i className="material-icons close-icon">close</i>
-                              </span>
-                            </span>
-                          </span>
                             </form>
                           </OutsideAlerter>
                         </div>
                       }
                     </div>
                   }
-                </span>
+                    </span>
                   </h2>
                   <h4>
                     <a
@@ -120,12 +120,12 @@ class Profile extends Component {
                 </div>
               </div>
 
-              { /* TODO - create component out of this */  }
+              { /* TODO - create component out of this */ }
               <div className="tabs-wrapper">
                 {
                   tabs.map(({ label, value, active }) => (
                     <div
-                      key={ value }
+                      key={value}
                       className={`tab ${active ? 'active' : ''}`}
                       onClick={() => { setActiveTab(value); }}
                     >
@@ -136,9 +136,9 @@ class Profile extends Component {
               </div>
             </div>
 
-            { activeTab === tabs[0].value && <MySamples address={this.props.params.address} />  }
-            { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} />  }
-            { activeTab === tabs[2].value && <MySongs />  }
+            { activeTab === tabs[0].value && <MySamples address={this.props.params.address} /> }
+            { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} /> }
+            { activeTab === tabs[2].value && <MySongs /> }
             { activeTab === tabs[3].value && <MyAlbums /> }
           </div>
         }
@@ -150,22 +150,46 @@ class Profile extends Component {
           </div>
         }
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
+Profile.propTypes = {
+  tabs: PropTypes.array.isRequired,
+  editAuthorActive: PropTypes.bool.isRequired,
+  isOwner: PropTypes.bool.isRequired,
+  author: PropTypes.string.isRequired,
+  authorEdit: PropTypes.string.isRequired,
+  isValidProfile: PropTypes.bool.isRequired,
+  params: PropTypes.object.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
+  checkIfOwnerProfile: PropTypes.func.isRequired,
+  toggleEditAuthor: PropTypes.func.isRequired,
+  onEditAuthorChange: PropTypes.func.isRequired,
+  submitEditAuthorForm: PropTypes.func.isRequired,
+  getAuthor: PropTypes.func.isRequired,
+  setProfileAddress: PropTypes.func.isRequired,
+  setInvalidProfile: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
   tabs: state.profile.tabs,
   editAuthorActive: state.profile.editAuthorActive,
   isOwner: state.profile.isOwner,
   author: state.profile.author,
   authorEdit: state.profile.authorEdit,
-  isValidProfile: state.profile.isValidProfile
+  isValidProfile: state.profile.isValidProfile,
 });
 
 const mapDispatchToProps = {
-  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
-  setProfileAddress, setInvalidProfile
+  setActiveTab,
+  checkIfOwnerProfile,
+  toggleEditAuthor,
+  onEditAuthorChange,
+  submitEditAuthorForm,
+  getAuthor,
+  setProfileAddress,
+  setInvalidProfile,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
