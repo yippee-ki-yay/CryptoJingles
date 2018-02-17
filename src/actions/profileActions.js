@@ -234,7 +234,7 @@ export const buySamples = () => async (dispatch, getState) => {
  * @return {Function}
  */
 export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
-  if (value < 1) return;
+  if (value < 1 || value > 15) return;
 
   dispatch({ type: SET_PROFILE_NUM_SAMPLES_TO_BUY, payload: value });
 };
