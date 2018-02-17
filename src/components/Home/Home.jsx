@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { getJingleMetadata } from '../../constants/getMockData';
-import {API_URL} from '../../util/config';
+import { API_URL } from '../../util/config';
 import SampleBox2 from '../SampleBox/SampleBox2';
 import SingleJingle from '../SingleJingle/SingleJingle';
 
-import "./Home.scss";
+import './Home.scss';
 import bigLogo from './bigLogo.png';
 
 class Home extends Component {
@@ -28,15 +29,15 @@ class Home extends Component {
     const jingle = jingleData.data;
 
     this.setState({ jingle });
-  };
+  }
 
   render() {
     const { lockedMM, hasMM, address } = this.props;
 
-    return(
+    return (
       <div className="container home">
         <div className="homepage-main">
-          <img className="big-logo" src={bigLogo} alt="Logo with typeface"/>
+          <img className="big-logo" src={bigLogo} alt="Logo with typeface" />
           <div className="home-title">
             Compose the best jingles on the blockchain, you can share them, sell them and love them.
           </div>
@@ -51,7 +52,7 @@ class Home extends Component {
         </div>
 
         <div className="separator" />
-        
+
         <div className="explanation-section">
           <div className="left">
             <h2>What is it?</h2>
@@ -74,8 +75,8 @@ class Home extends Component {
               future. A sample can be one of 4 types of rarity: common, rare, legendary and mythical. Rarer the sample,
               better the sound. There are currently 59 common sounds, 30 rare, 10 legendary and only 1 mythical!
               Every sound sample is hosted on IPFS and referenced on the main smart contract. Samples have a fixed
-              price of 0.001Ξ and can't be traded. In order to compose a jingle you need 5
-              samples. When a sample is used to compose a jingle it becomes a part of it and you can't use it in
+              price of 0.001Ξ and can{ '\'' }t be traded. In order to compose a jingle you need 5
+              samples. When a sample is used to compose a jingle it becomes a part of it and you can{ '\'' }t use it in
               other jingles.
             </div>
           </div>
@@ -107,9 +108,9 @@ class Home extends Component {
               result, a jingle can have value because of its cover image and its sound. Jingles are tradable items
               that you can put on sale in our marketplace for whatever price you think it’s worth.
               Putting a jingle on sale is free, but we do take a 3% cut on a successful sale. Additionally, a jingle
-              has a name and a author. They are set when a jingle is composed and can't be altered after that, even
-              after a change of ownership. The default name for every owner is Soundtoshi Nakajingles, you are free to
-              change this on your profile page.
+              has a name and a author. They are set when a jingle is composed and can{ '\'' }t be altered after that,
+              even after a change of ownership. The default name for every owner is Soundtoshi Nakajingles, you are
+              free to change this on your profile page.
             </div>
           </div>
         </div>
@@ -160,6 +161,12 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  hasMM: PropTypes.bool.isRequired,
+  lockedMM: PropTypes.bool.isRequired,
+  address: PropTypes.string.isRequired,
+};
 
 const mapStateToProps = state => ({
   hasMM: state.app.hasMM,
