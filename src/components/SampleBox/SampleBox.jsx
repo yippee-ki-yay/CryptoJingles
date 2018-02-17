@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { DragSource } from 'react-dnd';
 import Pizzicato from 'pizzicato';
+import PropTypes from 'prop-types';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
-import { playAudio } from '../../actions/audioActions';
 import { getColorForRarity } from '../../actions/profileActions';
 
 import './SampleBox.scss';
 
-const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }} };
+const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }; } };
 
 const style = {
   margin: '14px 27px 7px 26px',
@@ -57,7 +56,7 @@ class SampleBox extends Component {
   playSound = () => {
     if (this.state.sound === null) {
       this.loadSample();
-      return
+      return;
     }
 
     this.state.sound.play();
@@ -71,46 +70,63 @@ class SampleBox extends Component {
   };
 
   render() {
-    const { name, isDropped, isDragging, connectDragSource, rarity, jingleType } = this.props;
+    const {
+      name, isDropped, isDragging, connectDragSource, rarity, jingleType,
+    } = this.props;
     const opacity = isDragging || isDropped ? 0.4 : 1;
 
     if (isDropped) style.pointerEvents = 'none';
     if (!isDropped) style.pointerEvents = 'initial';
 
-    let background = getColorForRarity(rarity);
+    const background = getColorForRarity(rarity);
 
-    return connectDragSource(
-        <div style={{ opacity, ...style }}>
-          <div className={`sample-wrapper`} style={{ width: '175px' }}>
-            <div className="top" style={{ background }}>
-              { this.state.loading && <div><LoadingIcon /></div> }
-              {
-                !this.state.loading && !this.state.start &&
-                <div onClick={ this.playSound }><PlayIcon /></div>
-              }
-              {
-                !this.state.loading && this.state.start &&
-                <div onClick={ this.stopSound }><StopIcon /></div>
-              }
-            </div>
+    return connectDragSource((() => (
+      <div style={{ opacity, ...style }}>
+        <div className="sample-wrapper" style={{ width: '175px' }}>
+          <div className="top" style={{ background }}>
+            { this.state.loading && <div><LoadingIcon /></div> }
+            {
+              !this.state.loading && !this.state.start &&
+              <div onClick={this.playSound}><PlayIcon /></div>
+            }
+            {
+              !this.state.loading && this.state.start &&
+              <div onClick={this.stopSound}><StopIcon /></div>
+            }
+          </div>
 
-            <div className="bottom">
-              <div className="name-tag">{ name }</div>
+          <div className="bottom">
+            <div className="name-tag">{ name }</div>
 
-              <div className="id-tag">
-                <span>#{ jingleType } - </span>
-                <span style={{ color: background }}>
-                  { rarity === 0 && 'Common' }
-                  { rarity === 1 && 'Rare' }
-                  { rarity === 2 && 'Legendary' }
-                  { rarity === 3 && 'Mythical' }
-                </span>
-              </div>
+            <div className="id-tag">
+              <span>#{ jingleType } - </span>
+              <span style={{ color: background }}>
+                { rarity === 0 && 'Common' }
+                { rarity === 1 && 'Rare' }
+                { rarity === 2 && 'Legendary' }
+                { rarity === 3 && 'Mythical' }
+              </span>
             </div>
           </div>
         </div>
-    )
+      </div>
+    ))());
   }
 }
 
-export default connect(null, { playAudio })(SampleBox);
+SampleBox.defaultProps = {
+  connectDragSource: () => {},
+  isDragging: false,
+};
+
+SampleBox.propTypes = {
+  connectDragSource: PropTypes.func,
+  source: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  isDropped: PropTypes.bool.isRequired,
+  isDragging: PropTypes.bool,
+  rarity: PropTypes.number.isRequired,
+  jingleType: PropTypes.string.isRequired,
+};
+
+export default SampleBox;
