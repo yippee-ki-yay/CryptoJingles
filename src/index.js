@@ -12,7 +12,7 @@ import Home from './components/Home/Home';
 import Profile from './components/Profile/Profile';
 import Marketplace from './components/Marketplace/Marketplace';
 import Compose from './components/Compose/Compose';
-import JinglePage from './components/Marketplace/JinglePage';
+import JinglePage from './components/JinglePage/JinglePage';
 import Page404 from './components/Page404/Page404';
 
 // Redux Store
