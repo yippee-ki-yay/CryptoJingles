@@ -4,8 +4,6 @@ require('./models/jingles.model');
 const jingleCtrl = require('./controllers/jingles.controller');
 const jingleImageCtrl = require('./controllers/jingle.image.controller');
 
-const jingleImageCtrl = require('./controllers/jingle.image.controller');
-
 router.get('/jingles/pagination/:owner/page/:page/filter/:filter', jingleCtrl.getJinglesForOwner);
 router.get('/jingles/count/owner/:owner/sale/:sale', jingleCtrl.getJingleNumForOwner);
 router.get('/jingles/sale/:owner/page/:page/filter/:filter', jingleCtrl.getJinglesOnSaleForOwner);
@@ -18,8 +16,6 @@ router.post('/jingle/like', (req, res) => { jingleCtrl.likeUnLikeJingle(req, res
 router.post('/jingle/unlike', (req, res) => { jingleCtrl.likeUnLikeJingle(req, res, false); });
 router.get('/jingles/check-liked/:address/:jingleIds', jingleCtrl.checkIfLikedJingles);
 router.get('/jingle/check-liked/:address/:jingleId', jingleCtrl.checkIfLikedJingle);
-
-router.get('/jingle/get-image-url/:jingleId', jingleImageCtrl.getJingleImageUrl);
 
 router.get('/jingle/get-image-url/:jingleId', jingleImageCtrl.getJingleImageUrl);
 
