@@ -10,7 +10,7 @@ import '../../css/custom.min.css';
 import '../../css/theme.min.css';
 import './App.scss';
 
-const App = ({ lockedMM, hasMM, address }) => (
+const App = ({ lockedMM, hasMM, address, children }) => (
   <div>
     <header className="navbar navbar-default navbar-fixed-top header-wrapper">
       <div className="container">
@@ -50,7 +50,7 @@ const App = ({ lockedMM, hasMM, address }) => (
     </header>
 
     <div className="children-wrapper">
-      {this.props.children}
+      {children}
     </div>
   </div>
 );
@@ -65,6 +65,7 @@ App.propTypes = {
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default connect(mapStateToProps)(App);

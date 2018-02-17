@@ -303,7 +303,7 @@ class Compose extends Component {
                   {
                       this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
                         (<SampleSlot
-                          key={`item-${lastDroppedItem.id}`}
+                          key={`item-${guid()}`}
                           index={index}
                           accepts={accepts}
                           lastDroppedItem={lastDroppedItem}
