@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Pizzicato from 'pizzicato';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
@@ -46,7 +47,7 @@ class SampleBox2 extends Component {
   playSound = () => {
     if (this.state.sound === null) {
       this.loadSample();
-      return
+      return;
     }
 
     this.state.sound.play();
@@ -61,20 +62,20 @@ class SampleBox2 extends Component {
 
   render() {
     const { name, jingleType, rarity } = this.props;
-    let background = getColorForRarity(rarity);
+    const background = getColorForRarity(rarity);
 
     return (
       <div style={{ ...style }}>
         <div className="sample-wrapper">
-            <div className="top" style={{ background }}>
+          <div className="top" style={{ background }}>
             { this.state.loading && <div><LoadingIcon /></div> }
             {
               !this.state.loading && !this.state.start &&
-              <div onClick={ this.playSound }><PlayIcon /></div>
+              <div onClick={this.playSound}><PlayIcon /></div>
             }
             {
               !this.state.loading && this.state.start &&
-              <div onClick={ this.stopSound }><StopIcon /></div>
+              <div onClick={this.stopSound}><StopIcon /></div>
             }
           </div>
 
@@ -93,8 +94,15 @@ class SampleBox2 extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
+
+SampleBox2.propTypes = {
+  source: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  rarity: PropTypes.number.isRequired,
+  jingleType: PropTypes.string.isRequired,
+};
 
 export default connect(null, { playAudio })(SampleBox2);
