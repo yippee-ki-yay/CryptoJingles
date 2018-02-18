@@ -118,6 +118,10 @@ contract Marketplace is Ownable {
         jinglesOnSale.length--;
     }
     
+    function getAllJinglesOnSale() public view returns(uint[]) {
+        return jinglesOnSale;
+    }
+    
     //Owners functions 
     function withdraw(uint _amount) public onlyOwner {
         require(_amount <= ownerBalance);

@@ -22,7 +22,7 @@ contract Jingle is Ownable, ERC721 {
     mapping(bytes32 => bool) public uniqueJingles;
     
     mapping(uint => uint8[]) public soundEffects;
-    mapping(uint => uint[20]) public settings;
+    mapping(uint => uint8[20]) public settings;
     
     uint public numOfJingles;
     

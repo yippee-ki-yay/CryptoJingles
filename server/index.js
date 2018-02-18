@@ -15,7 +15,7 @@ const jingleCtrl = require('./controllers/jingles.controller');
 const userCtrl = require('./controllers/users.controller');
 
 const app = express();
-app.use( bodyParser.json() );
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const marketplaceAddress = "0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5";
