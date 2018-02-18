@@ -81,7 +81,7 @@ class SingleJingle extends Component {
 
   render() {
     const {
-      jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM,
+      jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM, type,
     } = this.props;
 
     return (
@@ -120,13 +120,15 @@ class SingleJingle extends Component {
         <div className="jingle-footer">
           <div className="id-likes-wrapper">
             <span>#{ jingleId }</span>
-            <span>
-              <span onClick={() => { this.likeJingle(jingleId, !liked); }}>
-                <Heart active={liked} size="30" canLike={hasMM && !lockedMM} />
+            {
+              type !== 'home' &&
+              <span>
+                <span onClick={() => { this.likeJingle(jingleId, !liked); }}>
+                  <Heart active={liked} size="30" canLike={hasMM && !lockedMM} />
+                </span>
+                <span>{ likeCount }</span>
               </span>
-              <span>{ likeCount }</span>
-            </span>
-
+            }
           </div>
           <div className="jingle-footer-author">{ author }</div>
           <div className="jingle-footer-name">{ name }</div>

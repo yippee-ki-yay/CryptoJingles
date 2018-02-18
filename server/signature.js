@@ -1,22 +1,17 @@
 const sigUtil = require('eth-sig-util');
+const { LIKES_MESSAGE_TO_SIGN } = require('../config/universalConstants');
 
 module.exports.isValidSignature = (address, sig) => {
+  const msgParams = [{
+    type: 'string',
+    name: 'Message',
+    value: LIKES_MESSAGE_TO_SIGN,
+  }];
 
-    const msgParams = [{
-        type: 'string',
-        name: 'Message',
-        value: 'CryptoJingles',
-    }];
+  const recovered = sigUtil.recoverTypedSignature({
+    data: msgParams,
+    sig,
+  });
 
-    const recovered = sigUtil.recoverTypedSignature({
-        data: msgParams,
-        sig
-    });
-
-    if (address.toString().toLowerCase() === recovered.toString().toLowerCase()) {
-        return true;
-    } else {
-        return false;
-    }
-
+  return address.toString().toLowerCase() === recovered.toString().toLowerCase();
 };

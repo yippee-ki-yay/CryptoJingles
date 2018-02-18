@@ -1,8 +1,9 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
-import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress } from '../config';
+import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress, SampleAddress } from '../config';
 import CryptoJingles from '../../../build/contracts/CryptoJingles.json';
 import Jingle from '../../../build/contracts/Jingle.json';
+import Sample from '../../../build/contracts/Sample.json';
 import Marketplace from '../../../build/contracts/Marketplace.json';
 import { initAppWithMM, initAppWithoutMM, initAppWithLockedMM } from '../../../src/actions/appActions';
 
@@ -13,12 +14,12 @@ import { initAppWithMM, initAppWithoutMM, initAppWithLockedMM } from '../../../s
  * @param {Function} dispatch
  * @return {Promise.<void>}
  */
-let getWeb3 = async (dispatch) => {
+// TODO - put all of this data into a web 3 reducer
+const getWeb3 = async (dispatch) => {
   if (typeof web3 !== 'undefined') {
     window.web3 = new Web3(web3.currentProvider); // eslint-disable-line
 
-    const netId = await window.web3.eth.net.getId();
-
+    // const netId = await window.web3.eth.net.getId();
     // if (netId !== "1") alert("Wrong network, please switch to the mainnet!");
 
     // Init jingles contract
@@ -36,14 +37,19 @@ let getWeb3 = async (dispatch) => {
     marketplaceContract.setProvider(window.web3.currentProvider);
     window.marketplaceContract = marketplaceContract.at(MarketplaceAddress);
 
+    // Init samples contract
+    const samplesContract = contract(Sample);
+    samplesContract.setProvider(window.web3.currentProvider);
+    window.samplesContract = samplesContract.at(SampleAddress);
+
     const addresses = await window.web3.eth.getAccounts();
     const address = addresses[0];
 
     if (address) dispatch(initAppWithMM(address.toLowerCase()));
-    else dispatch(initAppWithLockedMM())
+    else dispatch(initAppWithLockedMM());
   } else {
     dispatch(initAppWithoutMM());
   }
 };
 
-export default getWeb3
+export default getWeb3;

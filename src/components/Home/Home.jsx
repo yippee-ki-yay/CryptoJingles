@@ -27,6 +27,7 @@ class Home extends Component {
   async componentWillMount() {
     const jingleData = await axios(`${API_URL}/jingle/${30}`);
     const jingle = jingleData.data;
+    jingle.liked = false;
 
     this.setState({ jingle });
   }
@@ -96,7 +97,7 @@ class Home extends Component {
         <div className="explanation-section-2">
           <div className="home-samples-wrapper">
             <div className="home-samples">
-              { this.state.jingle && <SingleJingle {...this.state.jingle} /> }
+              { this.state.jingle && <SingleJingle type="home" {...this.state.jingle} /> }
             </div>
           </div>
 

@@ -39,7 +39,6 @@
     "react-dev-utils": "^0.4.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.1",
-    "truffle-contract": "^1.1.8",
     "uglifyjs-webpack-plugin": "^1.1.8",
     "url-loader": "0.5.7",
     "webpack": "^3.10.0",
@@ -47,6 +46,7 @@
     "webpack-manifest-plugin": "1.1.0"
   },
   "dependencies": {
+    "truffle-contract": "^1.1.8",
     "autoprefixer-loader": "^3.2.0",
     "axios": "^0.17.1",
     "canvas": "^1.6.9",

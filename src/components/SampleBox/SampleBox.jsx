@@ -73,7 +73,8 @@ class SampleBox extends Component {
     const {
       name, isDropped, isDragging, connectDragSource, rarity, jingleType,
     } = this.props;
-    const opacity = isDragging || isDropped ? 0.4 : 1;
+
+    style.opacity = isDragging || isDropped ? 0.4 : 1;
 
     if (isDropped) style.pointerEvents = 'none';
     if (!isDropped) style.pointerEvents = 'initial';
@@ -81,7 +82,7 @@ class SampleBox extends Component {
     const background = getColorForRarity(rarity);
 
     return connectDragSource((() => (
-      <div style={{ opacity, ...style }}>
+      <div style={{ ...style }}>
         <div className="sample-wrapper" style={{ width: '175px' }}>
           <div className="top" style={{ background }}>
             { this.state.loading && <div><LoadingIcon /></div> }
