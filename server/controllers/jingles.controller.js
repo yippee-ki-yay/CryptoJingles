@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Jingle = mongoose.model('Jingle');
 
 const JINGLES_PER_PAGE = 10;
@@ -9,269 +10,252 @@ const userCtrl = require('./users.controller');
 const signature = require('../signature');
 
 module.exports.getJinglesForOwner = async (req, res) => {
+  const pageNum = parseInt(req.params.page) - 1;
+  const filter = req.params.filter;
 
-    const pageNum = parseInt(req.params.page) - 1;
-    const filter = req.params.filter;
+  try {
+    const jingles = await Jingle.find({ owner: req.params.owner }, '-likes')
+      .limit(JINGLES_PER_PAGE)
+      .skip(JINGLES_PER_PAGE * pageNum)
+      .sort(filter)
+      .exec();
 
-    try {
-        const jingles = await Jingle.find({owner: req.params.owner}, '-likes')
-                                    .limit(JINGLES_PER_PAGE)
-                                    .skip(JINGLES_PER_PAGE * pageNum)
-                                    .sort(filter)
-                                    .exec();
-
-        res.status(200);
-        res.json(jingles);
-
-    } catch(err) {
-        console.log(err);
-    }
+    res.status(200);
+    res.json(jingles);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports.getJinglesOnSaleForOwner = async (req, res) => {
+  const pageNum = parseInt(req.params.page) - 1;
+  const filter = req.params.filter;
 
+  try {
+    const jingles = await Jingle.find({ owner: req.params.owner, onSale: true }, '-likes')
+      .limit(JINGLES_PER_PAGE)
+      .skip(JINGLES_PER_PAGE * pageNum)
+      .sort(filter)
+      .exec();
+
+    res.status(200);
+    res.json(jingles);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.getJingleNumForOwner = async (req, res) => {
+  try {
+    const sale = req.params.sale;
+
+    let search = { owner: req.params.owner };
+
+    if (sale === 'true') {
+      search = {
+        onSale: true,
+        owner: req.params.owner,
+      };
+    }
+
+    const num = await Jingle.count(search).exec();
+
+    res.status(200);
+    res.json(num);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.getJingle = async (req, res) => {
+  try {
+    const jingleId = req.params.jingleId;
+
+    const jingle = await Jingle.findOne({ jingleId }, '-likes');
+
+    console.log(jingle);
+
+    res.status(200);
+    res.json(jingle);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports.getJingles = async (req, res) => {
+  try {
     const pageNum = parseInt(req.params.page) - 1;
     const filter = req.params.filter;
 
-    try {
-        const jingles = await Jingle.find({owner: req.params.owner, onSale: true}, '-likes')
-                                    .limit(JINGLES_PER_PAGE)
-                                    .skip(JINGLES_PER_PAGE * pageNum)
-                                    .sort(filter)
-                                    .exec();
+    console.log('Getting orders', pageNum, filter);
 
-        res.status(200);
-        res.json(jingles);
-
-    } catch(err) {
-        console.log(err);
-    }
-}
-
-module.exports.getJingleNumForOwner = async (req, res) => {
-    try {
-        const sale = req.params.sale;
-
-        let search = { owner: req.params.owner };
-
-        if (sale === 'true') {
-            search = { 
-                onSale: true,
-                owner: req.params.owner
-            };
-        }
-
-        const num = await Jingle.count(search).exec();
-
-        res.status(200);
-        res.json(num);
-
-    } catch(err) {
-        console.log(err);
-    }  
-}
-
-module.exports.getJingle = async (req, res) => {
-    try {
-        const jingleId = req.params.jingleId;
-
-        const jingle = await Jingle.findOne({jingleId: jingleId}, '-likes');
-
-        console.log(jingle);
-
-        res.status(200);
-        res.json(jingle);
-
-    } catch(err) {
-        console.log(err);
-    }
-}
-
-module.exports.getJingles = async (req, res) => {
-    try {
-
-        const pageNum = parseInt(req.params.page) - 1;
-        const filter = req.params.filter;
-
-        console.log('Getting orders', pageNum, filter);
-
-        const orders = await Jingle.find({}, '-likes')
-                                  .limit(JINGLES_PER_PAGE)
-                                  .skip(JINGLES_PER_PAGE * pageNum)
-                                  .sort(filter)
-                                  .exec();
+    const orders = await Jingle.find({}, '-likes')
+      .limit(JINGLES_PER_PAGE)
+      .skip(JINGLES_PER_PAGE * pageNum)
+      .sort(filter)
+      .exec();
 
 
-        res.status(200);
-        res.json(orders);
-
-    } catch(err) {
-        console.log(err);
-    }
-}
+    res.status(200);
+    res.json(orders);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 module.exports.getJingleNum = async (req, res) => {
-    try {
-        const sale = req.params.sale;
+  try {
+    const sale = req.params.sale;
 
-        let search = {};
+    let search = {};
 
-        if (sale === 'true') {
-            search = { onSale: true};
-        }
+    if (sale === 'true') {
+      search = { onSale: true };
+    }
 
-        const num = await Jingle.count(search).exec();
+    const num = await Jingle.count(search).exec();
 
-        res.status(200);
-        res.json(num);
-
-    } catch(err) {
-        console.log(err);
-    }  
-}
+    res.status(200);
+    res.json(num);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 module.exports.getJinglesForSale = async (req, res) => {
-    try {
+  try {
+    const pageNum = parseInt(req.params.page) - 1;
+    const filter = req.params.filter;
 
-        const pageNum = parseInt(req.params.page) - 1;
-        const filter = req.params.filter;
+    console.log('Getting orders', pageNum, filter);
 
-        console.log('Getting orders', pageNum, filter);
+    const orders = await Jingle.find({ onSale: true }, '-likes')
+      .limit(JINGLES_PER_PAGE)
+      .skip(JINGLES_PER_PAGE * pageNum)
+      .sort(filter)
+      .exec();
 
-        const orders = await Jingle.find({onSale: true}, '-likes')
-                                  .limit(JINGLES_PER_PAGE)
-                                  .skip(JINGLES_PER_PAGE * pageNum)
-                                  .sort(filter)
-                                  .exec();
-
-        res.status(200);
-        res.json(orders);
-
-    } catch(err) {
-        console.log(err);
-    }
-}
+    res.status(200);
+    res.json(orders);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 module.exports.getOnSaleJingles = async () => {
-    try {
+  try {
+    const jinglesOfSale = await Jingle.find({ onSale: true }, '-likes').select('jingleId');
 
-        const jinglesOfSale = await Jingle.find({onSale: true}, '-likes').select('jingleId');
-
-        return jinglesOfSale;
-
-    } catch(err) {
-        console.log(err);
-    }
-}
+    return jinglesOfSale;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 // Server only method not exposed in api
 module.exports.addJingle = async (jingleData) => {
-    try {
+  try {
+    console.log('Trying to write a jingle');
 
-        const find = await Jingle.findOne({jingleId: parseInt(jingleData.jingleId)});
+    const find = await Jingle.findOne({ jingleId: parseInt(jingleData.jingleId, 10) });
 
-        console.log('Found jingle', find);
+    console.log('Found jingle', find);
 
-        if (!find) {
-            const jingle = new Jingle(jingleData);
+    if (!find) {
+      const jingle = new Jingle(jingleData);
 
-            await jingle.save();
+      await jingle.save();
 
-            console.log('Saved jingle', jingleData.jingleId);
+      console.log('Saved jingle', jingleData.jingleId);
 
-            return true;
-        }
-
-    } catch(err) {
-        console.log(err);
-        console.log('ERROR WHILE SAVING JINGLE', jingleData.jingleId, err);
-        return false;
+      return true;
     }
+  } catch (err) {
+    console.log(err);
+    console.log('ERROR WHILE SAVING JINGLE', jingleData.jingleId, err);
+    return false;
+  }
 };
 
 module.exports.jingleNum = async () => {
-    try {
-        const numJingles = Jingle.find({}).count();
+  try {
+    const numJingles = Jingle.find({}).count();
 
-        return numJingles;
-    } catch(err) {
-        console.log(err);
-    }
+    return numJingles;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 module.exports.setForSale = async (order) => {
-    try {
-        console.log("Id: ", order.jingleId);
+  try {
+    console.log('Id: ', order.jingleId);
 
-        const jingle = await Jingle.findOne({jingleId: order.jingleId});
+    const jingle = await Jingle.findOne({ jingleId: order.jingleId });
 
-        if(!jingle) {
-            return;
-        }
-
-        jingle.onSale = true;
-        jingle.price = order.price;
-
-        await jingle.save();
-
-        return true;
-
-    } catch(err) {
-        console.log(err);
-        return false;
+    if (!jingle) {
+      return;
     }
-}
+
+    jingle.onSale = true;
+    jingle.price = order.price;
+
+    await jingle.save();
+
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
 
 module.exports.removeFromSale = async (jingleId, buyer) => {
-    try {
-        const jingle = await Jingle.findOne({jingleId: jingleId});
+  try {
+    const jingle = await Jingle.findOne({ jingleId });
 
-        jingle.onSale = false;
-        jingle.price = 0;
-        jingle.buyer = buyer;
+    jingle.onSale = false;
+    jingle.price = 0;
+    jingle.buyer = buyer;
 
-        await jingle.save();
+    await jingle.save();
 
-        return true;
-
-    } catch(err) {
-        console.log(err);
-        return false;
-    }
-}
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
 
 module.exports.removeFromSale = async (jingleId, buyer) => {
-    try {
-        const jingle = await Jingle.findOne({jingleId: jingleId});
+  try {
+    const jingle = await Jingle.findOne({ jingleId });
 
-        jingle.onSale = false;
-        jingle.price = 0;
-        jingle.buyer = buyer;
+    jingle.onSale = false;
+    jingle.price = 0;
+    jingle.buyer = buyer;
 
-        await jingle.save();
+    await jingle.save();
 
-        return true;
-
-    } catch(err) {
-        console.log(err);
-        return false;
-    }
-}
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
 module.exports.cancelJingle = async (jingleId) => {
-    try {
-        const jingle = await Jingle.findOne({jingleId: jingleId});
+  try {
+    const jingle = await Jingle.findOne({ jingleId });
 
-        jingle.onSale = false;
-        jingle.price = 0;
+    jingle.onSale = false;
+    jingle.price = 0;
 
-        await jingle.save();
+    await jingle.save();
 
-        return true;
-
-    } catch(err) {
-        console.log(err);
-        return false;
-    }
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
 /**
@@ -286,7 +270,7 @@ module.exports.cancelJingle = async (jingleId) => {
  * @return {Promise}
  */
 const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
-  new Promise (async (resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     const jingle = await Jingle.findOne({ jingleId });
 
     console.log('Signature', sig);
@@ -295,13 +279,17 @@ const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
 
     console.log('Is valid signature', isValid);
 
-    if (!userCtrl.userExists(address)) {
-        reject('User has 0 samples');
+    const userExists = await userCtrl.userExists(address);
+
+    console.log(userExists);
+
+    if (!userExists) {
+      reject('User has 0 samples');
     }
 
     if (!isValid) {
-        reject(!isValid);
-        return;
+      reject(!isValid);
+      return;
     }
 
     if ((action === true) && jingle.likes.includes(address)) {
@@ -346,7 +334,7 @@ module.exports.likeUnLikeJingle = async (req, res, action) => {
   try {
     const likeCount = await updateLikeUnlikeJingle(jingleId, address, sig, action);
     res.send({ likeCount });
-  } catch(error) {
+  } catch (error) {
     res.status(500).send({ error });
   }
 };
@@ -364,8 +352,8 @@ const didAddressLikeJingle = (address, jingleId) =>
     const jingle = await Jingle.findOne({ jingleId });
 
     if (!jingle) {
-        reject(`Jingle #${jingleId} does not exist`);
-        return;
+      reject(`Jingle #${jingleId} does not exist`);
+      return;
     }
 
     resolve(jingle.likes.includes(address));
@@ -392,7 +380,7 @@ module.exports.checkIfLikedJingles = (req, res) => {
   // TODO - create try/catch error function that has a Promise for paramm
   try {
     Promise.all(promiseMap).then((data) => { res.send(data); });
-  } catch(error) {
+  } catch (error) {
     res.status(500).send({ error });
   }
 };
@@ -414,7 +402,7 @@ module.exports.checkIfLikedJingle = async (req, res) => {
   try {
     const result = await didAddressLikeJingle(address, jingleId);
     res.send(result);
-  } catch(error) {
+  } catch (error) {
     res.status(500).send({ error });
   }
 };
