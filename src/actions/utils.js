@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '../util/config';
+import { LIKES_MESSAGE_TO_SIGN } from '../../config/universalConstants';
 
 /**
  * Converts price in wei to price in ETH without web3
@@ -52,7 +53,7 @@ export const likeUnlikeJingle = async (jingleId, action, address) => {
   const actionString = action ? 'like' : 'unlike';
 
   try {
-    const sig = await signString(address, 'CryptoJingles');
+    const sig = await signString(address, LIKES_MESSAGE_TO_SIGN);
 
     const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId, sig });
 
