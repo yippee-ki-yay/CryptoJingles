@@ -169,8 +169,6 @@ class JinglePage extends Component {
 
     const sound = playWithDelay(this.state.sound, this.state.jingle.settings);
 
-    console.log(sound);
-
     sound.on('stop', () => { this.setState({ start: false }); });
 
     this.setState({ start: true });

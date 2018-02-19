@@ -50,7 +50,6 @@ const getWeb3 = async (dispatch) => {
     if (address) {
       const canLikeResponse = await axios(`${API_URL}/jingle/can-like/${address.toLowerCase()}`);
       const { canLike } = canLikeResponse.data;
-      console.log('canLike', canLike);
       dispatch(initAppWithMM(address.toLowerCase(), canLike));
     } else dispatch(initAppWithLockedMM());
   } else {
