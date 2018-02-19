@@ -27,14 +27,20 @@ class SampleSlot extends Component {
   constructor(props) {
     super(props);
 
-    const { index } = props;
+    const { index, lastDroppedItem } = props;
+
+    let maxLength = 10;
+
+    if (lastDroppedItem) {
+      maxLength = getJingleMetadata(lastDroppedItem.type).length;
+    }
 
     this.state = {
       volumeValue: props.volumes[index],
       delayValue: props.delays[index],
       range: {
         min: props.cuts[index],
-        max: props.cuts[index + 5],
+        max: props.cuts[index + 5] || maxLength,
       },
     };
   }
@@ -88,9 +94,9 @@ class SampleSlot extends Component {
 
    let maxLength = 10;
 
-    // if (lastDroppedItem) {
-    //   maxLength = getJingleMetadata(lastDroppedItem.type).length;
-    // }
+    if (lastDroppedItem) {
+      maxLength = getJingleMetadata(lastDroppedItem.type).length;
+    }
 
     const formatVolume = value => `${value}%`;
     const formatDelay = value => `${value.toFixed(1)}s`;
