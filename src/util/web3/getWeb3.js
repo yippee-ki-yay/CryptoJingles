@@ -20,8 +20,9 @@ const getWeb3 = async (dispatch) => {
   if (typeof web3 !== 'undefined') {
     window.web3 = new Web3(web3.currentProvider); // eslint-disable-line
 
-    // const netId = await window.web3.eth.net.getId();
-    // if (netId !== "1") alert("Wrong network, please switch to the mainnet!");
+    // TODO - check if dev or prod here
+    const netId = await window.web3.eth.net.getId();
+    if (netId !== '1') alert('Wrong network, please switch to the mainnet!');
 
     // Init jingles contract
     const cryptoJinglesContract = contract(CryptoJingles);
