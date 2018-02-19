@@ -27,12 +27,14 @@ class SampleSlot extends Component {
   constructor(props) {
     super(props);
 
+    const { index } = props;
+
     this.state = {
-      volumeValue: 50,
-      delayValue: 0,
+      volumeValue: props.volumes[index],
+      delayValue: props.delays[index],
       range: {
-        min: 0,
-        max: 15,
+        min: props.cuts[index],
+        max: props.cuts[index + 5],
       },
     };
   }
@@ -84,11 +86,11 @@ class SampleSlot extends Component {
       rarityColor = getColorForRarity(jingle.rarity);
     }
 
-    let maxLength = 10;
+   let maxLength = 10;
 
-    if (lastDroppedItem) {
-      maxLength = getJingleMetadata(lastDroppedItem.type).length;
-    }
+    // if (lastDroppedItem) {
+    //   maxLength = getJingleMetadata(lastDroppedItem.type).length;
+    // }
 
     const formatVolume = value => `${value}%`;
     const formatDelay = value => `${value.toFixed(1)}s`;
@@ -197,4 +199,10 @@ const mapDispatchToProps = {
   updateCuts,
 };
 
-export default connect(null, mapDispatchToProps)(SampleSlot);
+const mapStateToProps = state => ({
+  volumes: state.compose.volumes,
+  delays: state.compose.delays,
+  cuts: state.compose.cuts,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SampleSlot);
