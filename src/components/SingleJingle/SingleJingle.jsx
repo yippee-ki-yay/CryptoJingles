@@ -75,13 +75,14 @@ class SingleJingle extends Component {
   };
 
   likeJingle = (jingleId, action) => {
+    if (!this.props.canLike) return;
     if (this.props.type === 'marketplace') this.props.likeUnLikeMarketplaceJingle(jingleId, action);
     if (this.props.type === 'profile') this.props.likeUnLikeProfileJingle(jingleId, action);
   };
 
   render() {
     const {
-      jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM, type,
+      jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM, type, canLike,
     } = this.props;
 
     return (
@@ -124,7 +125,7 @@ class SingleJingle extends Component {
               type !== 'home' &&
               <span>
                 <span onClick={() => { this.likeJingle(jingleId, !liked); }}>
-                  <Heart active={liked} size="30" canLike={hasMM && !lockedMM} />
+                  <Heart active={liked} size="30" canLike={hasMM && !lockedMM && canLike} />
                 </span>
                 <span>{ likeCount }</span>
               </span>
@@ -143,6 +144,7 @@ SingleJingle.propTypes = {
   likeUnLikeProfileJingle: PropTypes.func.isRequired,
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
+  canLike: PropTypes.bool.isRequired,
   settings: PropTypes.array.isRequired,
   sampleTypes: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
@@ -160,6 +162,7 @@ const mapStateToProps = state => ({
   delays: state.compose.delays,
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
+  canLike: state.app.canLike,
 });
 
 const mapDispatchToProps = { likeUnLikeMarketplaceJingle, likeUnLikeProfileJingle };

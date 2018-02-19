@@ -3,7 +3,8 @@
 }
 
 #heart-svg.no-like {
-    cursor: auto;
+  pointer-events: none;
+  cursor: auto;
 }
 
 #heart-svg #heart{transform-origin:center; animation:animateHeartOut .3s linear forwards; transition: 0.2s ease-in;}

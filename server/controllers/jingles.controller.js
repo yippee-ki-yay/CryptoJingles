@@ -406,3 +406,15 @@ module.exports.checkIfLikedJingle = async (req, res) => {
     res.status(500).send({ error });
   }
 };
+
+/**
+ * Checks if address can buy a jingle
+ *
+ * @param {Object} req
+ * @param {Object} res
+ */
+module.exports.canLikeJingle = async (req, res) => {
+  const { address } = req.params;
+  const userExists = await userCtrl.userExists(address);
+  res.send({ canLike: userExists });
+};

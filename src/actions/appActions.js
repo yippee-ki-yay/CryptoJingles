@@ -27,9 +27,10 @@ export const guid = () => {
  * Sends action to init full app
  *
  * @return {String} address
+ * @return {Boolean} canLike
  */
-export const initAppWithMM = address => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: false, address } });
+export const initAppWithMM = (address, canLike) => (dispatch) => {
+  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: false, address, canLike } });
 };
 
 /**
@@ -38,7 +39,7 @@ export const initAppWithMM = address => (dispatch) => {
  * @return {String} address
  */
 export const initAppWithLockedMM = () => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: true, address: '' } });
+  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: true, address: '', canLike: false } });
 };
 
 /**
@@ -48,5 +49,5 @@ export const initAppWithLockedMM = () => (dispatch) => {
  * @return {String} address
  */
 export const initAppWithoutMM = () => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: false, lockedMM: false, address: '' } });
+  dispatch({ type: INIT_APP, payload: { hasMM: false, lockedMM: false, address: '', canLike: false } });
 };
