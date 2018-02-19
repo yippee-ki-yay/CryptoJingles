@@ -144,7 +144,7 @@ class SampleSlot extends Component {
           <div className="slider">
             <InputRange
               minValue={0}
-              maxValue={4}
+              maxValue={10}
               disabled={!lastDroppedItem}
               step={0.1}
               formatLabel={formatDelay}
