@@ -18,11 +18,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const marketplaceAddress = "0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5";
-const jinglesAddress = "0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf";
-const cryptoJinglesAddress = "0x3351ef3166ed2ddd8acb1e37362dda6275869b8c";
+const marketplaceAddress = "0xc1ef465527343f68bb1841f99b9adeb061cc7ac9";
+const jinglesAddress = "0x5b6660ca047cc351bfedca4fc864d0a88f551485";
+const cryptoJinglesAddress = "0xdea4c5c25218994d0468515195622e25820d27c7";
 
-const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.decenter.com"));
+const web3 = new Web3(new Web3.providers.HttpProvider("http://mainnet.decenter.com"));
 
 const _ = require('lodash');
 

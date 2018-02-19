@@ -1,18 +1,18 @@
 const Web3 = require('web3');
 
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.decenter.com'));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.decenter.com'));
 
 const db = require('./db');
 const routes = require('./routes');
 
 const marketplaceAbi = require('../build/contracts/Marketplace');
 
-const marketplaceAddress = '0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5';
+const marketplaceAddress = '0xc1ef465527343f68bb1841f99b9adeb061cc7ac9';
 const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
 
 const jinglesAbi = require('../build/contracts/Jingle');
 
-const jinglesAddress = '0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf';
+const jinglesAddress = '0x5b6660ca047cc351bfedca4fc864d0a88f551485';
 const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
 
