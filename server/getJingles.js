@@ -26,13 +26,13 @@ async function update() {
 
       console.log(event);
 
-      const mined = event; // .filter(_jingle => _jingle.type === 'mined');
+      const mined = event.filter(_jingle => _jingle.type === 'mined');
 
       const numJinglesInDb = await jingleCtrl.jingleNum();
 
       console.log('Trying', mined.length, numJinglesInDb);
 
-      // if (mined.length > numJinglesInDb) {
+     if (mined.length > numJinglesInDb) {
       const newOnes = mined.length - numJinglesInDb;
 
       const jingles =
@@ -44,7 +44,7 @@ async function update() {
                             const sampleTypes = _jingle.jingleTypes.map(s => s.valueOf());
                             const settings = _jingle.settings.map(s => s.valueOf());
 
-                            // if (_jingle.jingleId.valueOf() > numJinglesInDb) {
+                           if (_jingle.jingleId.valueOf() > numJinglesInDb) {
                             const saved = await jingleCtrl.addJingle({
                               jingleId: _jingle.jingleId.valueOf(),
                               name: _jingle.name,
@@ -57,7 +57,7 @@ async function update() {
                               settings,
                             });
                             resolve(saved);
-                          //  }
+                            }
                           }));
 
       console.log('GET JINGLES SUCCESS', jingles);
@@ -65,45 +65,45 @@ async function update() {
       Promise.all(jingles).then((_jingles) => {
         console.log('WROTE TO DB SUCCESS', _jingles);
       });
-    //  }
+      }
     });
 
 
-//   const marketplace = {};
+   const marketplace = {};
 
-//   marketplaceContract.allEvents({ fromBlock: '5025886', toBlock: 'latest' }).get(async (err, events) => {
-//     addMarketplaceEvents(events, marketplace);
+   marketplaceContract.allEvents({ fromBlock: '5025886', toBlock: 'latest' }).get(async (err, events) => {
+     addMarketplaceEvents(events, marketplace);
 
-//     for (const key of Object.keys(marketplace)) {
-//       const eventList = marketplace[key];
+     for (const key of Object.keys(marketplace)) {
+       const eventList = marketplace[key];
 
-//       let numOrders = 0;
-//       let numCancels = 0;
+       let numOrders = 0;
+       let numCancels = 0;
 
-//       eventList.forEach((e) => {
-//         if (e.event === 'SellOrder') {
-//           numOrders++;
-//         } else {
-//           numCancels++;
-//         }
-//       });
+      eventList.forEach((e) => {
+        if (e.event === 'SellOrder') {
+          numOrders++;
+        } else {
+          numCancels++;
+        }
+      });
 
-//       const e = eventList[eventList.length - 1];
+      const e = eventList[eventList.length - 1];
 
-//       if (numOrders > numCancels) {
-//         // add
-//         await putOnSale(eventList[eventList.length - 1]);
-//       } else {
-//         // cancel
+      if (numOrders > numCancels) {
+        // add
+        await putOnSale(eventList[eventList.length - 1]);
+      } else {
+        // cancel
 
-//         if (e.event === 'Bought') {
-//           await boughtJingle(e);
-//         } else {
-//           await cancelJingle(e);
-//         }
-//       }
-//     }
-//   });
+        if (e.event === 'Bought') {
+          await boughtJingle(e);
+        } else {
+          await cancelJingle(e);
+        }
+      }
+    }
+  });
 }
 
 async function boughtJingle(res) {
@@ -155,8 +155,8 @@ function addMarketplaceEvents(events, marketplace) {
   });
 }
 
-// (async () => {
-// setInterval(async () => {
-update();
-// }, 1000*6);
-// })();
+(async () => {
+setInterval(async () => {
+  update();
+}, 1000*6*4);
+})();
