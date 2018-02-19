@@ -148,7 +148,11 @@ class Compose extends Component {
 
   playSound() {
     this.loadGroup(() => {
+      console.log(this.props);
+
       const settings = createSettings(this.props);
+
+      console.log('Group loaded', settings);
 
       playWithDelay(this.state.group, settings, this.state.sampleSlots);
       this.setState({ playing: true });

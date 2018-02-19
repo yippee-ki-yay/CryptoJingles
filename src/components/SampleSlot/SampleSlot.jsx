@@ -32,7 +32,7 @@ class SampleSlot extends Component {
       delayValue: 0,
       range: {
         min: 0,
-        max: 10,
+        max: 15,
       },
     };
   }

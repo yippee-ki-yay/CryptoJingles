@@ -53,11 +53,12 @@ export const playWithDelay = (group, settings, samplesPos = defaultSamplePos) =>
 };
 
 export const createSettings = (props) => {
-  let delays = [...props.delays];
-  let cuts = [...props.cuts];
+  let delays = props.delays;
+  let cuts = props.cuts;
+  const volumes = props.volumes;
 
   delays = delays.map(d => d * 10);
   cuts = cuts.map(c => c * 10);
 
-  return [...delays, ...cuts];
+  return [...volumes, ...delays, ...cuts];
 };
