@@ -17,7 +17,7 @@ const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
 
 async function update() {
-  jinglesContract.Composed({}, { fromBlock: '1025886', toBlock: 'latest' })
+  jinglesContract.Composed({}, { fromBlock: '5025886', toBlock: 'latest' })
     .get(async (error, event) => {
       if (error) {
         console.log('GET JINGLES ERROR', error);
@@ -156,7 +156,7 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-setInterval(async () => {
+//setInterval(async () => {
   update();
-}, 1000*6*4);
+//}, 1000*6*4);
 })();
