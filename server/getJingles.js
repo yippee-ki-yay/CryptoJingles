@@ -162,7 +162,7 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-setInterval(async () => {
+//setInterval(async () => {
 update();
-}, 1000*60*3);
+//}, 1000*60*3);
 })();

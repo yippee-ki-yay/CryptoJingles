@@ -150,6 +150,4 @@ async function boughtJingle(res) {
 app.use(cors());
 app.use('/api', routes);
 
-app.get('/', (req, res) => res.send('Hi'));
-
-app.listen(80, () => console.log('Listening for Purchase events'));
+app.listen(9999, () => console.log('Listening for Purchase events'));
