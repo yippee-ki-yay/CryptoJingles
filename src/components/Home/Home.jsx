@@ -25,7 +25,7 @@ class Home extends Component {
   }
 
   async componentWillMount() {
-    const jingleData = await axios(`${API_URL}/jingle/${30}`);
+    const jingleData = await axios(`${API_URL}/jingle/${0}`);
     const jingle = jingleData.data;
     jingle.liked = false;
 

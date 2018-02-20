@@ -4,19 +4,20 @@ const INITIAL_STATE = {
   pendingTxs: [],
   address: '',
   hasMM: false,
-  lockedMM: false
+  lockedMM: false,
+  canLike: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
-  const  payload = action.payload;
-
-  switch (action.type) {
+  const { payload, type } = action;
+  switch (type) {
     case INIT_APP:
       return {
         ...state,
         hasMM: payload.hasMM,
         lockedMM: payload.lockedMM,
-        address: payload.address
+        address: payload.address,
+        canLike: payload.canLike,
       };
 
     case ADD_PENDING_TX:

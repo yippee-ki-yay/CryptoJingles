@@ -169,8 +169,6 @@ class JinglePage extends Component {
 
     const sound = playWithDelay(this.state.sound, this.state.jingle.settings);
 
-    console.log(sound);
-
     sound.on('stop', () => { this.setState({ start: false }); });
 
     this.setState({ start: true });
@@ -190,7 +188,7 @@ class JinglePage extends Component {
 
   render() {
     const { jingle, isOwner, validJingle } = this.state;
-    const { hasMM, lockedMM } = this.props;
+    const { hasMM, lockedMM, canLike } = this.props;
     return (
       <div className="container single-jingle-wrapper">
         {
@@ -225,7 +223,7 @@ class JinglePage extends Component {
 
                         <div className="liked-section">
                           <span onClick={() => { this.jingleLikeUnlike(jingle.jingleId, !jingle.liked); }}>
-                            <Heart active={jingle.liked} size="40" canLike={hasMM && !lockedMM} />
+                            <Heart active={jingle.liked} size="40" canLike={hasMM && !lockedMM && canLike} />
                           </span>
 
                           { jingle.likeCount }
@@ -331,6 +329,7 @@ JinglePage.propTypes = {
   params: PropTypes.object.isRequired,
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
+  canLike: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
   addPendingTx: PropTypes.func.isRequired,
   removePendingTx: PropTypes.func.isRequired,
@@ -339,6 +338,7 @@ JinglePage.propTypes = {
 const mapStateToProps = state => ({
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
+  canLike: state.app.canLike,
   address: state.app.address,
 });
 

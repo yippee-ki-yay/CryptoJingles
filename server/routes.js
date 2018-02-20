@@ -14,6 +14,7 @@ router.get('/jingles/count/filter/:filter/sale/:sale', jingleCtrl.getJingleNum);
 
 router.post('/jingle/like', (req, res) => { jingleCtrl.likeUnLikeJingle(req, res, true); });
 router.post('/jingle/unlike', (req, res) => { jingleCtrl.likeUnLikeJingle(req, res, false); });
+router.get('/jingle/can-like/:address', jingleCtrl.canLikeJingle);
 router.get('/jingles/check-liked/:address/:jingleIds', jingleCtrl.checkIfLikedJingles);
 router.get('/jingle/check-liked/:address/:jingleId', jingleCtrl.checkIfLikedJingle);
 

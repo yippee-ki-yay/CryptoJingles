@@ -57,8 +57,6 @@ export const likeUnlikeJingle = async (jingleId, action, address) => {
 
     const response = await axios.post(`${API_URL}/jingle/${actionString}`, { address, jingleId, sig });
 
-    console.log(response);
-
     return { likeCount: response.data.likeCount, liked: action };
   } catch (err) {
     // TODO Handle this in the future

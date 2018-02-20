@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
-import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress, SampleAddress } from '../config';
+import axios from 'axios';
+import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress, SampleAddress, API_URL } from '../config';
 import CryptoJingles from '../../../build/contracts/CryptoJingles.json';
 import Jingle from '../../../build/contracts/Jingle.json';
 import Sample from '../../../build/contracts/Sample.json';
@@ -19,8 +20,9 @@ const getWeb3 = async (dispatch) => {
   if (typeof web3 !== 'undefined') {
     window.web3 = new Web3(web3.currentProvider); // eslint-disable-line
 
-    // const netId = await window.web3.eth.net.getId();
-    // if (netId !== "1") alert("Wrong network, please switch to the mainnet!");
+    // TODO - check if dev or prod here
+    const netId = await window.web3.eth.net.getId();
+    if (netId !== '1') alert('Wrong network, please switch to the mainnet!');
 
     // Init jingles contract
     const cryptoJinglesContract = contract(CryptoJingles);
@@ -45,8 +47,11 @@ const getWeb3 = async (dispatch) => {
     const addresses = await window.web3.eth.getAccounts();
     const address = addresses[0];
 
-    if (address) dispatch(initAppWithMM(address.toLowerCase()));
-    else dispatch(initAppWithLockedMM());
+    if (address) {
+      const canLikeResponse = await axios(`${API_URL}/jingle/can-like/${address.toLowerCase()}`);
+      const { canLike } = canLikeResponse.data;
+      dispatch(initAppWithMM(address.toLowerCase(), canLike));
+    } else dispatch(initAppWithLockedMM());
   } else {
     dispatch(initAppWithoutMM());
   }
