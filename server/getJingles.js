@@ -8,6 +8,8 @@ const db = require('./db');
 const routes = require('./routes');
 
 const marketplaceAbi = require('../build/contracts/Marketplace');
+const cryptoJinglesAbi = require("../build/contracts/CryptoJingles");
+
 
 // const marketplaceAddress = '0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5';
 // const jinglesAddress = '0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf';
