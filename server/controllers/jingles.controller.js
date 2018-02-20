@@ -285,6 +285,7 @@ const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
 
     if (!userExists) {
       reject('User has 0 samples');
+      return;
     }
 
     if (!isValid) {
@@ -326,7 +327,7 @@ const updateLikeUnlikeJingle = (jingleId, address, sig, action) =>
 module.exports.likeUnLikeJingle = async (req, res, action) => {
   const { jingleId, address, sig } = req.body;
 
-  if (!address || !jingleId) {
+  if (!address || (jingleId === undefined)) {
     res.status(500).send({ error: 'Invalid params' });
     return;
   }
@@ -394,7 +395,7 @@ module.exports.checkIfLikedJingles = (req, res) => {
 module.exports.checkIfLikedJingle = async (req, res) => {
   const { address, jingleId } = req.params;
 
-  if (!address || !jingleId) {
+  if (!address || (jingleId === undefined)) {
     res.status(500).send({ error: 'Invalid params' });
     return;
   }

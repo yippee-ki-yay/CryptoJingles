@@ -22,6 +22,21 @@ module.exports.setNumSamplesBought = async (address, numSamples) => {
 
 };
 
+module.exports.addUser = async (address) => {
+    try {
+
+        const user = await User.findOne({ethAddress: address});
+
+
+        const newUser = new User({ethAddress: address});
+        await newUser.save();
+
+
+    } catch(err) {
+        console.log(err);
+    }
+};
+
 module.exports.userExists = async (address) => {
     try {
 

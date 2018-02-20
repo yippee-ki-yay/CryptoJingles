@@ -8,9 +8,13 @@ const db = require('./db');
 const routes = require('./routes');
 
 const marketplaceAbi = require('../build/contracts/Marketplace');
+const cryptoJinglesAbi = require("../build/contracts/CryptoJingles");
+
 
 // const marketplaceAddress = '0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5';
 // const jinglesAddress = '0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf';
+
+const userCtrl = require('./controllers/users.controller');
 
 const marketplaceAddress = '0xc1ef465527343f68bb1841f99b9adeb061cc7ac9';
 const jinglesAddress = '0x5b6660ca047cc351bfedca4fc864d0a88f551485';
@@ -21,6 +25,9 @@ const jinglesAbi = require('../build/contracts/Jingle');
 
 const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
+
+const cryptoJinglesAddress = "0xdea4c5c25218994d0468515195622e25820d27c7";
+const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAddress);
 
 async function update() {
   jinglesContract.Composed({}, { fromBlock: '5025886', toBlock: 'latest' })
@@ -74,6 +81,19 @@ async function update() {
       }
     });
 
+
+    cryptoJingles.Purchased({}, { fromBlock: '5025886', toBlock: 'latest' })
+    .get(async (err, ress) => {
+
+      ress.forEach(async (res) => {
+        const address = res.args.user;
+        const numSamples = res.args.numJingles.valueOf();
+
+        console.log(address, numSamples);
+
+        await userCtrl.addUser(address, numSamples);
+      });
+  });
 
   const marketplace = {};
 
