@@ -146,6 +146,8 @@ async function boughtJingle(res) {
 app.use(cors());
 app.use('/api', routes);
 
+app.use('/static', express.static('public'));
+
 app.get('/', (req, res) => res.send('Hi'));
 
 app.listen(9999, () => console.log('Listening for Purchase events'));
