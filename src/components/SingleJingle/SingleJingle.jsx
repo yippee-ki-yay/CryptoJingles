@@ -33,7 +33,7 @@ class SingleJingle extends Component {
     let delays = this.props.settings.slice(5, 11);
     delays = delays.map(d => parseInt(d, 10));
 
-    const sampleSrcs = this.props.sampleTypes.reverse().map((sampleType, i) =>
+    const sampleSrcs = this.props.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
         sound.volume = parseInt(this.props.settings[i], 10) / 100;

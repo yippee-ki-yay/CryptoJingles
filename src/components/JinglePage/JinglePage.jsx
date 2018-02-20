@@ -79,8 +79,6 @@ class JinglePage extends Component {
       return;
     }
 
-    jingle.sampleTypes = jingle.sampleTypes.reverse();
-
     const isOwner = jingle.owner === address;
 
     this.setState({

@@ -175,9 +175,15 @@ class Compose extends Component {
 
       const settings = createSettings(this.props);
 
+      let sampleIds = [];
+
+      this.state.sampleSlots.forEach(s => {
+        sampleIds.push(s.lastDroppedItem.id);
+      });
+
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');
-      await window.contract.composeJingle(name, jingleIds, settings, { from: this.props.address });
+      await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
 
       this.setState({ loading: true });
 
