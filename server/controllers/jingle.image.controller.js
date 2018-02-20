@@ -28,12 +28,12 @@ module.exports.getJingleImageUrl = async (req, res) => {
     fs.stat(`${pathToFile}/${fileName}`, (err, data) => {
       const fileExists = typeof data === 'object';
 
-      const url = `http://159.65.26.139/${fileName}`;
+      const url = `https://cryptojingles.com/public/${fileName}`;
 
       if (fileExists) res.send(url);
       if (!fileExists) createFileRenderer(config, () => { res.send(url); });
     });
-  } catch(err) {
+  } catch (err) {
     res.status(500).send(err);
   }
 };
