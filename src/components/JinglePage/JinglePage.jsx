@@ -79,6 +79,8 @@ class JinglePage extends Component {
       return;
     }
 
+    jingle.sampleTypes = jingle.sampleTypes.reverse();
+
     const isOwner = jingle.owner === address;
 
     this.setState({
@@ -136,7 +138,7 @@ class JinglePage extends Component {
   };
 
   loadJingle = () => {
-    const jingleSrcs = this.state.jingle.sampleTypes.reverse().map((sampleType, i) =>
+    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType, i) =>
       new Promise((resolve) => {
         const sound = new Sound(getJingleMetadata(sampleType).source, () => {
           resolve(sound);
