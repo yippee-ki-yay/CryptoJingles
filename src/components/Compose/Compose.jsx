@@ -270,7 +270,7 @@ class Compose extends Component {
                         type="submit"
                         className="btn buy-button"
                         onClick={this.createSong}
-                        disabled={this.state.droppedBoxIds.length !== 5}
+                        disabled={this.state.droppedBoxIds.length < 5}
                       >
                         Submit
                       </button>
