@@ -61,7 +61,7 @@ export const getJingleMetadata = (jingleType) => {
     case 28:
       return { type: COMPOSE, name: 'Robotica Synth',     source: 'https://cryptojingles.com/server_samples/QmWr5KmpfV8mqVs5CGuHKfL7owjo7KN4oHsU8cz4QniPG2.wav', rarity: 0, length: 8      };
     case 29:
-      return { type: COMPOSE, name: 'Rock Guitar',        source: 'https://cryptojingles.com/server_samples/QmVn3Pdz1sGFhBF7UTcavynawfSqgCJJrqgNXWATJSczU3.wav', rarity: 0, length: 6.060  };
+      return { type: COMPOSE, name: 'Rock Guitar',        source: 'https://cryptojingles.com/server_samples/QmVn3Pdz1sGFhBF7UTcavynawfSqgCJJrqgNXWATJSczU3.mp3', rarity: 0, length: 6.060  };
     case 30:
       return { type: COMPOSE, name: 'S1',                 source: 'https://cryptojingles.com/server_samples/QmcrZn5PHTefmqabxpzPPYPNNtK62u2wfSJGFgKaxWfsk4.wav', rarity: 0, length: 2.898  };
     case 31:
