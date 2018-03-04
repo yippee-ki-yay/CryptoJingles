@@ -101,7 +101,6 @@ class Compose extends Component {
       this.setState({
         group: new Group(sources),
         loadingGroup: false,
-        updatedSlots: false,
       });
 
       cb();
@@ -176,8 +175,6 @@ class Compose extends Component {
       sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
       droppedBoxIds: item.id ? { $push: [item.id] } : {},
     }));
-
-    this.setState({ updatedSlots: true });
   }
 
   /**
@@ -195,8 +192,6 @@ class Compose extends Component {
       sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
       droppedBoxIds: { $set: droppedBoxIds },
     }));
-
-    this.setState({ updatedSlots: true });
   }
 
   /**
