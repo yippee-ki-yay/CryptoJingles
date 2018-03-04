@@ -1,8 +1,11 @@
 import update from 'immutability-helper';
+import { Sound, Group } from 'pizzicato';
 import {
   UPDATE_VOLUME, UPDATE_DELAY, UPDATE_CUTS, SET_COMPOSE_SAMPLES, SAMPLE_SORTING_OPTIONS, SET_COMPOSE_SELECTED_SORT,
-  HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL,
+  HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL, TOGGLE_LOADING_NEW_JINGLE, SET_NEW_JINGLE_GROUP,
+  TOGGLE_NEW_JINGLE_PLAYING,
 } from '../constants/actionTypes';
+import { playWithDelay, createSettings } from '../util/soundHelper';
 import { getSamplesFromContract } from '../util/web3/ethereumService';
 
 /**
@@ -125,14 +128,86 @@ export const handleSampleDrop = (index, item) => (dispatch, getState) => {
  * @return {Function}
  */
 export const handleSampleDropCancel = (index, { id }) => (dispatch, getState) => {
-  const droppedSampleIds = [...getState().droppedSampleIds];
+  const composeState = getState().compose;
+  const droppedSampleIds = [...composeState.droppedSampleIds];
+
   const boxIndex = droppedSampleIds.findIndex(_id => _id === id);
   droppedSampleIds.splice(boxIndex, 1);
 
-  const compose = update(this.state, {
+  const compose = update(composeState, {
     sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
     droppedSampleIds: { $set: droppedSampleIds },
   });
 
   dispatch({ type: HANDLE_SAMPLE_DROP_CANCEL, payload: compose });
+};
+
+/**
+ * Stops playing new jingle if the sample group is present
+ *
+ * @return {Function}
+ */
+export const stopNewJinglePlaying = () => (dispatch, getState) => {
+  const { newJingleSampleGroup } = getState().compose;
+  if (!newJingleSampleGroup) return;
+
+  newJingleSampleGroup.stop();
+  dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: false });
+};
+
+/**
+ * Downloads sound samples fromm IPFS and
+ * creates a pizzicato group that goes to the state
+ *
+ */
+const loadComposeSamplesGroup = onSampleGroupLoad => (dispatch, getState) => {
+  // CHECK IF THIS IS THE SAME AS IN SINGLE JINGLE
+  const { sampleSlots, composeSamples, delays, volumes } = getState().compose;
+
+  let selectedSongSources = sampleSlots.filter(slot => slot.lastDroppedItem !== null);
+  selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
+    composeSamples.find(sample => lastDroppedItem.id === sample.id));
+
+  dispatch({ type: TOGGLE_LOADING_NEW_JINGLE });
+
+  selectedSongSources = selectedSongSources.map(({ source }, i) =>
+    new Promise((resolve) => {
+      const sound = new Sound(source, () => {
+        sound.volume = volumes[i] / 100;
+        resolve(sound);
+      });
+    }));
+
+  Promise.all(selectedSongSources).then((sources) => {
+    const longestSound = sources.reduce((prev, current, i) => ((
+      (prev.getRawSourceNode().buffer.duration + delays[i]) >
+      (current.getRawSourceNode().buffer.duration) + delays[i]) ?
+      prev : current
+    ));
+
+    longestSound.on('stop', () => { dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: false }); });
+
+    dispatch({ type: SET_NEW_JINGLE_GROUP, payload: new Group(sources) });
+    dispatch({ type: TOGGLE_LOADING_NEW_JINGLE });
+
+    onSampleGroupLoad();
+  });
+};
+
+/**
+ * Fires when the sources for the new jingle are downloaded
+ *
+ * @return {Function}
+ */
+const onNewJingleGroupLoad = () => (dispatch, getState) => {
+  const { compose } = getState();
+  const { delays, volumes, cuts, newJingleSampleGroup, sampleSlots } = compose;
+  const settings = createSettings(delays, volumes, cuts);
+
+  playWithDelay(newJingleSampleGroup, settings, sampleSlots);
+  dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: true });
+};
+
+export const playNewJingle = () => (dispatch) => {
+  dispatch(loadComposeSamplesGroup(() => { dispatch(onNewJingleGroupLoad()); }));
 };

@@ -65,3 +65,6 @@ export const SET_COMPOSE_SAMPLES = 'set_compose_samples';
 export const SET_COMPOSE_SELECTED_SORT = 'set_compose_selected_sort';
 export const HANDLE_SAMPLE_DROP = 'handle_sample_drop';
 export const HANDLE_SAMPLE_DROP_CANCEL = 'handle_sample_drop_cancel';
+export const TOGGLE_LOADING_NEW_JINGLE = 'toggle_loading_new_jingle';
+export const SET_NEW_JINGLE_GROUP = 'set_new_jingle_group';
+export const TOGGLE_NEW_JINGLE_PLAYING = 'toggle_new_jingle_playing';

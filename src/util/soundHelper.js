@@ -52,10 +52,10 @@ export const playWithDelay = (group, settings, samplesPos = defaultSamplePos) =>
   return longestSound;
 };
 
-export const createSettings = (props) => {
-  let delays = props.delays;
-  let cuts = props.cuts;
-  const volumes = props.volumes;
+export const createSettings = (_delays, _volumes, _cuts) => {
+  let delays = [..._delays];
+  let cuts = [..._cuts];
+  const volumes = [..._volumes];
 
   delays = delays.map(d => d * 10);
   cuts = cuts.map(c => c * 10);

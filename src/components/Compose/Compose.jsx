@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
 import withScrolling from 'react-dnd-scrollzone';
-import { Sound, Group } from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import {
-  getComposeSamples, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel
+  getComposeSamples, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel, playNewJingle,
+  stopNewJinglePlaying,
 } from '../../actions/composeActions';
 import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
-import { playWithDelay, createSettings } from '../../util/soundHelper';
 
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
@@ -30,94 +29,20 @@ class Compose extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      loading: true,
-      loadingGroup: false,
-      playing: false,
-      group: null,
-    };
-
     this.isDropped = this.isDropped.bind(this);
-    this.playSound = this.playSound.bind(this);
-    this.stopSound = this.stopSound.bind(this);
-    this.loadGroup = this.loadGroup.bind(this);
     this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
   }
 
   async componentWillMount() {
-    if (!this.props.hasMM || this.props.lockedMM) {
-      this.setState({ loading: false });
-      return;
+    if (this.props.hasMM && !this.props.lockedMM) {
+      this.props.getComposeSamples(this.props.address);
+      this.props.onComposeSamplesSort(this.props.selectedSort);
     }
 
-    this.props.getComposeSamples(this.props.address);
-
     this.setState({ loading: false });
-    this.props.onComposeSamplesSort(this.props.selectedSort);
   }
 
-  componentWillUnmount() {
-    if (this.state.group === null) return;
-
-    this.state.group.stop();
-    this.setState({ playing: false, group: null });
-  }
-
-  /**
-   * Creates group sound
-   *
-   */
-  loadGroup(cb) {
-    let selectedSongSources = this.props.sampleSlots.filter(slot => slot.lastDroppedItem !== null);
-
-    selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
-      this.props.composeSamples.find(sample => lastDroppedItem.id === sample.id));
-
-    const { delays } = this.props;
-
-    this.setState({ loadingGroup: true });
-
-    selectedSongSources = selectedSongSources.map(({ source }, i) =>
-      new Promise((resolve) => {
-        const sound = new Sound(source, () => {
-          sound.volume = this.props.volumes[i] / 100;
-          resolve(sound);
-        });
-      }));
-
-    Promise.all(selectedSongSources).then((sources) => {
-      const longestSound = sources.reduce((prev, current, i) => ((
-        (prev.getRawSourceNode().buffer.duration + delays[i]) >
-        (current.getRawSourceNode().buffer.duration) + delays[i]) ?
-        prev : current
-      ));
-
-      longestSound.on('stop', () => { this.setState({ playing: false }); });
-
-      this.setState({
-        group: new Group(sources),
-        loadingGroup: false,
-      });
-
-      cb();
-    });
-  }
-
-  playSound() {
-    this.loadGroup(() => {
-      const settings = createSettings(this.props);
-
-      playWithDelay(this.state.group, settings, this.props.sampleSlots);
-      this.setState({ playing: true });
-    });
-  }
-
-  stopSound() {
-    if (!this.state.group) return;
-
-    this.state.group.stop();
-    this.setState({ playing: false });
-  }
+  componentWillUnmount() { this.props.stopNewJinglePlaying(); }
 
   createSong = async () => {
     const id = guid();
@@ -130,24 +55,22 @@ class Compose extends Component {
 
       if (jingleIds.length !== 5) return; // TODO - show message in the  UI instead of return
 
-      const settings = createSettings(this.props);
+      // const settings = createSettings(this.props);
 
-      let sampleIds = [];
+      const sampleIds = [];
 
-      this.props.sampleSlots.forEach(s => {
-        sampleIds.push(s.lastDroppedItem.id);
-      });
+      this.props.sampleSlots.forEach((sampleSlot) => { sampleIds.push(sampleSlot.lastDroppedItem.id); });
 
       const name = this.state.jingleName;
       this.props.addPendingTx(id, 'Compose jingle');
-      await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
+      // await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
 
-      this.setState({ loading: true });
+      // this.setState({ loading: true });
 
       this.props.getComposeSamples(this.props.address);
 
       // this.setState({ loading: false, sampleSlots: getSampleSlots() });
-      this.setState({ loading: false });
+      // this.setState({ loading: false });
 
       this.props.removePendingTx(id);
     } catch (err) {
@@ -167,13 +90,15 @@ class Compose extends Component {
    * @param {String} jingleId
    * @returns {Boolean}
    */
+  // TODO FIX THIS
   isDropped = jingleId => this.props.droppedSampleIds.indexOf(jingleId) > -1;
 
   render() {
     const {
-      hasMM, lockedMM, composeSamples, sortingOptions, selectedSort, sampleSlots, droppedSampleIds,
+      hasMM, lockedMM, composeSamples, sortingOptions, selectedSort, sampleSlots, droppedSampleIds, loadingNewJingle,
+      playingNewJingle, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel, playNewJingle,
+      stopNewJinglePlaying,
     } = this.props;
-    const { onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel } = this.props;
 
     return (
       <DragDropContextProvider backend={HTML5Backend}>
@@ -209,20 +134,22 @@ class Compose extends Component {
                 <div className="compose-left-column">
 
                   <div className="compose-play">
-                    { this.state.loadingGroup && <LoadingIcon /> }
+                    { loadingNewJingle && <LoadingIcon /> }
+
                     {
-                        !this.state.playing && !this.state.loadingGroup &&
+                        !playingNewJingle && !loadingNewJingle &&
                         <span
                           className={droppedSampleIds.length === 0 ? 'disabled-play' : ''}
-                          onClick={this.playSound}
+                          onClick={playNewJingle}
                         >
                           <PlayIcon />
                         </span>
                       }
+
                     {
-                        this.state.playing && !this.state.loadingGroup &&
-                        <span onClick={this.stopSound}><StopIcon /></span>
-                      }
+                      playingNewJingle && !loadingNewJingle &&
+                      <span onClick={stopNewJinglePlaying}><StopIcon /></span>
+                    }
                   </div>
 
                   <div className="slot-options">
@@ -344,17 +271,22 @@ Compose.propTypes = {
   cuts: PropTypes.array.isRequired,
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
+  loadingNewJingle: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
   addPendingTx: PropTypes.func.isRequired,
   removePendingTx: PropTypes.func.isRequired,
   getComposeSamples: PropTypes.func.isRequired,
   onComposeSamplesSort: PropTypes.func.isRequired,
   handleSampleDrop: PropTypes.func.isRequired,
+  handleSampleDropCancel: PropTypes.func.isRequired,
+  playNewJingle: PropTypes.func.isRequired,
+  stopNewJinglePlaying: PropTypes.func.isRequired,
   composeSamples: PropTypes.array.isRequired,
   sortingOptions: PropTypes.array.isRequired,
   sampleSlots: PropTypes.array.isRequired,
   droppedSampleIds: PropTypes.array.isRequired,
   selectedSort: PropTypes.object.isRequired,
+  playingNewJingle: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -366,13 +298,22 @@ const mapStateToProps = state => ({
   selectedSort: state.compose.selectedSort,
   sampleSlots: state.compose.sampleSlots,
   droppedSampleIds: state.compose.sampleSlots,
+  loadingNewJingle: state.compose.loadingNewJingle,
+  playingNewJingle: state.compose.playingNewJingle,
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
   address: state.app.address,
 });
 
 const mapDispatchToProps = {
-  addPendingTx, removePendingTx, getComposeSamples, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel,
+  addPendingTx,
+  removePendingTx,
+  getComposeSamples,
+  onComposeSamplesSort,
+  handleSampleDrop,
+  handleSampleDropCancel,
+  playNewJingle,
+  stopNewJinglePlaying,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);

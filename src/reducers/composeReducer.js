@@ -1,6 +1,7 @@
 import {
   UPDATE_VOLUME, UPDATE_DELAY, UPDATE_CUTS, SET_COMPOSE_SAMPLES, SAMPLE_SORTING_OPTIONS, SET_COMPOSE_SELECTED_SORT,
-  HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL,
+  HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL, TOGGLE_LOADING_NEW_JINGLE, SET_NEW_JINGLE_GROUP,
+  TOGGLE_NEW_JINGLE_PLAYING,
 } from '../constants/actionTypes';
 import { getSampleSlots } from '../constants/getMockData';
 
@@ -13,6 +14,9 @@ const INITIAL_STATE = {
   sortingOptions: SAMPLE_SORTING_OPTIONS,
   selectedSort: SAMPLE_SORTING_OPTIONS[0],
   droppedSampleIds: [],
+  loadingNewJingle: false,
+  playingNewJingle: false,
+  newJingleSampleGroup: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -36,6 +40,15 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_COMPOSE_SELECTED_SORT:
       return { ...state, composeSamples: payload.composeSamples, selectedSort: payload.selectedSort };
+
+    case TOGGLE_LOADING_NEW_JINGLE:
+      return { ...state, loadingNewJingle: !state.loadingNewJingle };
+
+    case SET_NEW_JINGLE_GROUP:
+      return { ...state, newJingleSampleGroup: payload };
+
+    case TOGGLE_NEW_JINGLE_PLAYING:
+      return { ...state, playingNewJingle: payload };
 
     default:
       return state;
