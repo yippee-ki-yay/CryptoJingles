@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { getSampleSlots } from '../../constants/getMockData';
-import { getComposeSamples } from '../../actions/composeActions';
+import { getComposeSamples, onComposeSamplesSort } from '../../actions/composeActions';
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
@@ -18,7 +18,6 @@ import SampleBox from '../SampleBox/SampleBox';
 import SampleSlot from '../SampleSlot/SampleSlot';
 import SortSamples from '../SortSamples/SortSamples';
 import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
-import { SAMPLE_SORTING_OPTIONS } from '../../constants/actionTypes';
 import { playWithDelay, createSettings } from '../../util/soundHelper';
 
 import '../../util/config';
@@ -38,8 +37,6 @@ class Compose extends Component {
       droppedBoxIds: [],
       playing: false,
       group: null,
-      sortingOptions: SAMPLE_SORTING_OPTIONS,
-      selectedSort: SAMPLE_SORTING_OPTIONS[0],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -49,7 +46,6 @@ class Compose extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.loadGroup = this.loadGroup.bind(this);
     this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
-    this.onComposeSamplesSort = this.onComposeSamplesSort.bind(this);
   }
 
   async componentWillMount() {
@@ -61,7 +57,7 @@ class Compose extends Component {
     this.props.getComposeSamples(this.props.address);
 
     this.setState({ loading: false });
-    this.onComposeSamplesSort(this.state.selectedSort);
+    this.props.onComposeSamplesSort(this.props.selectedSort);
   }
 
   componentWillUnmount() {
@@ -70,41 +66,6 @@ class Compose extends Component {
     this.state.group.stop();
     this.setState({ playing: false, group: null });
   }
-
-  onComposeSamplesSort = (option) => {
-    let { selectedSort } = this.state;
-    let { composeSamples } = this.props;
-
-    if (!this.props.composeSamples) return;
-
-    switch (option.value) {
-      case '-rarity': {
-        composeSamples = composeSamples.sort((a, b) => b.rarity - a.rarity);
-        selectedSort = SAMPLE_SORTING_OPTIONS[0];
-        break;
-      }
-      case 'rarity': {
-        composeSamples = composeSamples.sort((a, b) => a.rarity - b.rarity);
-        selectedSort = SAMPLE_SORTING_OPTIONS[1];
-        break;
-      }
-      case '-length': {
-        composeSamples = composeSamples.sort((a, b) => b.length - a.length);
-        selectedSort = SAMPLE_SORTING_OPTIONS[2];
-        break;
-      }
-      case 'length': {
-        composeSamples = composeSamples.sort((a, b) => a.length - b.length);
-        selectedSort = SAMPLE_SORTING_OPTIONS[3];
-        break;
-      }
-      default:
-        break;
-    }
-
-    // dispatch here
-    this.setState({ selectedSort });
-  };
 
   /**
    * Creates group sound
@@ -247,8 +208,10 @@ class Compose extends Component {
   isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1; }
 
   render() {
-    const { hasMM, lockedMM, composeSamples } = this.props;
-    console.log('composeSamples', composeSamples);
+    const {
+      hasMM, lockedMM, composeSamples, sortingOptions, selectedSort,
+    } = this.props;
+    const { onComposeSamplesSort } = this.props;
 
     return (
       <DragDropContextProvider backend={HTML5Backend}>
@@ -327,9 +290,9 @@ class Compose extends Component {
             <div className="separator" />
 
             <SortSamples
-              value={this.state.selectedSort}
-              options={this.state.sortingOptions}
-              onSortChange={this.onComposeSamplesSort}
+              value={selectedSort}
+              options={sortingOptions}
+              onSortChange={onComposeSamplesSort}
             />
 
             {
@@ -423,7 +386,10 @@ Compose.propTypes = {
   addPendingTx: PropTypes.func.isRequired,
   removePendingTx: PropTypes.func.isRequired,
   getComposeSamples: PropTypes.func.isRequired,
+  onComposeSamplesSort: PropTypes.func.isRequired,
   composeSamples: PropTypes.array.isRequired,
+  sortingOptions: PropTypes.array.isRequired,
+  selectedSort: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -431,13 +397,15 @@ const mapStateToProps = state => ({
   delays: state.compose.delays,
   cuts: state.compose.cuts,
   composeSamples: state.compose.composeSamples,
+  sortingOptions: state.compose.sortingOptions,
+  selectedSort: state.compose.selectedSort,
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
   address: state.app.address,
 });
 
 const mapDispatchToProps = {
-  addPendingTx, removePendingTx, getComposeSamples
+  addPendingTx, removePendingTx, getComposeSamples, onComposeSamplesSort,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);

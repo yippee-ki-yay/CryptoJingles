@@ -63,3 +63,4 @@ export const UPDATE_VOLUME = 'update_volume';
 export const UPDATE_DELAY = 'update_delay';
 export const UPDATE_CUTS = 'update_cuts';
 export const SET_COMPOSE_SAMPLES = 'set_compose_samples';
+export const SET_COMPOSE_SELECTED_SORT = 'set_compose_selected_sort';
