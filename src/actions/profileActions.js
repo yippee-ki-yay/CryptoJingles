@@ -5,7 +5,7 @@ import {
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
   SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
 } from '../constants/actionTypes';
-import { getSamples } from '../util/web3/ethereumService';
+import { getSamplesFromContract } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
 import { SAMPLE_PRICE, API_URL } from '../util/config';
 import { likeUnlikeJingle } from '../actions/utils';
@@ -193,7 +193,7 @@ export const getColorForRarity = (rarity) => {
  * @return {Function}
  */
 export const getSamplesForUser = address => async (dispatch, getState) => {
-  const mySamples = await getSamples(address);
+  const mySamples = await getSamplesFromContract(address);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
   dispatch(onMySamplesSort(getState().profile.selectedMySampleSort));
 };

@@ -1,9 +1,22 @@
 import { ADD_PENDING_TX, REMOVE_PENDING_TX, INIT_APP } from '../constants/actionTypes';
 
+/**
+ * Adds a pending tx to the notification dropdown
+ *
+ * @param {Number} tx
+ * @param {String} type
+ * @return {Function}
+ */
 export const addPendingTx = (tx, type) => (dispatch) => {
   dispatch({ type: ADD_PENDING_TX, payload: { tx, type } });
 };
 
+/**
+ * Removes a pending tx to the notification dropdown
+ *
+ * @param {Number} tx
+ * @return {Function}
+ */
 export const removePendingTx = tx => (dispatch, getState) => {
   let { pendingTxs } = getState().app;
   pendingTxs = [...pendingTxs];

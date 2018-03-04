@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { getSampleSlots } from '../../constants/getMockData';
-import { getSamples } from '../../util/web3/ethereumService';
+import { getComposeSamples } from '../../actions/composeActions';
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
@@ -38,7 +38,6 @@ class Compose extends Component {
       droppedBoxIds: [],
       playing: false,
       group: null,
-      mySamples: [],
       sortingOptions: SAMPLE_SORTING_OPTIONS,
       selectedSort: SAMPLE_SORTING_OPTIONS[0],
     };
@@ -59,9 +58,9 @@ class Compose extends Component {
       return;
     }
 
-    const mySamples = await getSamples(this.props.address);
+    this.props.getComposeSamples(this.props.address);
 
-    this.setState({ mySamples, loading: false });
+    this.setState({ loading: false });
     this.onComposeSamplesSort(this.state.selectedSort);
   }
 
@@ -73,28 +72,29 @@ class Compose extends Component {
   }
 
   onComposeSamplesSort = (option) => {
-    let { mySamples, selectedSort } = this.state;
+    let { selectedSort } = this.state;
+    let { composeSamples } = this.props;
 
-    if (!this.state.mySamples) return;
+    if (!this.props.composeSamples) return;
 
     switch (option.value) {
       case '-rarity': {
-        mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
+        composeSamples = composeSamples.sort((a, b) => b.rarity - a.rarity);
         selectedSort = SAMPLE_SORTING_OPTIONS[0];
         break;
       }
       case 'rarity': {
-        mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
+        composeSamples = composeSamples.sort((a, b) => a.rarity - b.rarity);
         selectedSort = SAMPLE_SORTING_OPTIONS[1];
         break;
       }
       case '-length': {
-        mySamples = mySamples.sort((a, b) => b.length - a.length);
+        composeSamples = composeSamples.sort((a, b) => b.length - a.length);
         selectedSort = SAMPLE_SORTING_OPTIONS[2];
         break;
       }
       case 'length': {
-        mySamples = mySamples.sort((a, b) => a.length - b.length);
+        composeSamples = composeSamples.sort((a, b) => a.length - b.length);
         selectedSort = SAMPLE_SORTING_OPTIONS[3];
         break;
       }
@@ -102,7 +102,8 @@ class Compose extends Component {
         break;
     }
 
-    this.setState({ mySamples, selectedSort });
+    // dispatch here
+    this.setState({ selectedSort });
   };
 
   /**
@@ -113,7 +114,7 @@ class Compose extends Component {
     let selectedSongSources = this.state.sampleSlots.filter(slot => slot.lastDroppedItem !== null);
 
     selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
-      this.state.mySamples.find(sample => lastDroppedItem.id === sample.id));
+      this.props.composeSamples.find(sample => lastDroppedItem.id === sample.id));
 
     const { delays } = this.props;
 
@@ -166,7 +167,7 @@ class Compose extends Component {
     const id = guid();
 
     try {
-      const selectedSongSources = this.state.mySamples.filter(({ id }) =>
+      const selectedSongSources = this.props.composeSamples.filter(({ id }) =>
         this.state.droppedBoxIds.find(selectedId => id === selectedId));
 
       const jingleIds = selectedSongSources.map(s => parseInt(s.id, 10));
@@ -187,9 +188,9 @@ class Compose extends Component {
 
       this.setState({ loading: true });
 
-      const mySamples = await getSamples(this.props.address);
+      this.props.getComposeSamples(this.props.address);
 
-      this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
+      this.setState({ loading: false, sampleSlots: getSampleSlots() });
 
       this.props.removePendingTx(id);
     } catch (err) {
@@ -246,7 +247,8 @@ class Compose extends Component {
   isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1; }
 
   render() {
-    const { hasMM, lockedMM } = this.props;
+    const { hasMM, lockedMM, composeSamples } = this.props;
+    console.log('composeSamples', composeSamples);
 
     return (
       <DragDropContextProvider backend={HTML5Backend}>
@@ -331,9 +333,9 @@ class Compose extends Component {
             />
 
             {
-                (this.state.mySamples.length > 0) &&
+                (composeSamples.length > 0) &&
                 !this.state.loading &&
-                <div className="my-jingles-num">{ this.state.mySamples.length } samples</div>
+                <div className="my-jingles-num">{ composeSamples.length } samples</div>
               }
 
             {
@@ -370,7 +372,7 @@ class Compose extends Component {
                   }
 
                   {
-                    (this.state.mySamples.length === 0) &&
+                    (composeSamples.length === 0) &&
                     !this.state.loading &&
                     <div>
                       { /* TODO - insert buy sample form here */ }
@@ -385,12 +387,12 @@ class Compose extends Component {
                   }
 
                   {
-                    (this.state.mySamples.length > 0) &&
+                    (composeSamples.length > 0) &&
                     !this.state.loading &&
                     <div className="samples-slider">
                       <div className="compose-samples-wrapper">
                         {
-                            this.state.mySamples.map(sample => (
+                            composeSamples.map(sample => (
                               <SampleBox
                                 draggable
                                 key={sample.id}
@@ -420,17 +422,22 @@ Compose.propTypes = {
   address: PropTypes.string.isRequired,
   addPendingTx: PropTypes.func.isRequired,
   removePendingTx: PropTypes.func.isRequired,
+  getComposeSamples: PropTypes.func.isRequired,
+  composeSamples: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
   cuts: state.compose.cuts,
+  composeSamples: state.compose.composeSamples,
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
   address: state.app.address,
 });
 
-const mapDispatchToProps = { addPendingTx, removePendingTx };
+const mapDispatchToProps = {
+  addPendingTx, removePendingTx, getComposeSamples
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);

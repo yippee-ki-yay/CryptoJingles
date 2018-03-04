@@ -17,7 +17,7 @@ export const parseSamples = (samples) => {
   return mySamples;
 };
 
-export const getSamples = address =>
+export const getSamplesFromContract = address =>
   new Promise(async (resolve) => {
     const samples = parseSamples(await window.samplesContract.getAllSamplesForOwner(address));
     resolve(samples);

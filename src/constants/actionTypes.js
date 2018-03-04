@@ -58,7 +58,8 @@ export const SET_PROFILE_ADDRESS = 'set_profile_address';
 export const SET_MY_SAMPLES_SORTING = 'set_my_samples_sorting';
 export const PROFILE_LIKE_UNLIKE_JINGLE = 'profile_like_unlike_jingle';
 
-//Compose actions
+// Compose actions
 export const UPDATE_VOLUME = 'update_volume';
 export const UPDATE_DELAY = 'update_delay';
 export const UPDATE_CUTS = 'update_cuts';
+export const SET_COMPOSE_SAMPLES = 'set_compose_samples';
