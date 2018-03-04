@@ -10,18 +10,17 @@ export const SORTING_OPTIONS = [
   { value: 'jingleId', label: 'Oldest first' },
   { value: '-likeCount', label: 'Most loved' },
   { value: '-price', label: 'Most expensive first' },
-  { value: 'price', label: 'Cheapest first' }
+  { value: 'price', label: 'Cheapest first' },
 ];
-export const MARKETPLACE_JINGLES_PER_PAGE = 10;
+export const MARKETPLACE_JINGLES_PER_PAGE = 12;
 
 export const PROFILE_TABS = [
   { label: 'Samples', value: 'samples', active: true },
   { label: 'Jingles', value: 'jingles' },
   { label: 'Songs', value: 'songs' },
-  { label: 'Albums', value: 'albums' }
+  { label: 'Albums', value: 'albums' },
 ];
 
-export const MARKETPLACE_JINNGLES_PER_PAGE = 10;
 // TODO put everything above this comment in a constants file
 
 // App action types
@@ -64,3 +63,5 @@ export const UPDATE_DELAY = 'update_delay';
 export const UPDATE_CUTS = 'update_cuts';
 export const SET_COMPOSE_SAMPLES = 'set_compose_samples';
 export const SET_COMPOSE_SELECTED_SORT = 'set_compose_selected_sort';
+export const HANDLE_SAMPLE_DROP = 'handle_sample_drop';
+export const HANDLE_SAMPLE_DROP_CANCEL = 'handle_sample_drop_cancel';

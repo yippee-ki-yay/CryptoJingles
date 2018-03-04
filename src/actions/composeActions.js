@@ -1,5 +1,7 @@
+import update from 'immutability-helper';
 import {
   UPDATE_VOLUME, UPDATE_DELAY, UPDATE_CUTS, SET_COMPOSE_SAMPLES, SAMPLE_SORTING_OPTIONS, SET_COMPOSE_SELECTED_SORT,
+  HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL,
 } from '../constants/actionTypes';
 import { getSamplesFromContract } from '../util/web3/ethereumService';
 
@@ -97,4 +99,40 @@ export const onComposeSamplesSort = option => (dispatch, getState) => {
   }
 
   dispatch({ type: SET_COMPOSE_SELECTED_SORT, payload: { selectedSort, composeSamples } });
+};
+
+/**
+ * Fires when a jingle is dropped into a JingleSlot component
+ *
+ * @param {Number} index
+ * @param {Object} item
+ * @return {Function}
+ */
+export const handleSampleDrop = (index, item) => (dispatch, getState) => {
+  const compose = update(getState().compose, {
+    sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
+    droppedSampleIds: item.id ? { $push: [item.id] } : {},
+  });
+
+  dispatch({ type: HANDLE_SAMPLE_DROP, payload: compose });
+};
+
+/**
+ * Fires when a jingle is removed from a JingleSlot component
+ *
+ * @param {Number} index
+ * @param {Object} item
+ * @return {Function}
+ */
+export const handleSampleDropCancel = (index, { id }) => (dispatch, getState) => {
+  const droppedSampleIds = [...getState().droppedSampleIds];
+  const boxIndex = droppedSampleIds.findIndex(_id => _id === id);
+  droppedSampleIds.splice(boxIndex, 1);
+
+  const compose = update(this.state, {
+    sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
+    droppedSampleIds: { $set: droppedSampleIds },
+  });
+
+  dispatch({ type: HANDLE_SAMPLE_DROP_CANCEL, payload: compose });
 };

@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContextProvider } from 'react-dnd';
 import withScrolling from 'react-dnd-scrollzone';
-import update from 'immutability-helper';
 import { Sound, Group } from 'pizzicato';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getSampleSlots } from '../../constants/getMockData';
-import { getComposeSamples, onComposeSamplesSort } from '../../actions/composeActions';
+import {
+  getComposeSamples, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel
+} from '../../actions/composeActions';
+import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
+import { playWithDelay, createSettings } from '../../util/soundHelper';
+
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
@@ -17,8 +20,6 @@ import LoadingIcon from '../Decorative/LoadingIcon';
 import SampleBox from '../SampleBox/SampleBox';
 import SampleSlot from '../SampleSlot/SampleSlot';
 import SortSamples from '../SortSamples/SortSamples';
-import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
-import { playWithDelay, createSettings } from '../../util/soundHelper';
 
 import '../../util/config';
 import './Compose.scss';
@@ -32,15 +33,10 @@ class Compose extends Component {
     this.state = {
       loading: true,
       loadingGroup: false,
-      updatedSlots: false,
-      sampleSlots: getSampleSlots(),
-      droppedBoxIds: [],
       playing: false,
       group: null,
     };
 
-    this.handleDrop = this.handleDrop.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
     this.isDropped = this.isDropped.bind(this);
     this.playSound = this.playSound.bind(this);
     this.stopSound = this.stopSound.bind(this);
@@ -72,7 +68,7 @@ class Compose extends Component {
    *
    */
   loadGroup(cb) {
-    let selectedSongSources = this.state.sampleSlots.filter(slot => slot.lastDroppedItem !== null);
+    let selectedSongSources = this.props.sampleSlots.filter(slot => slot.lastDroppedItem !== null);
 
     selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
       this.props.composeSamples.find(sample => lastDroppedItem.id === sample.id));
@@ -111,7 +107,7 @@ class Compose extends Component {
     this.loadGroup(() => {
       const settings = createSettings(this.props);
 
-      playWithDelay(this.state.group, settings, this.state.sampleSlots);
+      playWithDelay(this.state.group, settings, this.props.sampleSlots);
       this.setState({ playing: true });
     });
   }
@@ -128,7 +124,7 @@ class Compose extends Component {
 
     try {
       const selectedSongSources = this.props.composeSamples.filter(({ id }) =>
-        this.state.droppedBoxIds.find(selectedId => id === selectedId));
+        this.props.droppedSampleIds.find(selectedId => id === selectedId));
 
       const jingleIds = selectedSongSources.map(s => parseInt(s.id, 10));
 
@@ -138,7 +134,7 @@ class Compose extends Component {
 
       let sampleIds = [];
 
-      this.state.sampleSlots.forEach(s => {
+      this.props.sampleSlots.forEach(s => {
         sampleIds.push(s.lastDroppedItem.id);
       });
 
@@ -150,7 +146,8 @@ class Compose extends Component {
 
       this.props.getComposeSamples(this.props.address);
 
-      this.setState({ loading: false, sampleSlots: getSampleSlots() });
+      // this.setState({ loading: false, sampleSlots: getSampleSlots() });
+      this.setState({ loading: false });
 
       this.props.removePendingTx(id);
     } catch (err) {
@@ -165,48 +162,18 @@ class Compose extends Component {
   }
 
   /**
-   * Fires when a jingle is dropped into a JingleSlot component
-   *
-   * @param {Number} index
-   * @param {Object} item
-   */
-  handleDrop(index, item) {
-    this.setState(update(this.state, {
-      sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
-      droppedBoxIds: item.id ? { $push: [item.id] } : {},
-    }));
-  }
-
-  /**
-   * Fires when a jingle is removed from a JingleSlot component
-   *
-   * @param {Number} index
-   * @param {Object} item
-   */
-  handleCancel(index, { id }) {
-    const droppedBoxIds = [...this.state.droppedBoxIds];
-    const boxIndex = droppedBoxIds.findIndex(_id => _id === id);
-    droppedBoxIds.splice(boxIndex, 1);
-
-    this.setState(update(this.state, {
-      sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
-      droppedBoxIds: { $set: droppedBoxIds },
-    }));
-  }
-
-  /**
    * Checks if a jingle is inside one of the JingleSlot components
    *
    * @param {String} jingleId
    * @returns {Boolean}
    */
-  isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1; }
+  isDropped = jingleId => this.props.droppedSampleIds.indexOf(jingleId) > -1;
 
   render() {
     const {
-      hasMM, lockedMM, composeSamples, sortingOptions, selectedSort,
+      hasMM, lockedMM, composeSamples, sortingOptions, selectedSort, sampleSlots, droppedSampleIds,
     } = this.props;
-    const { onComposeSamplesSort } = this.props;
+    const { onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel } = this.props;
 
     return (
       <DragDropContextProvider backend={HTML5Backend}>
@@ -230,7 +197,7 @@ class Compose extends Component {
                         type="submit"
                         className="btn buy-button"
                         onClick={this.createSong}
-                        disabled={this.state.droppedBoxIds.length < 5}
+                        disabled={droppedSampleIds.length < 5}
                       >
                         Submit
                       </button>
@@ -246,7 +213,7 @@ class Compose extends Component {
                     {
                         !this.state.playing && !this.state.loadingGroup &&
                         <span
-                          className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
+                          className={droppedSampleIds.length === 0 ? 'disabled-play' : ''}
                           onClick={this.playSound}
                         >
                           <PlayIcon />
@@ -267,15 +234,15 @@ class Compose extends Component {
 
                 <div className="sample-slots-wrapper">
                   {
-                      this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
+                      sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
                         (<SampleSlot
                           key={`item-${guid()}`}
                           index={index}
                           accepts={accepts}
                           lastDroppedItem={lastDroppedItem}
                           id={index}
-                          onDrop={item => this.handleDrop(index, item)}
-                          cancelDrop={item => this.handleCancel(index, item)}
+                          onDrop={item => handleSampleDrop(index, item)}
+                          cancelDrop={item => handleSampleDropCancel(index, item)}
                         />))
                     }
                 </div>
@@ -382,8 +349,11 @@ Compose.propTypes = {
   removePendingTx: PropTypes.func.isRequired,
   getComposeSamples: PropTypes.func.isRequired,
   onComposeSamplesSort: PropTypes.func.isRequired,
+  handleSampleDrop: PropTypes.func.isRequired,
   composeSamples: PropTypes.array.isRequired,
   sortingOptions: PropTypes.array.isRequired,
+  sampleSlots: PropTypes.array.isRequired,
+  droppedSampleIds: PropTypes.array.isRequired,
   selectedSort: PropTypes.object.isRequired,
 };
 
@@ -394,13 +364,15 @@ const mapStateToProps = state => ({
   composeSamples: state.compose.composeSamples,
   sortingOptions: state.compose.sortingOptions,
   selectedSort: state.compose.selectedSort,
+  sampleSlots: state.compose.sampleSlots,
+  droppedSampleIds: state.compose.sampleSlots,
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
   address: state.app.address,
 });
 
 const mapDispatchToProps = {
-  addPendingTx, removePendingTx, getComposeSamples, onComposeSamplesSort,
+  addPendingTx, removePendingTx, getComposeSamples, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);
