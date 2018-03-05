@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../util/config';
+import { API_URL } from '../constants/config';
 import { LIKES_MESSAGE_TO_SIGN } from '../../config/universalConstants';
 
 /**

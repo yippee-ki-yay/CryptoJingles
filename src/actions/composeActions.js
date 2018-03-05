@@ -5,8 +5,8 @@ import {
   HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL, TOGGLE_LOADING_NEW_JINGLE, SET_NEW_JINGLE_GROUP,
   TOGGLE_NEW_JINGLE_PLAYING, SET_NEW_JINGLE_NAME,
 } from '../constants/actionTypes';
-import { playWithDelay, createSettings } from '../util/soundHelper';
-import { getSamplesFromContract } from '../util/web3/ethereumService';
+import { playWithDelay, createSettings } from '../services/audioService';
+import { getSamplesFromContract } from '../services/ethereumService';
 import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 
 /**

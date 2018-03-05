@@ -9,8 +9,8 @@ import Heart from '../../components/Decorative/Heart';
 import { getJingleMetadata } from '../../constants/getMockData';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
-import { playWithDelay } from '../../util/soundHelper';
-import { formatSalePrice } from '../../actions/utils';
+import { playWithDelay } from '../../services/audioService';
+import { formatSalePrice } from '../../services/generalService';
 
 class SingleJingle extends Component {
   constructor(props) {

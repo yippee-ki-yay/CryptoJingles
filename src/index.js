@@ -1,6 +1,6 @@
 import FastClick from 'fastclick';
 import React from 'react';
-import getWeb3 from './util/web3/getWeb3';
+import getWeb3 from './services/web3Service';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory, Redirect } from 'react-router';
 import { Provider } from 'react-redux';

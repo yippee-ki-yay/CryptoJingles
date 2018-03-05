@@ -1,12 +1,12 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 import axios from 'axios';
-import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress, SampleAddress, API_URL } from '../config';
-import CryptoJingles from '../../../build/contracts/CryptoJingles.json';
-import Jingle from '../../../build/contracts/Jingle.json';
-import Sample from '../../../build/contracts/Sample.json';
-import Marketplace from '../../../build/contracts/Marketplace.json';
-import { initAppWithMM, initAppWithoutMM, initAppWithLockedMM } from '../../../src/actions/appActions';
+import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress, SampleAddress, API_URL } from '../constants/config';
+import CryptoJingles from '../../build/contracts/CryptoJingles.json';
+import Jingle from '../../build/contracts/Jingle.json';
+import Sample from '../../build/contracts/Sample.json';
+import Marketplace from '../../build/contracts/Marketplace.json';
+import { initAppWithMM, initAppWithoutMM, initAppWithLockedMM } from '../actions/appActions';
 
 /**
  * Checks if the user has MetaMask. If it does, binds

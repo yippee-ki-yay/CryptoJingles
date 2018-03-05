@@ -5,10 +5,10 @@ import {
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
   SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
 } from '../constants/actionTypes';
-import { getSamplesFromContract } from '../util/web3/ethereumService';
+import { getSamplesFromContract } from '../services/ethereumService';
 import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
-import { SAMPLE_PRICE, API_URL } from '../util/config';
-import { likeUnlikeJingle } from '../actions/utils';
+import { SAMPLE_PRICE, API_URL } from '../constants/config';
+import { likeUnlikeJingle } from '../services/generalService';
 
 /**
  * Dispatches action to show that the profile address URL param

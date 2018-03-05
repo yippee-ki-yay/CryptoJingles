@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { API_URL } from '../util/config';
+import { API_URL } from '../constants/config';
 import {
   SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_JINGLES, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE,
   MARKETPLACE_LIKE_UNLIKE_JINGLE,
 } from '../constants/actionTypes';
-import { likeUnlikeJingle } from '../actions/utils';
+import { likeUnlikeJingle } from '../services/generalService';
 
 /**
  * Gets all jingles for category and sort option fromm the server and then sets it in the state

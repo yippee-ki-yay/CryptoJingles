@@ -15,7 +15,7 @@ import SortSamples from '../SortSamples/SortSamples';
 import NewJingleNameForm from './NewJingleNameForm/NewJingleNameForm';
 import ComposeMixer from './ComposeMixer/ComposeMixer';
 
-import '../../util/config';
+import '../../constants/config';
 import './Compose.scss';
 
 const ScrollingComponent = withScrolling('div');

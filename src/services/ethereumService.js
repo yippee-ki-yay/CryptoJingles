@@ -1,4 +1,4 @@
-import { getJingleMetadata } from '../../constants/getMockData';
+import { getJingleMetadata } from '../constants/getMockData';
 
 export const parseSamples = (samples) => {
   const mySamples = [];
