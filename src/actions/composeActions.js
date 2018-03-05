@@ -7,7 +7,8 @@ import {
 } from '../constants/actionTypes';
 import { playWithDelay, createSettings } from '../services/audioService';
 import { getSamplesFromContract } from '../services/ethereumService';
-import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
+import { addPendingTx, removePendingTx } from '../actions/appActions';
+import { guid } from '../services/generalService';
 
 /**
  * Fires when user finishes changing the compose volume slider

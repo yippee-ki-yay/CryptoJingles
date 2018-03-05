@@ -6,13 +6,13 @@ import PropTypes from 'prop-types';
 import { Sound, Group } from 'pizzicato';
 import JingleImage from '../JingleImage/JingleImage';
 import Heart from '../Decorative/Heart';
-import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
+import { addPendingTx, removePendingTx } from '../../actions/appActions';
 // import { getColorForRarity } from '../../actions/profileActions';
 import { API_URL } from '../../constants/config';
 import { getJingleMetadata } from '../../constants/getMockData';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { playWithDelay } from '../../services/audioService';
-import { formatSalePrice, formatToWei, likeUnlikeJingle } from '../../services/generalService';
+import { formatSalePrice, formatToWei, likeUnlikeJingle, guid } from '../../services/generalService';
 
 import './JinglePage.scss';
 

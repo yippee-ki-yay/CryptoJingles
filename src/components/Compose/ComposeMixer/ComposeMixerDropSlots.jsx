@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { guid } from '../../../actions/appActions';
+import { guid } from '../../../services/generalService';
 import { handleSampleDrop, handleSampleDropCancel } from '../../../actions/composeActions';
 import SampleSlot from '../../SampleSlot/SampleSlot';
 
