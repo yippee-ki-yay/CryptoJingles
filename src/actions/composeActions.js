@@ -134,6 +134,7 @@ export const stopNewJinglePlaying = () => (dispatch, getState) => {
   dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: false });
 };
 
+
 /**
  * Fires when a jingle is removed from a JingleSlot component
  *
