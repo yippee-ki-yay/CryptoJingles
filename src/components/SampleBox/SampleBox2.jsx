@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
-import { playAudio } from '../../actions/audioActions';
 import { getColorForRarity } from '../../actions/profileActions';
 
 // import './SampleBox.css';
@@ -105,4 +104,4 @@ SampleBox2.propTypes = {
   jingleType: PropTypes.number.isRequired,
 };
 
-export default connect(null, { playAudio })(SampleBox2);
+export default connect(null, null)(SampleBox2);

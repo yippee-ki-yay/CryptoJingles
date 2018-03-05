@@ -17,7 +17,7 @@ import profilePlaceholder from './profile-placeholder.png';
 
 class Profile extends Component {
   componentWillMount() {
-    if (!this.isValidProfile(this.props.params.address)) return;
+    if (!ethereumAddress.isAddress(this.props.params.address)) return this.props.setInvalidProfile();
 
     this.props.setProfileAddress(this.props.params.address);
     this.props.getAuthor();
@@ -26,20 +26,12 @@ class Profile extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.params.address === this.props.params.address) return;
-    if (!this.isValidProfile(newProps.params.address)) return;
+    if (!ethereumAddress.isAddress(newProps.params.address)) return this.props.setInvalidProfile();
 
     this.props.setProfileAddress(newProps.params.address);
     this.props.getAuthor();
     this.props.checkIfOwnerProfile();
   }
-
-  isValidProfile = (address) => {
-    const isValid = ethereumAddress.isAddress(address);
-    if (isValid) return true;
-
-    this.props.setInvalidProfile();
-    return false;
-  };
 
   render() {
     const {
