@@ -10,7 +10,7 @@ import {
   getComposeSamples, onComposeSamplesSort, stopNewJinglePlaying, isSampleDropped,
 } from '../../actions/composeActions';
 
-import SampleBox from '../SingleSample/DraggableSingleSample';
+import DraggableSingleSample from '../SingleSample/DraggableSingleSample';
 import SortSamples from '../SortSamples/SortSamples';
 import NewJingleNameForm from './NewJingleNameForm/NewJingleNameForm';
 import ComposeMixer from './ComposeMixer/ComposeMixer';
@@ -104,7 +104,7 @@ class Compose extends Component {
                 <div className="compose-samples-wrapper">
                   {
                     composeSamples.map(sample => (
-                      <SampleBox
+                      <DraggableSingleSample
                         draggable
                         key={sample.id}
                         isDropped={isSampleDropped(sample.id)}

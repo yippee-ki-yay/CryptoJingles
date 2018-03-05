@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import SampleBox2 from '../../SingleSample/SingleSample';
+import SingleSample from '../../SingleSample/SingleSample';
 import BoxLoader from '../../Decorative/BoxLoader';
 import SortSamples from '../../SortSamples/SortSamples';
 import {
@@ -30,33 +30,33 @@ class MySamples extends Component {
     return (
       <div className="my-jingles-wrapper">
         {
-              isOwner &&
-              <div className="buy-samples-section-wrapper">
-                <div className="buy-samples-section">
-                  <div>
-                    <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
-                      <div className="buy-samples-wrapper">
-                        <h2>Buy some samples:</h2>
+          isOwner &&
+          <div className="buy-samples-section-wrapper">
+            <div className="buy-samples-section">
+              <div>
+                <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
+                  <div className="buy-samples-wrapper">
+                    <h2>Buy some samples:</h2>
 
-                        <div className="form-items-wrapper">
-                          <input
-                            name="numJinglesToBuy"
-                            value={numSamplesToBuy}
-                            onChange={(event) => { handleNumSamplesToBuyChange(event.target); }}
-                            type="number"
-                            className="form-control"
-                            placeholder="Num. of Jingles"
-                          />
+                    <div className="form-items-wrapper">
+                      <input
+                        name="numJinglesToBuy"
+                        value={numSamplesToBuy}
+                        onChange={(event) => { handleNumSamplesToBuyChange(event.target); }}
+                        type="number"
+                        className="form-control"
+                        placeholder="Num. of Jingles"
+                      />
 
-                          <button type="submit" className="btn buy-button" onClick={buySamples}>Buy!</button>
-                        </div>
-                      </div>
-                    </form>
+                      <button type="submit" className="btn buy-button" onClick={buySamples}>Buy!</button>
+                    </div>
                   </div>
-                </div>
-                <div className="separator" />
+                </form>
               </div>
-            }
+            </div>
+            <div className="separator" />
+          </div>
+        }
 
         <SortSamples
           value={selectedMySampleSort}
@@ -65,33 +65,33 @@ class MySamples extends Component {
         />
 
         {
-              (mySamples.length > 0) &&
-              !loading &&
-              <div className="my-jingles-num">{ mySamples.length } samples</div>
-            }
+          (mySamples.length > 0) &&
+          !loading &&
+          <div className="my-jingles-num">{ mySamples.length } samples</div>
+        }
 
         <div className="samples-wrapper">
           { loading && <div className="loader-wrapper"><BoxLoader /></div> }
 
           {
-                (mySamples.length === 0) &&
-                !loading &&
-                <div className="empty-state"><h2>You do not own any samples yet!</h2></div>
-              }
+            (mySamples.length === 0) &&
+            !loading &&
+            <div className="empty-state"><h2>You do not own any samples yet!</h2></div>
+          }
 
           {
-                (mySamples.length > 0) &&
-                !loading &&
-                <div>
-                  {
-                    mySamples.map(sample =>
-                      (<SampleBox2
-                        key={sample.id}
-                        {...sample}
-                      />))
-                  }
-                </div>
+            (mySamples.length > 0) &&
+            !loading &&
+            <div>
+              {
+                mySamples.map(sample =>
+                  (<SingleSample
+                    key={sample.id}
+                    {...sample}
+                  />))
               }
+            </div>
+          }
         </div>
       </div>
     );
