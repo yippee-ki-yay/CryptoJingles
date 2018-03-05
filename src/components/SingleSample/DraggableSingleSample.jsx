@@ -1,21 +1,31 @@
 import React, { Component } from 'react';
+import { DragSource } from 'react-dnd';
 import Pizzicato from 'pizzicato';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { getColorForRarity } from '../../actions/profileActions';
 
-// import './SampleBox.css';
+import './SingleSample.scss';
+
+const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }; } };
 
 const style = {
   margin: '14px 27px 7px 26px',
   width: '175px',
+  height: '230px',
   float: 'left',
+  cursor: 'move',
+  position: 'relative',
+  background: '#fff',
 };
 
-class SampleBox2 extends Component {
+@DragSource(props => props.type, boxSource, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging(),
+}))
+class SampleBox extends Component {
   constructor(props) {
     super(props);
 
@@ -60,12 +70,20 @@ class SampleBox2 extends Component {
   };
 
   render() {
-    const { name, jingleType, rarity } = this.props;
+    const {
+      name, isDropped, isDragging, connectDragSource, rarity, jingleType,
+    } = this.props;
+
+    style.opacity = isDragging || isDropped ? 0.4 : 1;
+
+    if (isDropped) style.pointerEvents = 'none';
+    if (!isDropped) style.pointerEvents = 'initial';
+
     const background = getColorForRarity(rarity);
 
-    return (
+    return connectDragSource((() => (
       <div style={{ ...style }}>
-        <div className="sample-wrapper">
+        <div className="sample-wrapper" style={{ width: '175px' }}>
           <div className="top" style={{ background }}>
             { this.state.loading && <div><LoadingIcon /></div> }
             {
@@ -93,15 +111,23 @@ class SampleBox2 extends Component {
           </div>
         </div>
       </div>
-    );
+    ))());
   }
 }
 
-SampleBox2.propTypes = {
+SampleBox.defaultProps = {
+  connectDragSource: () => {},
+  isDragging: false,
+};
+
+SampleBox.propTypes = {
+  connectDragSource: PropTypes.func,
   source: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  isDropped: PropTypes.bool.isRequired,
+  isDragging: PropTypes.bool,
   rarity: PropTypes.number.isRequired,
   jingleType: PropTypes.number.isRequired,
 };
 
-export default connect(null, null)(SampleBox2);
+export default SampleBox;

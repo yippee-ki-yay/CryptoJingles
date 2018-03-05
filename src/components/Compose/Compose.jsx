@@ -10,7 +10,7 @@ import {
   getComposeSamples, onComposeSamplesSort, stopNewJinglePlaying, isSampleDropped,
 } from '../../actions/composeActions';
 
-import SampleBox from '../SingleSample/SingleSample';
+import SampleBox from '../SingleSample/DraggableSingleSample';
 import SortSamples from '../SortSamples/SortSamples';
 import NewJingleNameForm from './NewJingleNameForm/NewJingleNameForm';
 import ComposeMixer from './ComposeMixer/ComposeMixer';

@@ -5,7 +5,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { getJingleMetadata } from '../../constants/getMockData';
 import { API_URL } from '../../constants/config';
-import SampleBox2 from '../SingleSample/DraggableSingleSample';
+import SingleSample from '../SingleSample/SingleSample';
 import SingleJingle from '../SingleJingle/SingleJingle';
 
 import './Home.scss';
@@ -16,10 +16,10 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      sample1: { jingleType: 24, ...getJingleMetadata(24) },
-      sample2: { jingleType: 67, ...getJingleMetadata(67) },
-      sample3: { jingleType: 90, ...getJingleMetadata(90) },
-      sample4: { jingleType: 0, ...getJingleMetadata(0) },
+      sample1: { jingleType: 24, id: 40512043, ...getJingleMetadata(24) },
+      sample2: { jingleType: 67, id: 14010222, ...getJingleMetadata(67) },
+      sample3: { jingleType: 90, id: 24314109, ...getJingleMetadata(90) },
+      sample4: { jingleType: 0, id: 34912232, ...getJingleMetadata(0) },
       jingle: null,
     };
   }
@@ -84,10 +84,10 @@ class Home extends Component {
 
           <div className="home-samples-wrapper">
             <div className="home-samples">
-              <SampleBox2 {...this.state.sample1} />
-              <SampleBox2 {...this.state.sample2} />
-              <SampleBox2 {...this.state.sample3} />
-              <SampleBox2 {...this.state.sample4} />
+              <SingleSample {...this.state.sample1} />
+              <SingleSample {...this.state.sample2} />
+              <SingleSample {...this.state.sample3} />
+              <SingleSample {...this.state.sample4} />
             </div>
           </div>
         </div>

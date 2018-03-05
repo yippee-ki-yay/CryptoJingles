@@ -36,9 +36,6 @@ export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
 export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';
 export const MARKETPLACE_LIKE_UNLIKE_JINGLE = 'marketplace_like_unlike_jingle';
 
-// Audio action types
-export const SET_SINGLE_AUDIO = 'set_single_audio';
-
 // Profile action types
 export const SET_ACTIVE_PROFILE_TAB = 'set_active_profile_tab';
 export const SET_INVALID_PROFILE = 'set_invalid_profile';
@@ -69,3 +66,9 @@ export const TOGGLE_LOADING_NEW_JINGLE = 'toggle_loading_new_jingle';
 export const SET_NEW_JINGLE_GROUP = 'set_new_jingle_group';
 export const TOGGLE_NEW_JINGLE_PLAYING = 'toggle_new_jingle_playing';
 export const SET_NEW_JINGLE_NAME = 'set_new_jingle_name';
+
+// Audio actions
+export const ADD_NEW_AUDIO = 'add_new_audio';
+export const TOGGLE_PLAY_AUDIO = 'toggle_play_audio';
+export const TOGGLE_AUDIO_LOADING = 'toggle_audio_loading';
+export const AUDIO_LOADED = 'audio_loaded';

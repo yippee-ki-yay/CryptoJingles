@@ -1,3 +1,5 @@
+import Pizzicato from 'pizzicato';
+
 const defaultSamplePos = [
   { lastDroppedItem: true },
   { lastDroppedItem: true },
@@ -62,3 +64,15 @@ export const createSettings = (_delays, _volumes, _cuts) => {
 
   return [...volumes, ...delays, ...cuts];
 };
+
+/**
+ * Returns loaded Pizzicato sound object
+ *
+ * @return {Object}
+ */
+export const getSoundFromSource = source =>
+  new Promise((resolve) => {
+    const sound = new Pizzicato.Sound(source, () => {
+      resolve(sound);
+    });
+  });
