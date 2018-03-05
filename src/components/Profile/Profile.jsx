@@ -52,51 +52,49 @@ class Profile extends Component {
                 <div>
                   <h2>
                     <span className="author">
-                      { !isOwner && author}
-
                       {
-                    isOwner &&
-                    <div>
-                      {
-                        !editAuthorActive &&
-                        <span>
-                          <span>{author}</span>
-                          <span onClick={() => { toggleEditAuthor(true); }}>
-                            <i className="material-icons edit-icon">edit</i>
-                          </span>
-                        </span>
-                      }
-
-                      {
-                        editAuthorActive &&
-                        <div className="edit-author-wrapper">
-                          <OutsideAlerter onClickOutside={() => { toggleEditAuthor(false); }}>
-                            <form onSubmit={(e) => { e.preventDefault(); }}>
-                              <span>
-                                <input
-                                  maxLength="30"
-                                  autoFocus
-                                  onChange={onEditAuthorChange}
-                                  type="text"
-                                  value={authorEdit}
-                                />
-                                <span>
-                                  <span>
-                                    <button type="submit" onClick={submitEditAuthorForm}>
-                                      <i className="material-icons save">save</i>
-                                    </button>
-                                  </span>
-                                  <span onClick={() => { toggleEditAuthor(false); }}>
-                                    <i className="material-icons close-icon">close</i>
-                                  </span>
-                                </span>
+                        isOwner &&
+                        <div>
+                          {
+                            !editAuthorActive &&
+                            <span>
+                              <span>{author}</span>
+                              <span onClick={() => { toggleEditAuthor(true); }}>
+                                <i className="material-icons edit-icon">edit</i>
                               </span>
-                            </form>
-                          </OutsideAlerter>
+                            </span>
+                          }
+
+                          {
+                            editAuthorActive &&
+                            <div className="edit-author-wrapper">
+                              <OutsideAlerter onClickOutside={() => { toggleEditAuthor(false); }}>
+                                <form onSubmit={(e) => { e.preventDefault(); }}>
+                                  <span>
+                                    <input
+                                      maxLength="30"
+                                      autoFocus
+                                      onChange={onEditAuthorChange}
+                                      type="text"
+                                      value={authorEdit}
+                                    />
+                                    <span>
+                                      <span>
+                                        <button type="submit" onClick={submitEditAuthorForm}>
+                                          <i className="material-icons save">save</i>
+                                        </button>
+                                      </span>
+                                      <span onClick={() => { toggleEditAuthor(false); }}>
+                                        <i className="material-icons close-icon">close</i>
+                                      </span>
+                                    </span>
+                                  </span>
+                                </form>
+                              </OutsideAlerter>
+                            </div>
+                          }
                         </div>
                       }
-                    </div>
-                  }
                     </span>
                   </h2>
                   <h4>
