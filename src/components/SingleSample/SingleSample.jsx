@@ -7,7 +7,7 @@ import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { getColorForRarity } from '../../actions/profileActions';
 
-import './SampleBox.scss';
+import './SingleSample.scss';
 
 const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }; } };
 

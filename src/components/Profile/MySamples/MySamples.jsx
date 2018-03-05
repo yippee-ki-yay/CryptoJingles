@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import SampleBox2 from '../../SampleBox/SampleBox2';
+import SampleBox2 from '../../SingleSample/DraggableSingleSample';
 import BoxLoader from '../../Decorative/BoxLoader';
 import SortSamples from '../../SortSamples/SortSamples';
 import {

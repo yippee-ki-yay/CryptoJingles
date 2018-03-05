@@ -5,7 +5,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { getJingleMetadata } from '../../constants/getMockData';
 import { API_URL } from '../../util/config';
-import SampleBox2 from '../SampleBox/SampleBox2';
+import SampleBox2 from '../SingleSample/DraggableSingleSample';
 import SingleJingle from '../SingleJingle/SingleJingle';
 
 import './Home.scss';
