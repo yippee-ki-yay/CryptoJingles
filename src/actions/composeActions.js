@@ -3,10 +3,11 @@ import { Sound, Group } from 'pizzicato';
 import {
   UPDATE_VOLUME, UPDATE_DELAY, UPDATE_CUTS, SET_COMPOSE_SAMPLES, SAMPLE_SORTING_OPTIONS, SET_COMPOSE_SELECTED_SORT,
   HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL, TOGGLE_LOADING_NEW_JINGLE, SET_NEW_JINGLE_GROUP,
-  TOGGLE_NEW_JINGLE_PLAYING,
+  TOGGLE_NEW_JINGLE_PLAYING, SET_NEW_JINGLE_NAME,
 } from '../constants/actionTypes';
 import { playWithDelay, createSettings } from '../util/soundHelper';
 import { getSamplesFromContract } from '../util/web3/ethereumService';
+import { addPendingTx, guid, removePendingTx } from '../actions/appActions';
 
 /**
  * Fires when user finishes changing the compose volume slider
@@ -114,10 +115,23 @@ export const onComposeSamplesSort = option => (dispatch, getState) => {
 export const handleSampleDrop = (index, item) => (dispatch, getState) => {
   const compose = update(getState().compose, {
     sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
-    droppedSampleIds: item.id ? { $push: [item.id] } : {},
+    droppedSampleIds: { $push: [item.id] },
   });
 
   dispatch({ type: HANDLE_SAMPLE_DROP, payload: compose });
+};
+
+/**
+ * Stops playing new jingle if the sample group is present
+ *
+ * @return {Function}
+ */
+export const stopNewJinglePlaying = () => (dispatch, getState) => {
+  const { newJingleSampleGroup } = getState().compose;
+  if (!newJingleSampleGroup) return;
+
+  newJingleSampleGroup.stop();
+  dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: false });
 };
 
 /**
@@ -143,26 +157,15 @@ export const handleSampleDropCancel = (index, { id }) => (dispatch, getState) =>
 };
 
 /**
- * Stops playing new jingle if the sample group is present
- *
- * @return {Function}
- */
-export const stopNewJinglePlaying = () => (dispatch, getState) => {
-  const { newJingleSampleGroup } = getState().compose;
-  if (!newJingleSampleGroup) return;
-
-  newJingleSampleGroup.stop();
-  dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: false });
-};
-
-/**
  * Downloads sound samples fromm IPFS and
  * creates a pizzicato group that goes to the state
  *
  */
 const loadComposeSamplesGroup = onSampleGroupLoad => (dispatch, getState) => {
   // CHECK IF THIS IS THE SAME AS IN SINGLE JINGLE
-  const { sampleSlots, composeSamples, delays, volumes } = getState().compose;
+  const {
+    sampleSlots, composeSamples, delays, volumes,
+  } = getState().compose;
 
   let selectedSongSources = sampleSlots.filter(slot => slot.lastDroppedItem !== null);
   selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
@@ -201,13 +204,73 @@ const loadComposeSamplesGroup = onSampleGroupLoad => (dispatch, getState) => {
  */
 const onNewJingleGroupLoad = () => (dispatch, getState) => {
   const { compose } = getState();
-  const { delays, volumes, cuts, newJingleSampleGroup, sampleSlots } = compose;
+  const {
+    delays, volumes, cuts, newJingleSampleGroup, sampleSlots,
+  } = compose;
   const settings = createSettings(delays, volumes, cuts);
 
   playWithDelay(newJingleSampleGroup, settings, sampleSlots);
   dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: true });
 };
 
+/**
+ * Fires when the user clicks on the compose page
+ * play button
+ *
+ * @return {Function}
+ */
 export const playNewJingle = () => (dispatch) => {
   dispatch(loadComposeSamplesGroup(() => { dispatch(onNewJingleGroupLoad()); }));
 };
+
+/**
+ * Fires when the user edits the jingle name input
+ *
+ * @param {Object} event
+ * @return {Function}
+ */
+export const handleNewJingleNameChange = event => (dispatch) => {
+  const val = event.target.value;
+  if (val > 30) return;
+  dispatch({ type: SET_NEW_JINGLE_NAME, payload: val });
+};
+
+/**
+ * Fires when the user has 5 samples in sample slots
+ * and submits the compose jingle button
+ *
+ * @return {Function}
+ */
+export const createNewJingle = () => async (dispatch, getState) => {
+  const pendingTxId = guid();
+  const { compose, app } = getState();
+  const {
+    composeSamples, droppedSampleIds, delays, volumes, cuts, newJingleName,
+  } = compose;
+  const { address } = app;
+
+  if (droppedSampleIds.length !== 5) return; // TODO - show message in the  UI instead of return
+
+  const settings = createSettings(delays, volumes, cuts);
+  const selectedSongSources = composeSamples.filter(({ id }) => droppedSampleIds.find(sId => id === sId) === id);
+
+  try {
+    dispatch(addPendingTx(pendingTxId, 'Compose jingle'));
+
+    await window.contract.composeJingle(newJingleName, selectedSongSources, settings, { from: address });
+
+    dispatch(getComposeSamples(address));
+    dispatch(removePendingTx(pendingTxId));
+  } catch (err) {
+    dispatch(removePendingTx(pendingTxId));
+  }
+};
+
+/**
+ * Checks if a sample is inside one of the JingleSlot components
+ *
+ * @param {Number} sampleId
+ * @returns {Boolean}
+ */
+export const isSampleDropped = sampleId => (dispatch, getState) =>
+  getState().compose.droppedSampleIds.indexOf(sampleId) > -1;

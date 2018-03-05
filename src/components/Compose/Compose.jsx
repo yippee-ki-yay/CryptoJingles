@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 
 import {
   getComposeSamples, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel, playNewJingle,
-  stopNewJinglePlaying,
+  stopNewJinglePlaying, createNewJingle, handleNewJingleNameChange, isSampleDropped,
 } from '../../actions/composeActions';
-import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
+import { guid } from '../../actions/appActions';
 
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
@@ -26,13 +26,6 @@ import './Compose.scss';
 const ScrollingComponent = withScrolling('div');
 
 class Compose extends Component {
-  constructor(props) {
-    super(props);
-
-    this.isDropped = this.isDropped.bind(this);
-    this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
-  }
-
   async componentWillMount() {
     if (this.props.hasMM && !this.props.lockedMM) {
       this.props.getComposeSamples(this.props.address);
@@ -44,60 +37,11 @@ class Compose extends Component {
 
   componentWillUnmount() { this.props.stopNewJinglePlaying(); }
 
-  createSong = async () => {
-    const id = guid();
-
-    try {
-      const selectedSongSources = this.props.composeSamples.filter(({ id }) =>
-        this.props.droppedSampleIds.find(selectedId => id === selectedId));
-
-      const jingleIds = selectedSongSources.map(s => parseInt(s.id, 10));
-
-      if (jingleIds.length !== 5) return; // TODO - show message in the  UI instead of return
-
-      // const settings = createSettings(this.props);
-
-      const sampleIds = [];
-
-      this.props.sampleSlots.forEach((sampleSlot) => { sampleIds.push(sampleSlot.lastDroppedItem.id); });
-
-      const name = this.state.jingleName;
-      this.props.addPendingTx(id, 'Compose jingle');
-      // await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
-
-      // this.setState({ loading: true });
-
-      this.props.getComposeSamples(this.props.address);
-
-      // this.setState({ loading: false, sampleSlots: getSampleSlots() });
-      // this.setState({ loading: false });
-
-      this.props.removePendingTx(id);
-    } catch (err) {
-      this.props.removePendingTx(id);
-    }
-  };
-
-  handleJingleNameChange(e) {
-    const val = e.target.value;
-    if (val > 30) return;
-    this.setState({ jingleName: val });
-  }
-
-  /**
-   * Checks if a jingle is inside one of the JingleSlot components
-   *
-   * @param {String} jingleId
-   * @returns {Boolean}
-   */
-  // TODO FIX THIS
-  isDropped = jingleId => this.props.droppedSampleIds.indexOf(jingleId) > -1;
-
   render() {
     const {
       hasMM, lockedMM, composeSamples, sortingOptions, selectedSort, sampleSlots, droppedSampleIds, loadingNewJingle,
       playingNewJingle, onComposeSamplesSort, handleSampleDrop, handleSampleDropCancel, playNewJingle,
-      stopNewJinglePlaying,
+      stopNewJinglePlaying, createNewJingle, handleNewJingleNameChange, isSampleDropped,
     } = this.props;
 
     return (
@@ -115,13 +59,13 @@ class Compose extends Component {
                         className="form-control"
                         placeholder="Jingle name"
                         type="text"
-                        onChange={this.handleJingleNameChange}
+                        onChange={handleNewJingleNameChange}
                       />
 
                       <button
                         type="submit"
                         className="btn buy-button"
-                        onClick={this.createSong}
+                        onClick={createNewJingle}
                         disabled={droppedSampleIds.length < 5}
                       >
                         Submit
@@ -248,7 +192,7 @@ class Compose extends Component {
                               <SampleBox
                                 draggable
                                 key={sample.id}
-                                isDropped={this.isDropped(sample.id)}
+                                isDropped={isSampleDropped(sample.id)}
                                 {...sample}
                               />
                             ))
@@ -273,8 +217,6 @@ Compose.propTypes = {
   lockedMM: PropTypes.bool.isRequired,
   loadingNewJingle: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
-  addPendingTx: PropTypes.func.isRequired,
-  removePendingTx: PropTypes.func.isRequired,
   getComposeSamples: PropTypes.func.isRequired,
   onComposeSamplesSort: PropTypes.func.isRequired,
   handleSampleDrop: PropTypes.func.isRequired,
@@ -287,6 +229,9 @@ Compose.propTypes = {
   droppedSampleIds: PropTypes.array.isRequired,
   selectedSort: PropTypes.object.isRequired,
   playingNewJingle: PropTypes.bool.isRequired,
+  createNewJingle: PropTypes.func.isRequired,
+  handleNewJingleNameChange: PropTypes.func.isRequired,
+  isSampleDropped: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -297,7 +242,7 @@ const mapStateToProps = state => ({
   sortingOptions: state.compose.sortingOptions,
   selectedSort: state.compose.selectedSort,
   sampleSlots: state.compose.sampleSlots,
-  droppedSampleIds: state.compose.sampleSlots,
+  droppedSampleIds: state.compose.droppedSampleIds,
   loadingNewJingle: state.compose.loadingNewJingle,
   playingNewJingle: state.compose.playingNewJingle,
   hasMM: state.app.hasMM,
@@ -306,14 +251,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  addPendingTx,
-  removePendingTx,
   getComposeSamples,
   onComposeSamplesSort,
   handleSampleDrop,
   handleSampleDropCancel,
   playNewJingle,
   stopNewJinglePlaying,
+  createNewJingle,
+  handleNewJingleNameChange,
+  isSampleDropped,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);

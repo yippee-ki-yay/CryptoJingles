@@ -58,3 +58,7 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 .children-wrapper {
     margin-top: 10px;
 }
+
+body input.form-control {
+  border: 1px solid #d1d1d1;
+}
