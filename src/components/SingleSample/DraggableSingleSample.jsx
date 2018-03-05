@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { DragSource } from 'react-dnd';
-import Pizzicato from 'pizzicato';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import { getColorForRarity } from '../../actions/profileActions';
+import { playSample, stopAudio } from '../../actions/audioActions';
 
 import './SingleSample.scss';
 
@@ -25,53 +26,12 @@ const style = {
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))
-class SampleBox extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      start: false,
-      loading: false,
-      sound: null,
-    };
-
-    this.stopSound = this.stopSound.bind(this);
-    this.playSound = this.playSound.bind(this);
-    this.loadSample = this.loadSample.bind(this);
-  }
-
-  componentWillUnmount() { this.stopSound(); }
-
-  loadSample() {
-    this.setState({ loading: true });
-
-    const sound = new Pizzicato.Sound(this.props.source, () => {
-      sound.on('stop', () => { this.setState({ start: false }); });
-
-      this.setState({ sound, start: false, loading: false });
-      this.playSound();
-    });
-  }
-
-  playSound = () => {
-    if (this.state.sound === null) {
-      this.loadSample();
-      return;
-    }
-
-    this.state.sound.play();
-    this.setState({ start: true });
-  };
-
-  stopSound = () => {
-    if (!this.state.sound) return;
-    this.state.sound.stop();
-    this.setState({ start: false });
-  };
+class DraggableSingleSample extends Component {
+  componentWillUnmount() { this.props.stopAudio(`sample-${this.props.id}`); }
 
   render() {
     const {
-      name, isDropped, isDragging, connectDragSource, rarity, jingleType,
+      name, isDropped, isDragging, connectDragSource, rarity, jingleType, audios, id, source, playSample, stopAudio,
     } = this.props;
 
     style.opacity = isDragging || isDropped ? 0.4 : 1;
@@ -79,20 +39,30 @@ class SampleBox extends Component {
     if (isDropped) style.pointerEvents = 'none';
     if (!isDropped) style.pointerEvents = 'initial';
 
+    const sampleId = `sample-${id}`;
     const background = getColorForRarity(rarity);
+
+    const audio = audios.find(_audio => _audio.id === sampleId);
+    let playing = false;
+    let loading = false;
+
+    if (audio) {
+      playing = audio.playing;
+      loading = audio.loading;
+    }
 
     return connectDragSource((() => (
       <div style={{ ...style }}>
         <div className="sample-wrapper" style={{ width: '175px' }}>
           <div className="top" style={{ background }}>
-            { this.state.loading && <div><LoadingIcon /></div> }
+            { loading && <div><LoadingIcon /></div> }
             {
-              !this.state.loading && !this.state.start &&
-              <div onClick={this.playSound}><PlayIcon /></div>
+              !loading && !playing &&
+              <div onClick={() => { playSample(sampleId, source); }}><PlayIcon /></div>
             }
             {
-              !this.state.loading && this.state.start &&
-              <div onClick={this.stopSound}><StopIcon /></div>
+              !loading && playing &&
+              <div onClick={() => { stopAudio(sampleId); }}><StopIcon /></div>
             }
           </div>
 
@@ -115,12 +85,12 @@ class SampleBox extends Component {
   }
 }
 
-SampleBox.defaultProps = {
+DraggableSingleSample.defaultProps = {
   connectDragSource: () => {},
   isDragging: false,
 };
 
-SampleBox.propTypes = {
+DraggableSingleSample.propTypes = {
   connectDragSource: PropTypes.func,
   source: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -128,6 +98,18 @@ SampleBox.propTypes = {
   isDragging: PropTypes.bool,
   rarity: PropTypes.number.isRequired,
   jingleType: PropTypes.number.isRequired,
+  audios: PropTypes.array.isRequired,
+  id: PropTypes.number.isRequired,
+  playSample: PropTypes.func.isRequired,
+  stopAudio: PropTypes.func.isRequired,
 };
 
-export default SampleBox;
+const mapStateToProps = ({ audio }) => ({
+  audios: audio.audios,
+});
+
+const mapDispatchToProps = {
+  playSample, stopAudio,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DraggableSingleSample);

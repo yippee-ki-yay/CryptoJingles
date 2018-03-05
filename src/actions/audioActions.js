@@ -93,7 +93,7 @@ const loadSample = (id, source) => async (dispatch) => {
 /**
  * Fires when user clicks play button on sample
  *
- * @param {Number} _id
+ * @param {String} _id
  * @param {String} source
  * @return {Function}
  */
