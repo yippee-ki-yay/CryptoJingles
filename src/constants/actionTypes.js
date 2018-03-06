@@ -72,3 +72,7 @@ export const ADD_NEW_AUDIO = 'add_new_audio';
 export const TOGGLE_PLAY_AUDIO = 'toggle_play_audio';
 export const TOGGLE_AUDIO_LOADING = 'toggle_audio_loading';
 export const AUDIO_LOADED = 'audio_loaded';
+
+// Jingle Page actions
+export const SET_VALID_JINGLE = 'set_valid_jingle';
+export const JINGLE_PAGE_LOADED = 'jingle_page_loaded';

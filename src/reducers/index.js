@@ -6,6 +6,7 @@ import marketplaceReducer from './marketplaceReducer';
 import profileReducer from './profileReducer';
 import composeReducer from './composeReducer';
 import audioReducer from './audioReducer';
+import jinglePageRecucer from './jinglePageRecucer';
 
 const reducer = combineReducers({
   routing: routerReducer,
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   compose: composeReducer,
   app: appReducer,
   audio: audioReducer,
+  jinglePage: jinglePageRecucer,
 });
 
 export default reducer;

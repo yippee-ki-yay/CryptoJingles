@@ -1,4 +1,4 @@
-import { ADD_PENDING_TX, REMOVE_PENDING_TX, INIT_APP } from '../constants/actionTypes';
+import { ADD_PENDING_TX, REMOVE_PENDING_TX, INIT_APP} from '../constants/actionTypes';
 
 /**
  * Adds a pending tx to the notification dropdown

@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { Sound, Group } from 'pizzicato';
 import JingleImage from '../JingleImage/JingleImage';
 import Heart from '../Decorative/Heart';
 import { addPendingTx, removePendingTx } from '../../actions/appActions';
 // import { getColorForRarity } from '../../actions/profileActions';
-import { API_URL } from '../../constants/config';
 import { getJingleMetadata } from '../../constants/getMockData';
 import LoadingIcon from '../Decorative/LoadingIcon';
-import { playWithDelay } from '../../services/audioService';
 import { formatSalePrice, formatToWei, likeUnlikeJingle, guid } from '../../services/generalService';
+
+import { getJingle, loadPage } from '../../actions/jinglePageActions';
+import { playJingle, stopAudio } from '../../actions/audioActions';
 
 import './JinglePage.scss';
 
@@ -21,72 +20,19 @@ class JinglePage extends Component {
     super(props);
 
     this.state = {
-      jingle: null,
-      validJingle: true,
-      loading: false,
-      isOwner: false,
-      start: false,
-      sound: null,
       salePrice: undefined,
     };
 
-    this.loadPage = this.loadPage.bind(this);
-    this.stopSound = this.stopSound.bind(this);
-    this.playSound = this.playSound.bind(this);
-    this.loadJingle = this.loadJingle.bind(this);
     this.jingleLikeUnlike = this.jingleLikeUnlike.bind(this);
   }
 
-  componentWillMount() {
-    this.loadPage(this.props.params.id);
-  }
+  componentWillMount() { this.props.loadPage(this.props.params.id); }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.params.id === this.props.params.id) return;
-
-    this.loadPage(newProps.params.id);
+    if (newProps.params.id !== this.props.params.id) this.props.loadPage(newProps.params.id);
   }
 
-  componentWillUnmount() { this.stopSound(); }
-
-  getJingle = jingleId => new Promise(async (resolve) => {
-    const { address, lockedMM, hasMM } = this.props;
-
-    let jingleData = await axios(`${API_URL}/jingle/${jingleId}`);
-    jingleData = jingleData.data;
-
-    if (!jingleData) {
-      resolve(false);
-      return;
-    }
-
-    if (!hasMM || lockedMM) jingleData.liked = false;
-    else {
-      const likedJinglesResponse = await axios(`${API_URL}/jingle/check-liked/${address}/${jingleId}`);
-      jingleData.liked = likedJinglesResponse.data;
-    }
-
-    resolve(jingleData);
-  });
-
-  loadPage = async (id) => {
-    const { address } = this.props;
-
-    const jingle = await this.getJingle(id);
-
-    if (typeof jingle !== 'object') {
-      this.setState({ validJingle: false });
-      return;
-    }
-
-    const isOwner = jingle.owner === address;
-
-    this.setState({
-      jingle,
-      isOwner,
-      validJingle: true,
-    });
-  };
+  componentWillUnmount() { this.props.stopAudio(`jingle-${this.props.jingle.jingleId}`); }
 
   purchase = async () => {
     let { jingle } = this.state;
@@ -97,7 +43,7 @@ class JinglePage extends Component {
     await window.marketplaceContract.buy(jingle.jingleId, { from: account, value: jingle.price });
     this.props.removePendingTx(id);
 
-    jingle = await this.getJingle(jingle.jingleId);
+    jingle = await this.props.getJingle(jingle.jingleId);
 
     const isOwner = jingle.owner === account;
 
@@ -115,7 +61,7 @@ class JinglePage extends Component {
     await window.jingleContract.approveAndSell(jingle.jingleId, amount, { from: this.props.address });
     this.props.removePendingTx(id);
 
-    jingle = await this.getJingle(jingle.jingleId);
+    jingle = await this.props.getJingle(jingle.jingleId);
     this.setState({ jingle });
   };
 
@@ -127,58 +73,12 @@ class JinglePage extends Component {
     await window.marketplaceContract.cancel(jingle.jingleId, { from: this.props.address });
     this.props.removePendingTx(id);
 
-    jingle = await this.getJingle(jingle.jingle);
+    jingle = await this.props.getJingle(jingle.jingle);
     this.setState({ jingle });
   };
 
   handleSalePriceChange = (e) => {
     this.setState({ salePrice: formatToWei(e.target.value) });
-  };
-
-  loadJingle = () => {
-    const jingleSrcs = this.state.jingle.sampleTypes.map((sampleType, i) =>
-      new Promise((resolve) => {
-        const sound = new Sound(getJingleMetadata(sampleType).source, () => {
-          resolve(sound);
-          sound.volume = parseInt(this.state.jingle.settings[i], 10) / 100;
-        });
-      }));
-
-    this.setState({ loading: true });
-
-    Promise.all(jingleSrcs).then((sources) => {
-      // const longestSound = sources.reduce((prev, current, i) => (
-      //   (prev.getRawSourceNode().buffer.duration + delays[i]) > (current.getRawSourceNode().buffer.duration) + delays[i]) ? prev : current);
-
-      // longestSound.on('stop', () => { this.setState({ start: false }); });
-
-      this.setState({
-        sound: new Group(sources),
-        loading: false,
-      });
-
-      this.playSound();
-    });
-  };
-
-  playSound = () => {
-    if (this.state.sound === null) {
-      this.loadJingle();
-      return;
-    }
-
-    const sound = playWithDelay(this.state.sound, this.state.jingle.settings);
-
-    sound.on('stop', () => { this.setState({ start: false }); });
-
-    this.setState({ start: true });
-  };
-
-
-  stopSound = () => {
-    if (!this.state.sound) return;
-    this.state.sound.stop();
-    this.setState({ start: false });
   };
 
   jingleLikeUnlike = async (jingleId, action) => {
@@ -187,8 +87,16 @@ class JinglePage extends Component {
   };
 
   render() {
-    const { jingle, isOwner, validJingle } = this.state;
-    const { hasMM, lockedMM, canLike } = this.props;
+    const {
+      hasMM, lockedMM, canLike, jingle, isOwner, validJingle, playJingle, stopAudio, audios,
+    } = this.props;
+    let audio = false;
+
+    if (jingle) audio = audios.find(_audio => _audio.id === `jingle-${jingle.jingleId}`);
+
+    const playing = audio && audio.playing;
+    const loading = audio && audio.loading;
+
     return (
       <div className="container single-jingle-wrapper">
         {
@@ -205,16 +113,22 @@ class JinglePage extends Component {
                       <div className="buy-options">
                         <div className="jingle-page-img">
                           <div className="overlay">
-                            { this.state.loading && <LoadingIcon /> }
+                            { loading && <LoadingIcon /> }
                             {
-                              !this.state.start && !this.state.loading &&
-                              <span onClick={this.playSound}>
+                              !playing && !loading &&
+                              <span
+                                onClick={() => {
+                                  playJingle(`jingle-${jingle.jingleId}`, jingle.settings, jingle.sampleTypes);
+                                }}
+                              >
                                 <i className="material-icons play">play_circle_outline</i>
                               </span>
                             }
                             {
-                              this.state.start && !this.state.loading &&
-                              <span onClick={this.stopSound}><i className="material-icons stop">cancel</i></span>
+                              playing && !loading &&
+                              <span onClick={() => { stopAudio(`jingle-${jingle.jingleId}`); }}>
+                                <i className="material-icons stop">cancel</i>
+                              </span>
                             }
                           </div>
 
@@ -325,6 +239,10 @@ class JinglePage extends Component {
   }
 }
 
+JinglePage.defaultProps = {
+  jingle: null,
+};
+
 JinglePage.propTypes = {
   params: PropTypes.object.isRequired,
   hasMM: PropTypes.bool.isRequired,
@@ -333,14 +251,30 @@ JinglePage.propTypes = {
   address: PropTypes.string.isRequired,
   addPendingTx: PropTypes.func.isRequired,
   removePendingTx: PropTypes.func.isRequired,
+  getJingle: PropTypes.func.isRequired,
+  loadPage: PropTypes.func.isRequired,
+  jingle: PropTypes.object,
+  isOwner: PropTypes.bool.isRequired,
+  validJingle: PropTypes.bool.isRequired,
+  playJingle: PropTypes.func.isRequired,
+  stopAudio: PropTypes.func.isRequired,
+  audios: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = state => ({
-  hasMM: state.app.hasMM,
-  lockedMM: state.app.lockedMM,
-  canLike: state.app.canLike,
-  address: state.app.address,
+const mapStateToProps = ({ app, jinglePage, audio }) => ({
+  hasMM: app.hasMM,
+  lockedMM: app.lockedMM,
+  canLike: app.canLike,
+  address: app.address,
+  jingle: jinglePage.jingle,
+  isOwner: jinglePage.isOwner,
+  validJingle: jinglePage.validJingle,
+  audios: audio.audios,
 });
 
-export default connect(mapStateToProps, { addPendingTx, removePendingTx })(JinglePage);
+const mapDispatchToProps = {
+  addPendingTx, removePendingTx, getJingle, loadPage, playJingle, stopAudio,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(JinglePage);
 
