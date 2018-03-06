@@ -1,4 +1,5 @@
 import Pizzicato from 'pizzicato';
+import { getJingleMetadata } from '../constants/getMockData';
 
 const defaultSamplePos = [
   { lastDroppedItem: true },
@@ -73,6 +74,42 @@ export const createSettings = (_delays, _volumes, _cuts) => {
 export const getSoundFromSource = source =>
   new Promise((resolve) => {
     const sound = new Pizzicato.Sound(source, () => {
+      resolve(sound);
+    });
+  });
+
+/**
+ * Returns array of promises for sample sounds
+ *
+ * @return {Array}
+ */
+export const getSourcesForJingle = (sampleTypes, settings) =>
+  sampleTypes.map((sampleType, i) =>
+    new Promise((resolve) => {
+      const sound = new Pizzicato.Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
+      sound.volume = parseInt(settings[i], 10) / 100;
+    }));
+
+/**
+ * Returns pizzicato sound object for samples
+ *
+ * @param {Array} sampleSrcs
+ * @param {Array} delays
+ * @param {Function} onStop
+ * @return {Object}
+ */
+export const getSoundForJingle = (sampleSrcs, delays, onStop) =>
+  new Promise((resolve) => {
+    Promise.all(sampleSrcs).then((sources) => {
+      const longestSound = sources.reduce((prev, current, i) => ((
+        (prev.getRawSourceNode().buffer.duration + delays[i]) >
+        (current.getRawSourceNode().buffer.duration) + delays[i]) ?
+        prev : current));
+
+      longestSound.on('stop', onStop);
+      const sound = new Pizzicato.Group(sources);
+      sound.on('stop', onStop);
+
       resolve(sound);
     });
   });

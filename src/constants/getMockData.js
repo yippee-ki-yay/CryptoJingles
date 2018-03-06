@@ -17,7 +17,7 @@ export const getJingleMetadata = (jingleType) => {
     case 6:
       return { type: COMPOSE, name: 'Quiet Bit',          source: 'https://gateway.ipfs.io/ipfs/QmS4iieauh4nJceDdaGaPNGHu6qhW6fkHD8aUrL9K2qi51', rarity: 0, length: 8      };
     case 7:
-      return { type: COMPOSE, name: 'Crystal bells',      source: 'https://gateway.ipfs.io/ipfs/Qme6qdE4V2ZgNwfKgepVuG5c1FMMtHHUsjJrKSrheVtmcQ', rarity: 0, length: 3.428  };
+      return { type: COMPOSE, name: 'Crystal bells',      source: 'http://localhost:8080/public/audio/Qme6qdE4V2ZgNwfKgepVuG5c1FMMtHHUsjJrKSrheVtmcQ.wav', rarity: 0, length: 3.428  };
     case 8:
       return { type: COMPOSE, name: 'Distorted drum',     source: 'https://gateway.ipfs.io/ipfs/Qmf1Tx4dUSqBDtCVmTsAAMkvhKVb3z6QugNAbSEBdWUUYj', rarity: 0, length: 6.260  };
     case 9:
@@ -57,7 +57,7 @@ export const getJingleMetadata = (jingleType) => {
     case 26:
       return { type: COMPOSE, name: 'P trap',             source: 'https://gateway.ipfs.io/ipfs/QmUypZyxXF1c7rR7NVzbvn1SaDtq4s6cvvn9WJ82SBv5Mv', rarity: 0, length: 5.393  };
     case 27:
-      return { type: COMPOSE, name: 'Rave Synth',         source: 'https://gateway.ipfs.io/ipfs/QmNcoPcsUmwN3JngxnhRc4Fi2ryKskQnTQSkXKbognFuKc', rarity: 0, length: 7.559  };
+      return { type: COMPOSE, name: 'Rave Synth',         source: 'http://localhost:8080/public/audio/QmNcoPcsUmwN3JngxnhRc4Fi2ryKskQnTQSkXKbognFuKc.wav', rarity: 0, length: 7.559  };
     case 28:
       return { type: COMPOSE, name: 'Robotica Synth',     source: 'https://gateway.ipfs.io/ipfs/QmWr5KmpfV8mqVs5CGuHKfL7owjo7KN4oHsU8cz4QniPG2', rarity: 0, length: 8      };
     case 29:
@@ -111,7 +111,7 @@ export const getJingleMetadata = (jingleType) => {
     case 53:
       return { type: COMPOSE, name: 'Paradime shattered', source: 'https://gateway.ipfs.io/ipfs/Qmf3poBH4cKxsi2DDcoJKcBX81Ab5swQZTw9twYtwPArvs', rarity: 0, length: 3.750  };
     case 54:
-      return { type: COMPOSE, name: 'Party people',       source: 'https://gateway.ipfs.io/ipfs/QmRMKih1k4x3k3bv2jrcDdQLfce5mxvyEQkiYChq7Pd8ap', rarity: 0, length: 7.500  };
+      return { type: COMPOSE, name: 'Party people',       source: 'http://localhost:8080/public/audio/QmRMKih1k4x3k3bv2jrcDdQLfce5mxvyEQkiYChq7Pd8ap.wav', rarity: 0, length: 7.500  };
     case 55:
       return { type: COMPOSE, name: 'Strong',             source: 'https://gateway.ipfs.io/ipfs/QmbdZHpLG1WUCpz8tghy1Z981JNAAasn5TRekkQ9XgB4Yn', rarity: 0, length: 8.276  };
     case 56:
@@ -143,7 +143,7 @@ export const getJingleMetadata = (jingleType) => {
     case 69:
       return { type: COMPOSE, name: 'Bass A',             source: 'https://gateway.ipfs.io/ipfs/QmcE4r7xPb5Te5JQuBsDgryRLZ4ymEpn1SYYctrv4upo5H', rarity: 1, length: 6.857  };
     case 70:
-      return { type: COMPOSE, name: 'Kick F',             source: 'https://gateway.ipfs.io/ipfs/QmWw7joedMe2VFpUyFLrNwFDgNpsBg1fwu39bP59U18pQF', rarity: 1, length: 6.857  };
+      return { type: COMPOSE, name: 'Kick F',             source: 'http://localhost:8080/public/audio/QmWw7joedMe2VFpUyFLrNwFDgNpsBg1fwu39bP59U18pQF.wav', rarity: 1, length: 6.857  };
     case 71:
       return { type: COMPOSE, name: 'Kick G',             source: 'https://gateway.ipfs.io/ipfs/QmQAjuzXMKN8JUmhDMdaJEbzcfhqjUS7uHh3ETUsmD7Y4k', rarity: 1, length: 6.857  };
     case 72:
@@ -179,7 +179,7 @@ export const getJingleMetadata = (jingleType) => {
     case 87:
       return { type: COMPOSE, name: 'Drives you crazy',   source: 'https://gateway.ipfs.io/ipfs/Qmf9Yh6JSA6RCs2WegvVqnumKKi3JW18GVLPzPcvAKB6p5', rarity: 1, length: 7.500  };
     case 88:
-      return { type: COMPOSE, name: 'Elephant',           source: 'https://gateway.ipfs.io/ipfs/QmSbL8wWdpAMJ7B9GR22VP6zA8HwYu37rfCw8QJJtPXwr3', rarity: 1, length: 1.769  };
+      return { type: COMPOSE, name: 'Elephant',           source: 'http://localhost:8080/public/audio/QmSbL8wWdpAMJ7B9GR22VP6zA8HwYu37rfCw8QJJtPXwr3.wav', rarity: 1, length: 1.769  };
     case 89:
       return { type: COMPOSE, name: 'F12 Synth',          source: 'https://gateway.ipfs.io/ipfs/QmPbuwXP8cLhqyPYEVgRkgpAG4nNA1vEA1LgcraYuhgpT7', rarity: 1, length: 7.500  };
     case 90:

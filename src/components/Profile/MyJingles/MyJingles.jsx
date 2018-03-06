@@ -7,6 +7,7 @@ import Pagination from '../../Pagination/Pagination';
 import SingleJingle from '../../SingleJingle/SingleJingle';
 import {
   getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange,
+  likeUnLikeProfileJingle,
 } from '../../../actions/profileActions';
 import { MARKETPLACE_JINGLES_PER_PAGE } from '../../../constants/actionTypes';
 
@@ -28,7 +29,9 @@ class MyJingles extends Component {
       myJingles, loading, jingleSorting, jingleSortingOptions, jingleCategory, jingleCategories, totalJingles,
       jinglesPerPage,
     } = this.props;
-    const { changeProfileJinglesSorting, changeProfileJinglesCategory, onMyJinglesPaginationChange } = this.props;
+    const {
+      changeProfileJinglesSorting, changeProfileJinglesCategory, onMyJinglesPaginationChange, likeUnLikeProfileJingle,
+    } = this.props;
 
     return (
       <div className="my-jingles-wrapper">
@@ -84,7 +87,12 @@ class MyJingles extends Component {
                     {
                       myJingles.map(jingle =>
                         (
-                          <SingleJingle key={jingle.jingleId} {...jingle} type="profile" />
+                          <SingleJingle
+                            key={jingle.jingleId}
+                            onJingleLike={likeUnLikeProfileJingle}
+                            type="profile"
+                            {...jingle}
+                          />
                         ))
                     }
                   </div>
@@ -118,6 +126,7 @@ MyJingles.propTypes = {
   changeProfileJinglesCategory: PropTypes.func.isRequired,
   changeProfileJinglesSorting: PropTypes.func.isRequired,
   onMyJinglesPaginationChange: PropTypes.func.isRequired,
+  likeUnLikeProfileJingle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -132,7 +141,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange,
+  getJinglesForUser,
+  changeProfileJinglesCategory,
+  changeProfileJinglesSorting,
+  onMyJinglesPaginationChange,
+  likeUnLikeProfileJingle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyJingles);

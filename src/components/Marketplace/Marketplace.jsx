@@ -8,13 +8,12 @@ import SingleJingle from '../SingleJingle/SingleJingle';
 import Pagination from '../Pagination/Pagination';
 import {
   getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting,
-  onMarketplacePaginationChange,
+  onMarketplacePaginationChange, likeUnLikeMarketplaceJingle,
 } from '../../actions/marketplaceActions';
 import { MARKETPLACE_JINGLES_PER_PAGE } from '../../constants/actionTypes';
 
 import './Marketplace.scss';
 
-// TODO - Add prototypes
 class Marketplace extends Component {
   async componentDidMount() {
     this.props.getMarketplaceJingles();
@@ -22,7 +21,7 @@ class Marketplace extends Component {
 
   render() {
     const {
-      jingles, jinglesPerPage, sorting, sortingOptions, category, categories, totalJingles,
+      jingles, jinglesPerPage, sorting, sortingOptions, category, categories, totalJingles, likeUnLikeMarketplaceJingle,
     } = this.props;
     const { changeMarketplaceCategory, changeMarketplaceSorting, onMarketplacePaginationChange } = this.props;
 
@@ -64,17 +63,18 @@ class Marketplace extends Component {
                 <SingleJingle
                   type="marketplace"
                   key={jingle.jingleId}
+                  onJingleLike={likeUnLikeMarketplaceJingle}
                   {...jingle}
                 />)) }
             </div>
 
             {
-                  totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
-                  <Pagination
-                    pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                    onPageChange={onMarketplacePaginationChange}
-                  />
-                }
+              totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
+              <Pagination
+                pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+                onPageChange={onMarketplacePaginationChange}
+              />
+            }
           </div>
         </div>
       </div>
@@ -94,6 +94,7 @@ Marketplace.propTypes = {
   changeMarketplaceSorting: PropTypes.func.isRequired,
   getMarketplaceJingles: PropTypes.func.isRequired,
   onMarketplacePaginationChange: PropTypes.func.isRequired,
+  likeUnLikeMarketplaceJingle: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -107,7 +108,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  getMarketplaceJingles, changeMarketplaceCategory, changeMarketplaceSorting, onMarketplacePaginationChange,
+  getMarketplaceJingles,
+  changeMarketplaceCategory,
+  changeMarketplaceSorting,
+  onMarketplacePaginationChange,
+  likeUnLikeMarketplaceJingle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Marketplace);

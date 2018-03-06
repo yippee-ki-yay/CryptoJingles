@@ -24,13 +24,8 @@ class SingleSample extends Component {
     const background = getColorForRarity(rarity);
 
     const audio = audios.find(_audio => _audio.id === sampleId);
-    let playing = false;
-    let loading = false;
-
-    if (audio) {
-      playing = audio.playing;
-      loading = audio.loading;
-    }
+    const playing = audio && audio.playing;
+    const loading = audio && audio.loading;
 
     return (
       <div style={{ ...style }}>

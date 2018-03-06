@@ -1,5 +1,5 @@
 import { TOGGLE_PLAY_AUDIO, TOGGLE_AUDIO_LOADING, ADD_NEW_AUDIO, AUDIO_LOADED } from '../constants/actionTypes';
-import { getSoundFromSource } from '../services/audioService';
+import { getSoundFromSource, getSourcesForJingle, getSoundForJingle, playWithDelay } from '../services/audioService';
 
 /**
  * Toggles audio loading based on action (true or false)
@@ -56,7 +56,7 @@ export const stopAudio = id => (dispatch, getState) => {
  * @param {String} source
  * @return {Function}
  */
-const audioLoaded = (id, sound, source) => (dispatch, getState) => {
+const sampleLoaded = (id, sound, source) => (dispatch, getState) => {
   const audios = [...getState().audio.audios];
   const audioIndex = audios.findIndex(_audio => _audio.id === id);
 
@@ -73,7 +73,7 @@ const audioLoaded = (id, sound, source) => (dispatch, getState) => {
 };
 
 /**
- * Creates new audio object and menages audio states
+ * Creates new audio object for sample and menages audio states
  *
  * @param {String} id
  * @param {String} source
@@ -87,7 +87,7 @@ const loadSample = (id, source) => async (dispatch) => {
 
   sound.on('stop', () => { dispatch(toggleAudioPlaying(id, false)); });
 
-  dispatch(audioLoaded(id, sound, source));
+  dispatch(sampleLoaded(id, sound, source));
 };
 
 /**
@@ -105,6 +105,75 @@ export const playSample = (_id, source) => (dispatch, getState) => {
 
   const audio = audios.find(_audio => _audio.id === _id);
   audio.sound.play();
+
+  audios[audioIndex].playing = true;
+
+  dispatch({ type: TOGGLE_PLAY_AUDIO, payload: audios });
+};
+
+/**
+ * Fires when an audio is downloaded and is ready to be played
+ *
+ * @param {String} id
+ * @param {Object} sound
+ * @param {Object} settings
+ * @return {Function}
+ */
+const jingleLoaded = (id, sound, settings) => (dispatch, getState) => {
+  const audios = [...getState().audio.audios];
+  const audioIndex = audios.findIndex(_audio => _audio.id === id);
+
+  audios[audioIndex] = {
+    id,
+    sound,
+    settings,
+    playing: true,
+    loading: false,
+  };
+
+  playWithDelay(sound, settings);
+  dispatch({ type: AUDIO_LOADED, payload: audios });
+};
+
+/**
+ * Creates new audio object for jingle and menages audio states
+ *
+ * @param {String} id
+ * @param {Array} settings
+ * @param {Array} sampleTypes
+ * @return {Function}
+ */
+export const loadJingle = (id, settings, sampleTypes) => async (dispatch) => {
+  dispatch({ type: ADD_NEW_AUDIO, payload: { id } });
+
+  let delays = settings.slice(5, 11);
+  delays = delays.map(d => parseInt(d, 10));
+
+  const sampleSrcs = getSourcesForJingle(sampleTypes, settings);
+
+  dispatch(toggleAudioLoading(id, true));
+
+  const sound = await getSoundForJingle(sampleSrcs, delays, () => { dispatch(toggleAudioPlaying(id, false)); });
+
+  dispatch(jingleLoaded(id, sound, settings));
+};
+
+/**
+ * Fires when user clicks play button on jingle
+ *
+ * @param {String} id
+ * @param {Array} settings
+ * @param {Array} sampleTypes
+ * @return {Function}
+ */
+export const playJingle = (id, settings, sampleTypes) => (dispatch, getState) => {
+  const audios = [...getState().audio.audios];
+  const audioIndex = audios.findIndex(_audio => _audio.id === id);
+
+  if (audioIndex === -1) return dispatch(loadJingle(id, settings, sampleTypes));
+
+  const audio = audios.find(_audio => _audio.id === id);
+  playWithDelay(audio.sound, audio.settings);
 
   audios[audioIndex].playing = true;
 
