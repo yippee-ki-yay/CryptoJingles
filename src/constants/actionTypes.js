@@ -76,3 +76,8 @@ export const AUDIO_LOADED = 'audio_loaded';
 // Jingle Page actions
 export const SET_VALID_JINGLE = 'set_valid_jingle';
 export const JINGLE_PAGE_LOADED = 'jingle_page_loaded';
+export const JINGLE_BOUGHT = 'jingle_bought';
+export const JINGLE_SALE_CANCELED = 'jingle_sale_canceled';
+export const JINGLE_PUT_ON_SALE = 'jingle_put_on_sale';
+export const SET_JINGLE_SELL_PRICE = 'set_jingle_sell_price';
+export const LIKE_UNLIKE_JINGLE_PAGE = 'like_unlike_jingle_page';

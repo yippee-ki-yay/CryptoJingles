@@ -4,91 +4,29 @@ import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import JingleImage from '../JingleImage/JingleImage';
 import Heart from '../Decorative/Heart';
-import { addPendingTx, removePendingTx } from '../../actions/appActions';
-// import { getColorForRarity } from '../../actions/profileActions';
 import { getJingleMetadata } from '../../constants/getMockData';
 import LoadingIcon from '../Decorative/LoadingIcon';
-import { formatSalePrice, formatToWei, likeUnlikeJingle, guid } from '../../services/generalService';
-
-import { getJingle, loadPage } from '../../actions/jinglePageActions';
+import { formatSalePrice } from '../../services/generalService';
 import { playJingle, stopAudio } from '../../actions/audioActions';
+import {
+  loadPage, purchaseJingle, cancelJingleSale, putJingleOnSale, handleSalePriceChange, likeUnlikeJinglePageJingle,
+} from '../../actions/jinglePageActions';
+// import { getColorForRarity } from '../../actions/profileActions';
 
 import './JinglePage.scss';
 
 class JinglePage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      salePrice: undefined,
-    };
-
-    this.jingleLikeUnlike = this.jingleLikeUnlike.bind(this);
-  }
-
   componentWillMount() { this.props.loadPage(this.props.params.id); }
-
   componentWillReceiveProps(newProps) {
-    if (newProps.params.id !== this.props.params.id) this.props.loadPage(newProps.params.id);
+    if (newProps.params.id === this.props.params.id) return;
+    this.props.loadPage(newProps.params.id);
   }
-
   componentWillUnmount() { this.props.stopAudio(`jingle-${this.props.jingle.jingleId}`); }
-
-  purchase = async () => {
-    let { jingle } = this.state;
-    const account = this.props.address;
-
-    const id = guid();
-    this.props.addPendingTx(id, 'Buy Jingle');
-    await window.marketplaceContract.buy(jingle.jingleId, { from: account, value: jingle.price });
-    this.props.removePendingTx(id);
-
-    jingle = await this.props.getJingle(jingle.jingleId);
-
-    const isOwner = jingle.owner === account;
-
-    this.setState({ jingle, isOwner });
-  };
-
-  sell = async () => {
-    const amount = this.state.salePrice;
-    if (amount && (amount <= 0)) return;
-
-    let { jingle } = this.state;
-
-    const id = guid();
-    this.props.addPendingTx(id, 'Sell Jingle');
-    await window.jingleContract.approveAndSell(jingle.jingleId, amount, { from: this.props.address });
-    this.props.removePendingTx(id);
-
-    jingle = await this.props.getJingle(jingle.jingleId);
-    this.setState({ jingle });
-  };
-
-  cancelSale = async () => {
-    let { jingle } = this.state;
-
-    const id = guid();
-    this.props.addPendingTx(id, 'Cancel Sale');
-    await window.marketplaceContract.cancel(jingle.jingleId, { from: this.props.address });
-    this.props.removePendingTx(id);
-
-    jingle = await this.props.getJingle(jingle.jingle);
-    this.setState({ jingle });
-  };
-
-  handleSalePriceChange = (e) => {
-    this.setState({ salePrice: formatToWei(e.target.value) });
-  };
-
-  jingleLikeUnlike = async (jingleId, action) => {
-    const likeData = await likeUnlikeJingle(jingleId, action, this.props.address);
-    if (likeData) this.setState({ jingle: { ...this.state.jingle, ...likeData } });
-  };
 
   render() {
     const {
-      hasMM, lockedMM, canLike, jingle, isOwner, validJingle, playJingle, stopAudio, audios,
+      hasMM, lockedMM, canLike, jingle, isOwner, validJingle, playJingle, stopAudio, audios, purchaseJingle,
+      cancelJingleSale, putJingleOnSale, handleSalePriceChange, likeUnlikeJinglePageJingle,
     } = this.props;
     let audio = false;
 
@@ -136,7 +74,7 @@ class JinglePage extends Component {
                         </div>
 
                         <div className="liked-section">
-                          <span onClick={() => { this.jingleLikeUnlike(jingle.jingleId, !jingle.liked); }}>
+                          <span onClick={() => { likeUnlikeJinglePageJingle(jingle.jingleId, !jingle.liked); }}>
                             <Heart active={jingle.liked} size="40" canLike={hasMM && !lockedMM && canLike} />
                           </span>
 
@@ -153,7 +91,7 @@ class JinglePage extends Component {
                             {
                               !isOwner &&
                               (hasMM && !lockedMM) &&
-                              <button type="submit" className="btn buy-button" onClick={this.purchase}>
+                              <button type="submit" className="btn buy-button" onClick={purchaseJingle}>
                                 Purchase
                               </button>
                             }
@@ -170,9 +108,9 @@ class JinglePage extends Component {
                               placeholder="Sell price in ETH"
                               type="number"
                               step="any"
-                              onChange={this.handleSalePriceChange}
+                              onChange={handleSalePriceChange}
                             />
-                            <button type="submit" className="btn buy-button" onClick={this.sell}>
+                            <button type="submit" className="btn buy-button" onClick={putJingleOnSale}>
                               Put on sale
                             </button>
                           </form>
@@ -181,7 +119,7 @@ class JinglePage extends Component {
                           jingle.onSale &&
                           (hasMM && !lockedMM) &&
                           isOwner &&
-                          <button className="btn buy-button" onClick={this.cancelSale}>Cancel Sale</button>
+                          <button className="btn buy-button" onClick={cancelJingleSale}>Cancel Sale</button>
                         }
                       </div>
 
@@ -248,16 +186,17 @@ JinglePage.propTypes = {
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
   canLike: PropTypes.bool.isRequired,
-  address: PropTypes.string.isRequired,
-  addPendingTx: PropTypes.func.isRequired,
-  removePendingTx: PropTypes.func.isRequired,
-  getJingle: PropTypes.func.isRequired,
   loadPage: PropTypes.func.isRequired,
   jingle: PropTypes.object,
   isOwner: PropTypes.bool.isRequired,
   validJingle: PropTypes.bool.isRequired,
   playJingle: PropTypes.func.isRequired,
   stopAudio: PropTypes.func.isRequired,
+  purchaseJingle: PropTypes.func.isRequired,
+  cancelJingleSale: PropTypes.func.isRequired,
+  putJingleOnSale: PropTypes.func.isRequired,
+  handleSalePriceChange: PropTypes.func.isRequired,
+  likeUnlikeJinglePageJingle: PropTypes.func.isRequired,
   audios: PropTypes.array.isRequired,
 };
 
@@ -273,7 +212,14 @@ const mapStateToProps = ({ app, jinglePage, audio }) => ({
 });
 
 const mapDispatchToProps = {
-  addPendingTx, removePendingTx, getJingle, loadPage, playJingle, stopAudio,
+  loadPage,
+  playJingle,
+  stopAudio,
+  purchaseJingle,
+  cancelJingleSale,
+  putJingleOnSale,
+  handleSalePriceChange,
+  likeUnlikeJinglePageJingle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(JinglePage);
