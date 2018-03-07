@@ -91,6 +91,21 @@ export const getSourcesForJingle = (sampleTypes, settings) =>
     }));
 
 /**
+ * Returns longes sound from array of sources with
+ * added delay effect
+ *
+ * @param {Array} sources
+ * @param {Array} delays
+ * @return {Object}
+ */
+export const getLongestSoundFromSources = (sources, delays) =>
+  sources.reduce((prev, current, i) => ((
+    (prev.getRawSourceNode().buffer.duration + delays[i]) >
+    (current.getRawSourceNode().buffer.duration) + delays[i]) ?
+    prev : current
+  ));
+
+/**
  * Returns pizzicato sound object for samples
  *
  * @param {Array} sampleSrcs
@@ -101,10 +116,7 @@ export const getSourcesForJingle = (sampleTypes, settings) =>
 export const getSoundForJingle = (sampleSrcs, delays, onStop) =>
   new Promise((resolve) => {
     Promise.all(sampleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current, i) => ((
-        (prev.getRawSourceNode().buffer.duration + delays[i]) >
-        (current.getRawSourceNode().buffer.duration) + delays[i]) ?
-        prev : current));
+      const longestSound = getLongestSoundFromSources(sources, delays);
 
       longestSound.on('stop', onStop);
       const sound = new Pizzicato.Group(sources);

@@ -5,7 +5,7 @@ import {
   HANDLE_SAMPLE_DROP, HANDLE_SAMPLE_DROP_CANCEL, TOGGLE_LOADING_NEW_JINGLE, SET_NEW_JINGLE_GROUP,
   TOGGLE_NEW_JINGLE_PLAYING, SET_NEW_JINGLE_NAME,
 } from '../constants/actionTypes';
-import { playWithDelay, createSettings } from '../services/audioService';
+import { playWithDelay, createSettings, getLongestSoundFromSources } from '../services/audioService';
 import { getSamplesFromContract } from '../services/ethereumService';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 import { guid } from '../services/generalService';
@@ -164,7 +164,6 @@ export const handleSampleDropCancel = (index, { id }) => (dispatch, getState) =>
  *
  */
 const loadComposeSamplesGroup = onSampleGroupLoad => (dispatch, getState) => {
-  // CHECK IF THIS IS THE SAME AS IN SINGLE JINGLE
   const {
     sampleSlots, composeSamples, delays, volumes,
   } = getState().compose;
@@ -184,11 +183,7 @@ const loadComposeSamplesGroup = onSampleGroupLoad => (dispatch, getState) => {
     }));
 
   Promise.all(selectedSongSources).then((sources) => {
-    const longestSound = sources.reduce((prev, current, i) => ((
-      (prev.getRawSourceNode().buffer.duration + delays[i]) >
-      (current.getRawSourceNode().buffer.duration) + delays[i]) ?
-      prev : current
-    ));
+    const longestSound = getLongestSoundFromSources(sources, delays);
 
     longestSound.on('stop', () => { dispatch({ type: TOGGLE_NEW_JINGLE_PLAYING, payload: false }); });
 
