@@ -86,7 +86,6 @@ class Compose extends Component {
               (hasMM && !lockedMM) &&
               (composeSamples.length === 0) &&
               <div>
-                { /* TODO - insert buy sample form here */ }
                 <h1 className="no-samples-heading">
                   <span>You do not own any Sound Samples yet!</span>
 
