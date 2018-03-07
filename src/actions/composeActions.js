@@ -114,7 +114,19 @@ export const onComposeSamplesSort = option => (dispatch, getState) => {
  * @return {Function}
  */
 export const handleSampleDrop = (index, item) => (dispatch, getState) => {
-  const compose = update(getState().compose, {
+  const composeState = getState().compose;
+  const droppedSampleIds = [...composeState.droppedSampleIds];
+
+  if (composeState.sampleSlots[index].lastDroppedItem) {
+    const lastItemId = composeState.sampleSlots[index].lastDroppedItem.id;
+    const boxIndex = droppedSampleIds.findIndex(_id => _id === lastItemId);
+    droppedSampleIds.splice(boxIndex, 1);
+  }
+
+  let compose = { ...getState().compose };
+
+  compose = update(compose, { droppedSampleIds: { $set: droppedSampleIds } });
+  compose = update(compose, {
     sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
     droppedSampleIds: { $push: [item.id] },
   });
