@@ -16,10 +16,10 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      sample1: { jingleType: 24, id: 40512043, ...getJingleMetadata(24) },
+      sample1: { jingleType: 24, id: 405120401, ...getJingleMetadata(24) },
       sample2: { jingleType: 67, id: 14010222, ...getJingleMetadata(67) },
       sample3: { jingleType: 90, id: 24314109, ...getJingleMetadata(90) },
-      sample4: { jingleType: 0, id: 34912232, ...getJingleMetadata(0) },
+      sample4: { jingleType: 0, id: 3, ...getJingleMetadata(0) },
       jingle: null,
     };
   }

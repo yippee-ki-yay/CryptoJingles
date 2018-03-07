@@ -81,6 +81,10 @@ class SingleJingle extends Component {
   }
 }
 
+SingleJingle.defaultProps = {
+  onJingleLike: () => {},
+};
+
 SingleJingle.propTypes = {
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
@@ -98,7 +102,7 @@ SingleJingle.propTypes = {
   audios: PropTypes.array.isRequired,
   playJingle: PropTypes.func.isRequired,
   stopAudio: PropTypes.func.isRequired,
-  onJingleLike: PropTypes.func.isRequired,
+  onJingleLike: PropTypes.func,
 };
 
 const mapStateToProps = ({ compose, app, audio }) => ({
