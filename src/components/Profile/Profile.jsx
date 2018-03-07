@@ -6,8 +6,9 @@ import MySamples from './MySamples/MySamples';
 import MyJingles from './MyJingles/MyJingles';
 import MySongs from './MySongs/MySongs';
 import MyAlbums from './MyAlbums/MyAlbums';
+import ProfileTabs from './ProfileTabs/ProfileTabs';
 import {
-  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
+  checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
   setProfileAddress, setInvalidProfile,
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
@@ -37,7 +38,7 @@ class Profile extends Component {
     const {
       tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile,
     } = this.props;
-    const { setActiveTab, toggleEditAuthor, onEditAuthorChange } = this.props;
+    const { toggleEditAuthor, onEditAuthorChange } = this.props;
     const activeTab = tabs.find(_tab => _tab.active).value;
 
     return (
@@ -110,20 +111,7 @@ class Profile extends Component {
                 </div>
               </div>
 
-              { /* TODO - create component out of this */ }
-              <div className="tabs-wrapper">
-                {
-                  tabs.map(({ label, value, active }) => (
-                    <div
-                      key={value}
-                      className={`tab ${active ? 'active' : ''}`}
-                      onClick={() => { setActiveTab(value); }}
-                    >
-                      { label }
-                    </div>
-                  ))
-                }
-              </div>
+              <ProfileTabs />
             </div>
 
             { activeTab === tabs[0].value && <MySamples address={this.props.params.address} /> }
@@ -152,7 +140,6 @@ Profile.propTypes = {
   authorEdit: PropTypes.string.isRequired,
   isValidProfile: PropTypes.bool.isRequired,
   params: PropTypes.object.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
   checkIfOwnerProfile: PropTypes.func.isRequired,
   toggleEditAuthor: PropTypes.func.isRequired,
   onEditAuthorChange: PropTypes.func.isRequired,
@@ -172,7 +159,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  setActiveTab,
   checkIfOwnerProfile,
   toggleEditAuthor,
   onEditAuthorChange,

@@ -7,7 +7,7 @@ import Pagination from '../../Pagination/Pagination';
 import SingleJingle from '../../SingleJingle/SingleJingle';
 import {
   getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange,
-  likeUnLikeProfileJingle,
+  likeUnLikeProfileJingle
 } from '../../../actions/profileActions';
 import { MARKETPLACE_JINGLES_PER_PAGE } from '../../../constants/actionTypes';
 
@@ -56,56 +56,56 @@ class MyJingles extends Component {
                 />
               </div>
             </div>
-            <div className="separator" />
+            <div className="separator"/>
           </div>
 
           {
-                loading &&
-                <div className="loader-wrapper">
-                  <BoxLoader />
-                </div>
-              }
+            loading &&
+            <div className="loader-wrapper">
+              <BoxLoader/>
+            </div>
+          }
 
           {
-                (myJingles.length === 0) &&
-                !loading &&
-                <div className="empty-state">
-                  <h2>There are no jingles with this filtering.</h2>
-                </div>
-              }
+            (myJingles.length === 0) &&
+            !loading &&
+            <div className="empty-state">
+              <h2>There are no jingles with this filtering.</h2>
+            </div>
+          }
 
           {
-                (myJingles.length > 0) &&
-                !loading &&
-                <div>
-                  <div className="my-jingles-num">
-                    { totalJingles } Jingles
-                  </div>
+            (myJingles.length > 0) &&
+            !loading &&
+            <div>
+              <div className="my-jingles-num">
+                {totalJingles} Jingles
+              </div>
 
-                  <div className="my-jingles-list">
+              <div className="my-jingles-list">
 
-                    {
-                      myJingles.map(jingle =>
-                        (
-                          <SingleJingle
-                            key={jingle.jingleId}
-                            onJingleLike={likeUnLikeProfileJingle}
-                            type="profile"
-                            {...jingle}
-                          />
-                        ))
-                    }
-                  </div>
-                </div>
-              }
+                {
+                  myJingles.map(jingle =>
+                    (
+                      <SingleJingle
+                        key={jingle.jingleId}
+                        onJingleLike={likeUnLikeProfileJingle}
+                        type="profile"
+                        {...jingle}
+                      />
+                    ))
+                }
+              </div>
+            </div>
+          }
 
           {
-                totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
-                <Pagination
-                  pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                  onPageChange={onMyJinglesPaginationChange}
-                />
-              }
+            totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
+            <Pagination
+              pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+              onPageChange={onMyJinglesPaginationChange}
+            />
+          }
         </div>
       </div>
     );
