@@ -52,6 +52,10 @@
   margin-bottom: 10px;
 }
 
+.compose-top-wrapper .buy-button.disabled {
+  pointer-events: none
+}
+
 .slot-options div {
   margin-top: 33px;
   font-size: 16px;

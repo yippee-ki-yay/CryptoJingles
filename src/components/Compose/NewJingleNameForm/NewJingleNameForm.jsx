@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Tooltip from '../../Tooltip/Tooltip';
 
 import { createNewJingle, handleNewJingleNameChange } from '../../../actions/composeActions';
 
@@ -15,14 +16,18 @@ const NewJingleNameForm = ({ handleNewJingleNameChange, droppedSampleIds, create
         onChange={handleNewJingleNameChange}
       />
 
-      <button
-        type="submit"
-        className="btn buy-button"
-        onClick={createNewJingle}
-        disabled={droppedSampleIds.length < 5}
+      <Tooltip
+        content="All slots must contain a sample in order to compose a jingle"
+        useHover={droppedSampleIds.length < 5}
       >
-        Submit
-      </button>
+        <button
+          type="submit"
+          className={`btn buy-button ${droppedSampleIds.length < 5 && 'disabled'}`}
+          onClick={createNewJingle}
+        >
+          Submit
+        </button>
+      </Tooltip>
     </div>
   </form>
 );
