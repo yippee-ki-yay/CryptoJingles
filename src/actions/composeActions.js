@@ -253,22 +253,22 @@ export const handleNewJingleNameChange = event => (dispatch) => {
 export const createNewJingle = () => async (dispatch, getState) => {
   const pendingTxId = guid();
   const { compose, app } = getState();
-  const {
-    composeSamples, droppedSampleIds, delays, volumes, cuts, newJingleName,
-  } = compose;
   const { address } = app;
+  const {
+    delays, volumes, cuts, newJingleName, sampleSlots,
+  } = compose;
+  const samplesIds = sampleSlots.map(({ lastDroppedItem }) => lastDroppedItem.id);
 
-  if (droppedSampleIds.length !== 5) return; // TODO - show message in the  UI instead of return
+  if (samplesIds.length !== 5) return;
 
   const settings = createSettings(delays, volumes, cuts);
-  const samplesIds = composeSamples.filter(({ id }) => droppedSampleIds.find(sId => id === sId) === id);
 
   try {
     dispatch(addPendingTx(pendingTxId, 'Compose jingle'));
 
-    const doesJingleAlreadyExist = await checkIfJingleUnique(samplesIds);
+    const jingleAlreadyExist = await checkIfJingleUnique(samplesIds);
 
-    if (!doesJingleAlreadyExist) {
+    if (jingleAlreadyExist) {
       alert('Jingle with the same order of samples already exists!'); // TODO - handle this in the UI
       return dispatch(removePendingTx(pendingTxId));
     }
