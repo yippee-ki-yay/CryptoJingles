@@ -17,6 +17,18 @@ export const parseSamples = (samples) => {
   return mySamples;
 };
 
+/**
+ * Hashes array of intiger sample ids
+ *
+ * @param {Array} samples
+ */
+export const checkIfJingleUnique = samples =>
+  new Promise(async (resolve) => {
+    const samplesHash = window.web3.utils.keccak256(samples);
+    const res = await window.jingleContract.uniqueJingles(samplesHash);
+    resolve(res);
+  });
+
 export const getSamplesFromContract = address =>
   new Promise(async (resolve) => {
     const samples = parseSamples(await window.samplesContract.getAllSamplesForOwner(address));

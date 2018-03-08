@@ -6,7 +6,7 @@ import {
   TOGGLE_NEW_JINGLE_PLAYING, SET_NEW_JINGLE_NAME,
 } from '../constants/actionTypes';
 import { playWithDelay, createSettings, getLongestSoundFromSources } from '../services/audioService';
-import { getSamplesFromContract } from '../services/ethereumService';
+import { checkIfJingleUnique, getSamplesFromContract } from '../services/ethereumService';
 import { addPendingTx, removePendingTx } from '../actions/appActions';
 import { guid } from '../services/generalService';
 
@@ -261,12 +261,19 @@ export const createNewJingle = () => async (dispatch, getState) => {
   if (droppedSampleIds.length !== 5) return; // TODO - show message in the  UI instead of return
 
   const settings = createSettings(delays, volumes, cuts);
-  const selectedSongSources = composeSamples.filter(({ id }) => droppedSampleIds.find(sId => id === sId) === id);
+  const samplesIds = composeSamples.filter(({ id }) => droppedSampleIds.find(sId => id === sId) === id);
 
   try {
     dispatch(addPendingTx(pendingTxId, 'Compose jingle'));
 
-    await window.contract.composeJingle(newJingleName, selectedSongSources, settings, { from: address });
+    const doesJingleAlreadyExist = await checkIfJingleUnique(samplesIds);
+
+    if (!doesJingleAlreadyExist) {
+      alert('Jingle with the same order of samples already exists!'); // TODO - handle this in the UI
+      return dispatch(removePendingTx(pendingTxId));
+    }
+
+    await window.contract.composeJingle(newJingleName, samplesIds, settings, { from: address });
 
     dispatch(getComposeSamples(address));
     dispatch(removePendingTx(pendingTxId));
