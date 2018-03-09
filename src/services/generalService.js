@@ -73,3 +73,19 @@ export const guid = () => {
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
 };
+
+/**
+ * Returns name of Ethereum network for given ID
+ *
+ * @return {String}
+ */
+export const nameOfNetwork = (networkId) => {
+  const networks = {
+    1: 'Mainnet',
+    3: 'Ropsten',
+    4: 'Rinkedby',
+    42: 'Kovan',
+  };
+  return networks[networkId] || 'Unknown network';
+};
+

@@ -6,6 +6,8 @@ const INITIAL_STATE = {
   hasMM: false,
   lockedMM: false,
   canLike: false,
+  network: 0,
+  networkError: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -18,6 +20,8 @@ export default (state = INITIAL_STATE, action) => {
         lockedMM: payload.lockedMM,
         address: payload.address,
         canLike: payload.canLike,
+        network: payload.network,
+        networkError: payload.networkError,
       };
 
     case ADD_PENDING_TX:

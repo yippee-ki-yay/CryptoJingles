@@ -62,3 +62,13 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 body input.form-control {
   border: 1px solid #d1d1d1;
 }
+
+.network-error {
+  font-size: 20px;
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  background: #FF7F5B;
+  color: white;
+  padding: 2px;
+}

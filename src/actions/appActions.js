@@ -29,19 +29,43 @@ export const removePendingTx = tx => (dispatch, getState) => {
  * Sends action to init full app
  *
  * @return {String} address
- * @return {Boolean} canLike
+ * @param {Boolean} canLike
+ * @param {Number} network
+ * @param {Boolean} networkError
  */
-export const initAppWithMM = (address, canLike) => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: false, address, canLike } });
+export const initAppWithMM = (address, canLike, network, networkError) => (dispatch) => {
+  dispatch({
+    type: INIT_APP,
+    payload: {
+      hasMM: true,
+      lockedMM: false,
+      address,
+      canLike,
+      network,
+      networkError,
+    },
+  });
 };
 
 /**
  * Sends action to init app with locked MM
  *
+ * @param {Number} network
+ * @param {Boolean} networkError
  * @return {String} address
  */
-export const initAppWithLockedMM = () => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: true, address: '', canLike: false } });
+export const initAppWithLockedMM = (network, networkError) => (dispatch) => {
+  dispatch({
+    type: INIT_APP,
+    payload: {
+      hasMM: true,
+      lockedMM: true,
+      address: '',
+      canLike: false,
+      network,
+      networkError,
+    },
+  });
 };
 
 /**
