@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getJingleMetadata } from '../../constants/getMockData';
+import PackImage from './PackImage';
 
 import './SamplePack.scss';
 
 const SamplePack = ({ samplePack }) => (
   <div className="sample-pack-wrapper">
+    <PackImage image={samplePack.image} />
     <div className="pack-info">
       <div className="pack-name">{ samplePack.name }</div>
       <div className="pack-description">{ samplePack.description }</div>

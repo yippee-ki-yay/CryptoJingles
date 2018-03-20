@@ -35,6 +35,7 @@ module.exports = {
   },
   globals: {
     web3: true,
+    Chromata: true,
     window: true,
     document: true,
     fetch: true,

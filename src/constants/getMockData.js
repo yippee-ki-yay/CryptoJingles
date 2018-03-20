@@ -1,4 +1,10 @@
 import { COMPOSE } from './sampleTypes';
+import trippy1 from '../images/trippy.jpg';
+import trippy2 from '../images/trippy2.jpeg';
+import trippy3 from '../images/trippy3.png';
+import trippy4 from '../images/trippy4.jpeg';
+import trippy5 from '../images/trippy5.jpg';
+import trippy6 from '../images/trippy6.jpeg';
 
 export const getJingleMetadata = (jingleType) => {
   switch (parseInt(jingleType, 10)) {
@@ -819,36 +825,42 @@ export const getSamplePacks = () => [
     name: 'Happy',
     description: `Aliquam neque urna, sagittis in vehicula eu, mollis a justo. Morbi ut gravida lectus. Proin a gravida'
     'velit, ac eleifend sem. Curabitur eget consectetur elit, a hendrerit tortor.`,
+    image: trippy1,
     samples: [0, 1, 2, 3, 4],
   },
   {
     name: 'Sad',
     description: `Aliquam neque urna, sagittis in vehicula eu, mollis a justo. Morbi ut gravida lectus. Proin a gravida'
     'velit, ac eleifend sem. Curabitur eget consectetur elit, a hendrerit tortor.`,
+    image: trippy2,
     samples: [6, 7, 8, 9, 10],
   },
   {
     name: 'Strange',
     description: `Aliquam neque urna, sagittis in vehicula eu, mollis a justo. Morbi ut gravida lectus. Proin a gravida'
     'velit, ac eleifend sem. Curabitur eget consectetur elit, a hendrerit tortor.`,
+    image: trippy3,
     samples: [11, 12, 13, 14, 15],
   },
   {
     name: 'Ecstatic',
     description: `Aliquam neque urna, sagittis in vehicula eu, mollis a justo. Morbi ut gravida lectus. Proin a gravida'
     'velit, ac eleifend sem. Curabitur eget consectetur elit, a hendrerit tortor.`,
+    image: trippy4,
     samples: [16, 17, 18, 19, 20],
   },
   {
     name: 'Joy',
     description: `Aliquam neque urna, sagittis in vehicula eu, mollis a justo. Morbi ut gravida lectus. Proin a gravida'
     'velit, ac eleifend sem. Curabitur eget consectetur elit, a hendrerit tortor.`,
+    image: trippy5,
     samples: [16, 17, 18, 19, 20],
   },
   {
     name: 'Fear',
     description: `Aliquam neque urna, sagittis in vehicula eu, mollis a justo. Morbi ut gravida lectus. Proin a gravida'
     'velit, ac eleifend sem. Curabitur eget consectetur elit, a hendrerit tortor.`,
+    image: trippy6,
     samples: [21, 22, 23, 24, 25],
   },
 ];
