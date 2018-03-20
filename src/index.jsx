@@ -1,10 +1,10 @@
 import FastClick from 'fastclick';
 import React from 'react';
-import getWeb3 from './services/web3Service';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory, Redirect } from 'react-router';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
+import getWeb3 from './services/web3Service';
 
 // Layouts
 import App from './components/App/App';
@@ -14,6 +14,7 @@ import Marketplace from './components/Marketplace/Marketplace';
 import Compose from './components/Compose/Compose';
 import JinglePage from './components/JinglePage/JinglePage';
 import Page404 from './components/Page404/Page404';
+import SamplePacks from './components/SamplePacks/SamplePacks';
 
 // Redux Store
 import store from './store';
@@ -28,25 +29,27 @@ const startApp = async () => {
 
   await getWeb3(store.dispatch);
 
-  ReactDOM.render((
-    <div>
-      <Provider store={store}>
-        <Router history={history}>
-          <Route path='/' component={App}>
-            <IndexRoute component={Home} />
-            <Route path="/home" component={Home} />
-            <Route path="/marketplace" component={Marketplace} />
-            <Route path="/jingle/:id" component={JinglePage} />
-            <Route path="/compose" component={Compose} />
-            <Route path="/profile/:address" component={Profile} />
-            <Route path='/404' component={Page404} />
-            <Redirect from='*' to='/404' />
-          </Route>
-        </Router>
-      </Provider>
-    </div>
+  ReactDOM.render(
+    (
+      <div>
+        <Provider store={store}>
+          <Router history={history}>
+            <Route path="/" component={App}>
+              <IndexRoute component={Home} />
+              <Route path="/home" component={Home} />
+              <Route path="/marketplace" component={Marketplace} />
+              <Route path="/jingle/:id" component={JinglePage} />
+              <Route path="/compose" component={Compose} />
+              <Route path="/profile/:address" component={Profile} />
+              <Route path="/sample-packs" component={SamplePacks} />
+              <Route path="/404" component={Page404} />
+              <Redirect from="*" to="/404" />
+            </Route>
+          </Router>
+        </Provider>
+      </div>
     ),
-    document.getElementById('root')
+    document.getElementById('root'),
   );
 };
 

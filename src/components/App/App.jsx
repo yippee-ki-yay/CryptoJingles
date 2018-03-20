@@ -30,19 +30,13 @@ const App = ({
         </div>
         <div className="navbar-collapse collapse" id="navbar-main">
           <ul className="nav navbar-nav navbar-left">
-
-            <li>
-              <Link to="/compose">Compose</Link>
-            </li>
-            <li>
-              <Link to="/marketplace">Marketplace</Link>
-            </li>
-            <li>
-              {
-                hasMM && !lockedMM &&
-                <Link to={`/profile/${address}`}>Profile</Link>
-              }
-            </li>
+            <li><Link to="/compose">Compose</Link></li>
+            <li><Link to="/marketplace">Marketplace</Link></li>
+            {
+              hasMM && !lockedMM &&
+              <li><Link to={`/profile/${address}`}>Profile</Link></li>
+            }
+            <li><Link to="/sample-packs">Sample packs</Link></li>
           </ul>
 
           <div className="nav navbar-nav navbar-right">
