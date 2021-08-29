@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 require('./models/jingles.model');
 const jingleCtrl = require('./controllers/jingles.controller');
-const jingleImageCtrl = require('./controllers/jingle.image.controller');
+// const jingleImageCtrl = require('./controllers/jingle.image.controller');
 
 router.get('/jingles/pagination/:owner/page/:page/filter/:filter', jingleCtrl.getJinglesForOwner);
 router.get('/jingles/count/owner/:owner/sale/:sale', jingleCtrl.getJingleNumForOwner);
@@ -18,6 +18,6 @@ router.get('/jingle/can-like/:address', jingleCtrl.canLikeJingle);
 router.get('/jingles/check-liked/:address/:jingleIds', jingleCtrl.checkIfLikedJingles);
 router.get('/jingle/check-liked/:address/:jingleId', jingleCtrl.checkIfLikedJingle);
 
-router.get('/jingle/get-image-url/:jingleId', jingleImageCtrl.getJingleImageUrl);
+// router.get('/jingle/get-image-url/:jingleId', jingleImageCtrl.getJingleImageUrl);
 
 module.exports = router;

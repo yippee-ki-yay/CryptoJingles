@@ -1,45 +1,33 @@
-require('dotenv').load();
+require('dotenv').config();
 
 const Web3 = require('web3');
 
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NODE_URL));
+const web3 = new Web3(process.env.NODE_URL);
 
 const db = require('./db');
 const routes = require('./routes');
 
-const marketplaceAbi = require('../build/contracts/Marketplace');
-const cryptoJinglesAbi = require("../build/contracts/CryptoJingles");
-
-
-// const marketplaceAddress = '0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5';
-// const jinglesAddress = '0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf';
+const marketplaceAbi = require("./abis/Marketplace.json");
+const cryptoJinglesAbi = require("./abis/CryptoJingle");
+const jinglesAbi = require("./abis/Jingle");
 
 const userCtrl = require('./controllers/users.controller');
 
 const marketplaceAddress = '0xc1ef465527343f68bb1841f99b9adeb061cc7ac9';
 const jinglesAddress = '0x5b6660ca047cc351bfedca4fc864d0a88f551485';
 
-const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
+const marketplaceContract = new web3.eth.Contract(marketplaceAbi.abi, marketplaceAddress);
 
-const jinglesAbi = require('../build/contracts/Jingle');
-
-const jinglesContract = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
+const jinglesContract = new web3.eth.Contract(jinglesAbi.abi, jinglesAddress);
 const jingleCtrl = require('./controllers/jingles.controller');
 
 const cryptoJinglesAddress = "0xdea4c5c25218994d0468515195622e25820d27c7";
-const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAddress);
+const cryptoJingles = new web3.eth.Contract(cryptoJinglesAbi.abi, cryptoJinglesAddress);
 
 async function update() {
-  jinglesContract.Composed({}, { fromBlock: '5025886', toBlock: 'latest' })
-    .get(async (error, event) => {
-      if (error) {
-        console.log('GET JINGLES ERROR', error);
-        return;
-      }
+  jinglesContract.getPastEvents('Composed', { fromBlock: '5025886', toBlock: 'latest' }, async (err, events) => {
 
-      console.log(event);
-
-      const mined = event.filter(_jingle => _jingle.type === 'mined');
+      const mined = events;
 
       const numJinglesInDb = await jingleCtrl.jingleNum();
 
@@ -50,7 +38,7 @@ async function update() {
 
       const jingles =
                         mined
-                          .map(_jingle => _jingle.args)
+                          .map(_jingle => _jingle.returnValues)
                           .map(_jingle => ({ ..._jingle, jingleId: parseFloat(_jingle.jingleId.valueOf()) }))
                           .map(_jingle => new Promise(async (resolve) => {
                             const samples = _jingle.samples.map(s => s.valueOf());
@@ -82,12 +70,11 @@ async function update() {
     });
 
 
-    cryptoJingles.Purchased({}, { fromBlock: '5025886', toBlock: 'latest' })
-    .get(async (err, ress) => {
+    cryptoJingles.getPastEvents('Purchased', { fromBlock: '5025886', toBlock: 'latest' }, async (err, ress) => {
 
       ress.forEach(async (res) => {
-        const address = res.args.user;
-        const numSamples = res.args.numJingles.valueOf();
+        const address = res.returnValues.user;
+        const numSamples = res.returnValues.numJingles.valueOf();
 
         console.log(address, numSamples);
 
@@ -97,7 +84,8 @@ async function update() {
 
   const marketplace = {};
 
-  marketplaceContract.allEvents({ fromBlock: '5025886', toBlock: 'latest' }).get(async (err, events) => {
+  marketplaceContract.getPastEvents('allEvents', { fromBlock: '5025886', toBlock: 'latest' }, async (err, events) => {
+    console.log(err, events);
     addMarketplaceEvents(events, marketplace);
 
     for (const key of Object.keys(marketplace)) {
@@ -133,8 +121,8 @@ async function update() {
 }
 
 async function boughtJingle(res) {
-  const jingleId = res.args.jingleId.valueOf();
-  const buyer = res.args.buyer;
+  const jingleId = res.returnValues.jingleId.valueOf();
+  const buyer = res.returnValues.buyer;
 
   const updated = await jingleCtrl.removeFromSale(jingleId, buyer);
 
@@ -145,8 +133,8 @@ async function boughtJingle(res) {
 
 async function putOnSale(res) {
   const order = {
-    jingleId: res.args.jingleId.valueOf(),
-    price: res.args.price.valueOf(),
+    jingleId: res.returnValues.jingleId.valueOf(),
+    price: res.returnValues.price.valueOf(),
   };
 
   const updated = await jingleCtrl.setForSale(order);
@@ -157,8 +145,8 @@ async function putOnSale(res) {
 }
 
 async function cancelJingle(res) {
-  const jingleId = res.args.jingleId.valueOf();
-  const owner = res.args.owner;
+  const jingleId = res.returnValues.jingleId.valueOf();
+  const owner = res.returnValues.owner;
 
   const updated = await jingleCtrl.removeFromSale(jingleId, owner);
 
@@ -170,7 +158,7 @@ async function cancelJingle(res) {
 
 function addMarketplaceEvents(events, marketplace) {
   events.forEach((event) => {
-    const jingleId = event.args.jingleId.valueOf();
+    const jingleId = event.returnValues.jingleId.valueOf();
 
     if (marketplace[jingleId]) {
       marketplace[jingleId].push(event);

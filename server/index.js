@@ -1,5 +1,5 @@
 
-require('dotenv').load();
+require('dotenv').config();
 
 const Web3 = require('web3');
 const express = require('express');
@@ -8,19 +8,15 @@ const bodyParser = require('body-parser');
 
 const db = require('./db');
 const routes = require('./routes');
-const marketplaceAbi = require("../build/contracts/Marketplace");
-const jinglesAbi = require("../build/contracts/Jingle");
-const cryptoJinglesAbi = require("../build/contracts/CryptoJingles");
+const marketplaceAbi = require("./abis/Marketplace.json");
+const jinglesAbi = require("./abis/Jingle");
+const cryptoJinglesAbi = require("./abis/CryptoJingle");
 const jingleCtrl = require('./controllers/jingles.controller');
 const userCtrl = require('./controllers/users.controller');
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// const marketplaceAddress = "0x0d9da77d3e21b99dae30b67cb79fafb2c5cee0e5";
-// const jinglesAddress = "0x0c0abddfdc1226ca336f24723c75e455fa1cd6bf";
-// const cryptoJinglesAddress = "0x3351ef3166ed2ddd8acb1e37362dda6275869b8c";
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 const marketplaceAddress = "0xc1ef465527343f68bb1841f99b9adeb061cc7ac9";
 const jinglesAddress = "0x5b6660ca047cc351bfedca4fc864d0a88f551485";
@@ -30,38 +26,38 @@ const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NODE_URL));
 
 const _ = require('lodash');
 
-const marketplaceContract = web3.eth.contract(marketplaceAbi.abi).at(marketplaceAddress);
+const marketplaceContract = new web3.eth.Contract(marketplaceAbi.abi, marketplaceAddress);
 
-const jingles = web3.eth.contract(jinglesAbi.abi).at(jinglesAddress);
-const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAddress);
+const jingles = new web3.eth.Contract(jinglesAbi.abi, jinglesAddress);
+const cryptoJingles = new web3.eth.Contract(cryptoJinglesAbi.abi, cryptoJinglesAddress);
 
 (async () => {
 
 
-    jingles.Composed(async (err, res) => {
+    jingles.events.Composed({}).on('data', async (err, res) => {
         await addJingle(res);
     });
 
-    marketplaceContract.SellOrder(async (err, res) => {
+    marketplaceContract.events.SellOrder({}).on('data', async (err, res) => {
         await putOnSale(res);
     });
 
-   marketplaceContract.Bought(async (err, res) => {
+   marketplaceContract.events.Bought({}).on('data', async (err, res) => {
         await boughtJingle(res);
     });
 
-    marketplaceContract.Canceled(async (err, res) => {
+    marketplaceContract.events.Canceled({}).on('data', async (err, res) => {
         await cancelJingle(res);
     });
 
-    cryptoJingles.Purchased(async (err, res) => {
+    cryptoJingles.events.Purchased({}).on('data', async (err, res) => {
 
-        if (!res.args) {
+        if (!res.returnValues) {
             return;
         }
 
-        const address = res.args.user;
-        const numSamples = res.args.numJingles.valueOf();
+        const address = res.returnValues.user;
+        const numSamples = res.returnValues.numJingles.valueOf();
 
         console.log(address, numSamples);
 
@@ -89,8 +85,8 @@ const cryptoJingles = web3.eth.contract(cryptoJinglesAbi.abi).at(cryptoJinglesAd
 
 async function putOnSale(res) {
     const order = {
-        jingleId: res.args.jingleId.valueOf(),
-        price: res.args.price.valueOf(),
+        jingleId: res.returnValues.jingleId.valueOf(),
+        price: res.returnValues.price.valueOf(),
     };
 
    const updated = await jingleCtrl.setForSale(order);
@@ -101,8 +97,8 @@ async function putOnSale(res) {
 }
 
 async function cancelJingle(res) {
-    const jingleId = res.args.jingleId.valueOf();
-    const owner = res.args.owner;
+    const jingleId = res.returnValues.jingleId.valueOf();
+    const owner = res.returnValues.owner;
 
     const updated = await jingleCtrl.removeFromSale(jingleId, owner);
 
@@ -112,16 +108,17 @@ async function cancelJingle(res) {
 }
 
 async function addJingle(res) {
-    const samples = res.args.samples.map(s => s.valueOf());
-    const settings = res.args.settings.map(s => s.valueOf());
+    console.log(res);
+    const samples = res.returnValues.samples.map(s => s.valueOf());
+    const settings = res.returnValues.settings.map(s => s.valueOf());
 
-    const sampleTypes = res.args.jingleTypes.map(s => s.valueOf());
+    const sampleTypes = res.returnValues.jingleTypes.map(s => s.valueOf());
 
     const jingleData = {
-        jingleId: res.args.jingleId.valueOf(),
-        name: res.args.name,
-        author: res.args.author,
-        owner: res.args.owner,
+        jingleId: res.returnValues.jingleId.valueOf(),
+        name: res.returnValues.name,
+        author: res.returnValues.author,
+        owner: res.returnValues.owner,
         samples,
         sampleTypes,
         onSale: false,
@@ -137,8 +134,8 @@ async function addJingle(res) {
 }
 
 async function boughtJingle(res) {
-    const jingleId = res.args.jingleId.valueOf();
-    const buyer = res.args.buyer;
+    const jingleId = res.returnValues.jingleId.valueOf();
+    const buyer = res.returnValues.buyer;
 
     const updated = await jingleCtrl.removeFromSale(jingleId, buyer);
 
