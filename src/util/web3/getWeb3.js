@@ -2,10 +2,10 @@ import Web3 from 'web3';
 import contract from 'truffle-contract';
 import axios from 'axios';
 import { CryptoJinglesAddress, JingleAddress, MarketplaceAddress, SampleAddress, API_URL } from '../config';
-import CryptoJingles from '../../../build/contracts/CryptoJingles.json';
-import Jingle from '../../../build/contracts/Jingle.json';
-import Sample from '../../../build/contracts/Sample.json';
-import Marketplace from '../../../build/contracts/Marketplace.json';
+import CryptoJingles from '../../../server/abis/CryptoJingle.json';
+import Jingle from '../../../server/abis/Jingle.json';
+import Sample from '../../../server/abis/Sample.json';
+import Marketplace from '../../../server/abis/Marketplace.json';
 import { initAppWithMM, initAppWithoutMM, initAppWithLockedMM } from '../../../src/actions/appActions';
 
 /**
