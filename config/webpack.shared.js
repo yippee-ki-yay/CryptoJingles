@@ -5,11 +5,11 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const nodePolyfill = new NodePolyfillPlugin();
 
 const appManifest = new WebpackPwaManifest({
-  name: 'LMTLSS',
-  short_name: 'LMTLSS',
-  description: 'LMTLSS',
-  background_color: '#7A30F5',
-  theme_color: '#7A30F5',
+  name: 'CryptoJingles',
+  short_name: 'CrpytoJingles',
+  description: 'Compose the best jingles on the blockchain, you can share them, sell them and love them.',
+  background_color: '#fff',
+  theme_color: '#fff',
   icons: {
     src: path.resolve('favicon.png'),
     sizes: [96, 128, 192, 256, 384, 512] // multiple sizes
