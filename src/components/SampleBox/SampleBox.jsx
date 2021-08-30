@@ -21,7 +21,7 @@ const style = {
   background: '#fff',
 };
 
-@DragSource(props => props.type, boxSource, (connect, monitor) => ({
+@DragSource((props) => props.type, boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))
@@ -42,17 +42,6 @@ class SampleBox extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
-  loadSample() {
-    this.setState({ loading: true });
-
-    const sound = new Pizzicato.Sound(this.props.source, () => {
-      sound.on('stop', () => { this.setState({ start: false }); });
-
-      this.setState({ sound, start: false, loading: false });
-      this.playSound();
-    });
-  }
-
   playSound = () => {
     if (this.state.sound === null) {
       this.loadSample();
@@ -68,6 +57,17 @@ class SampleBox extends Component {
     this.state.sound.stop();
     this.setState({ start: false });
   };
+
+  loadSample() {
+    this.setState({ loading: true });
+
+    const sound = new Pizzicato.Sound(this.props.source, () => {
+      sound.on('stop', () => { this.setState({ start: false }); });
+
+      this.setState({ sound, start: false, loading: false });
+      this.playSound();
+    });
+  }
 
   render() {
     const {

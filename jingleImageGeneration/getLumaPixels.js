@@ -1,26 +1,25 @@
-var smoothstep = require('smoothstep');
-var luminance = require('color-luminance');
-var drawImageCover = require('./drawImageCover');
+const smoothstep = require('smoothstep');
+const luminance = require('color-luminance');
+const drawImageCover = require('./drawImageCover');
 
-module.exports = getLumaPixels;
-function getLumaPixels (ctx, img, opt) {
-  var canvas = ctx.canvas;
-  var scale = typeof opt.scale === 'number' ? opt.scale : 1;
-  var threshold = Array.isArray(opt.threshold) ? opt.threshold : null;
+function getLumaPixels(ctx, img, opt) {
+  const { canvas } = ctx;
+  const scale = typeof opt.scale === 'number' ? opt.scale : 1;
+  const threshold = Array.isArray(opt.threshold) ? opt.threshold : null;
   ctx.fillStyle = opt.fillStyle || 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   drawImageCover(ctx, img, canvas, scale);
 
-  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  var rgba = imageData.data;
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const rgba = imageData.data;
 
-  for (var i = 0; i < canvas.width * canvas.height; i++) {
-    var r = rgba[i * 4 + 0];
-    var g = rgba[i * 4 + 1];
-    var b = rgba[i * 4 + 2];
+  for (let i = 0; i < canvas.width * canvas.height; i += 1) {
+    const r = rgba[i * 4 + 0];
+    const g = rgba[i * 4 + 1];
+    const b = rgba[i * 4 + 2];
 
     // grayscale
-    var L = luminance(r, g, b);
+    let L = luminance(r, g, b);
 
     // optional threshold
     if (threshold) {
@@ -34,3 +33,5 @@ function getLumaPixels (ctx, img, opt) {
   }
   return imageData;
 }
+
+module.exports = getLumaPixels;

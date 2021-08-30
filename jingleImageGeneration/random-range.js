@@ -1,11 +1,11 @@
 module.exports = function (randFunc) {
-  return function random (min, max) {
+  return function random(min, max) {
     if (typeof min === 'undefined') {
-      min = 1;
+      min = 1; // eslint-disable-line
     }
     if (typeof max === 'undefined') {
-      max = min;
-      min = 0;
+      max = min; // eslint-disable-line
+      min = 0; // eslint-disable-line
     }
     return randFunc() * (max - min) + min;
   };

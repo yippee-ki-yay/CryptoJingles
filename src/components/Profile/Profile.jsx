@@ -16,7 +16,8 @@ import './Profile.scss';
 import profilePlaceholder from './profile-placeholder.png';
 
 class Profile extends Component {
-  componentWillMount() {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillMount() {
     if (!this.isValidProfile(this.props.params.address)) return;
 
     this.props.setProfileAddress(this.props.params.address);
@@ -24,7 +25,8 @@ class Profile extends Component {
     this.props.checkIfOwnerProfile();
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (newProps.params.address === this.props.params.address) return;
     if (!this.isValidProfile(newProps.params.address)) return;
 
@@ -46,108 +48,113 @@ class Profile extends Component {
       tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile,
     } = this.props;
     const { setActiveTab, toggleEditAuthor, onEditAuthorChange } = this.props;
-    const activeTab = tabs.find(_tab => _tab.active).value;
+    const activeTab = tabs.find((_tab) => _tab.active).value;
 
     return (
       <div className="container profile-wrapper">
         { /* TODO - create component out of this, fix html layout */ }
         {
-          isValidProfile &&
-          <div>
-            <div className="profile-info-wrapper">
-              <div className="profile-image-wrapper">
-                <img src={profilePlaceholder} alt="profile placeholder" />
-                <div>
-                  <h2>
-                    <span className="author">
-                      { !isOwner && author}
+          isValidProfile && (
+            <div>
+              <div className="profile-info-wrapper">
+                <div className="profile-image-wrapper">
+                  <img src={profilePlaceholder} alt="profile placeholder" />
+                  <div>
+                    <h2>
+                      <span className="author">
+                        { !isOwner && author}
 
-                      {
-                    isOwner &&
-                    <div>
-                      {
-                        !editAuthorActive &&
-                        <span>
-                          <span>{author}</span>
-                          <span onClick={() => { toggleEditAuthor(true); }}>
-                            <i className="material-icons edit-icon">edit</i>
-                          </span>
-                        </span>
-                      }
-
-                      {
-                        editAuthorActive &&
-                        <div className="edit-author-wrapper">
-                          <OutsideAlerter onClickOutside={() => { toggleEditAuthor(false); }}>
-                            <form onSubmit={(e) => { e.preventDefault(); }}>
-                              <span>
-                                <input
-                                  maxLength="30"
-                                  autoFocus
-                                  onChange={onEditAuthorChange}
-                                  type="text"
-                                  value={authorEdit}
-                                />
-                                <span>
+                        {
+                          isOwner && (
+                            <div>
+                              {
+                                !editAuthorActive && (
                                   <span>
-                                    <button type="submit" onClick={submitEditAuthorForm}>
-                                      <i className="material-icons save">save</i>
-                                    </button>
+                                    <span>{author}</span>
+                                    <span onClick={() => { toggleEditAuthor(true); }}>
+                                      <i className="material-icons edit-icon">edit</i>
+                                    </span>
                                   </span>
-                                  <span onClick={() => { toggleEditAuthor(false); }}>
-                                    <i className="material-icons close-icon">close</i>
-                                  </span>
-                                </span>
-                              </span>
-                            </form>
-                          </OutsideAlerter>
-                        </div>
-                      }
-                    </div>
+                                )
+                              }
+
+                              {
+                                editAuthorActive && (
+                                  <div className="edit-author-wrapper">
+                                    <OutsideAlerter onClickOutside={() => { toggleEditAuthor(false); }}>
+                                      <form onSubmit={(e) => { e.preventDefault(); }}>
+                                        <span>
+                                          <input
+                                            maxLength="30"
+                                            autoFocus
+                                            onChange={onEditAuthorChange}
+                                            type="text"
+                                            value={authorEdit}
+                                          />
+                                          <span>
+                                            <span>
+                                              <button type="submit" onClick={submitEditAuthorForm}>
+                                                <i className="material-icons save">save</i>
+                                              </button>
+                                            </span>
+                                            <span onClick={() => { toggleEditAuthor(false); }}>
+                                              <i className="material-icons close-icon">close</i>
+                                            </span>
+                                          </span>
+                                        </span>
+                                      </form>
+                                    </OutsideAlerter>
+                                  </div>
+                                )
+                              }
+                            </div>
+                          )
+                        }
+                      </span>
+                    </h2>
+                    <h4>
+                      <a
+                        className="etherscan-link"
+                        href={`https://etherscan.io/address/${params.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        { params.address }
+                      </a>
+                    </h4>
+                  </div>
+                </div>
+
+                { /* TODO - create component out of this */ }
+                <div className="tabs-wrapper">
+                  {
+                    tabs.map(({ label, value, active }) => (
+                      <div
+                        key={value}
+                        className={`tab ${active ? 'active' : ''}`}
+                        onClick={() => { setActiveTab(value); }}
+                      >
+                        { label }
+                      </div>
+                    ))
                   }
-                    </span>
-                  </h2>
-                  <h4>
-                    <a
-                      className="etherscan-link"
-                      href={`https://etherscan.io/address/${params.address}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      { params.address }
-                    </a>
-                  </h4>
                 </div>
               </div>
 
-              { /* TODO - create component out of this */ }
-              <div className="tabs-wrapper">
-                {
-                  tabs.map(({ label, value, active }) => (
-                    <div
-                      key={value}
-                      className={`tab ${active ? 'active' : ''}`}
-                      onClick={() => { setActiveTab(value); }}
-                    >
-                      { label }
-                    </div>
-                  ))
-                }
-              </div>
+              { activeTab === tabs[0].value && <MySamples address={this.props.params.address} /> }
+              { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} /> }
+              { activeTab === tabs[2].value && <MySongs /> }
+              { activeTab === tabs[3].value && <MyAlbums /> }
             </div>
-
-            { activeTab === tabs[0].value && <MySamples address={this.props.params.address} /> }
-            { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} /> }
-            { activeTab === tabs[2].value && <MySongs /> }
-            { activeTab === tabs[3].value && <MyAlbums /> }
-          </div>
+          )
         }
 
         {
-          !isValidProfile &&
-          <div className="not-valid-message">
-            Provided address is not valid.
-          </div>
+          !isValidProfile && (
+            <div className="not-valid-message">
+              Provided address is not valid.
+            </div>
+          )
         }
       </div>
     );
@@ -172,7 +179,7 @@ Profile.propTypes = {
   setInvalidProfile: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   tabs: state.profile.tabs,
   editAuthorActive: state.profile.editAuthorActive,
   isOwner: state.profile.isOwner,

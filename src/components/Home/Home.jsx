@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { getJingleMetadata } from '../../constants/getMockData';
@@ -24,7 +24,7 @@ class Home extends Component {
     };
   }
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() { // eslint-disable-line
     const jingleData = await axios(`${API_URL}/jingle/${0}`);
     const jingle = jingleData.data;
     jingle.liked = false;
@@ -45,7 +45,7 @@ class Home extends Component {
 
           <div className="btn-wrapper">
             <Link to={hasMM && !lockedMM ? `/profile/${address}` : '/marketplace'}>
-              <button className="btn buy-button">
+              <button type="button" className="btn buy-button">
                 Start jamming!
               </button>
             </Link>
@@ -169,7 +169,7 @@ Home.propTypes = {
   address: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   hasMM: state.app.hasMM,
   lockedMM: state.app.lockedMM,
   address: state.app.address,

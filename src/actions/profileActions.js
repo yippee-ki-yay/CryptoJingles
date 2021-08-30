@@ -6,9 +6,9 @@ import {
   SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
-import { addPendingTx, removePendingTx, guid } from '../actions/appActions';
+import { addPendingTx, removePendingTx, guid } from './appActions';
 import { SAMPLE_PRICE, API_URL } from '../util/config';
-import { likeUnlikeJingle } from '../actions/utils';
+import { likeUnlikeJingle } from './utils';
 
 /**
  * Dispatches action to show that the profile address URL param
@@ -25,7 +25,7 @@ export const setInvalidProfile = () => (dispatch) => { dispatch({ type: SET_INVA
  *
  * @return {Function}
  */
-export const setProfileAddress = address => (dispatch) => {
+export const setProfileAddress = (address) => (dispatch) => {
   dispatch({ type: SET_PROFILE_ADDRESS, payload: address });
 };
 
@@ -36,10 +36,10 @@ export const setProfileAddress = address => (dispatch) => {
  *
  * @return {Function}
  */
-export const setActiveTab = value => (dispatch, getState) => {
+export const setActiveTab = (value) => (dispatch, getState) => {
   const tabs = [...getState().profile.tabs];
-  tabs[tabs.findIndex(_tab => _tab.active)].active = false;
-  tabs[tabs.findIndex(_tab => _tab.value === value)].active = true;
+  tabs[tabs.findIndex((_tab) => _tab.active)].active = false;
+  tabs[tabs.findIndex((_tab) => _tab.value === value)].active = true;
   dispatch({ type: SET_ACTIVE_PROFILE_TAB, payload: tabs });
 };
 
@@ -76,7 +76,7 @@ export const onEditAuthorChange = ({ target }) => (dispatch) => {
  *
  * @return {Function}
  */
-export const toggleEditAuthor = hideOrShow => (dispatch) => {
+export const toggleEditAuthor = (hideOrShow) => (dispatch) => {
   dispatch({ type: TOGGLE_PROFILE_AUTHOR, payload: hideOrShow });
 };
 
@@ -132,33 +132,33 @@ export const submitEditAuthorForm = () => async (dispatch, getState) => {
 export const onMySamplesSort = ({ value }) => (dispatch, getState) => {
   const profileState = getState().profile;
   let mySamples = [...profileState.mySamples];
-  let selectedMySampleSort = Object.assign({}, profileState.selectedMySampleSort);
+  let selectedMySampleSort = { ...profileState.selectedMySampleSort };
 
   if (!mySamples) return;
 
   switch (value) {
-    case '-rarity': {
-      mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
-      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[0];
-      break;
-    }
-    case 'rarity': {
-      mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
-      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[1];
-      break;
-    }
-    case '-length': {
-      mySamples = mySamples.sort((a, b) => b.length - a.length);
-      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[2];
-      break;
-    }
-    case 'length': {
-      mySamples = mySamples.sort((a, b) => a.length - b.length);
-      selectedMySampleSort = SAMPLE_SORTING_OPTIONS[3];
-      break;
-    }
-    default:
-      break;
+  case '-rarity': {
+    mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
+    selectedMySampleSort = SAMPLE_SORTING_OPTIONS[0]; // eslint-disable-line
+    break;
+  }
+  case 'rarity': {
+    mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
+    selectedMySampleSort = SAMPLE_SORTING_OPTIONS[1]; // eslint-disable-line
+    break;
+  }
+  case '-length': {
+    mySamples = mySamples.sort((a, b) => b.length - a.length);
+    selectedMySampleSort = SAMPLE_SORTING_OPTIONS[2]; // eslint-disable-line
+    break;
+  }
+  case 'length': {
+    mySamples = mySamples.sort((a, b) => a.length - b.length);
+    selectedMySampleSort = SAMPLE_SORTING_OPTIONS[3]; // eslint-disable-line
+    break;
+  }
+  default:
+    break;
   }
 
   dispatch({ type: SET_MY_SAMPLES_SORTING, payload: { mySamples, selectedMySampleSort } });
@@ -173,16 +173,16 @@ export const onMySamplesSort = ({ value }) => (dispatch, getState) => {
  */
 export const getColorForRarity = (rarity) => {
   switch (rarity) {
-    case 0:
-      return '#005792';
-    case 1:
-      return '#734488'; // 492645
-    case 2:
-      return '#FFDF00';
-    case 3:
-      return '#99ff00';
-    default:
-      return '#000';
+  case 0:
+    return '#005792';
+  case 1:
+    return '#734488'; // 492645
+  case 2:
+    return '#FFDF00';
+  case 3:
+    return '#99ff00';
+  default:
+    return '#000';
   }
 };
 
@@ -192,7 +192,7 @@ export const getColorForRarity = (rarity) => {
  * @param {String} address
  * @return {Function}
  */
-export const getSamplesForUser = address => async (dispatch, getState) => {
+export const getSamplesForUser = (address) => async (dispatch, getState) => {
   const mySamples = await getSamples(address);
   dispatch({ type: SET_PROFILE_SAMPLES, payload: mySamples });
   dispatch(onMySamplesSort(getState().profile.selectedMySampleSort));
@@ -253,7 +253,7 @@ export const getJinglesForUser = () => async (dispatch, getState) => {
   const query = `${API_URL}/jingles/${category}/${profileAddress}/page/${currentJinglesPage}/filter/${activeSort}`;
   const response = await axios(query);
 
-  const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
+  const jingleIds = response.data.map((_jingle) => _jingle.jingleId).toString();
 
   const { address } = getState().app;
 
@@ -281,7 +281,7 @@ export const getJinglesForUser = () => async (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const changeProfileJinglesCategory = payload => (dispatch) => {
+export const changeProfileJinglesCategory = (payload) => (dispatch) => {
   dispatch({ type: SET_PROFILE_JINGLES_CATEGORY, payload });
   dispatch(getJinglesForUser());
 };
@@ -294,7 +294,7 @@ export const changeProfileJinglesCategory = payload => (dispatch) => {
  *
  * @return {Function}
  */
-export const changeProfileJinglesSorting = payload => (dispatch) => {
+export const changeProfileJinglesSorting = (payload) => (dispatch) => {
   dispatch({ type: SET_PROFILE_JINGLES_SORT, payload });
   dispatch(getJinglesForUser());
 };
@@ -306,7 +306,7 @@ export const changeProfileJinglesSorting = payload => (dispatch) => {
  *
  * @return {Function}
  */
-export const onMyJinglesPaginationChange = pageNum => (dispatch) => {
+export const onMyJinglesPaginationChange = (pageNum) => (dispatch) => {
   dispatch({ type: SET_MY_JINGLES_PAGE, payload: pageNum + 1 });
   dispatch(getJinglesForUser());
 };
@@ -329,7 +329,7 @@ export const likeUnLikeProfileJingle = (jingleId, action) => async (dispatch, ge
     if (!likeData) return;
 
     const jingles = [...state.profile.myJingles];
-    const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
+    const jingleIndex = jingles.findIndex((_jingle) => _jingle.jingleId === jingleId);
 
     jingles[jingleIndex] = { ...jingles[jingleIndex], ...likeData };
     dispatch({ type: PROFILE_LIKE_UNLIKE_JINGLE, payload: jingles });

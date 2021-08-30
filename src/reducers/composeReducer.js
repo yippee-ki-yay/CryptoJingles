@@ -7,29 +7,29 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-  const payload = action.payload;
+  const { payload } = action;
   switch (action.type) {
-    case UPDATE_VOLUME:
-      const newState = Object.assign({}, state);
+  case UPDATE_VOLUME:
+    const newState = { ...state }; // eslint-disable-line
 
-      newState.volumes[payload.index] = payload.volume;
-      return newState;
+    newState.volumes[payload.index] = payload.volume;
+    return newState;
 
-    case UPDATE_DELAY:
-      const updatedState = Object.assign({}, state);
+  case UPDATE_DELAY:
+    const updatedState = { ...state }; // eslint-disable-line
 
-      updatedState.delays[payload.index] = payload.delay;
-      return updatedState;
+    updatedState.delays[payload.index] = payload.delay;
+    return updatedState;
 
-    case UPDATE_CUTS:
-      const cutState = Object.assign({}, state);
+  case UPDATE_CUTS:
+    const cutState = { ...state }; // eslint-disable-line
 
-      cutState.cuts[payload.index] = payload.cuts.min;
-      cutState.cuts[payload.index + 5] = payload.cuts.max;
+    cutState.cuts[payload.index] = payload.cuts.min;
+    cutState.cuts[payload.index + 5] = payload.cuts.max;
 
-      return cutState;
+    return cutState;
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };

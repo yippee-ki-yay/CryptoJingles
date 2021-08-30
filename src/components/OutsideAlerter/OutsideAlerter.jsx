@@ -1,54 +1,41 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 /**
  * Component that alerts if you click outside of it
- *
  */
-class OutsideAlerter extends Component {
-  constructor(props) {
-    super(props);
+const OutsideAlerter = ({
+  className, children, handleClick, onClickOutside,
+}) => {
+  const wrapperRef = useRef();
 
-    this.setWrapperRef = this.setWrapperRef.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-  }
+  useEffect(() => {
+    document.addEventListener('mousedown', onClickOutside);
+    return () => { document.removeEventListener('mousedown', onClickOutside); };
+  }, [onClickOutside]);
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
-  }
+  return (
+    <div ref={wrapperRef} className={className} onClick={handleClick}>
+      { children }
+    </div>
+  );
+};
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  /**
-   * Set the wrapper ref
-   */
-  setWrapperRef(node) {
-    this.wrapperRef = node;
-  }
-
-  /**
-   * Alert if clicked on outside of element
-   */
-  handleClickOutside(event) {
-    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      this.props.onClickOutside();
-    }
-  }
-
-  render() {
-    return (
-      <div ref={this.setWrapperRef}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+OutsideAlerter.defaultProps = {
+  className: '',
+  handleClick: () => {},
+};
 
 OutsideAlerter.propTypes = {
-  children: PropTypes.element.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.node,
+    PropTypes.arrayOf(PropTypes.node),
+  ]).isRequired,
   onClickOutside: PropTypes.func.isRequired,
+  handleClick: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default OutsideAlerter;

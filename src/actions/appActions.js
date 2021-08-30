@@ -4,10 +4,10 @@ export const addPendingTx = (tx, type) => (dispatch) => {
   dispatch({ type: ADD_PENDING_TX, payload: { tx, type } });
 };
 
-export const removePendingTx = tx => (dispatch, getState) => {
+export const removePendingTx = (tx) => (dispatch, getState) => {
   let { pendingTxs } = getState().app;
   pendingTxs = [...pendingTxs];
-  pendingTxs.splice(pendingTxs.findIndex(item => item.tx === tx), 1);
+  pendingTxs.splice(pendingTxs.findIndex((item) => item.tx === tx), 1);
 
   dispatch({ type: REMOVE_PENDING_TX, payload: pendingTxs });
 };
@@ -30,7 +30,12 @@ export const guid = () => {
  * @return {Boolean} canLike
  */
 export const initAppWithMM = (address, canLike) => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: false, address, canLike } });
+  dispatch({
+    type: INIT_APP,
+    payload: {
+      hasMM: true, lockedMM: false, address, canLike,
+    },
+  });
 };
 
 /**
@@ -39,7 +44,12 @@ export const initAppWithMM = (address, canLike) => (dispatch) => {
  * @return {String} address
  */
 export const initAppWithLockedMM = () => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: true, lockedMM: true, address: '', canLike: false } });
+  dispatch({
+    type: INIT_APP,
+    payload: {
+      hasMM: true, lockedMM: true, address: '', canLike: false,
+    },
+  });
 };
 
 /**
@@ -49,5 +59,10 @@ export const initAppWithLockedMM = () => (dispatch) => {
  * @return {String} address
  */
 export const initAppWithoutMM = () => (dispatch) => {
-  dispatch({ type: INIT_APP, payload: { hasMM: false, lockedMM: false, address: '', canLike: false } });
+  dispatch({
+    type: INIT_APP,
+    payload: {
+      hasMM: false, lockedMM: false, address: '', canLike: false,
+    },
+  });
 };

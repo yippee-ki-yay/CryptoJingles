@@ -18,7 +18,7 @@ const style = {
 
 const dropTarget = { drop(props, monitor) { props.onDrop(monitor.getItem()); } };
 
-@DropTarget(props => props.accepts, dropTarget, (connect, monitor) => ({
+@DropTarget((props) => props.accepts, dropTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
@@ -36,11 +36,11 @@ class SampleSlot extends Component {
     }
 
     this.state = {
-      volumeValue: props.volumes[index],
-      delayValue: props.delays[index],
+      volumeValue: props.volumes[index], // eslint-disable-line
+      delayValue: props.delays[index], // eslint-disable-line
       range: {
-        min: props.cuts[index],
-        max: props.cuts[index + 5] || maxLength,
+        min: props.cuts[index], // eslint-disable-line
+        max: props.cuts[index + 5] || maxLength, // eslint-disable-line
       },
     };
   }
@@ -92,45 +92,46 @@ class SampleSlot extends Component {
       rarityColor = getColorForRarity(jingle.rarity);
     }
 
-   let maxLength = 10;
+    let maxLength = 10;
 
     if (lastDroppedItem) {
       maxLength = getJingleMetadata(lastDroppedItem.type).length;
     }
 
-    const formatVolume = value => `${value}%`;
-    const formatDelay = value => `${value.toFixed(1)}s`;
-    const formatCut = value => `${value.toFixed(1)}s`;
+    const formatVolume = (value) => `${value}%`;
+    const formatDelay = (value) => `${value.toFixed(1)}s`;
+    const formatCut = (value) => `${value.toFixed(1)}s`;
 
     return connectDropTarget((() => (
       <div className="jingle-slot-wrapper" style={{ ...style }}>
         <div className="jingle-slot" style={{ ...additionalStyle }}>
           {
-            lastDroppedItem &&
-            <div>
-              <div className="top" style={{ backgroundColor: rarityColor }}>
-                <div className="cancel-btn" onClick={() => { cancelDrop(lastDroppedItem); }}>
-                  <i className="material-icons">close</i>
+            lastDroppedItem && (
+              <div>
+                <div className="top" style={{ backgroundColor: rarityColor }}>
+                  <div className="cancel-btn" onClick={() => { cancelDrop(lastDroppedItem); }}>
+                    <i className="material-icons">close</i>
+                  </div>
+                </div>
+                <div className="bottom">
+                  {/* <div className="name-tag">{ lastDroppedItem.name }</div> */}
+
+                  <div className="name-tag">
+                    { lastDroppedItem.name }
+                  </div>
+
+                  <div className="id-tag">
+                    <span>#{ lastDroppedItem.type } - </span>
+                    <span style={{ color: rarityColor }}>
+                      { jingle.rarity === 0 && 'Common' }
+                      { jingle.rarity === 1 && 'Rare' }
+                      { jingle.rarity === 2 && 'Legendary' }
+                      { jingle.rarity === 3 && 'Mythical' }
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="bottom">
-                {/* <div className="name-tag">{ lastDroppedItem.name }</div> */}
-
-                <div className="name-tag">
-                  { lastDroppedItem.name }
-                </div>
-
-                <div className="id-tag">
-                  <span>#{ lastDroppedItem.type } - </span>
-                  <span style={{ color: rarityColor }}>
-                    { jingle.rarity === 0 && 'Common' }
-                    { jingle.rarity === 1 && 'Rare' }
-                    { jingle.rarity === 2 && 'Legendary' }
-                    { jingle.rarity === 3 && 'Mythical' }
-                  </span>
-                </div>
-              </div>
-            </div>
+            )
           }
 
           { !lastDroppedItem && <div className="empty-slot">Drag & drop sound sample here</div> }
@@ -205,7 +206,7 @@ const mapDispatchToProps = {
   updateCuts,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
   cuts: state.compose.cuts,

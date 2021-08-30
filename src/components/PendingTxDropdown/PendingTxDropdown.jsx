@@ -15,7 +15,7 @@ class PendingTxDropdown extends Component {
     this.hideDropdown = this.hideDropdown.bind(this);
   }
 
-  toggleDropdown() { this.setState({ open: !this.state.open }); }
+  toggleDropdown() { this.setState({ open: !this.state.open }); } // eslint-disable-line
 
   hideDropdown() {
     if (this.props.pendingTxs.length > 0 && this.state.open) {
@@ -29,29 +29,31 @@ class PendingTxDropdown extends Component {
       <OutsideAlerter onClickOutside={() => { this.hideDropdown(); }}>
         <div className="pending-tx-dropdown-wrapper">
           {
-            (this.props.pendingTxs.length > 0) &&
-            <div>
-              <div className="dropdown-header" onClick={this.toggleDropdown}>
-                Pending transactions
+            (this.props.pendingTxs.length > 0) && (
+              <div>
+                <div className="dropdown-header" onClick={this.toggleDropdown}>
+                  Pending transactions
 
-                <div className="icons-wrapper">
-                  <i className="material-icons">{ this.state.open ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }</i>
+                  <div className="icons-wrapper">
+                    <i className="material-icons">{ this.state.open ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }</i>
+                  </div>
                 </div>
+
+                {
+                  this.state.open && (
+                    <div className="dropdown-wrapper">
+                      {
+                        this.props.pendingTxs.map(({ tx, type }) => (
+                          <div className="pending-single" key={tx}>
+                            <span className="type">{ type }</span>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  )
+                }
               </div>
-
-              {
-                this.state.open &&
-                <div className="dropdown-wrapper">
-                  {
-                    this.props.pendingTxs.map(({ tx, type }) => (
-                      <div className="pending-single" key={tx}>
-                        <span className="type">{ type }</span>
-                      </div>
-                    ))
-                  }
-                </div>
-              }
-            </div>
+            )
           }
         </div>
       </OutsideAlerter>
@@ -63,7 +65,7 @@ PendingTxDropdown.propTypes = {
   pendingTxs: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   pendingTxs: state.app.pendingTxs,
 });
 

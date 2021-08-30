@@ -1,12 +1,30 @@
 const palettes = require('./color-palettes.json');
 
 module.exports = (seed, random, randomFunc, mapSrc, outputDir = '') => {
+  function arrayShuffle(arr) {
+    let rand;
+    let tmp;
+    let len = arr.length;
+    const ret = arr.slice();
+
+    while (len) {
+      rand = Math.floor(random(1) * len--); // eslint-disable-line
+      tmp = ret[len];
+      ret[len] = ret[rand];
+      ret[rand] = tmp;
+    }
+
+    return ret;
+  }
+
+  function getPalette() { return arrayShuffle(palettes[Math.floor(random() * palettes.length)]); }
+
   return {
     // rendering options
     random: randomFunc,
     seedName: seed,
     pointilism: random(0, 0.1),
-    noiseScalar: [ random(0.000001, 0.000001), random(0.0002, 0.004) ],
+    noiseScalar: [random(0.000001, 0.000001), random(0.0002, 0.004)],
     globalAlpha: 0.5,
     startArea: random(0.0, 1.5),
     maxRadius: random(5, 100),
@@ -31,24 +49,6 @@ module.exports = (seed, random, randomFunc, mapSrc, outputDir = '') => {
     // node only options
     asVideoFrames: false,
     filename: 'render',
-    outputDir
+    outputDir,
   };
-
-  function getPalette () { return arrayShuffle(palettes[Math.floor(random() * palettes.length)]); }
-
-  function arrayShuffle (arr) {
-    let rand;
-    let tmp;
-    let len = arr.length;
-    let ret = arr.slice();
-
-    while (len) {
-      rand = Math.floor(random(1) * len--);
-      tmp = ret[len];
-      ret[len] = ret[rand];
-      ret[rand] = tmp;
-    }
-
-    return ret;
-  }
 };

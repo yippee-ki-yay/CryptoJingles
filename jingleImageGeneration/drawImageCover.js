@@ -1,17 +1,17 @@
 // fits the PIXI.Sprite to the parent
 // similar to CSS background-size: cover
-module.exports = drawImageCover;
-function drawImageCover (ctx, image, parent, scale) {
-  scale = typeof scale === 'number' ? scale : 1;
-  parent = typeof parent === 'undefined' ? ctx.canvas : parent;
+function drawImageCover(ctx, image, parent, scale) {
+  scale = typeof scale === 'number' ? scale : 1; // eslint-disable-line
+  parent = typeof parent === 'undefined' ? ctx.canvas : parent; // eslint-disable-line
 
-  var tAspect = image.width / image.height;
-  var pWidth = parent.width;
-  var pHeight = parent.height;
+  const tAspect = image.width / image.height;
+  const pWidth = parent.width;
+  const pHeight = parent.height;
 
-  var pAspect = pWidth / pHeight;
+  const pAspect = pWidth / pHeight;
 
-  var width, height;
+  let width; let
+    height;
   if (tAspect > pAspect) {
     height = pHeight;
     width = height * tAspect;
@@ -21,7 +21,9 @@ function drawImageCover (ctx, image, parent, scale) {
   }
   width *= scale;
   height *= scale;
-  var x = (pWidth - width) / 2;
-  var y = (pHeight - height) / 2;
+  const x = (pWidth - width) / 2;
+  const y = (pHeight - height) / 2;
   ctx.drawImage(image, x, y, width, height);
 }
+
+module.exports = drawImageCover;

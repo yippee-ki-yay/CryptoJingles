@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContextProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 import withScrolling from 'react-dnd-scrollzone';
 import update from 'immutability-helper';
 import { Sound, Group } from 'pizzicato';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -53,7 +53,7 @@ class Compose extends Component {
     this.onComposeSamplesSort = this.onComposeSamplesSort.bind(this);
   }
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() { // eslint-disable-line
     if (!this.props.hasMM || this.props.lockedMM) {
       this.setState({ loading: false });
       return;
@@ -72,112 +72,94 @@ class Compose extends Component {
     this.setState({ playing: false, group: null });
   }
 
+  handleJingleNameChange(e) {
+    const val = e.target.value;
+    if (val > 30) return;
+    this.setState({ jingleName: val });
+  }
+
+  /**
+   * Fires when a jingle is dropped into a JingleSlot component
+   *
+   * @param {Number} index
+   * @param {Object} item
+   */
+  handleDrop(index, item) {
+    this.setState(update(this.state, { // eslint-disable-line
+      sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
+      droppedBoxIds: item.id ? { $push: [item.id] } : {},
+    }));
+
+    this.setState({ updatedSlots: true });
+  }
+
+  /**
+   * Fires when a jingle is removed from a JingleSlot component
+   *
+   * @param {Number} index
+   * @param {Object} item
+   */
+  handleCancel(index, { id }) {
+    const droppedBoxIds = [...this.state.droppedBoxIds]; // eslint-disable-line
+    const boxIndex = droppedBoxIds.findIndex((_id) => _id === id);
+    droppedBoxIds.splice(boxIndex, 1);
+
+    this.setState(update(this.state, { // eslint-disable-line
+      sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
+      droppedBoxIds: { $set: droppedBoxIds },
+    }));
+
+    this.setState({ updatedSlots: true });
+  }
+
   onComposeSamplesSort = (option) => {
     let { mySamples, selectedSort } = this.state;
 
     if (!this.state.mySamples) return;
 
     switch (option.value) {
-      case '-rarity': {
-        mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
-        selectedSort = SAMPLE_SORTING_OPTIONS[0];
-        break;
-      }
-      case 'rarity': {
-        mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
-        selectedSort = SAMPLE_SORTING_OPTIONS[1];
-        break;
-      }
-      case '-length': {
-        mySamples = mySamples.sort((a, b) => b.length - a.length);
-        selectedSort = SAMPLE_SORTING_OPTIONS[2];
-        break;
-      }
-      case 'length': {
-        mySamples = mySamples.sort((a, b) => a.length - b.length);
-        selectedSort = SAMPLE_SORTING_OPTIONS[3];
-        break;
-      }
-      default:
-        break;
+    case '-rarity': {
+      mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
+      selectedSort = SAMPLE_SORTING_OPTIONS[0]; // eslint-disable-line
+      break;
+    }
+    case 'rarity': {
+      mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
+      selectedSort = SAMPLE_SORTING_OPTIONS[1]; // eslint-disable-line
+      break;
+    }
+    case '-length': {
+      mySamples = mySamples.sort((a, b) => b.length - a.length);
+      selectedSort = SAMPLE_SORTING_OPTIONS[2]; // eslint-disable-line
+      break;
+    }
+    case 'length': {
+      mySamples = mySamples.sort((a, b) => a.length - b.length);
+      selectedSort = SAMPLE_SORTING_OPTIONS[3]; // eslint-disable-line
+      break;
+    }
+    default:
+      break;
     }
 
     this.setState({ mySamples, selectedSort });
   };
 
-  /**
-   * Creates group sound
-   *
-   */
-  loadGroup(cb) {
-    let selectedSongSources = this.state.sampleSlots.filter(slot => slot.lastDroppedItem !== null);
-
-    selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) =>
-      this.state.mySamples.find(sample => lastDroppedItem.id === sample.id));
-
-    const { delays } = this.props;
-
-    this.setState({ loadingGroup: true });
-
-    selectedSongSources = selectedSongSources.map(({ source }, i) =>
-      new Promise((resolve) => {
-        const sound = new Sound(source, () => {
-          sound.volume = this.props.volumes[i] / 100;
-          resolve(sound);
-        });
-      }));
-
-    Promise.all(selectedSongSources).then((sources) => {
-      const longestSound = sources.reduce((prev, current, i) => ((
-        (prev.getRawSourceNode().buffer.duration + delays[i]) >
-        (current.getRawSourceNode().buffer.duration) + delays[i]) ?
-        prev : current
-      ));
-
-      longestSound.on('stop', () => { this.setState({ playing: false }); });
-
-      this.setState({
-        group: new Group(sources),
-        loadingGroup: false,
-        updatedSlots: false,
-      });
-
-      cb();
-    });
-  }
-
-  playSound() {
-    this.loadGroup(() => {
-      const settings = createSettings(this.props);
-
-      playWithDelay(this.state.group, settings, this.state.sampleSlots);
-      this.setState({ playing: true });
-    });
-  }
-
-  stopSound() {
-    if (!this.state.group) return;
-
-    this.state.group.stop();
-    this.setState({ playing: false });
-  }
-
   createSong = async () => {
     const id = guid();
 
     try {
-      const selectedSongSources = this.state.mySamples.filter(({ id }) =>
-        this.state.droppedBoxIds.find(selectedId => id === selectedId));
+      const selectedSongSources = this.state.mySamples.filter(({ id }) => this.state.droppedBoxIds.find((selectedId) => id === selectedId));
 
-      const jingleIds = selectedSongSources.map(s => parseInt(s.id, 10));
+      const jingleIds = selectedSongSources.map((s) => parseInt(s.id, 10));
 
       if (jingleIds.length !== 5) return; // TODO - show message in the  UI instead of return
 
       const settings = createSettings(this.props);
 
-      let sampleIds = [];
+      const sampleIds = [];
 
-      this.state.sampleSlots.forEach(s => {
+      this.state.sampleSlots.forEach((s) => {
         sampleIds.push(s.lastDroppedItem.id);
       });
 
@@ -197,44 +179,59 @@ class Compose extends Component {
     }
   };
 
-  handleJingleNameChange(e) {
-    const val = e.target.value;
-    if (val > 30) return;
-    this.setState({ jingleName: val });
+  stopSound() {
+    if (!this.state.group) return;
+
+    this.state.group.stop();
+    this.setState({ playing: false });
+  }
+
+  playSound() {
+    this.loadGroup(() => {
+      const settings = createSettings(this.props);
+
+      playWithDelay(this.state.group, settings, this.state.sampleSlots);
+      this.setState({ playing: true });
+    });
   }
 
   /**
-   * Fires when a jingle is dropped into a JingleSlot component
+   * Creates group sound
    *
-   * @param {Number} index
-   * @param {Object} item
    */
-  handleDrop(index, item) {
-    this.setState(update(this.state, {
-      sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
-      droppedBoxIds: item.id ? { $push: [item.id] } : {},
+  loadGroup(cb) {
+    let selectedSongSources = this.state.sampleSlots.filter((slot) => slot.lastDroppedItem !== null);
+
+    selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) => this.state.mySamples.find((sample) => lastDroppedItem.id === sample.id));
+
+    const { delays } = this.props;
+
+    this.setState({ loadingGroup: true });
+
+    selectedSongSources = selectedSongSources.map(({ source }, i) => new Promise((resolve) => {
+      const sound = new Sound(source, () => {
+        sound.volume = this.props.volumes[i] / 100;
+        resolve(sound);
+      });
     }));
 
-    this.setState({ updatedSlots: true });
-  }
+    Promise.all(selectedSongSources).then((sources) => {
+      const longestSound = sources.reduce((prev, current, i) => ((
+        (prev.getRawSourceNode().buffer.duration + delays[i]) >
+          (current.getRawSourceNode().buffer.duration) + delays[i]) ?
+        prev : current
+      ));
 
-  /**
-   * Fires when a jingle is removed from a JingleSlot component
-   *
-   * @param {Number} index
-   * @param {Object} item
-   */
-  handleCancel(index, { id }) {
-    const droppedBoxIds = [...this.state.droppedBoxIds];
-    const boxIndex = droppedBoxIds.findIndex(_id => _id === id);
-    droppedBoxIds.splice(boxIndex, 1);
+      longestSound.on('stop', () => { this.setState({ playing: false }); });
 
-    this.setState(update(this.state, {
-      sampleSlots: { [index]: { lastDroppedItem: { $set: null } } },
-      droppedBoxIds: { $set: droppedBoxIds },
-    }));
+      this.setState({
+        group: new Group(sources),
+        loadingGroup: false,
+        updatedSlots: false,
+      });
 
-    this.setState({ updatedSlots: true });
+      cb();
+    });
   }
 
   /**
@@ -249,129 +246,134 @@ class Compose extends Component {
     const { hasMM, lockedMM } = this.props;
 
     return (
-      <DragDropContextProvider backend={HTML5Backend}>
-        <ScrollingComponent className="scroll-wrapper">
-          <div className="container">
-            <div className="compose-top-wrapper">
+      <DndProvider backend={HTML5Backend}>
+        <div className="container">
+          <div className="compose-top-wrapper">
 
-              {
-                  (hasMM && !lockedMM) &&
-                  <form onSubmit={(e) => { e.preventDefault(); }} className="form-horizontal create-jingle-form">
-                    <h4>Compose jingle:</h4>
-                    <div>
-                      <input
-                        className="form-control"
-                        placeholder="Jingle name"
-                        type="text"
-                        onChange={this.handleJingleNameChange}
-                      />
+            {
+              (hasMM && !lockedMM) && (
+                <form onSubmit={(e) => { e.preventDefault(); }} className="form-horizontal create-jingle-form">
+                  <h4>Compose jingle:</h4>
+                  <div>
+                    <input
+                      className="form-control"
+                      placeholder="Jingle name"
+                      type="text"
+                      onChange={this.handleJingleNameChange}
+                    />
 
-                      <button
-                        type="submit"
-                        className="btn buy-button"
-                        onClick={this.createSong}
-                        disabled={this.state.droppedBoxIds.length < 5}
+                    <button
+                      type="submit"
+                      className="btn buy-button"
+                      onClick={this.createSong}
+                      disabled={this.state.droppedBoxIds.length < 5}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              )
+            }
+
+            <div className="sort-samples-wrapper">
+              <div className="compose-left-column">
+
+                <div className="compose-play">
+                  { this.state.loadingGroup && <LoadingIcon /> }
+                  {
+                    !this.state.playing && !this.state.loadingGroup && (
+                      <span
+                        className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
+                        onClick={this.playSound}
                       >
-                        Submit
-                      </button>
-                    </div>
-                  </form>
-                }
-
-              <div className="sort-samples-wrapper">
-                <div className="compose-left-column">
-
-                  <div className="compose-play">
-                    { this.state.loadingGroup && <LoadingIcon /> }
-                    {
-                        !this.state.playing && !this.state.loadingGroup &&
-                        <span
-                          className={this.state.droppedBoxIds.length === 0 ? 'disabled-play' : ''}
-                          onClick={this.playSound}
-                        >
-                          <PlayIcon />
-                        </span>
-                      }
-                    {
-                        this.state.playing && !this.state.loadingGroup &&
-                        <span onClick={this.stopSound}><StopIcon /></span>
-                      }
-                  </div>
-
-                  <div className="slot-options">
-                    <div>Volume</div>
-                    <div>Delay</div>
-                    <div>Cut</div>
-                  </div>
+                        <PlayIcon />
+                      </span>
+                    )
+                  }
+                  {
+                    this.state.playing && !this.state.loadingGroup &&
+                    <span onClick={this.stopSound}><StopIcon /></span>
+                  }
                 </div>
 
-                <div className="sample-slots-wrapper">
-                  {
-                      this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) =>
-                        (<SampleSlot
-                          key={`item-${guid()}`}
-                          index={index}
-                          accepts={accepts}
-                          lastDroppedItem={lastDroppedItem}
-                          id={index}
-                          onDrop={item => this.handleDrop(index, item)}
-                          cancelDrop={item => this.handleCancel(index, item)}
-                        />))
-                    }
+                <div className="slot-options">
+                  <div>Volume</div>
+                  <div>Delay</div>
+                  <div>Cut</div>
                 </div>
               </div>
+
+              <div className="sample-slots-wrapper">
+                {
+                  this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) => (
+                    <SampleSlot
+                      key={`item-${guid()}`}
+                      index={index}
+                      accepts={accepts}
+                      lastDroppedItem={lastDroppedItem}
+                      id={index}
+                      onDrop={(item) => this.handleDrop(index, item)}
+                      cancelDrop={(item) => this.handleCancel(index, item)}
+                    />
+                  ))
+                }
+              </div>
             </div>
+          </div>
 
-            <div className="separator" />
+          <div className="separator" />
 
-            <SortSamples
-              value={this.state.selectedSort}
-              options={this.state.sortingOptions}
-              onSortChange={this.onComposeSamplesSort}
-            />
+          <SortSamples
+            value={this.state.selectedSort}
+            options={this.state.sortingOptions}
+            onSortChange={this.onComposeSamplesSort}
+          />
 
-            {
-                (this.state.mySamples.length > 0) &&
-                !this.state.loading &&
-                <div className="my-jingles-num">{ this.state.mySamples.length } samples</div>
-              }
+          {
+            (this.state.mySamples.length > 0) &&
+            !this.state.loading &&
+            <div className="my-jingles-num">{ this.state.mySamples.length } samples</div>
+          }
 
-            {
-                (!hasMM && !lockedMM) &&
-                <h1 className="buy-samples-link mm-link">
-                  Install
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-                  >
-                    MetaMask
-                  </a>
-                  in order to see your samples.
-                </h1>
-              }
+          {
+            (!hasMM && !lockedMM) && (
+              <h1 className="buy-samples-link mm-link">
+                Install
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+                >
+                  MetaMask
+                </a>
+                in order to see your samples.
+              </h1>
+            )
+          }
 
-            {
-                (hasMM && lockedMM) &&
-                <h1 className="buy-samples-link mm-link">
-                  Please unlock your MetaMask account.
-                </h1>
-              }
+          {
+            (hasMM && lockedMM) && (
+              <h1 className="buy-samples-link mm-link">
+                Please unlock your MetaMask account.
+              </h1>
+            )
+          }
 
-            {
-                (hasMM && !lockedMM) &&
-                <div>
+          {
+            (hasMM && !lockedMM) && (
+              <div>
 
-                  {
-                    this.state.loading &&
+                {
+                  this.state.loading && (
                     <div className="loader-wrapper">
                       <BoxLoader />
                     </div>
-                  }
+                  )
+                }
 
-                  {
-                    (this.state.mySamples.length === 0) &&
-                    !this.state.loading &&
+                {
+                  (this.state.mySamples.length === 0) &&
+                  !this.state.loading && (
                     <div>
                       { /* TODO - insert buy sample form here */ }
                       <h1 className="no-samples-heading">
@@ -382,31 +384,33 @@ class Compose extends Component {
                         </span>
                       </h1>
                     </div>
-                  }
+                  )
+                }
 
-                  {
-                    (this.state.mySamples.length > 0) &&
-                    !this.state.loading &&
+                {
+                  (this.state.mySamples.length > 0) &&
+                  !this.state.loading && (
                     <div className="samples-slider">
                       <div className="compose-samples-wrapper">
                         {
-                            this.state.mySamples.map(sample => (
-                              <SampleBox
-                                draggable
-                                key={sample.id}
-                                isDropped={this.isDropped(sample.id)}
-                                {...sample}
-                              />
-                            ))
-                          }
+                          this.state.mySamples.map((sample) => (
+                            <SampleBox
+                              draggable
+                              key={sample.id}
+                              isDropped={this.isDropped(sample.id)}
+                              {...sample}
+                            />
+                          ))
+                        }
                       </div>
                     </div>
-                  }
-                </div>
-              }
-          </div>
-        </ScrollingComponent>
-      </DragDropContextProvider>
+                  )
+                }
+              </div>
+            )
+          }
+        </div>
+      </DndProvider>
     );
   }
 }
@@ -422,7 +426,7 @@ Compose.propTypes = {
   removePendingTx: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   volumes: state.compose.volumes,
   delays: state.compose.delays,
   cuts: state.compose.cuts,

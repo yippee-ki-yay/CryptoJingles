@@ -33,17 +33,6 @@ class SampleBox2 extends Component {
 
   componentWillUnmount() { this.stopSound(); }
 
-  loadSample() {
-    this.setState({ loading: true });
-
-    const sound = new Pizzicato.Sound(this.props.source, () => {
-      sound.on('stop', () => { this.setState({ start: false }); });
-
-      this.setState({ sound, start: false, loading: false });
-      this.playSound();
-    });
-  }
-
   playSound = () => {
     if (this.state.sound === null) {
       this.loadSample();
@@ -59,6 +48,17 @@ class SampleBox2 extends Component {
     this.state.sound.stop();
     this.setState({ start: false });
   };
+
+  loadSample() {
+    this.setState({ loading: true });
+
+    const sound = new Pizzicato.Sound(this.props.source, () => {
+      sound.on('stop', () => { this.setState({ start: false }); });
+
+      this.setState({ sound, start: false, loading: false });
+      this.playSound();
+    });
+  }
 
   render() {
     const { name, jingleType, rarity } = this.props;

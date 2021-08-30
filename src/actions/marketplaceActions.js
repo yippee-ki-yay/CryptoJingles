@@ -4,7 +4,7 @@ import {
   SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_JINGLES, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE,
   MARKETPLACE_LIKE_UNLIKE_JINGLE,
 } from '../constants/actionTypes';
-import { likeUnlikeJingle } from '../actions/utils';
+import { likeUnlikeJingle } from './utils';
 
 /**
  * Gets all jingles for category and sort option fromm the server and then sets it in the state
@@ -20,7 +20,7 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
     // TODO - export this to Api.js
     const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
 
-    const jingleIds = response.data.map(_jingle => _jingle.jingleId).toString();
+    const jingleIds = response.data.map((_jingle) => _jingle.jingleId).toString();
 
     if ((hasMM && !lockedMM) && jingleIds.length > 0) {
       const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
@@ -30,7 +30,7 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
     }
 
     if ((!hasMM || lockedMM) && jingleIds.length > 0) {
-      jingles = response.data.map(_jingle => ({ ..._jingle, liked: false }));
+      jingles = response.data.map((_jingle) => ({ ..._jingle, liked: false }));
     }
 
     if (jingleIds.length === 0) jingles = response.data;
@@ -53,7 +53,7 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const changeMarketplaceCategory = payload => (dispatch) => {
+export const changeMarketplaceCategory = (payload) => (dispatch) => {
   dispatch({ type: SET_MARKETPLACE_CATEGORY, payload });
   dispatch(getMarketplaceJingles());
 };
@@ -66,7 +66,7 @@ export const changeMarketplaceCategory = payload => (dispatch) => {
  *
  * @return {Function}
  */
-export const changeMarketplaceSorting = payload => (dispatch) => {
+export const changeMarketplaceSorting = (payload) => (dispatch) => {
   dispatch({ type: SET_MARKETPLACE_SORT, payload });
   dispatch(getMarketplaceJingles());
 };
@@ -78,7 +78,7 @@ export const changeMarketplaceSorting = payload => (dispatch) => {
  *
  * @return {Function}
  */
-export const onMarketplacePaginationChange = pageNum => (dispatch) => {
+export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
   dispatch({ type: SET_MARKETPLACE_PAGE, payload: pageNum + 1 });
   dispatch(getMarketplaceJingles());
 };
@@ -100,7 +100,7 @@ export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch
     if (!likeData) return;
 
     const jingles = [...state.marketplace.jingles];
-    const jingleIndex = jingles.findIndex(_jingle => _jingle.jingleId === jingleId);
+    const jingleIndex = jingles.findIndex((_jingle) => _jingle.jingleId === jingleId);
 
     jingles[jingleIndex] = { ...jingles[jingleIndex], ...likeData };
     dispatch({ type: MARKETPLACE_LIKE_UNLIKE_JINGLE, payload: jingles });
@@ -108,4 +108,3 @@ export const likeUnLikeMarketplaceJingle = (jingleId, action) => async (dispatch
     // TODO Handle this in the future
   }
 };
-

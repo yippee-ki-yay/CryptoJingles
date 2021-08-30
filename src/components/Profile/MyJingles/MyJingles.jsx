@@ -13,11 +13,13 @@ import { MARKETPLACE_JINGLES_PER_PAGE } from '../../../constants/actionTypes';
 import './MyJingles.scss';
 
 class MyJingles extends Component {
-  async componentWillMount() {
+  // eslint-disable-next-line camelcase
+  async UNSAFE_componentWillMount() {
     this.props.getJinglesForUser();
   }
 
-  componentWillReceiveProps(newProps) {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(newProps) {
     if (newProps.address === this.props.address) return;
 
     this.props.getJinglesForUser();
@@ -57,47 +59,47 @@ class MyJingles extends Component {
           </div>
 
           {
-                loading &&
-                <div className="loader-wrapper">
-                  <BoxLoader />
-                </div>
-              }
+            loading && (
+              <div className="loader-wrapper">
+                <BoxLoader />
+              </div>
+            )
+          }
 
           {
-                (myJingles.length === 0) &&
-                !loading &&
-                <div className="empty-state">
-                  <h2>There are no jingles with this filtering.</h2>
-                </div>
-              }
+            (myJingles.length === 0) && !loading && (
+              <div className="empty-state">
+                <h2>There are no jingles with this filtering.</h2>
+              </div>
+            )
+          }
 
           {
-                (myJingles.length > 0) &&
-                !loading &&
-                <div>
-                  <div className="my-jingles-num">
-                    { totalJingles } Jingles
-                  </div>
-
-                  <div className="my-jingles-list">
-
-                    {
-                      myJingles.map(jingle =>
-                        (
-                          <SingleJingle key={jingle.jingleId} {...jingle} type="profile" />
-                        ))
-                    }
-                  </div>
+            (myJingles.length > 0) && !loading && (
+              <div>
+                <div className="my-jingles-num">
+                  { totalJingles } Jingles
                 </div>
-              }
+
+                <div className="my-jingles-list">
+                  {
+                    myJingles.map((jingle) => (
+                      <SingleJingle key={jingle.jingleId} {...jingle} type="profile" />
+                    ))
+                  }
+                </div>
+              </div>
+            )
+          }
 
           {
-                totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
-                <Pagination
-                  pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                  onPageChange={onMyJinglesPaginationChange}
-                />
-              }
+            totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
+              <Pagination
+                pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+                onPageChange={onMyJinglesPaginationChange}
+              />
+            )
+          }
         </div>
       </div>
     );
@@ -120,7 +122,7 @@ MyJingles.propTypes = {
   onMyJinglesPaginationChange: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   myJingles: state.profile.myJingles,
   totalJingles: state.profile.totalJingles,
   jinglesPerPage: state.profile.jinglesPerPage,
@@ -136,4 +138,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyJingles);
-

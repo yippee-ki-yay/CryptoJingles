@@ -11,9 +11,9 @@ export const playWithDelay = (group, settings, samplesPos = defaultSamplePos) =>
   let startCuts = settings.slice(10, 16);
   let endCuts = settings.slice(15, 21);
 
-  delays = delays.map(d => parseInt(d, 10) / 10);
-  startCuts = startCuts.map(d => parseInt(d, 10) / 10);
-  endCuts = endCuts.map(d => parseInt(d, 10) / 10);
+  delays = delays.map((d) => parseInt(d, 10) / 10);
+  startCuts = startCuts.map((d) => parseInt(d, 10) / 10);
+  endCuts = endCuts.map((d) => parseInt(d, 10) / 10);
 
   let longest = 0;
 
@@ -53,12 +53,12 @@ export const playWithDelay = (group, settings, samplesPos = defaultSamplePos) =>
 };
 
 export const createSettings = (props) => {
-  let delays = props.delays;
-  let cuts = props.cuts;
-  const volumes = props.volumes;
+  let { delays } = props;
+  let { cuts } = props;
+  const { volumes } = props;
 
-  delays = delays.map(d => d * 10);
-  cuts = cuts.map(c => c * 10);
+  delays = delays.map((d) => d * 10);
+  cuts = cuts.map((c) => c * 10);
 
   return [...volumes, ...delays, ...cuts];
 };

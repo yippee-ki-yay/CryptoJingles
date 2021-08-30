@@ -1,4 +1,15 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
-  "plugins": ["transform-runtime", "transform-object-rest-spread", "babel-plugin-transform-decorators-legacy"]
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-optional-chaining",
+    "syntax-dynamic-import",
+    [
+      "@babel/plugin-proposal-decorators",
+      { "legacy": true }
+    ]
+  ]
 }

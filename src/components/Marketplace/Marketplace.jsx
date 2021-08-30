@@ -60,21 +60,23 @@ class Marketplace extends Component {
             </div>
 
             <div className="songs-wrapper">
-              { jingles.map(jingle => (
+              { jingles.map((jingle) => (
                 <SingleJingle
                   type="marketplace"
                   key={jingle.jingleId}
                   {...jingle}
-                />)) }
+                />
+              )) }
             </div>
 
             {
-                  totalJingles > MARKETPLACE_JINGLES_PER_PAGE &&
-                  <Pagination
-                    pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                    onPageChange={onMarketplacePaginationChange}
-                  />
-                }
+              totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
+                <Pagination
+                  pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+                  onPageChange={onMarketplacePaginationChange}
+                />
+              )
+            }
           </div>
         </div>
       </div>
@@ -96,7 +98,7 @@ Marketplace.propTypes = {
   onMarketplacePaginationChange: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   totalJingles: state.marketplace.totalJingles,
   jinglesPerPage: state.marketplace.jinglesPerPage,
   jingles: state.marketplace.jingles,
@@ -111,4 +113,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Marketplace);
-

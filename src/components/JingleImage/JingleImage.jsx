@@ -64,7 +64,7 @@ class JingleImage extends Component {
     canvas.width = opts.width * pixelRatio;
     canvas.height = opts.height * pixelRatio;
 
-    this.canvasWrapper.style.background = opts.palette[0];
+    this.canvasWrapper.style.background = opts.palette[0]; // eslint-disable-line
 
     background.onload = () => {
       const renderer = createRenderer(opts);
@@ -100,4 +100,3 @@ JingleImage.propTypes = {
 };
 
 export default JingleImage;
-

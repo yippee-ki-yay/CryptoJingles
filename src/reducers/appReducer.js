@@ -11,21 +11,21 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   const { payload, type } = action;
   switch (type) {
-    case INIT_APP:
-      return {
-        ...state,
-        hasMM: payload.hasMM,
-        lockedMM: payload.lockedMM,
-        address: payload.address,
-        canLike: payload.canLike,
-      };
+  case INIT_APP:
+    return {
+      ...state,
+      hasMM: payload.hasMM,
+      lockedMM: payload.lockedMM,
+      address: payload.address,
+      canLike: payload.canLike,
+    };
 
-    case ADD_PENDING_TX:
-      return { ...state, pendingTxs: [...state.pendingTxs, payload] };
-    case REMOVE_PENDING_TX:
-      return { ...state, pendingTxs: payload };
+  case ADD_PENDING_TX:
+    return { ...state, pendingTxs: [...state.pendingTxs, payload] };
+  case REMOVE_PENDING_TX:
+    return { ...state, pendingTxs: payload };
 
-    default:
-      return state;
+  default:
+    return state;
   }
 };

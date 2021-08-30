@@ -1,46 +1,42 @@
-<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Crypto Jingles</title>
+<head>
+  <!--    Facebook sharing meta tags-->
+  <!--      <meta property="og:type" content="website"/>-->
+  <!--      <meta property="og:title" content="Pages title" />-->
+  <!--      <meta property="og:description" content="Pages description" />-->
+  <!--      <meta property="og:url" content="Pages url" />-->
+  <!--      <meta property="og:image" content=https://lmtlss/src/images/share-image.png" />-->
+  <!--      <meta property="og:site_name" content="Site name" />-->
+  <!--      <meta property="og:image:width" content="1079" />-->
+  <!--      <meta property="og:image:height" content="566" />-->
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <!-- Twitter sharing meta tags -->
+  <!--
+    <meta name="twitter:title" content="Pages title" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:description" content="Pages description" />
+    <meta name="twitter:image" content="absolute url to image">
+  -->
 
-    <!-- Start Single Page Apps for GitHub Pages -->
-    <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // https://github.com/rafrex/spa-github-pages
-      // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
-      // ----------------------------------------------------------------------
-      // This script checks to see if a redirect is present in the query string
-      // and converts it back into the correct url and adds it to the
-      // browser's history using window.history.replaceState(...),
-      // which won't cause the browser to attempt to load the new url.
-      // When the single page app is loaded further down in this file,
-      // the correct url will be waiting in the browser's history for
-      // the single page app to route accordingly.
-      (function(l) {
-        if (l.search) {
-          var q = {};
-          l.search.slice(1).split('&').forEach(function(v) {
-            var a = v.split('=');
-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-          });
-          if (q.p !== undefined) {
-            window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + (q.p || '') +
-              (q.q ? ('?' + q.q) : '') +
-              l.hash
-            );
-          }
-        }
-      }(window.location))
-    </script>
-    <!-- End Single Page Apps for GitHub Pages -->
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Crypto Jingles<</title>
+  <meta name="description" content="App description">
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="shortcut icon" type="image/x-icon" href="<%=htmlWebpackPlugin.files.favicon%>">
+
+  <% for (var chunk in htmlWebpackPlugin.files.css) { %>
+  <link rel="preload" href="<%= htmlWebpackPlugin.files.css[chunk] %>" as="style" onload="this.rel='stylesheet'">
+  <% } %>
+</head>
+
+<body>
+<div id="root"></div>
+
+<% for (var chunk in htmlWebpackPlugin.files.js) { %>
+<script src="<%= htmlWebpackPlugin.files.js[chunk] %>"></script>
+<% } %>
+</body>
 </html>

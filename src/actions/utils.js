@@ -6,13 +6,13 @@ import { LIKES_MESSAGE_TO_SIGN } from '../../config/universalConstants';
  * Converts price in wei to price in ETH without web3
  * @param price - ether
  */
-export const formatSalePrice = price => (String(parseFloat(price) / 1000000000000000000)).slice(0, 8);
+export const formatSalePrice = (price) => (String(parseFloat(price) / 1000000000000000000)).slice(0, 8);
 
 /**
  * Converts price in ethers to price in wei without web3
  * @param price - wei
  */
-export const formatToWei = price => (parseFloat(price) * 1000000000000000000);
+export const formatToWei = (price) => (parseFloat(price) * 1000000000000000000);
 
 /**
  * Prompts user to sign message in order to
@@ -22,23 +22,22 @@ export const formatToWei = price => (parseFloat(price) * 1000000000000000000);
  * @param {String} stringToSign
  * @return {Object}
  */
-const signString = (address, stringToSign) =>
-  new Promise((resolve, reject) => {
-    const msgParams = [{
-      type: 'string',
-      name: 'Message',
-      value: stringToSign,
-    }];
+const signString = (address, stringToSign) => new Promise((resolve, reject) => {
+  const msgParams = [{
+    type: 'string',
+    name: 'Message',
+    value: stringToSign,
+  }];
 
-    window.web3.givenProvider.sendAsync({
-      method: 'eth_signTypedData',
-      params: [msgParams, address],
-      from: address,
-    }, (err, data) => {
-      if (err || data.error) return reject(data.error);
-      return resolve(data.result);
-    });
+  window.web3.givenProvider.sendAsync({
+    method: 'eth_signTypedData',
+    params: [msgParams, address],
+    from: address,
+  }, (err, data) => {
+    if (err || data.error) return reject(data.error);
+    return resolve(data.result);
   });
+});
 
 /**
  * Gets signed message and sends it to the server
