@@ -1,0 +1,120 @@
+@import "partials/variables";
+@import "partials/text";
+
+.modal-backdrop {
+  position: absolute;
+  outline: none;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  transition: all 0.15s ease-out;
+  text-align: center;
+  visibility: hidden;
+
+  .modal-scroll-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE 10+ */
+
+    &::-webkit-scrollbar { /* WebKit */
+      width: 0;
+      height: 0;
+    }
+  }
+
+  .modal-wrapper {
+    width: 100%;
+    display: inline-block;
+
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+
+    max-height: 100%;
+    height: 100%;
+
+    padding: 0 15px;
+  }
+
+  &.open {
+    background: rgba(32, 41, 47, 0.9);
+    z-index: 1050;
+    visibility: visible;
+    cursor: default;
+
+    &.calendar-modal .modal1 {
+      padding-top: 0;
+    }
+
+    .modal1 {
+      transform: translateY(100px);
+      opacity: 1;
+
+      @include for-sm-screen {
+        transform: translateY(40px);
+      }
+    }
+  }
+
+  .modal1 {
+    margin-top: 0;
+    top: 0;
+    transform: translateY(0);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    padding: 0;
+
+    .modal-header {
+      background: transparent;
+      display: flex;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--modal-header-line);
+      color: var(--modal-header-title);
+      font-size: $font-size-title-small;
+      font-weight: $font-weight-extra-bold;
+      justify-content: space-between;
+      align-items: center;
+
+      .icon-close {
+        @include hover-transition;
+        cursor: pointer;
+
+        svg {
+          @include hover-transition;
+          path { stroke: var(--modal-header-close); }
+        }
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      background: var(--modal-box-bgd);
+
+      .modal-header { padding: 23px 30px; }
+
+      .modal-body-content { padding: 23px 30px 30px 30px; }
+    }
+  }
+
+  @include for-sm-screen {
+    .modal1 .modal-body .modal-header {
+      padding: 20px;
+
+      .modal-title { font-size: $font-size-extra-large; }
+    }
+  }
+}

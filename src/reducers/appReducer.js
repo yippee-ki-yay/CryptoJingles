@@ -6,6 +6,10 @@ const INITIAL_STATE = {
   hasMM: false,
   lockedMM: false,
   canLike: false,
+
+  connectingWallet: false,
+  connectingWalletAccountType: '',
+  connectingWalletProviderError: '',
 };
 
 export default (state = INITIAL_STATE, action) => {

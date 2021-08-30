@@ -1,0 +1,25 @@
+$browser: #323232;
+$mathWallet: #323232;
+$safePal: #323232;
+$tokenPocket: lighten(#2485F2, 10);
+$metaMask: #F89B55;
+$status: #4360DF;
+$imToken: #068EBD;
+$trust: #3476BB;
+$coinbase: #1253F5;
+$tokenary: #2C7CF5;
+$opera: #EA1227;
+
+$provider-colors: (
+  MetaMask: $metaMask,
+  browser: $browser,
+  Status: $status,
+  imToken: $imToken,
+  Trust: $trust,
+  Coinbase: $coinbase,
+  Tokenary: $tokenary,
+  Opera: $opera,
+  MathWallet: $mathWallet,
+  SafePal: $safePal,
+  TokenPocket: $tokenPocket,
+);

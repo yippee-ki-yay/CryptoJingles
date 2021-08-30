@@ -1,0 +1,161 @@
+@import "partials/text";
+@import "partials/variables";
+
+.no-wallet-provider-wrapper {
+
+  .browsers-wrapper {
+    .supported-no-provider-wrapper {
+      padding: 20px;
+
+      .supported-title {
+        font-size: $font-size-extra-large;
+        margin-bottom: 20px;
+      }
+
+      .metamask-link {
+        color: var(--color-link);;
+        @include hover-transition;
+        word-break: break-all;
+
+        &:hover { color: var(--color-link-hover); }
+      }
+    }
+
+    .not-supported-no-provider-wrapper {
+      padding: 20px;
+
+      .not-supported-item {
+        .not-supported-title { font-size: $font-size-extra-large; }
+
+        .browser-list {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          ul { list-style: none; }
+
+          li {
+            display: flex;
+            align-items: center;
+
+            &:not(:last-child) { margin-bottom: 20px; }
+
+            &::before {
+              content: "\2022";
+              color: var(--color-link);
+              font-size: 30px;
+              font-weight: bold;
+              width: 1em;
+              margin-left: -1em;
+              position: relative;
+              bottom: -2px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .suggestions-container {
+
+    .title {
+      margin-bottom: 15px;
+      color: var(--color-title);
+      font-size: $font-size-medium;
+      font-weight: $font-weight-regular;
+      text-align: center;
+
+      .title-item:first-child { margin-bottom: 15px; }
+    }
+
+    .wallet-wrapper {
+
+      &:not(:last-child) { margin-bottom: 30px; }
+
+      .icon-name-wrapper {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--color-main);
+        margin-bottom: 10px;
+        font-size: $font-size-extra-large;
+        padding-bottom: 5px;
+        color: var(--modal-white);
+
+        svg {
+          margin-right: 10px;
+          width: 33px;
+          height: 33px;
+
+          &.mm-icon {
+            width: 32px;
+            height: 33px;
+          }
+        }
+      }
+
+      ul.options-wrapper {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      li.option {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-bottom: 20px;
+        }
+
+        &::before {
+          content: "\2022";
+          color: var(--color-link);
+          font-size: 30px;
+          font-weight: bold;
+          width: 30px;
+          top: 1px;
+          position: relative;
+        }
+
+        .option-link {
+          color: var(--color-link);
+          font-size: $font-size-regular;
+          text-decoration: underline;
+          width: 100%;
+          text-align: left;
+          max-width: 100%;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          @include hover-transition;
+
+          &:hover { color: var(--color-link-hover); }
+        }
+      }
+    }
+  }
+
+  @include for-sm-screen {
+    .suggestions-container .title {
+      padding: 10px;
+      font-size: $font-size-medium;
+    }
+
+    .suggestions-container .wallet-wrapper {
+      padding: 0 10px;
+
+      .options-wrapper {
+        margin: 0;
+      }
+    }
+
+    .suggestions-container .wallet-wrapper li.option::before {
+      width: 5px;
+      margin-right: 20px;
+    }
+
+    .suggestions-container .wallet-wrapper li.option:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
+}

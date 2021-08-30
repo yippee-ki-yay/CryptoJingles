@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Header from './Header/Header';
 import ScrollToTop from './ScrollToTop/ScrollToTop';
 import Page404 from './Page404/Page404';
+import ModalRoot from './Modals/ModalRoot';
 
 // Layouts
 const HomeLazy = lazy(() => import('./Home/Home'));
@@ -31,6 +32,8 @@ const Routes = () => (
         </ScrollToTop>
       </Suspense>
     </div>
+
+    <ModalRoot />
   </div>
 );
 

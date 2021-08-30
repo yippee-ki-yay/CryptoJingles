@@ -1,0 +1,42 @@
+@import "partials/colors";
+@import "partials/text";
+@import "partials/variables";
+
+.connect-wallet-buttons-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .wallet-wrapper {
+    padding: 20px 30px;
+    background: var(--modal-provider-bgd);
+    border-radius: 5px;
+    cursor: not-allowed;
+    max-width: 100%;
+    max-height: 80px;
+    min-height: 80px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid transparent;
+    @include hover-transition;
+
+    &:not(.connecting) {
+      cursor: pointer;
+
+      &:hover { @include inPage-provider-hover-border(border-color); }
+    }
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .wallet-name {
+      font-weight: $font-weight-bold;
+      font-size: $font-size-large;
+      color: var(--modal-white);
+    }
+  }
+}

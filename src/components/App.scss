@@ -1,10 +1,21 @@
 body {
     background: white;
     color: black;
+  padding: 0;
 }
 
 div {
     box-sizing: border-box;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  @media only screen and (max-width: 850px) {
+    padding-top: 60px;
+  }
 }
 
 .header-wrapper {

@@ -1,0 +1,82 @@
+$box-border-radius: 15px;
+$box-box-shadow: 0 0 15px var(--box-item-box-shadow);
+$box-padding: 20px 25px 25px 25px;
+
+@mixin for-sm-iphone {
+  @media only screen and (max-width: 320px) { @content; }
+}
+
+@mixin for-sm-phone {
+  @media only screen and (max-width: 360px) { @content; }
+}
+
+@mixin for-iphone {
+  @media only screen and (max-width: 375px) { @content; }
+}
+
+@mixin for-phone {
+  @media only screen and (max-width: 414px) { @content; }
+}
+
+@mixin for-sm-screen {
+  @media only screen and (max-width: 500px) { @content; }
+}
+
+@mixin for-ipad {
+  @media only screen and (max-width: 1000px) { @content; }
+}
+
+@mixin hover-transition {
+  transition: all 420ms cubic-bezier(.165,.84,.44,1);
+}
+
+@mixin hello($duration) {
+  @keyframes hello {
+    0% {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
+
+  animation: hello $duration;
+}
+
+@function vh($quantity) {
+  @return calc(var(--vh, 1vh) * #{$quantity});
+}
+
+@mixin rotate() {
+  @keyframes rotating {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(1deg); }
+  }
+
+  animation: rotating 1s linear infinite;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-items: center;
+  white-space: nowrap;
+}
+
+@mixin inPage-provider-hover-border($name) {
+  @each $selectorName, $actualSelector in $provider-colors {
+    &.#{$selectorName} {
+      #{$name}: $actualSelector;
+
+      &:hover { border: 1px solid lighten($actualSelector, 10); }
+    }
+  }
+}

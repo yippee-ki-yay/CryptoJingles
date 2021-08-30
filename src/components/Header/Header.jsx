@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Logo from '../Decorative/Logo';
 import PendingTxDropdown from '../PendingTxDropdown/PendingTxDropdown';
+import ConnectWalletButton from './ConnectWalletButton/ConnectWalletButton';
 
 const Header = ({ lockedMM, hasMM, address }) => (
   <header className="navbar navbar-default navbar-fixed-top header-wrapper">
@@ -33,6 +34,10 @@ const Header = ({ lockedMM, hasMM, address }) => (
               hasMM && !lockedMM &&
               <Link to={`/profile/${address}`}>Profile</Link>
             }
+          </li>
+
+          <li>
+            <ConnectWalletButton />
           </li>
         </ul>
 

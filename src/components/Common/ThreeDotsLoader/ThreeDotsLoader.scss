@@ -1,0 +1,101 @@
+$three-dots-loader-dot-size: 5px;
+$three-dots-loader-grow-factor: 1.2;
+$three-dots-loader-grow-size: ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) - $three-dots-loader-dot-size;
+$three-dots-loader-color: '#fff';
+$three-dots-loader-duration: 1s;
+
+$three-dots-loader-dot-size-big: 15px;
+$three-dots-loader-grow-size-big: ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) - $three-dots-loader-dot-size-big;
+
+.three-dots-loader-wrapper {
+  display: flex;
+  align-items: center;
+
+  &.big .c-three-dots-loader {
+    width: $three-dots-loader-dot-size-big;
+    height: $three-dots-loader-dot-size-big;
+    background-color: $three-dots-loader-color;
+    margin-right: $three-dots-loader-dot-size-big * 2 * $three-dots-loader-grow-factor;
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+    animation: three-dots-loader-animation-big $three-dots-loader-duration infinite;
+  }
+
+  .c-three-dots-loader {
+    display: inline-block;
+    width: $three-dots-loader-dot-size;
+    height: $three-dots-loader-dot-size;
+    background-color: $three-dots-loader-color;
+    margin-right: $three-dots-loader-dot-size * 2 * $three-dots-loader-grow-factor;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+    animation: three-dots-loader-animation $three-dots-loader-duration infinite;
+  }
+}
+
+@keyframes three-dots-loader-animation {
+  20% {
+    box-shadow:
+      0 0 0 $three-dots-loader-grow-size $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+  }
+
+  40% {
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) 0 0 $three-dots-loader-grow-size $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+  }
+
+  60% {
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor * 2) 0 0 $three-dots-loader-grow-size $three-dots-loader-color;
+  }
+
+
+  0%, 80%, 100% {
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+  }
+}
+
+@keyframes three-dots-loader-animation-big {
+  20% {
+    box-shadow:
+      0 0 0 $three-dots-loader-grow-size-big $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+  }
+
+  40% {
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) 0 0 $three-dots-loader-grow-size-big $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+  }
+
+  60% {
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor * 2) 0 0 $three-dots-loader-grow-size-big $three-dots-loader-color;
+  }
+
+
+  0%, 80%, 100% {
+    box-shadow:
+      0 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) 0 0 0 $three-dots-loader-color,
+        ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor * 2) 0 0 0 $three-dots-loader-color;
+  }
+}

@@ -1,0 +1,23 @@
+@import "partials/text";
+@import "partials/variables";
+
+.wallet-modal-no-account-wrapper {
+
+  .modal-body .modal-body-content .new-to-eth {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-regular;
+    color: var(--modal-gray);
+    margin-top: 30px;
+  }
+
+  @include for-sm-screen {
+    .modal-body {
+
+      .header-content {
+        justify-content: center;
+
+        .icon-wrapper { display: none; }
+      }
+    }
+  }
+}
