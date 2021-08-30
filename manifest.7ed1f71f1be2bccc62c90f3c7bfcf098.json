@@ -1,0 +1,42 @@
+{
+  "icons": [
+    {
+      "src": "/icon_512x512.d63fb4a99846008a53b100d47a215999.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_384x384.92d85b672d07c0367318b19cb48503e6.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_256x256.d284d23e71a2cb1af7d57ef98fbaaf2d.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_192x192.87736d266c1e0835e2fd4ff859e8f46b.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_128x128.7520acd5104c6f240dea75c68137052f.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon_96x96.4a3ee81db625218f8134fc9b14c0d170.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "LMTLSS",
+  "short_name": "LMTLSS",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "LMTLSS",
+  "background_color": "#7A30F5",
+  "theme_color": "#7A30F5"
+}
