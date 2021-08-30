@@ -272,7 +272,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 67:
     return {
-      type: COMPOSE, name: 'Lion', source: 'https://cryptojingles.app/Ethereum1.wav', rarity: 1, length: 15,
+      type: COMPOSE, name: 'Lion', source: 'https://cryptojingles.app/128BMP_Lion.wav', rarity: 1, length: 15,
     };
   case 68:
     return {
