@@ -54,11 +54,7 @@ class Compose extends Component {
   }
 
   async UNSAFE_componentWillMount() { // eslint-disable-line
-    if (!this.props.hasMM || this.props.lockedMM) {
-      this.setState({ loading: false });
-      return;
-    }
-
+    console.log('mySamples', this.props.address);
     const mySamples = await getSamples(this.props.address);
 
     this.setState({ mySamples, loading: false });
@@ -85,9 +81,9 @@ class Compose extends Component {
    * @param {Object} item
    */
   handleDrop(index, item) {
-    this.setState(update(this.state, { // eslint-disable-line
+    this.setState((preState) => update(preState, { // eslint-disable-line
       sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
-      droppedBoxIds: item.id ? { $push: [item.id] } : {},
+      droppedBoxIds: { $push: [item.id] },
     }));
 
     this.setState({ updatedSlots: true });
@@ -149,7 +145,10 @@ class Compose extends Component {
     const id = guid();
 
     try {
-      const selectedSongSources = this.state.mySamples.filter(({ id }) => this.state.droppedBoxIds.find((selectedId) => id === selectedId));
+      const selectedSongSources = this.state.mySamples.filter(({ id }) => {
+        const res = this.state.droppedBoxIds.find((selectedId) => id === selectedId);
+        return res !== undefined;
+      });
 
       const jingleIds = selectedSongSources.map((s) => parseInt(s.id, 10));
 
@@ -244,6 +243,8 @@ class Compose extends Component {
 
   render() {
     const { hasMM, lockedMM } = this.props;
+
+    console.log('droppedBoxIds', this.state.droppedBoxIds);
 
     return (
       <DndProvider backend={HTML5Backend}>

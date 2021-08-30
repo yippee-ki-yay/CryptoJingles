@@ -39,14 +39,14 @@ class JinglePage extends Component {
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
-    this.loadPage(this.props.params.id);
+    this.loadPage(this.props.match.params.id);
   }
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.params.id === this.props.params.id) return;
+    if (newProps.match.params.id === this.props.match.params.id) return;
 
-    this.loadPage(newProps.params.id);
+    this.loadPage(newProps.match.params.id);
   }
 
   componentWillUnmount() { this.stopSound(); }
@@ -329,7 +329,7 @@ class JinglePage extends Component {
 }
 
 JinglePage.propTypes = {
-  params: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
   canLike: PropTypes.bool.isRequired,

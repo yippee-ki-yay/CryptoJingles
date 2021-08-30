@@ -18,19 +18,19 @@ import profilePlaceholder from './profile-placeholder.png';
 class Profile extends Component {
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
-    if (!this.isValidProfile(this.props.params.address)) return;
+    if (!this.isValidProfile(this.props.match.params.address)) return;
 
-    this.props.setProfileAddress(this.props.params.address);
+    this.props.setProfileAddress(this.props.match.params.address);
     this.props.getAuthor();
     this.props.checkIfOwnerProfile();
   }
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.params.address === this.props.params.address) return;
-    if (!this.isValidProfile(newProps.params.address)) return;
+    if (newProps.match.params.address === this.props.match.params.address) return;
+    if (!this.isValidProfile(newProps.match.params.address)) return;
 
-    this.props.setProfileAddress(newProps.params.address);
+    this.props.setProfileAddress(newProps.match.params.address);
     this.props.getAuthor();
     this.props.checkIfOwnerProfile();
   }
@@ -45,7 +45,7 @@ class Profile extends Component {
 
   render() {
     const {
-      tabs, isOwner, params, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile,
+      tabs, isOwner, match: { params }, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile,
     } = this.props;
     const { setActiveTab, toggleEditAuthor, onEditAuthorChange } = this.props;
     const activeTab = tabs.find((_tab) => _tab.active).value;
@@ -141,8 +141,8 @@ class Profile extends Component {
                 </div>
               </div>
 
-              { activeTab === tabs[0].value && <MySamples address={this.props.params.address} /> }
-              { activeTab === tabs[1].value && <MyJingles address={this.props.params.address} /> }
+              { activeTab === tabs[0].value && <MySamples address={this.props.match.params.address} /> }
+              { activeTab === tabs[1].value && <MyJingles address={this.props.match.params.address} /> }
               { activeTab === tabs[2].value && <MySongs /> }
               { activeTab === tabs[3].value && <MyAlbums /> }
             </div>
@@ -168,7 +168,7 @@ Profile.propTypes = {
   author: PropTypes.string.isRequired,
   authorEdit: PropTypes.string.isRequired,
   isValidProfile: PropTypes.bool.isRequired,
-  params: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   setActiveTab: PropTypes.func.isRequired,
   checkIfOwnerProfile: PropTypes.func.isRequired,
   toggleEditAuthor: PropTypes.func.isRequired,

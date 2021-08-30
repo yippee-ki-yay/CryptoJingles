@@ -151,7 +151,7 @@ class Home extends Component {
           or
           <a
             className="discord"
-            href="https://discord.gg/F6PW2Tx"
+            href="https://discord.gg/AEHvH7Bv"
             rel="noopener noreferrer"
           >
             Discord

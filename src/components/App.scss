@@ -1,3 +1,7 @@
+@import "partials/colors";
+@import "partials/text";
+@import "partials/variables";
+
 body {
     background: white;
     color: black;
@@ -12,6 +16,7 @@ div {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 80px;
 
   @media only screen and (max-width: 850px) {
     padding-top: 60px;
@@ -68,4 +73,151 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 
 .children-wrapper {
     margin-top: 10px;
+}
+
+.marketplace-wrapper {
+  background: white;
+  display: flex;
+  margin-top: 20px;
+}
+
+.marketplace-play-wrapper {
+  height: 200px;
+  font-size: 40px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.marketplace-wrapper .songs-wrapper {
+  padding: 10px;
+  padding-left: 0;
+  width: 100%;
+  justify-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.songs-count {
+  margin: 20px 0 5px 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.single-song {
+  display: flex;
+  position:relative;
+  flex-direction: column;
+  width: 200px;
+  margin: 10px 10px 5px 10px;
+}
+
+.single-song #load, .single-song  .loading-icon-wrapper {
+  width: 45px;
+}
+
+.single-song #load #loading-inner {
+  width: 43px;
+  stroke: #fff;
+}
+
+.single-song .header-label {
+  position: absolute;
+  top: 10px;
+  left: 25px;
+  z-index: 10;
+  background: black;
+  width: 150px;
+  text-align: center;
+  padding: 5px;
+  font-size: 14px;
+  color: white;
+}
+
+.single-song .header-label span {
+  margin-right: 5px;
+}
+
+.single-song .overlay {
+  position: absolute;
+  transition: 0.2s ease-in;
+  display: flex;
+  visibility: hidden;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  height: 200px;
+  width:100%;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.overlay .play, .overlay .open, .overlay .stop {
+  color: white;
+  cursor: pointer;
+  font-size: 45px;
+}
+
+.jingle-image-container {
+  position: relative;
+  z-index: 9;
+  width:100%;
+  vertical-align:top;
+}
+
+.jingle-image-container .jingle-image-wrapper {
+  height: 200px;
+}
+
+.single-song .jingle-image-container:hover + .overlay, .single-song .overlay:hover {
+  visibility: visible;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/*img:after*/
+/*opacity: 1;*/
+
+.marketplace-wrapper .sidebar {
+  border-right: 1px solid #d1d1d1;
+  color: black;
+  padding: 20px;
+  padding-left: 0;
+  flex: 1;
+  flex-basis: 240px;
+  min-width: 240px;
+  max-width: 240px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+.button {
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  color: var(--button-white);
+  font-size: $font-size-medium;
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.251);
+  cursor: pointer;
+  @include hover-transition;
+
+  &:hover { opacity: 0.7; }
+
+  &.disconnect { background: var(--button-red); }
+}
+
+
+.sort-wrapper:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.sort-wrapper .sort-wrapper-label {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.marketplace-page-wrapper .pagination-wrapper {
+  margin-left: 15px;
 }

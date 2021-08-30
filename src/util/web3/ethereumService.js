@@ -1,4 +1,5 @@
 import { getJingleMetadata } from '../../constants/getMockData';
+import { wait } from '../../services/utilsService';
 
 export const parseSamples = (samples) => {
   const mySamples = [];
@@ -18,6 +19,7 @@ export const parseSamples = (samples) => {
 };
 
 export const getSamples = async (address) => {
+  await wait(500);
   const data = await window.samplesContract.getAllSamplesForOwner(address);
   return parseSamples(data);
 };

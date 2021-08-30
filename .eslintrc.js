@@ -74,7 +74,7 @@ module.exports = {
         config: path.resolve(__dirname, './config/webpack.dev.config.js'),
         alias: {
           map: [
-            // ['translate', path.resolve(__dirname, './src/services/translate/translate.jsx')],
+            ['translate', path.resolve(__dirname, './src/services/translate/translate.jsx')],
           ],
         },
       },

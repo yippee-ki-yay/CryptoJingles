@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { normalLogin } from 'redux/actions/walletActions';
+import { normalLogin } from 'redux/actions/walletActions';
 import clsx from 'clsx';
 import { getSupportedWallets } from '../../../constants/wallet';
-
 import ThreeDotsLoader from '../../Common/ThreeDotsLoader/TreeDotsLoader';
+
 import './ConnectWalletWithProvider.scss';
 
 const ConnectWalletWithProvider = ({ normalLogin, connectingWallet, connectingWalletAccountType }) => {
@@ -43,6 +43,6 @@ const mapStateToProps = ({ app }) => ({
   connectingWalletAccountType: app.connectingWalletAccountType,
 });
 
-const mapDispatchToProps = { normalLogin: () => () => {} };
+const mapDispatchToProps = { normalLogin };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectWalletWithProvider);

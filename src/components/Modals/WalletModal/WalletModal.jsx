@@ -31,13 +31,13 @@ class WalletModal extends React.Component {
   }
 
   render() {
-    const { closeModal } = this.props;
+    const { closeModal, address } = this.props;
     const { showAccount } = this.state;
 
     return (
       <div className="wallet-modal-wrapper">
         { !showAccount && (<WalletModalNoAccount closeModal={closeModal} />) }
-        { showAccount && (<WalletModalConnected closeModal={closeModal} />) }
+        { showAccount && address && (<WalletModalConnected closeModal={closeModal} />) }
       </div>
     );
   }

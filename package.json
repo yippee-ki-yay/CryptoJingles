@@ -7,8 +7,8 @@
     "dev-old": "webpack-dev-server --history-api-fallback --compress --config ./config/webpack.config.dev.js",
     "dev-http": "NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=development webpack serve --mode=development --compress --hot --config ./config/webpack.dev.config.js",
     "dev": "NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=development webpack serve --https --cert localhost.pem --key localhost-key.pem --mode=development --compress --hot --config ./config/webpack.dev.config.js",
-    "prod": "NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=production webpack --mode=production --config ./build/webpack.prod.config.js",
-    "prod-serve": "NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=production webpack serve --https --cert localhost.pem --key localhost-key.pem --mode=production --host 0.0.0.0 --compress --hot --config ./build/webpack.prod.config.js",
+    "prod": "NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=production webpack --mode=production --config ./config/webpack.prod.config.js",
+    "prod-serve": "NODE_OPTIONS=--max_old_space_size=4096 NODE_ENV=production webpack serve --host 0.0.0.0 --history-api-fallback --compress --hot --config ./config/webpack.prod.config.js",
     "start-server": "node server/index.js"
   },
   "devDependencies": {
@@ -64,6 +64,7 @@
     "lerp": "^1.0.3",
     "map-limit": "^0.0.1",
     "new-array": "^1.0.0",
+    "react-intl": "^5.8.9",
     "node-sass": "^6.0.1",
     "pad-left": "^2.1.0",
     "pizzicato": "^0.6.4",
