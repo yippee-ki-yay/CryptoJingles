@@ -52,7 +52,7 @@ const fileLoader = {
 };
 
 const devServer =  {
-    stats: 'minimal',
+  stats: 'minimal',
     public: 'cryptojingles.app',
     contentBase: './dist',
     open: true,
