@@ -272,7 +272,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 67:
     return {
-      type: COMPOSE, name: 'Lion', source: 'https://cryptojingles.mypinata.cloud/ipfs/Qme3mWDQ1Etn9KwHs9um9aHQDLd65ZT3ct6SMerhh7cBk3', rarity: 1, length: 15,
+      type: COMPOSE, name: 'Lion', source: 'https://cryptojingles.app/Ethereum1.wav', rarity: 1, length: 15,
     };
   case 68:
     return {
