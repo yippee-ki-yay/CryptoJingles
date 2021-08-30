@@ -216,23 +216,7 @@ module.exports.removeFromSale = async (jingleId, buyer) => {
     jingle.onSale = false;
     jingle.price = 0;
     jingle.buyer = buyer;
-
-    await jingle.save();
-
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-};
-
-module.exports.removeFromSale = async (jingleId, buyer) => {
-  try {
-    const jingle = await Jingle.findOne({ jingleId });
-
-    jingle.onSale = false;
-    jingle.price = 0;
-    jingle.buyer = buyer;
+    jingle.owner = buyer;
 
     await jingle.save();
 

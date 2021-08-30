@@ -24,8 +24,10 @@ const jingleCtrl = require('./controllers/jingles.controller');
 const cryptoJinglesAddress = "0xdea4c5c25218994d0468515195622e25820d27c7";
 const cryptoJingles = new web3.eth.Contract(cryptoJinglesAbi.abi, cryptoJinglesAddress);
 
+const startBlock = '13121891';
+
 async function update() {
-  jinglesContract.getPastEvents('Composed', { fromBlock: '5025886', toBlock: 'latest' }, async (err, events) => {
+  jinglesContract.getPastEvents('Composed', { fromBlock: startBlock, toBlock: 'latest' }, async (err, events) => {
 
       const mined = events;
 
@@ -70,7 +72,7 @@ async function update() {
     });
 
 
-    cryptoJingles.getPastEvents('Purchased', { fromBlock: '5025886', toBlock: 'latest' }, async (err, ress) => {
+    cryptoJingles.getPastEvents('Purchased', { fromBlock: startBlock, toBlock: 'latest' }, async (err, ress) => {
 
       ress.forEach(async (res) => {
         const address = res.returnValues.user;
@@ -84,7 +86,7 @@ async function update() {
 
   const marketplace = {};
 
-  marketplaceContract.getPastEvents('allEvents', { fromBlock: '5025886', toBlock: 'latest' }, async (err, events) => {
+  marketplaceContract.getPastEvents('allEvents', { fromBlock: startBlock, toBlock: 'latest' }, async (err, events) => {
     console.log(err, events);
     addMarketplaceEvents(events, marketplace);
 
@@ -170,7 +172,7 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-//setInterval(async () => {
-update();
-//}, 1000*60*3);
+setInterval(async () => {
+  update();
+}, 1000*60*2);
 })();
