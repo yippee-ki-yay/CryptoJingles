@@ -7,8 +7,19 @@ const assign = require('object-assign');
 const jsdom = require("jsdom");
 const tar = require("tar");
 const GIFEncoder = require('gifencoder');
+const sharp = require('sharp');
 const { createCanvas } = require('canvas');
+const Whammy = require('whammy');
 const pngFileStream = require('png-file-stream');
+
+function canvasToWebp(canvas, callback) {
+
+  sharp(canvas.toBuffer()).toFormat(sharp.format.webp).toBuffer(function(e, webpbuffer) {
+    var webpDataURL = 'data:image/webp;base64,' + webpbuffer.toString('base64');
+    callback(webpDataURL);
+  });
+
+}
 
 const { JSDOM } = jsdom;
 
@@ -61,13 +72,15 @@ module.exports = function (opt, cb) {
       }));
 
       // let capturer = new window.CCapture({ format: 'png', name: filename });
-      const encoder = new GIFEncoder(250, 250);
-      encoder.createReadStream().pipe(fs.createWriteStream('myanimated.gif'));
+      // const encoder = new GIFEncoder(250, 250);
+      // encoder.createReadStream().pipe(fs.createWriteStream('myanimated.gif'));
 
-      encoder.start();
-      encoder.setRepeat(-1);   // 0 for repeat, -1 for no-repeat
-      encoder.setDelay(0.1);  // frame delay in ms
-      encoder.setQuality(20); // image quality. 10 is default.
+      var encoder = new Whammy.Video(50, 10);
+
+      // encoder.start();
+      // encoder.setRepeat(-1);   // 0 for repeat, -1 for no-repeat
+      // encoder.setDelay(0.1);  // frame delay in ms
+      // encoder.setQuality(20); // image quality. 10 is default.
 
       // capturer.start();
 
@@ -85,12 +98,22 @@ module.exports = function (opt, cb) {
       for (let i = 0; i < steps + 1; i++) {
         const newContext = renderer.step(interval);
         // _capturer.capture(canvas);
-        _encoder.addFrame(newContext);
+
+        canvasToWebp(newContext.canvas, (webmData) => {
+          // console.log('webmData', webmData);
+          _encoder.add(webmData);
+        });
 
         frame++;
       }
 
-      _encoder.finish();
+      setTimeout(() => {
+        const output = _encoder.compile(true);
+        console.log('output', output);
+        fs.writeFileSync("./file.webm", output, { encoding: "binary" });
+      }, 4000);
+
+      // _encoder.finish();
       // _capturer.stop();
 
       // Now clearing the interval, stopping capturer
