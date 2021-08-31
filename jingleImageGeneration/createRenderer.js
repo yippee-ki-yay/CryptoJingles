@@ -92,6 +92,8 @@ module.exports = function createRenderer(opt) {
         resetParticle(p);
       }
     });
+
+    return ctx;
   }
 
   function resetParticle(p) {

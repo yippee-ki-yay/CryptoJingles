@@ -12,6 +12,7 @@ const Header = ({ address }) => {
   const [checked, setChecked] = useState(false);
 
   const changeCheckedCallback = useCallback(() => { setChecked(!checked); }, [checked, setChecked]);
+  const onChangeCallback = useCallback(() => {}, []);
 
   return (
     <header className="header-wrapper">
@@ -21,7 +22,7 @@ const Header = ({ address }) => {
         </Link>
 
         <div className="mobile-wrapper">
-          <input className="menu-btn" type="checkbox" id="menu-btn" checked={checked} />
+          <input className="menu-btn" type="checkbox" id="menu-btn" checked={checked} onChange={onChangeCallback} />
           <label className="menu-icon" htmlFor="menu-btn" onClick={changeCheckedCallback}><span className="navicon" /></label>
 
           <div className="links-container">
