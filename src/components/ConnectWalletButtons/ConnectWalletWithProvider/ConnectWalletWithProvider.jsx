@@ -24,7 +24,7 @@ const ConnectWalletWithProvider = ({ normalLogin, connectingWallet, connectingWa
             onClick={() => { normalLogin(connectionType); }}
           >
             <div className="wallet-name">{label}</div>
-            { connectingWallet ? <ThreeDotsLoader /> : <Icon /> }
+            { connectingWallet ? <ThreeDotsLoader white big /> : <Icon /> }
           </div>
         ))
       }

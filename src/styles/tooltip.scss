@@ -2,7 +2,7 @@
 @import "partials/variables";
 
 .tippy-touch {
-  cursor: pointer !important
+  cursor: pointer !important;
 }
 
 .tippy-notransition {
@@ -618,8 +618,7 @@
 .tippy-tooltip [x-circle] {
   position: absolute;
   will-change: transform;
-    background-color: #333;
-  //border-radius: 50%;
+  background-color: #333;
   width: 130%;
   width: calc(110% + 2rem);
   left: 50%;
@@ -647,7 +646,7 @@
   font-weight: $font-weight-regular;
   line-height: 14px;
   font-size: $font-size-small;
-  max-width: 165px;
+  max-width: 350px;
   text-align: center;
   white-space: pre-line;
   color: var(--tooltip-text);
@@ -680,11 +679,15 @@
 
 div[data-tooltipped] {
   cursor: pointer;
+  display: flex;
+
+  &.copy-disabled { cursor: default; }
+
   > * {
     vertical-align: bottom;
   }
 }
 
 .tippy-tooltip[data-animatefill] {
-  //background: var(--tooltip-bg-before);
+  // background: var(--tooltip-bg-before);
 }

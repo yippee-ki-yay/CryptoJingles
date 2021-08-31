@@ -1,10 +1,10 @@
 $three-dots-loader-dot-size: 5px;
 $three-dots-loader-grow-factor: 1.2;
 $three-dots-loader-grow-size: ($three-dots-loader-dot-size * $three-dots-loader-grow-factor) - $three-dots-loader-dot-size;
-$three-dots-loader-color: '#fff';
+$three-dots-loader-color: #000;
 $three-dots-loader-duration: 1s;
 
-$three-dots-loader-dot-size-big: 15px;
+$three-dots-loader-dot-size-big: 10px;
 $three-dots-loader-grow-size-big: ($three-dots-loader-dot-size-big * $three-dots-loader-grow-factor) - $three-dots-loader-dot-size-big;
 
 .three-dots-loader-wrapper {

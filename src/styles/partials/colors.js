@@ -59,7 +59,8 @@ export default {
     '--header-navicon-bg': PALLET.white,
     '--header-navicon-hover': PALLET.blackHover,
     '--header-links-mobile-bg': PALLET.white,
-    // '--header-bg': PALLET.gray,
+
+    '--box-item-box-shadow': PALLET.blackLight,
 
     // OLD
 
@@ -105,7 +106,6 @@ export default {
     '--box-item-bg': PALLET.darkGray,
     '--box-item-title': PALLET.brown,
     '--box-item-value': PALLET.white,
-    '--box-item-box-shadow': PALLET.blackLight,
     '--box-item-value-err': PALLET.red,
     '--box-item-small-num': PALLET.gray,
     '--box-item-small-num-error': PALLET.red,
