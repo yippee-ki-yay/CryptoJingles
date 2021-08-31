@@ -23,9 +23,27 @@ div {
   }
 }
 
-.header-wrapper {
-    background: white;
-    padding-top: 10px;
+a {
+  color: var(--link);
+  text-decoration: none;
+  @include hover-transition;
+
+  &:focus {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  &:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+  }
+}
+
+.width-container {
+  max-width: 1170px;
+  width: 100%;
+  padding: 0 15px;
+  margin: 0 auto;
 }
 
 .navbar-default .navbar-nav > li > a,
@@ -199,13 +217,15 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
   border: none;
   width: 100%;
   border-radius: 5px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.251);
   cursor: pointer;
   @include hover-transition;
 
-  &:hover { opacity: 0.7; }
-
-  &.disconnect { background: var(--button-red); }
+  &.disconnect {
+    background: var(--button-red);
+    &:hover {
+      background: var(--button-red-hover);
+    }
+  }
 }
 
 

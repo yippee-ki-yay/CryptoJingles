@@ -8,6 +8,12 @@
     font-weight: $font-weight-regular;
     color: var(--modal-gray);
     margin-top: 30px;
+
+    a {
+      color: var(--wallet-connect-modal-new-to-eth-link);
+
+      &:hover { color: var(--wallet-connect-modal-new-to-eth-link-hover); }
+    }
   }
 
   @include for-sm-screen {

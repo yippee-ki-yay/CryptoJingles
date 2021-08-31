@@ -4,7 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const { resolve, entry, nodePolyfill, parseVideo, fileLoader, devServer } = require('./webpack.shared');
+const Dotenv = require('dotenv-webpack');
+const { resolve, entry, nodePolyfill, parseVideo, fileLoader, createDevServer } = require('./webpack.shared');
+
+const devServer = createDevServer(false);
+
+console.log('path.resolve(\'./.env.development\')', path.resolve('./.env.development'));
 
 module.exports = {
   entry,
@@ -91,5 +96,7 @@ module.exports = {
       template: './src/index.html',
       filename: 'index.html'
     }),
+
+    new Dotenv({ path: path.resolve('./.env.development') }),
   ]
 };

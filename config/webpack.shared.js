@@ -51,14 +51,19 @@ const fileLoader = {
   ]
 };
 
-const devServer =  {
-  stats: 'minimal',
-    public: 'cryptojingles.app',
+const createDevServer = (prod = true) => {
+  const base = {
+    stats: 'minimal',
     contentBase: './dist',
     open: true,
     historyApiFallback: {
-    disableDotRule: true,
-  },
+      disableDotRule: true,
+    },
+  };
+
+  if (prod) base.public = 'cryptojingles.app';
+
+  return base;
 };
 
-module.exports = { appManifest, resolve, entry, parseVideo, nodePolyfill, fileLoader, devServer }
+module.exports = { appManifest, resolve, entry, parseVideo, nodePolyfill, fileLoader, createDevServer }

@@ -1,4 +1,4 @@
-module.exports = function (randFunc) {
+module.exports = function (randFunc) { // eslint-disable-line
   return function random(min, max) {
     if (typeof min === 'undefined') {
       min = 1; // eslint-disable-line
