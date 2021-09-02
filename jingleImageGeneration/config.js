@@ -1,6 +1,6 @@
 const palettes = require('./color-palettes.json');
 
-module.exports = (seed, random, randomFunc, mapSrc, outputDir = '') => {
+module.exports = (seed, random, randomFunc, mapSrc, outputDir = '', fileName = 'render') => {
   function arrayShuffle(arr) {
     let rand;
     let tmp;
@@ -48,7 +48,7 @@ module.exports = (seed, random, randomFunc, mapSrc, outputDir = '') => {
 
     // node only options
     asVideoFrames: false,
-    filename: 'render',
+    fileName,
     outputDir,
   };
 };
