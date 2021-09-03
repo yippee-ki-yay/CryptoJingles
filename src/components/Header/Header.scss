@@ -1,0 +1,208 @@
+@import "partials/text";
+@import "partials/variables";
+
+.header-wrapper {
+  background: white;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  top: 0;
+  align-items: center;
+  font-size: $font-size-large;
+
+  .width-container {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--header-border);
+
+    .logo-wrapper {
+      display: flex;
+      z-index: 1000;
+      align-items: center;
+      flex-shrink: 0;
+      @include hover-transition;
+
+      &:hover { opacity: 0.7; }
+
+      svg { margin-right: 5px; }
+      a:hover { color: var(--link) }
+    }
+  }
+
+  .mobile-wrapper {
+    display: flex;
+    align-items: center;
+
+    .links-container {
+      display: flex;
+      align-items: center;
+
+      .links-wrapper {
+        margin-right: 30px;
+
+        a {
+
+          &.active {
+            color: var(--link);
+            text-decoration: underline;
+          }
+
+          &:not(:last-child) { margin-right: 30px; }
+        }
+      }
+    }
+
+    .menu-icon {
+      background: var(--header-navicon-bg);
+      border-radius: 5px;
+      margin: 0;
+      display: none;
+      cursor: pointer;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 14px 8px;
+      width: 35px;
+      top: 25px;
+      height: 35px;
+      z-index: 1000;
+
+      &:hover .navicon {
+        background-color: var(--header-navicon-hover);
+
+        &:before, &:after { background-color: var(--header-navicon-hover); }
+      }
+
+      .navicon {
+        background: var(--header-navicon);
+        height: 2px;
+        position: relative;
+        border-radius: 10px;
+        transition: background .2s ease-out;
+        width: 25px;
+
+        &:before, &:after {
+          background: var(--header-navicon);
+          border-radius: 10px;
+          content: '';
+          display: block;
+          height: 100%;
+          position: absolute;
+          transition: all .2s ease-out;
+          width: 100%;
+        }
+
+        &:before { top: 6px; }
+        &:after { top: -6px; }
+      }
+    }
+
+    .menu-btn {
+      &:checked ~ {
+
+        .links-container { top: 0; }
+
+        .menu-icon {
+          .navicon {
+            background: transparent;
+
+            &:before { transform: rotate(-45deg); }
+            &:after { transform: rotate(45deg); }
+          }
+
+          .navicon {  &:before, &:after { top: 0; }  }
+        }
+      }
+
+      &:hover { background-color: var(--header-navicon-hover); }
+    }
+
+    .menu-btn { display: none; }
+  }
+
+  @media only screen and (max-width: 800px) {
+    .width-container {
+      align-items: center;
+      height: 81px;
+
+      &.checked {
+        .logo-wrapper {
+          position: fixed;
+          top: 15px;
+        }
+
+        .menu-icon {
+          position: fixed;
+          right: 15px;
+          top: 22px;
+        }
+      }
+
+      .mobile-wrapper {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: flex-end;
+        max-width: fit-content;
+        height: fit-content;
+        width: 100%;
+
+        .menu-icon { display: flex; }
+
+        .links-container {
+          background: var(--header-links-mobile-bg);
+          background-size: cover;
+          z-index: 30;
+          width: 100%;
+          left: 0;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: fixed;
+          top: calc(-100% - 500px);
+          min-height: vh(100);
+          padding: 50px 15px;
+          margin-top: 0;
+          transition: all .5s ease-in;
+
+          .links-wrapper {
+            margin-right: 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 60px;
+
+            a {
+              font-size: $font-size-title;
+              margin-right: 0;
+
+              &:not(:last-child) { margin-bottom: 60px; }
+            }
+          }
+
+          .connect-wallet-wrapper {
+            width: 100%;
+
+            .button {
+              width: 100%;
+              max-height: 80px;
+              font-size: $font-size-title-small;
+
+              .wallet-is-connected {
+
+                .short-address { font-size: $font-size-title-small; }
+
+                .icon-status-wrapper svg {
+                  width: 35px;
+                  height: 35px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

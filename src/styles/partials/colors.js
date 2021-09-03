@@ -19,6 +19,7 @@ const PALLET = {
   greenHover: '#29e7b7',
 
   black: '#000',
+  blackHover: 'rgba(0, 0, 0, 0.5)',
   blackLight: 'rgba(0, 0, 0, 0.15)',
 
   gray: '#A5A5A5',
@@ -36,6 +37,33 @@ const PALLET = {
 
 export default {
   main: {
+    '--link': PALLET.black,
+    '--link-hover': PALLET.blackHover,
+
+    '--connect-wallet-button': PALLET.black,
+    '--connect-wallet-button-bg': PALLET.white,
+    '--connect-wallet-button-border': PALLET.darkGray,
+    '--connect-wallet-button-hovered': PALLET.whiteHover,
+    '--connect-wallet-button-connected': PALLET.green,
+    '--connect-wallet-button-disconnected': PALLET.gray5,
+
+    '--button-white': PALLET.white,
+    '--button-red': PALLET.red,
+    '--button-red-hover': PALLET.red2,
+
+    '--wallet-connect-modal-new-to-eth-link': PALLET.white,
+    '--wallet-connect-modal-new-to-eth-link-hover': PALLET.whiteHover,
+
+    '--header-navicon': PALLET.black,
+    '--header-border': PALLET.gray,
+    '--header-navicon-bg': PALLET.white,
+    '--header-navicon-hover': PALLET.blackHover,
+    '--header-links-mobile-bg': PALLET.white,
+
+    '--box-item-box-shadow': PALLET.blackLight,
+
+    // OLD
+
     '--color-main': PALLET.brown,
     '--color-bg': PALLET.darkGray2,
     '--color-bg-hover': PALLET.darkGrayHover,
@@ -47,17 +75,7 @@ export default {
     '--color-button': PALLET.white,
     '--color-button-hover': PALLET.whiteHover,
 
-    '--header-navicon': PALLET.white,
-    '--header-navicon-hover': PALLET.whiteHover,
-    '--header-bg': PALLET.darkGray2,
-
     '--header-box': PALLET.white,
-
-    '--connect-wallet-button-bg': PALLET.darkGray,
-    '--connect-wallet-button-border': PALLET.white,
-    '--connect-wallet-button-hovered': PALLET.whiteHover,
-    '--connect-wallet-button-connected': PALLET.green,
-    '--connect-wallet-button-disconnected': PALLET.gray5,
 
     '--footer-text': PALLET.gray,
 
@@ -69,9 +87,6 @@ export default {
     '--modal-provider-bgd': PALLET.gray4,
     '--modal-white': PALLET.white,
     '--modal-gray': PALLET.gray,
-
-    '--button-white': PALLET.white,
-    '--button-red': PALLET.red,
 
     '--message-box-text': PALLET.white,
     '--message-box-error-bgd': PALLET.red,
@@ -91,7 +106,6 @@ export default {
     '--box-item-bg': PALLET.darkGray,
     '--box-item-title': PALLET.brown,
     '--box-item-value': PALLET.white,
-    '--box-item-box-shadow': PALLET.blackLight,
     '--box-item-value-err': PALLET.red,
     '--box-item-small-num': PALLET.gray,
     '--box-item-small-num-error': PALLET.red,

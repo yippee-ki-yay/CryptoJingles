@@ -33,7 +33,6 @@ const ConnectWalletButton = ({
                 <div className="short-address">{shortAddress}</div>
                 <div className="icon-status-wrapper">
                   <div className="icon-wrapper"><Icon /></div>
-                  <div className={clsx('status', isConnected ? 'connected' : '')} />
                 </div>
               </div>
             )

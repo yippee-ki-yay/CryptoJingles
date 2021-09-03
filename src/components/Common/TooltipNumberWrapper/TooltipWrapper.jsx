@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-// import trans from 'translate';
+import trans from 'translate';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tooltip } from 'react-tippy';
 import TitleFormat from './TitleFormat';
@@ -13,7 +13,7 @@ const TooltipWrapper = ({
 
   const handleCopyClick =
     useCallback(() => {
-      setCopiedText('common.copied_to_clipboard');
+      setCopiedText(trans('common.copied_to_clipboard'));
       setTimeout(() => { setCopiedText(''); }, 700);
     }, []);
 

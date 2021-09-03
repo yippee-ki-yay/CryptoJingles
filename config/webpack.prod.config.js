@@ -2,11 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const { appManifest, entry, resolve, nodePolyfill, parseVideo, fileLoader, devServer } = require('./webpack.shared');
+const { appManifest, entry, resolve, nodePolyfill, parseVideo, fileLoader, createDevServer } = require('./webpack.shared');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 // const CopyPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+
+const devServer = createDevServer(true);
 
 module.exports = {
   entry,
@@ -94,6 +97,8 @@ module.exports = {
       overrideConfigFile: path.resolve(__dirname, "../.eslintrc.js"),
       extensions: [`js`, `jsx`],
     }),
+
+    new Dotenv({ path: path.resolve('./.env.production') }),
 
     // new CopyPlugin({
     //   patterns: [
