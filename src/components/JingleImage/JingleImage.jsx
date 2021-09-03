@@ -66,8 +66,6 @@ class JingleImage extends Component {
 
     this.canvasWrapper.style.background = opts.palette[0]; // eslint-disable-line
 
-    const capturer = new CCapture({ format: 'webm' });
-
     background.onload = () => {
       const renderer = createRenderer(opts);
       renderer.clear();
@@ -76,17 +74,13 @@ class JingleImage extends Component {
 
       loop.on('tick', () => {
         renderer.step(opts.interval);
-        capturer.capture(canvas);
         stepCount += 1;
         if (!opts.endlessBrowser && stepCount > opts.steps) {
           loop.stop();
-          capturer.stop();
-          capturer.save();
         }
       });
 
       loop.start();
-      capturer.start();
     };
 
     background.src = config.backgroundSrc;
