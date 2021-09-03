@@ -25,8 +25,6 @@ contract WrappedJingle is ERC721URIStorage {
     }
 
     mapping (uint256 => mapping (address => OldToken)) public tokenMap;
-    mapping (uint256 => uint256) public isWrapped;
-
 
     constructor() ERC721("WrappedJingle", "WJL") {}
 
