@@ -39,10 +39,12 @@ const startBlock = '13157578';
 
 const endBlock = 'latest';
 
+let lastCycleBlock = startBlock;
+
 async function update() {
   jinglesContract.getPastEvents(
     'Composed',
-    { fromBlock: startBlock, toBlock: endBlock },
+    { fromBlock: lastCycleBlock, toBlock: endBlock },
     async (err, events) => {
       const mined = events;
 
@@ -91,7 +93,7 @@ async function update() {
 
   cryptoJingles.getPastEvents(
     'Purchased',
-    { fromBlock: startBlock, toBlock: endBlock },
+    { fromBlock: lastCycleBlock, toBlock: endBlock },
     async (err, ress) => {
       ress.forEach(async (res) => {
         const address = res.returnValues.user;
@@ -108,7 +110,7 @@ async function update() {
 
   marketplaceContract.getPastEvents(
     'allEvents',
-    { fromBlock: startBlock, toBlock: endBlock },
+    { fromBlock: lastCycleBlock, toBlock: endBlock },
     async (err, events) => {
       console.log(err, events);
       // eslint-disable-next-line no-use-before-define
@@ -196,7 +198,11 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-  // setInterval(async () => {
-  update();
-  // }, 1000*60*2);
+  setInterval(async () => {
+    await update();
+    console.log('Block before: ', lastCycleBlock);
+
+    lastCycleBlock = (await web3.eth.getBlockNumber()).toString();
+    console.log('Block after: ', lastCycleBlock);
+  }, 1000 * 60 * 0.2);
 })();
