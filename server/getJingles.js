@@ -32,12 +32,12 @@ const cryptoJingles = new web3.eth.Contract(
   cryptoJinglesAddress,
 );
 
-const startBlock = '13153895';
-const endBlock = parseInt(startBlock, 10) + 2000;
+const startBlock = '13157578';
+// const endBlock = parseInt(startBlock, 10) + 2000;
 
-console.log(endBlock);
+// console.log(endBlock);
 
-// const endBlock = 'latest';
+const endBlock = 'latest';
 
 async function update() {
   jinglesContract.getPastEvents(
@@ -50,44 +50,42 @@ async function update() {
 
       console.log('Trying', mined.length, numJinglesInDb);
 
-      if (mined.length > numJinglesInDb) {
-        const newOnes = mined.length - numJinglesInDb;
+      const newOnes = mined.length - numJinglesInDb;
 
-        const jingles = mined
-          .map((_jingle) => _jingle.returnValues)
-          .map((_jingle) => ({
-            ..._jingle,
-            jingleId: parseFloat(_jingle.jingleId.valueOf()),
-          }))
-          .map(
-            (_jingle) => new Promise(async (resolve) => {
-              const samples = _jingle.samples.map((s) => s.valueOf());
-              const sampleTypes = _jingle.jingleTypes.map((s) => s.valueOf());
-              const settings = _jingle.settings.map((s) => s.valueOf());
+      const jingles = mined
+        .map((_jingle) => _jingle.returnValues)
+        .map((_jingle) => ({
+          ..._jingle,
+          jingleId: parseFloat(_jingle.jingleId.valueOf()),
+        }))
+        .map(
+          (_jingle) => new Promise(async (resolve) => {
+            const samples = _jingle.samples.map((s) => s.valueOf());
+            const sampleTypes = _jingle.jingleTypes.map((s) => s.valueOf());
+            const settings = _jingle.settings.map((s) => s.valueOf());
 
-              if (_jingle.jingleId.valueOf() >= numJinglesInDb) {
-                const saved = await jingleCtrl.addJingle({
-                  jingleId: _jingle.jingleId.valueOf(),
-                  name: _jingle.name,
-                  author: _jingle.author,
-                  owner: _jingle.owner,
-                  samples,
-                  sampleTypes,
-                  onSale: false,
-                  price: 0,
-                  settings,
-                });
-                resolve(saved);
-              }
-            }),
-          );
+            if (_jingle.jingleId.valueOf() >= numJinglesInDb) {
+              const saved = await jingleCtrl.addJingle({
+                jingleId: _jingle.jingleId.valueOf(),
+                name: _jingle.name,
+                author: _jingle.author,
+                owner: _jingle.owner,
+                samples,
+                sampleTypes,
+                onSale: false,
+                price: 0,
+                settings,
+              });
+              resolve(saved);
+            }
+          }),
+        );
 
-        console.log('GET JINGLES SUCCESS', jingles);
+      console.log('GET JINGLES SUCCESS', jingles);
 
-        Promise.all(jingles).then((_jingles) => {
-          console.log('WROTE TO DB SUCCESS', _jingles);
-        });
-      }
+      Promise.all(jingles).then((_jingles) => {
+        console.log('WROTE TO DB SUCCESS', _jingles);
+      });
     },
   );
 
