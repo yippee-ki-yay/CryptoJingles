@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-restricted-syntax */
 require('dotenv').config();
@@ -32,12 +33,12 @@ const cryptoJingles = new web3.eth.Contract(
   cryptoJinglesAddress,
 );
 
-const startBlock = '13157578';
+const startBlock = '5025886';
 // const endBlock = parseInt(startBlock, 10) + 2000;
 
 // console.log(endBlock);
 
-const endBlock = 'latest';
+const endBlock = '13143557';
 
 let lastCycleBlock = startBlock;
 
@@ -191,6 +192,7 @@ function addMarketplaceEvents(events, marketplace) {
     if (marketplace[jingleId]) {
       marketplace[jingleId].push(event);
     } else {
+      // eslint-disable-next-line no-param-reassign
       marketplace[jingleId] = [];
       marketplace[jingleId].push(event);
     }
@@ -198,11 +200,11 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-  setInterval(async () => {
+ // setInterval(async () => {
     await update();
     console.log('Block before: ', lastCycleBlock);
 
     lastCycleBlock = (await web3.eth.getBlockNumber()).toString();
     console.log('Block after: ', lastCycleBlock);
-  }, 1000 * 60 * 0.2);
+//  }, 1000 * 60 * 0.2);
 })();
