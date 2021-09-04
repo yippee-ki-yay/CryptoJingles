@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "../node_modules/@openzeppelin/contracts/utils/Counters.sol";
-import "../node_modules/@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /// @title A wrapped contract for CryptoJingles V0 and V1
 contract WrappedJingle is ERC721URIStorage {
@@ -17,7 +17,7 @@ contract WrappedJingle is ERC721URIStorage {
 
     enum Version { V0, V1 }
 
-    uint256 constant public NUM_V0_JINGLES = 55;
+    uint256 constant public NUM_V0_JINGLES = 54;
 
     struct OldToken {
         uint256 tokenId;
@@ -28,6 +28,10 @@ contract WrappedJingle is ERC721URIStorage {
 
     constructor() ERC721("WrappedJingle", "WJL") {}
 
+    /// @notice Locks an old v0/v1 jingle and gives the user a wrapped jingle
+    /// @dev User must approve the contract to withdraw the asset
+    /// @param _tokenId Token id of the asset to be wrapped
+    /// @param _version 0 - v0 version, 1 - v1 version
     function wrap(uint256 _tokenId, Version _version) public {
         address jingleContract = getJingleAddr(_version);
         address owner = IERC721(jingleContract).ownerOf(_tokenId);
@@ -53,6 +57,10 @@ contract WrappedJingle is ERC721URIStorage {
     }
 
 
+    /// @notice Unlocks an old v0/v1 jingle and burnes the users wrapped jingle
+    /// @dev User must approve the contract to withdraw the asset
+    /// @param _wrappedTokenId Token id of the wrapped jingle
+    /// @param _version 0 - v0 version, 1 - v1 version
     function unwrap(uint256 _wrappedTokenId, Version _version) public {
         // check if user is owner
         address jingleContract = getJingleAddr(_version);
