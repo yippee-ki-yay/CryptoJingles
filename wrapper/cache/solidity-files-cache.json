@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/contracts/WrappedJingle.sol": {
-      "lastModificationDate": 1630770558052,
-      "contentHash": "fc7b8fa1b84541371cd8fad963ea8409",
+      "lastModificationDate": 1630846686181,
+      "contentHash": "456df57e18fbc2056e3e4271a2d79e6c",
       "sourceName": "contracts/WrappedJingle.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -36,6 +36,7 @@
         "^0.8.0"
       ],
       "artifacts": [
+        "IJIngle",
         "WrappedJingle"
       ]
     },
@@ -256,8 +257,8 @@
       ]
     },
     "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
-      "lastModificationDate": 1630515235707,
-      "contentHash": "8aa69ca8424167555baaaa9f607801db",
+      "lastModificationDate": 1630846784759,
+      "contentHash": "9bc6456590d47aa23f0f4a9716880cc1",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -360,8 +361,8 @@
       ]
     },
     "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
-      "lastModificationDate": 1630515235692,
-      "contentHash": "a9a5319dff9088c6ffe757ea1c2a6729",
+      "lastModificationDate": 1630846849117,
+      "contentHash": "6469a053c3b7bc9a59a36e1b4b7ce08d",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -396,8 +397,8 @@
       ]
     },
     "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
-      "lastModificationDate": 1630515235704,
-      "contentHash": "9a04322bb8f6b8f2767d8358d1d2537b",
+      "lastModificationDate": 1630846829852,
+      "contentHash": "6aca272d0547da9eacb9b7e784abba5f",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -427,6 +428,40 @@
       ],
       "artifacts": [
         "IERC165"
+      ]
+    },
+    "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1630444176440,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
       ]
     }
   }

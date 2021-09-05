@@ -6,6 +6,10 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
+interface IJIngle {
+    function transfer(address _to, uint256 _tokenId) external virtual;
+}
+
 /// @title A wrapped contract for CryptoJingles V0 and V1
 contract WrappedJingle is ERC721URIStorage {
 
@@ -70,6 +74,7 @@ contract WrappedJingle is ERC721URIStorage {
 
         // burn wrapped
         _burn(_wrappedTokenId);
+        _tokenIds.decrement();
 
         OldToken memory tokenData = tokenMap[_wrappedTokenId][jingleContract];
 
@@ -79,7 +84,7 @@ contract WrappedJingle is ERC721URIStorage {
         tokenMap[_wrappedTokenId][jingleContract] = tokenData;
 
         // send token to caller
-        ERC721(jingleContract).transferFrom(address(this), msg.sender, tokenData.tokenId);
+        IJIngle(jingleContract).transfer(msg.sender, tokenData.tokenId);
 
         emit Unwrapped(_wrappedTokenId, tokenData.tokenId, jingleContract);
     }
@@ -111,6 +116,10 @@ contract WrappedJingle is ERC721URIStorage {
     }
 
     /////////////////// PUBLIC ////////////////////////
+
+    function totalSupply() public view returns (uint256) {
+        return _tokenIds.current();
+    }
 
     function tokenURI(uint256 _tokenId) public pure override returns (string memory) {
         return string(abi.encodePacked(baseTokenURI(), Strings.toString(_tokenId)));
