@@ -75,7 +75,9 @@ class JingleImage extends Component {
       loop.on('tick', () => {
         renderer.step(opts.interval);
         stepCount += 1;
-        if (!opts.endlessBrowser && stepCount > opts.steps) loop.stop();
+        if (!opts.endlessBrowser && stepCount > opts.steps) {
+          loop.stop();
+        }
       });
 
       loop.start();

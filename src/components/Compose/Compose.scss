@@ -18,14 +18,11 @@
   height: 200px;
 }
 
-.separator {
-  border-bottom: 1px solid #d1d1d1;
-  width: 100%;
-}
-
 .sort-samples-wrapper {
   margin: 20px 0 20px 0;
   display: flex;
+  padding-bottom: 10px;
+  overflow-x: auto;
 }
 
 .sort-samples-wrapper:after {

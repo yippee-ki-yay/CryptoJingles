@@ -7,14 +7,22 @@
   height: fit-content;
   margin-top: 20px;
   border-radius: 10px;
+  width: fit-content;
+  min-width: 150px;
 
   &.error {
     background: var(--message-box-error-bgd);
 
-    .message-box .status-icon-wrapper .close-icon {
-      @include flex-center;
+    .message-box .status-icon-wrapper {
+      width: fit-content;
+      height: fit-content;
+      padding: 0;
+      border: none;
 
-      svg { stroke-width: 3px; }
+      svg {
+        width: auto;
+        height: auto;
+      }
     }
   }
 

@@ -52,6 +52,7 @@ class SingleJingle extends Component {
   };
 
   loadJingle() {
+    console.log('this.props.settings', this.props.settings);
     let delays = this.props.settings.slice(5, 11);
     delays = delays.map((d) => parseInt(d, 10));
 
