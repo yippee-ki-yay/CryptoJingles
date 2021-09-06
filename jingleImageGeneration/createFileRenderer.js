@@ -7,7 +7,9 @@ const Whammy = require('./whamy');
 const createRenderer = require('./createRenderer');
 
 const { Image } = Canvas;
-
+// TODO - add frames, create webm with sound
+// --> v0 = up to number 30
+// --> v1 = upto number 47
 const canvasToWebp = (canvas) => new Promise((resolve, reject) => {
   try {
     sharp(canvas.toBuffer()).toFormat(sharp.format.webp).toBuffer((e, webpbuffer) => {
