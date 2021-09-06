@@ -1,7 +1,7 @@
 {
   "name": "crypto_jingles",
   "version": "0.1.1",
-  "homepage": "https://yippee-ki-yay.github.io/WorldOfContracts/",
+  "homepage": "https://cryptojingles.app",
   "private": true,
   "scripts": {
     "dev-old": "webpack-dev-server --history-api-fallback --compress --config ./config/webpack.config.dev.js",
