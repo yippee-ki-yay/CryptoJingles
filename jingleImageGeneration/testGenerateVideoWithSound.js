@@ -37,7 +37,7 @@ const test = () => {
   generateSound(1, jingleId, [70, 88, 7, 27, 54], _settings);
 
   const config = serverConfig.create(1, jingleId + 5 + 1 + 10 + 3 + 8 , 0, false);
-  createFileRenderer(config, () => { generateVideoWithSound(1, 0); });
+  createFileRenderer(config, () => { generateVideoWithSound(1, 0); }, () => {});
 };
 
 test();
