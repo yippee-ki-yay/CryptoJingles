@@ -46,8 +46,9 @@ const addFrameImage = (context, fileData) => {
  * @param _fileName
  * @param _version
  * @param _addFrame
+ * @param _cb
  */
-const render = async (_encoder, _renderer, _steps, _interval, _fileName, _version, _addFrame) => {
+const render = async (_encoder, _renderer, _steps, _interval, _fileName, _version, _addFrame, _cb) => {
   const promises = [];
 
   const frameFileData = _addFrame ? fs.readFileSync(_version === 0 ? './frames/gold.png' : './frames/silver.png') : null;
@@ -66,7 +67,9 @@ const render = async (_encoder, _renderer, _steps, _interval, _fileName, _versio
   frames.map((frame) => _encoder.add(frame));
 
   const output = _encoder.compile(true);
-  fs.writeFileSync(`./${_fileName}.webm`, output, { encoding: 'binary' });
+  fs.writeFileSync(`./videos/${_fileName}.webm`, output, { encoding: 'binary' });
+
+  _cb(null, true);
 };
 
 module.exports = function (opt, cb) {
@@ -76,8 +79,6 @@ module.exports = function (opt, cb) {
 
   const canvas = createCanvas(250, 250);
   const context = canvas.getContext('2d');
-
-  const outputDir = opt.outputDir || process.cwd();
 
   const interval = typeof opt.interval === 'number' ? opt.interval : 0.0001;
   const cwd = opt.cwd || process.cwd();
@@ -92,6 +93,6 @@ module.exports = function (opt, cb) {
     const renderer = createRenderer({ ...opt, backgroundImage, context });
     const encoder = new Whammy.Video(60, 10);
 
-    render(encoder, renderer, steps, interval, fileName, version, addFrame);
+    render(encoder, renderer, steps, interval, fileName, version, addFrame, cb);
   });
 };
