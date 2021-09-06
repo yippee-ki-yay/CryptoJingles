@@ -32,9 +32,11 @@ const _settings = [
 ];
 
 const test = () => {
-  generateSound(1, 0, [70, 88, 7, 27, 54], _settings);
+  const jingleId = 0;
 
-  const config = serverConfig.create(1, 5 + 1 + 10 + 3 + 8, 0, true);
+  generateSound(1, jingleId, [70, 88, 7, 27, 54], _settings);
+
+  const config = serverConfig.create(1, jingleId + 5 + 1 + 10 + 3 + 8 , 0, true);
   createFileRenderer(config, () => { generateVideoWithSound(1, 0); });
 };
 
