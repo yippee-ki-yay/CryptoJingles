@@ -20,6 +20,7 @@ import SortSamples from '../SortSamples/SortSamples';
 import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
 import { SAMPLE_SORTING_OPTIONS } from '../../constants/actionTypes';
 import { playWithDelay, createSettings } from '../../util/soundHelper';
+import BuySamples from '../Common/BuySamples/BuySamples';
 
 import '../../util/config';
 import './Compose.scss';
@@ -322,7 +323,7 @@ class Compose extends Component {
             </div>
           </div>
 
-          <div className="separator" />
+          <BuySamples />
 
           <SortSamples
             value={this.state.selectedSort}

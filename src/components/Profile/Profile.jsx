@@ -27,6 +27,8 @@ class Profile extends Component {
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
+    if (newProps.address !== this.props.address && newProps.address) this.props.checkIfOwnerProfile();
+
     if (newProps.match.params.address === this.props.match.params.address) return;
     if (!this.isValidProfile(newProps.match.params.address)) return;
 
@@ -177,6 +179,7 @@ Profile.propTypes = {
   getAuthor: PropTypes.func.isRequired,
   setProfileAddress: PropTypes.func.isRequired,
   setInvalidProfile: PropTypes.func.isRequired,
+  address: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -186,6 +189,7 @@ const mapStateToProps = (state) => ({
   author: state.profile.author,
   authorEdit: state.profile.authorEdit,
   isValidProfile: state.profile.isValidProfile,
+  address: state.app.address,
 });
 
 const mapDispatchToProps = {

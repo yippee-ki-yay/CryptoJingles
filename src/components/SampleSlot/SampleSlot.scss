@@ -23,9 +23,13 @@
     font-size: 16px;
 }
 
-.sample-slots-wrapper .jingle-slot-wrapper:not(:last-child) {
-    margin-right: 3.6rem;
+.sample-slots-wrapper {
+  flex-shrink: 0;
+
+  .jingle-slot-wrapper:not(:last-child) {
+    margin-right: 3.0rem;
     margin-bottom: 1.5rem;
+  }
 }
 
 .cancel-btn {

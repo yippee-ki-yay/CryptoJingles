@@ -4,11 +4,17 @@ import {
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
   SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
   SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
+
+  BUY_SAMPLES_REQUEST,
+  BUY_SAMPLES_SUCCESS,
+  BUY_SAMPLES_FAILURE,
+  CLEAR_BUY_SAMPLES,
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from './appActions';
 import { SAMPLE_PRICE, API_URL } from '../util/config';
 import { likeUnlikeJingle } from './utils';
+import { wait } from '../services/utilsService';
 
 /**
  * Dispatches action to show that the profile address URL param
@@ -199,28 +205,37 @@ export const getSamplesForUser = (address) => async (dispatch, getState) => {
 };
 
 /**
- * Sends transaction to contract to buy specified number of samples
+ * Handles the redux state for buying the specified number of samples
  *
  * @return {Function}
  */
-export const buySamples = () => async (dispatch, getState) => {
-  const id = guid();
+export const buySamplesAction = () => async (dispatch, getState) => {
+  dispatch({ type: BUY_SAMPLES_REQUEST });
 
   try {
     const state = getState();
-    const { address } = state.app;
 
+    const { address } = state.app;
     const numJinglesToBuy = state.profile.numSamplesToBuy;
 
-    dispatch(addPendingTx(id, 'Buy sample'));
     const txParams = { from: address, value: numJinglesToBuy * SAMPLE_PRICE };
     await window.contract.buySamples(parseInt(numJinglesToBuy, 10), address, txParams);
-    dispatch(removePendingTx(id));
+
+    dispatch({ type: BUY_SAMPLES_SUCCESS });
 
     dispatch(getSamplesForUser(address));
   } catch (err) {
-    dispatch(removePendingTx(id));
+    dispatch({ type: BUY_SAMPLES_FAILURE, payload: err.message });
   }
+};
+
+/**
+ * Handles the reducer state for clearing the buy samples action
+ *
+ * @return {(function(*, *))|*}
+ */
+export const clearBuySamplesAction = () => (dispatch, getState) => {
+  if (!getState().profile.buyingSamples) dispatch({ type: CLEAR_BUY_SAMPLES });
 };
 
 /**
@@ -230,7 +245,7 @@ export const buySamples = () => async (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const handleNumSamplesToBuyChange = ({ value }) => async (dispatch) => {
+export const setNumSamplesToBuyAction = ({ value }) => async (dispatch) => {
   if (value < 1 || value > 15) return;
 
   dispatch({ type: SET_PROFILE_NUM_SAMPLES_TO_BUY, payload: value });

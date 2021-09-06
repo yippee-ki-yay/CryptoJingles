@@ -4,6 +4,11 @@ import {
   TOGGLE_PROFILE_AUTHOR, SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE,
   SET_PROFILE_ADDRESS, MARKETPLACE_JINGLES_PER_PAGE, SET_MY_SAMPLES_SORTING, SAMPLE_SORTING_OPTIONS,
   PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
+
+  BUY_SAMPLES_REQUEST,
+  BUY_SAMPLES_SUCCESS,
+  BUY_SAMPLES_FAILURE,
+  CLEAR_BUY_SAMPLES,
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
@@ -27,6 +32,9 @@ const INITIAL_STATE = {
   jinglesPerPage: MARKETPLACE_JINGLES_PER_PAGE,
   mySamplesSortingOptions: SAMPLE_SORTING_OPTIONS,
   selectedMySampleSort: SAMPLE_SORTING_OPTIONS[0],
+
+  buyingSamples: false,
+  buyingSamplesError: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -80,13 +88,46 @@ export default (state = INITIAL_STATE, action) => {
     return { ...state, currentJinglesPage: payload };
 
   case SET_PROFILE_ADDRESS:
-    return { ...INITIAL_STATE, profileAddress: payload };
+    return {
+      ...INITIAL_STATE,
+      buyingSamples: state.buyingSamples,
+      buyingSamplesError: state.buyingSamplesError,
+      profileAddress: payload,
+    };
 
   case SET_MY_SAMPLES_SORTING:
     return { ...state, ...payload };
 
   case PROFILE_LIKE_UNLIKE_JINGLE:
     return { ...state, myJingles: payload };
+
+  case BUY_SAMPLES_REQUEST:
+    return {
+      ...state,
+      buyingSamples: true,
+      buyingSamplesError: '',
+    };
+
+  case BUY_SAMPLES_SUCCESS:
+    return {
+      ...state,
+      buyingSamples: false,
+      buyingSamplesError: '',
+    };
+
+  case BUY_SAMPLES_FAILURE:
+    return {
+      ...state,
+      buyingSamples: false,
+      buyingSamplesError: payload,
+    };
+
+  case CLEAR_BUY_SAMPLES:
+    return {
+      ...state,
+      buyingSamples: false,
+      buyingSamplesError: '',
+    };
 
   default:
     return state;

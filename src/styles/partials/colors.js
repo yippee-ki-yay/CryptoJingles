@@ -25,6 +25,10 @@ const PALLET = {
   gray: '#A5A5A5',
   grayHover: '#fff',
 
+  teal: 'rgba(12, 236, 221, 0.2)',
+
+  pink: '#FF67E7',
+
   gray2: '#4b4c56',
   gray3: '#313131',
   gray4: '#2D2E34',
@@ -61,6 +65,10 @@ export default {
     '--header-links-mobile-bg': PALLET.white,
 
     '--box-item-box-shadow': PALLET.blackLight,
+
+    '--buy-samples-bg': PALLET.teal,
+    '--buy-samples-title': PALLET.pink,
+    '--buy-samples-button': PALLET.pink,
 
     // OLD
 
