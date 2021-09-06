@@ -7,9 +7,7 @@ const Whammy = require('./whamy');
 const createRenderer = require('./createRenderer');
 
 const { Image } = Canvas;
-// TODO - add frames, create webm with sound
-// --> v0 = up to number 30
-// --> v1 = upto number 47
+
 const canvasToWebp = (canvas) => new Promise((resolve, reject) => {
   try {
     sharp(canvas.toBuffer()).toFormat(sharp.format.webp).toBuffer((e, webpbuffer) => {
@@ -24,6 +22,21 @@ const canvasToWebp = (canvas) => new Promise((resolve, reject) => {
 });
 
 /**
+ * Adds frame based on the version
+ *
+ * @param context
+ * @param fileData
+ */
+const addFrameImage = (context, fileData) => {
+  const img = new Canvas.Image(); // Create a new Image
+  img.src = fileData;
+
+  // Initialiaze a new Canvas with the same dimensions
+  // as the image, and get a 2D drawing context for it.
+  context.drawImage(img, 0, 0, img.width, img.height);
+};
+
+/**
  * Creates the new webm files from the steps iterations
  *
  * @param _encoder
@@ -31,14 +44,21 @@ const canvasToWebp = (canvas) => new Promise((resolve, reject) => {
  * @param _steps
  * @param _interval
  * @param _fileName
+ * @param _version
+ * @param _addFrame
  */
-const render = async (_encoder, _renderer, _steps, _interval, _fileName) => {
+const render = async (_encoder, _renderer, _steps, _interval, _fileName, _version, _addFrame) => {
   const promises = [];
+
+  const frameFileData = _addFrame ? fs.readFileSync(_version === 0 ? './frames/gold.png' : './frames/silver.png') : null;
 
   _renderer.clear();
 
   for (let i = 0; i < _steps + 1; i += 1) {
     const newContext = _renderer.step(_interval);
+
+    if (_addFrame) addFrameImage(newContext, frameFileData);
+
     promises.push(canvasToWebp(newContext.canvas));
   }
 
@@ -50,7 +70,9 @@ const render = async (_encoder, _renderer, _steps, _interval, _fileName) => {
 };
 
 module.exports = function (opt, cb) {
-  const { steps, fileName } = opt;
+  const {
+    steps, fileName, addFrame, version,
+  } = opt;
 
   const canvas = createCanvas(250, 250);
   const context = canvas.getContext('2d');
@@ -68,8 +90,8 @@ module.exports = function (opt, cb) {
     backgroundImage.src = buffer;
 
     const renderer = createRenderer({ ...opt, backgroundImage, context });
-    const encoder = new Whammy.Video(30, 10);
+    const encoder = new Whammy.Video(60, 10);
 
-    render(encoder, renderer, steps, interval, fileName);
+    render(encoder, renderer, steps, interval, fileName, version, addFrame);
   });
 };
