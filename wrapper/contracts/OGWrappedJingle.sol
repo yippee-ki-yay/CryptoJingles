@@ -11,7 +11,7 @@ interface IJIngle {
 }
 
 /// @title A wrapped contract for CryptoJingles V0 and V1
-contract WrappedJingle is ERC721URIStorage {
+contract OGWrappedJingle is ERC721URIStorage {
 
     event Wrapped(uint256 indexed, uint256, address);
     event Unwrapped(uint256 indexed, uint256, address);
@@ -100,11 +100,11 @@ contract WrappedJingle is ERC721URIStorage {
 
     function wrapCheck(uint256 _tokenId, Version _version) internal pure returns (bool) {
         if (_version == Version.V0) {
-            if (_tokenId <= NUM_V0_JINGLES) return true;
+            if (_tokenId > NUM_V0_JINGLES) return true;
         }
 
         if (_version == Version.V1) {
-            if (_tokenId <= NUM_V0_JINGLES) return true;
+            if (_tokenId > NUM_V0_JINGLES) return true;
         }
 
         return true;
