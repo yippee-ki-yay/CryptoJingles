@@ -18,8 +18,10 @@ const SingleJingleContentItem = ({
   isAddressApprovedOnAssetAction, jingleWrapping, wrapJingleAction,
 }) => {
   useEffect(() => {
-    if (address) isAddressApprovedOnAssetAction('ETH', '', (Number.MAX_SAFE_INTEGER - 22240000).toString(), APPROVE_TYPES.WRAPPING);
+    if (address) isAddressApprovedOnAssetAction('ETH', '', (Number.MAX_SAFE_INTEGER - 10000).toString(), APPROVE_TYPES.WRAPPING);
   }, [address, isAddressApprovedOnAssetAction]);
+
+  // TODO - clear wrap error, add if error happens
 
   const buttonLabel = useMemo(() => {
     if (approvingAsset) return 'Approving';
@@ -36,7 +38,7 @@ const SingleJingleContentItem = ({
     <div className="single-jingle-content-item-wrapper">
       <SingleJingle {...jingle} />
 
-      <div onClick={handleJingleWrapCallback} className="button">{buttonLabel}</div>
+      <div onClick={handleJingleWrapCallback} className="button green">{buttonLabel}</div>
     </div>
   );
 };

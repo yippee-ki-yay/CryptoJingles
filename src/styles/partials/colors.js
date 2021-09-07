@@ -70,6 +70,9 @@ export default {
     '--buy-samples-title': PALLET.pink,
     '--buy-samples-button': PALLET.pink,
 
+    '--button-green-bg': PALLET.green,
+    '--button-green-bg-hover': PALLET.greenHover,
+
     // OLD
 
     '--color-main': PALLET.brown,
@@ -146,9 +149,6 @@ export default {
     '--graph-tooltip-top': PALLET.gray,
     '--graph-tooltip-title': PALLET.brown,
     '--graph-tooltip-value': PALLET.white,
-
-    '--single-wrap-button': PALLET.green,
-    '--single-wrap-button-hover': PALLET.greenHover,
 
     '--join-text': PALLET.white,
     '--join-general': PALLET.gray,

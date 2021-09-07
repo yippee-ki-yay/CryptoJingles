@@ -20,6 +20,12 @@
     cursor: not-allowed;
   }
 
+  &.green {
+    background: var(--button-green-bg);
+
+    &:hover { background: var(--button-green-bg-hover); }
+  }
+
   &.disconnect {
     background: var(--button-red);
 

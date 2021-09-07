@@ -11,8 +11,8 @@
   font-size: $font-size-large;
 
   .width-container {
-    display: flex;
     justify-content: space-between;
+    flex-direction: row;
     padding-top: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--header-border);

@@ -1,33 +1,80 @@
 import {
-  GET_ALL_JINGLES_REQUEST,
-  GET_ALL_JINGLES_SUCCESS,
-  GET_ALL_JINGLES_FAILURE,
+  GET_ALL_USER_JINGLES_REQUEST,
+  GET_ALL_USER_JINGLES_SUCCESS,
+  GET_ALL_USER_JINGLES_FAILURE,
+
+  GET_ALL_USER_V0_JINGLES_REQUEST,
+  GET_ALL_USER_V0_JINGLES_SUCCESS,
+  GET_ALL_USER_V0_JINGLES_FAILURE,
+
+  GET_ALL_USER_V1_JINGLES_REQUEST,
+  GET_ALL_USER_V1_JINGLES_SUCCESS,
+  GET_ALL_USER_V1_JINGLES_FAILURE,
 
   WRAP_JINGLE_REQUEST,
   WRAP_JINGLE_SUCCESS,
   WRAP_JINGLE_FAILURE,
 } from '../redux/actionTypes/jingleActionTypes';
-import { getAllJingles, wrapJingle } from '../services/jingleService';
+import { wrapJingle, getAllV0UserJingles, getAllV1UserJingles } from '../services/jingleService';
 import { wait } from '../services/utilsService';
 
 /**
- * Gets all jingles from the server for the current address
+ * Handles the redux state for getting all the users v0 jingles
  *
+ * @param address {String}
  * @return {Function}
  */
-export const getAllJinglesAction = () => async (dispatch, getState) => {
-  dispatch({ type: GET_ALL_JINGLES_REQUEST });
+export const getAllV0UserJinglesAction = (address) => async (dispatch, getState) => {
+  dispatch({ type: GET_ALL_USER_V0_JINGLES_REQUEST });
 
   try {
-    await wait(1000);
-    // const { address } = getState().app;
-    const address = '0x93cdB0a93Fc36f6a53ED21eCf6305Ab80D06becA';
-    const profileAddress = '0x93cdB0a93Fc36f6a53ED21eCf6305Ab80D06becA';
-    const payload = await getAllJingles(profileAddress, address, 1);
+    const payload = await getAllV0UserJingles(address);
 
-    dispatch({ type: GET_ALL_JINGLES_SUCCESS, payload });
+    dispatch({ type: GET_ALL_USER_V0_JINGLES_SUCCESS, payload });
   } catch (err) {
-    dispatch({ type: GET_ALL_JINGLES_FAILURE, payload: err.message });
+    dispatch({ type: GET_ALL_USER_V0_JINGLES_FAILURE, payload: err.message });
+
+    // Do not remove this, action called in other actions
+    throw new Error(err);
+  }
+};
+
+/**
+ * Handles the redux state for getting all the users v0 jingles
+ *
+ * @param address {String}
+ * @return {Function}
+ */
+export const getAllV1UserJinglesAction = (address) => async (dispatch, getState) => {
+  dispatch({ type: GET_ALL_USER_V1_JINGLES_REQUEST });
+
+  try {
+    const payload = await getAllV1UserJingles(address);
+
+    dispatch({ type: GET_ALL_USER_V1_JINGLES_SUCCESS, payload });
+  } catch (err) {
+    dispatch({ type: GET_ALL_USER_V1_JINGLES_FAILURE, payload: err.message });
+
+    // Do not remove this, action called in other actions
+    throw new Error(err);
+  }
+};
+
+/**
+ * Handles the redux state for getting all the users v0 and v1 jingles
+ *
+ * @param address {String}
+ * @return {Function}
+ */
+export const getAllUserJinglesAction = (address) => async (dispatch) => {
+  dispatch({ type: GET_ALL_USER_JINGLES_REQUEST });
+
+  try {
+    await Promise.all([dispatch(getAllV0UserJinglesAction(address)), dispatch(getAllV1UserJinglesAction(address))]);
+
+    dispatch({ type: GET_ALL_USER_JINGLES_SUCCESS });
+  } catch (err) {
+    dispatch({ type: GET_ALL_USER_JINGLES_FAILURE, payload: err.message });
   }
 };
 

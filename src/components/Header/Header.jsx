@@ -13,6 +13,7 @@ const Header = ({ address }) => {
 
   const changeCheckedCallback = useCallback(() => { setChecked(!checked); }, [checked, setChecked]);
   const onChangeCallback = useCallback(() => {}, []);
+  const closeMenu = useCallback(() => { if (checked) setChecked(false); }, [checked, setChecked]);
 
   return (
     <header className="header-wrapper">
@@ -27,10 +28,10 @@ const Header = ({ address }) => {
 
           <div className="links-container">
             <div className="links-wrapper">
-              <NavLink activeClasssName="active" to="/wrap-jingle">Wrap Jingles</NavLink>
-              <NavLink activeClasssName="active" to="/compose">Compose</NavLink>
-              <NavLink activeClasssName="active" to="/marketplace">Marketplace</NavLink>
-              { address && (<NavLink activeClasssName="active" to={`/profile/${address}`}>Profile</NavLink>) }
+              <NavLink activeClasssName="active" onClick={closeMenu} to="/wrap-jingle">Wrap Jingles</NavLink>
+              <NavLink activeClasssName="active" onClick={closeMenu} to="/compose">Compose</NavLink>
+              <NavLink activeClasssName="active" onClick={closeMenu} to="/marketplace">Marketplace</NavLink>
+              { address && (<NavLink activeClasssName="active" onClick={closeMenu} to={`/profile/${address}`}>Profile</NavLink>) }
             </div>
 
             <ConnectWalletButton closeMenu={setChecked} />

@@ -15,6 +15,10 @@ class AccountRouteChecker extends Component {
     this.state = {};
   }
 
+  // componentDidMount() {
+  //   this.login();
+  // }
+
   componentDidUpdate(prevProps) {
     const { requireLogin, address, accountType } = this.props;
 
@@ -48,7 +52,12 @@ class AccountRouteChecker extends Component {
         message = t('common.connecting_wallet', { wallet: getInPageProviderName() });
       }
 
-      return (<div className="checker-loader-container"><BoxLoader message={message} /></div>);
+      return (
+        <div className="checker-loader-container width-container">
+          <BoxLoader />
+          { message && <div className="checker-text">{ message }</div> }
+        </div>
+      );
     }
 
     const additional = {};
@@ -56,7 +65,7 @@ class AccountRouteChecker extends Component {
 
     let content;
 
-    if (!address) content = (<Blocker />);
+    if (requireLoginBlocker && !address) content = (<Blocker />);
     else content = <Route {...additional} {...rest} render={(props) => (<Component {...props} />)} />;
 
     return content;

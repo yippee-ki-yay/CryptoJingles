@@ -44,7 +44,7 @@ const Routes = ({ listenToAccChange, silentLogin }) => {
               <Route path="/" exact component={HomeLazy} />
               <Route path="/marketplace" component={MarketplaceLazy} />
               <Route path="/jingle/:id" component={JinglePageLazy} />
-              <AccountRouteChecker path="/wrap-jingle" component={WrapJinglesLazy} />
+              <AccountRouteChecker path="/wrap-jingle" component={WrapJinglesLazy} requireLogin requireLoginBlocker />
               <Route path="/compose" component={ComposeLazy} />
               <Route path="/profile/:address" component={ProfileLazy} />
               <Route path="/404" component={Page404} />

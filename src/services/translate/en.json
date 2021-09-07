@@ -16,6 +16,10 @@
   "common.get_hord_tokens": "Get HORD Tokens",
   "common.home": "Home",
   "common.token": "Token",
+  "common.connecting_wallet": "Connecting {wallet}...",
+  "common.connecting": "Connecting",
+  "common.getting_all_your_jingles": "Getting all your jingles",
+  "common.compose_your_first_jingle": "Compose your first jingle!",
 
   "header.get_hord_lp": "Get HORD-ETH LP Tokens",
 
@@ -24,6 +28,8 @@
 
   "wallet_modal.not_connected": "Connect To A Wallet",
   "wallet_modal.connected_with": "Connected with {provider}",
+
+  "wrapper.no_jingles": "You currently don't own any jingles",
 
   "banner.title": "HORD LP Staking Farm",
   "banner.description": "Deposit your HORD-ETH Uniswap Liquidity Pool tokens to earn extra Annual Percentage Yield!",

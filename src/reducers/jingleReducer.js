@@ -1,7 +1,15 @@
 import {
-  GET_ALL_JINGLES_REQUEST,
-  GET_ALL_JINGLES_SUCCESS,
-  GET_ALL_JINGLES_FAILURE,
+  GET_ALL_USER_JINGLES_REQUEST,
+  GET_ALL_USER_JINGLES_SUCCESS,
+  GET_ALL_USER_JINGLES_FAILURE,
+
+  GET_ALL_USER_V0_JINGLES_REQUEST,
+  GET_ALL_USER_V0_JINGLES_SUCCESS,
+  GET_ALL_USER_V0_JINGLES_FAILURE,
+
+  GET_ALL_USER_V1_JINGLES_REQUEST,
+  GET_ALL_USER_V1_JINGLES_SUCCESS,
+  GET_ALL_USER_V1_JINGLES_FAILURE,
 
   WRAP_JINGLE_REQUEST,
   WRAP_JINGLE_SUCCESS,
@@ -9,9 +17,16 @@ import {
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
-  gettingAllJingles: false,
-  gettingAllJinglesError: '',
-  allJingles: null,
+  gettingAllUserJingles: false,
+  gettingAllUserJinglesError: '',
+
+  gettingV0UserJingles: false,
+  gettingV0UserJinglesError: '',
+  v0UserJingles: null,
+
+  gettingV1UserJingles: false,
+  gettingV1UserJinglesError: '',
+  v1UserJingles: null,
 
   wrappingJingles: {},
 };
@@ -20,26 +35,69 @@ export default (state = INITIAL_STATE, action) => {
   const { type, payload } = action;
 
   switch (type) {
-  case GET_ALL_JINGLES_REQUEST:
+  case GET_ALL_USER_JINGLES_REQUEST:
     return {
       ...state,
-      gettingAllJingles: true,
-      gettingAllJinglesError: '',
+      gettingAllUserJingles: true,
+      gettingAllUserJinglesError: '',
     };
 
-  case GET_ALL_JINGLES_SUCCESS:
+  case GET_ALL_USER_JINGLES_SUCCESS:
     return {
       ...state,
-      gettingAllJingles: false,
-      gettingAllJinglesError: '',
-      allJingles: payload,
+      gettingAllUserJingles: false,
+      gettingAllUserJinglesError: '',
     };
 
-  case GET_ALL_JINGLES_FAILURE:
+  case GET_ALL_USER_JINGLES_FAILURE:
     return {
       ...state,
-      gettingAllJingles: false,
-      gettingAllJinglesError: payload,
+      gettingAllUserJingles: false,
+      gettingAllUserJinglesError: payload,
+    };
+
+  case GET_ALL_USER_V0_JINGLES_REQUEST:
+    return {
+      ...state,
+      gettingV0UserJingles: true,
+      gettingV0UserJinglesError: '',
+    };
+
+  case GET_ALL_USER_V0_JINGLES_SUCCESS:
+    return {
+      ...state,
+      gettingV0UserJingles: false,
+      gettingV0UserJinglesError: '',
+      v0UserJingles: payload,
+    };
+
+  case GET_ALL_USER_V0_JINGLES_FAILURE:
+    return {
+      ...state,
+      gettingV0UserJingles: false,
+      gettingV0UserJinglesError: payload,
+    };
+
+  case GET_ALL_USER_V1_JINGLES_REQUEST:
+    return {
+      ...state,
+      gettingV1UserJingles: true,
+      gettingV1UserJinglesError: '',
+    };
+
+  case GET_ALL_USER_V1_JINGLES_SUCCESS:
+    return {
+      ...state,
+      gettingV1UserJingles: false,
+      gettingV1UserJinglesError: '',
+      v1UserJingles: payload,
+    };
+
+  case GET_ALL_USER_V1_JINGLES_FAILURE:
+    return {
+      ...state,
+      gettingV1UserJingles: false,
+      gettingV1UserJinglesError: payload,
     };
 
   case WRAP_JINGLE_REQUEST:

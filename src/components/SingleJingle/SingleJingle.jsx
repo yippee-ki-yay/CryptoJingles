@@ -83,6 +83,7 @@ class SingleJingle extends Component {
   render() {
     const {
       jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM, type, canLike,
+      version,
     } = this.props;
 
     return (
@@ -122,7 +123,7 @@ class SingleJingle extends Component {
 
         <div className="jingle-footer">
           <div className="id-likes-wrapper">
-            <span>#{ jingleId }</span>
+            <span>v{version} #{ jingleId }</span>
             {
               type !== 'home' && (
                 <span>
@@ -142,6 +143,10 @@ class SingleJingle extends Component {
   }
 }
 
+SingleJingle.defaultProps = {
+  version: 1,
+};
+
 SingleJingle.propTypes = {
   likeUnLikeMarketplaceJingle: PropTypes.func.isRequired,
   likeUnLikeProfileJingle: PropTypes.func.isRequired,
@@ -158,6 +163,7 @@ SingleJingle.propTypes = {
   price: PropTypes.number.isRequired,
   likeCount: PropTypes.number.isRequired,
   liked: PropTypes.bool.isRequired,
+  version: PropTypes.number,
 };
 
 const mapStateToProps = (state) => ({
