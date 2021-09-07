@@ -5,11 +5,12 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { getJingleMetadata } from '../../constants/getMockData';
 import { API_URL } from '../../util/config';
+import Footer from '../Common/Footer/Footer';
 import SampleBox2 from '../SampleBox/SampleBox2';
 import SingleJingle from '../SingleJingle/SingleJingle';
 
-import './Home.scss';
 import bigLogo from './bigLogo.png';
+import './Home.scss';
 
 class Home extends Component {
   constructor(props) {
@@ -94,7 +95,7 @@ class Home extends Component {
 
         <div className="separator" />
 
-        <div className="explanation-section-2">
+        <div className="explanation-section-2 reverse">
           <div className="home-samples-wrapper">
             <div className="home-samples">
               { this.state.jingle && <SingleJingle type="home" {...this.state.jingle} /> }
@@ -129,35 +130,6 @@ class Home extends Component {
         </div>
 
         <div className="separator" />
-
-        <div className="home-footer">
-          Fell free to ask us anything on
-          <a
-            className="reddit"
-            href="https://www.reddit.com/r/CryptoJingles/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Reddit
-          </a>
-          ,
-          <a
-            className="medium"
-            href="https://medium.com/@cryptojingles"
-            rel="noopener noreferrer"
-          >
-            Medium
-          </a>
-          or
-          <a
-            className="discord"
-            href="https://discord.gg/AEHvH7Bv"
-            rel="noopener noreferrer"
-          >
-            Discord
-          </a>
-          , we will gladly answer all questions.
-        </div>
       </div>
     );
   }

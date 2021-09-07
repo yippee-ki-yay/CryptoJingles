@@ -7,6 +7,8 @@ import marketplaceReducer from './marketplaceReducer';
 import profileReducer from './profileReducer';
 import composeReducer from './composeReducer';
 import modalReducer from './modalReducer';
+import jingleReducer from './jingleReducer';
+import assetsReducer from './assetsReducer';
 
 const reducer = combineReducers({
   routing: routerReducer,
@@ -15,6 +17,8 @@ const reducer = combineReducers({
   compose: composeReducer,
   app: appReducer,
   modal: modalReducer,
+  jingle: jingleReducer,
+  assets: assetsReducer,
   // web3: web3Reducer,
   // audio: audioReducer,
 });

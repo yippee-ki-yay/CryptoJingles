@@ -1,0 +1,28 @@
+@import "partials/text";
+
+.wrap-jingles-content-wrapper {
+  width: 100%;
+
+  .page-title {
+    margin-bottom: 20px;
+  }
+
+  .page-description {
+    max-width: 800px;
+    margin-bottom: 50px;
+    font-size: $font-size-medium;
+  }
+
+  .jingles-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-gap: 20px 35px;
+
+    .single-jingle-content-item-wrapper {
+
+      .single-song {
+        margin: 0 0 5px 0;
+      }
+    }
+  }
+}

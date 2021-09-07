@@ -43,13 +43,14 @@
         margin-right: 30px;
 
         a {
+          font-size: $font-size-medium;
 
           &.active {
             color: var(--link);
             text-decoration: underline;
           }
 
-          &:not(:last-child) { margin-right: 30px; }
+          &:not(:last-child) { margin-right: 25px; }
         }
       }
     }

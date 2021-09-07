@@ -1,0 +1,17 @@
+.blocker-wrapper {
+  display: flex;
+  flex-grow: 1;
+
+  .width-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+
+    .block-text {
+      font-size: 20px;
+      margin-top: 15px;
+    }
+  }
+}

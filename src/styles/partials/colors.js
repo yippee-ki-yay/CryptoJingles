@@ -139,6 +139,9 @@ export default {
     '--graph-tooltip-title': PALLET.brown,
     '--graph-tooltip-value': PALLET.white,
 
+    '--single-wrap-button': PALLET.green,
+    '--single-wrap-button-hover': PALLET.greenHover,
+
     '--join-text': PALLET.white,
     '--join-general': PALLET.gray,
 

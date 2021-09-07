@@ -1,0 +1,36 @@
+@import 'partials/colors';
+@import 'partials/text';
+@import 'partials/variables';
+
+.transaction-button-wrapper {
+
+  .transaction-button {
+    padding: 13px 25px;
+    font-size: $font-size-regular;
+    font-weight: $font-weight-bold;
+    display: flex;
+    min-height: 42px;
+
+    .symbol { margin-left: 5px; }
+
+    svg { margin-right: 10px; }
+
+    .ext-icon.true {
+      display: flex;
+
+      svg {
+        @include rotate;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .button-value {
+      display: flex;
+      align-items: center;
+      font-weight: $font-weight-light;
+
+      b { margin-left: 5px; }
+    }
+  }
+}

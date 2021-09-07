@@ -1,0 +1,8 @@
+.single-jingle-content-item-wrapper {
+  .button {
+    margin-top: 15px;
+    background: var(--single-wrap-button);
+
+    &:hover { background: var(--single-wrap-button-hover); }
+  }
+}

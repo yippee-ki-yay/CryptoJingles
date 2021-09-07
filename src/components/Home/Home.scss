@@ -1,3 +1,5 @@
+@import "partials/variables";
+
 .headline {
     margin-top: 30px;
 }
@@ -139,26 +141,104 @@
     font-size: 18px;
 }
 
-.home-footer {
-    font-size: 22px;
-    margin-bottom: 100px;
+@include for-ipad {
+  .homepage-main {
+    .big-logo { width: 400px; }
+
+    .home-title {
+      font-size: 25px;
+      line-height: 35px;
+      margin: 30px auto;
+    }
+  }
+
+  .explanation-section {
+    flex-direction: column;
+
+    .left {
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .right {
+      width: 100%;
+      max-width: 450px;
+      padding: 0;
+      text-align: center;
+      margin-top: 15px;
+      line-height: 32px;
+      height: auto;
+    }
+  }
+
+  .explanation-section-2 {
+    flex-direction: column;
+    align-items: center;
+
+    &.reverse { flex-direction: column-reverse; }
+
+    .sample-text, .home-samples-wrapper { margin-top: 15px; }
+
+    .sample-text { text-align: center; }
+
+    .home-samples-wrapper .home-samples div {
+      //margin: auto;
+
+      .sample-wrapper .top div {
+        .loading-icon-wrapper {
+          width: 100%;
+
+          svg { width: 100% !important; }
+        }
+      }
+    }
+  }
 }
 
-.jingle-footer li {
-    float: none;
-    display: block;
-    margin-bottom: 10px;
+@include for-sm-screen {
+  .homepage-main {
+    .big-logo { width: 300px; }
+
+    .home-title {
+      font-size: 20px;
+      line-height: 30px;
+      margin: 20px auto;
+    }
+  }
+
+  .explanation-section {
+    .left, .right {
+      max-width: 100%;
+      font-size: 18px;
+      line-height: 27px;
+    }
+  }
+
+  .explanation-section-2 {
+    .description {
+      width: 100%;
+
+      .sample-text {
+        font-size: 18px;
+        line-height: 25px;
+      }
+    }
+
+    .home-samples-wrapper .home-samples div {
+      //margin: auto;
+
+      .sample-wrapper .top div {
+        width: 170px;
+        .loading-icon-wrapper {
+          width: 100%;
+
+          svg { width: 100% !important; }
+        }
+      }
+    }
+  }
 }
 
-.home-footer { text-align: center; }
-.home-footer a { margin: 5px; }
-.home-footer a:hover { text-decoration: none; }
-
-a.reddit { color: rgb(253, 68, 4); }
-a.reddit:hover { opacity: 0.7; }
-
-a.medium { color: #03a87c; }
-a.medium:hover { opacity: 0.7; }
-
-a.discord { color: rgb(114, 137, 218); }
-a.discord:hover { opacity: 0.7; }
+@media only screen and (max-width: 350px) {
+  .homepage-main .big-logo { width: 250px; }
+}

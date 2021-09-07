@@ -6,6 +6,8 @@ import Header from './Header/Header';
 import ScrollToTop from './ScrollToTop/ScrollToTop';
 import Page404 from './Page404/Page404';
 import ModalRoot from './Modals/ModalRoot';
+import Footer from './Common/Footer/Footer';
+import AccountRouteChecker from './AccountRouteChecker/AccountRouteChecker';
 import { useWindowSize } from '../hooks/generalHooks';
 import { listenToAccChange, silentLogin } from '../redux/actions/walletActions';
 
@@ -17,6 +19,7 @@ const ProfileLazy = lazy(() => import('./Profile/Profile'));
 const MarketplaceLazy = lazy(() => import('./Marketplace/Marketplace'));
 const ComposeLazy = lazy(() => import('./Compose/Compose'));
 const JinglePageLazy = lazy(() => import('./JinglePage/JinglePage'));
+const WrapJinglesLazy = lazy(() => import('./WrapJingles/WrapJingles'));
 
 const Routes = ({ listenToAccChange, silentLogin }) => {
   const [windowWidth, windowHeight] = useWindowSize();
@@ -41,6 +44,7 @@ const Routes = ({ listenToAccChange, silentLogin }) => {
               <Route path="/" exact component={HomeLazy} />
               <Route path="/marketplace" component={MarketplaceLazy} />
               <Route path="/jingle/:id" component={JinglePageLazy} />
+              <AccountRouteChecker path="/wrap-jingle" component={WrapJinglesLazy} />
               <Route path="/compose" component={ComposeLazy} />
               <Route path="/profile/:address" component={ProfileLazy} />
               <Route path="/404" component={Page404} />
@@ -50,6 +54,7 @@ const Routes = ({ listenToAccChange, silentLogin }) => {
         </Suspense>
       </div>
 
+      <Footer />
       <ModalRoot />
     </div>
   );

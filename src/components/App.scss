@@ -23,6 +23,12 @@ div {
   }
 }
 
+.page-title {
+  font-size: $font-size-title;
+  margin: 50px 0;
+  font-weight: $font-weight-bold;
+}
+
 a {
   color: var(--link);
   text-decoration: none;
@@ -90,7 +96,9 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 }
 
 .children-wrapper {
-    margin-top: 10px;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
 }
 
 .marketplace-wrapper {

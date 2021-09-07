@@ -19,6 +19,8 @@ const createNewContract = async (abi, address, name) => {
   window[name] = cryptoJinglesContract.at(address);
 };
 
+export const getErc20Contract = async (address) => createNewContract('Erc20', address)();
+
 createNewContract(CryptoJingles, CryptoJinglesAddress, 'contract');
 createNewContract(Jingle, JingleAddress, 'jingleContract');
 createNewContract(Marketplace, MarketplaceAddress, 'marketplaceContract');

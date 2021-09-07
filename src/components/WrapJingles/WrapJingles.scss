@@ -1,0 +1,17 @@
+@import "partials/colors";
+@import "partials/text";
+
+.wrap-jingle-wrapper {
+  display: flex;
+  flex-grow: 1;
+
+  &.getting {
+
+    .width-container {
+      min-height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

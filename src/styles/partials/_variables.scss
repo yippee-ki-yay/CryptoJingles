@@ -19,7 +19,7 @@ $box-padding: 20px 25px 25px 25px;
 }
 
 @mixin for-sm-screen {
-  @media only screen and (max-width: 500px) { @content; }
+  @media only screen and (max-width: 650px) { @content; }
 }
 
 @mixin for-ipad {

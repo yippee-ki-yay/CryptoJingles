@@ -27,6 +27,7 @@ const Header = ({ address }) => {
 
           <div className="links-container">
             <div className="links-wrapper">
+              <NavLink activeClasssName="active" to="/wrap-jingle">Wrap Jingles</NavLink>
               <NavLink activeClasssName="active" to="/compose">Compose</NavLink>
               <NavLink activeClasssName="active" to="/marketplace">Marketplace</NavLink>
               { address && (<NavLink activeClasssName="active" to={`/profile/${address}`}>Profile</NavLink>) }
