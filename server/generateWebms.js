@@ -23,15 +23,15 @@ function generateWebm(jingleId, sampleTypes, settings) {
 }
 
 (async () => {
-  const jingle = await Jingle.findOne({ hasWebm: false });
+  setInterval(async () => {
+    const jingle = await Jingle.findOne({ hasWebm: false });
 
-  console.log(jingle);
+    generateWebm(jingle.jingleId, jingle.sampleTypes, jingle.settings);
 
-  generateWebm(jingle.jingleId, jingle.sampleTypes, jingle.settings);
+    jingle.hasWebm = true;
 
-  jingle.hasWebm = true;
+    await jingle.save();
 
-  await jingle.save();
-
-  db.closeConnection();
+    db.closeConnection();
+  }, 60 * 1000 * 1);
 })();
