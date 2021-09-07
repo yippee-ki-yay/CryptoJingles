@@ -9,8 +9,6 @@ const { resolve, entry, nodePolyfill, parseVideo, fileLoader, createDevServer } 
 
 const devServer = createDevServer(false);
 
-console.log('path.resolve(\'./.env.development\')', path.resolve('./.env.development'));
-
 module.exports = {
   entry,
   output: {

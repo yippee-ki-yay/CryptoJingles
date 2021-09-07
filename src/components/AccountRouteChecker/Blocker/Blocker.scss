@@ -1,3 +1,5 @@
+@import "partials/text";
+
 .blocker-wrapper {
   display: flex;
   flex-grow: 1;
@@ -10,8 +12,10 @@
     justify-content: center;
 
     .block-text {
-      font-size: 20px;
+      font-size: $font-size-giant;
+      max-width: 300px;
       margin-top: 15px;
+      text-align: center;
     }
   }
 }
