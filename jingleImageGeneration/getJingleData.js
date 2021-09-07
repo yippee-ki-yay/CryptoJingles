@@ -118,7 +118,7 @@ module.exports = (jingleId) => {
     };
   case 29:
     return {
-      name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.mp3', rarity: 0, length: 6.060,
+      name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.wav', rarity: 0, length: 6.060,
     };
   case 30:
     return {

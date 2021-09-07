@@ -120,7 +120,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 29:
     return {
-      type: COMPOSE, name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.mp3', rarity: 0, length: 6.060,
+      type: COMPOSE, name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.wav', rarity: 0, length: 6.060,
     };
   case 30:
     return {
