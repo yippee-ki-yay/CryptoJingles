@@ -34,9 +34,4 @@ export const filterOGJingles = (jingles) => jingles.filter(({ jingleId, version 
   return isV0OG || isV1OG;
 });
 
-export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, version }) => {
-  const isV0OG = version === 0 && jingleId >= NUM_V0_OG_JINGLES;
-  const isV1OG = version === 1 && jingleId >= NUM_V1_OG_JINGLES;
-
-  return isV0OG || isV1OG;
-});
+export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, version }) => version === 1 && jingleId >= NUM_V1_OG_JINGLES);
