@@ -44,7 +44,7 @@ const generate = (version, jingleId, samplesIds, settings) => {
 
     const noCut = cutStart === 0 && cutEnd === 0;
 
-    return execSync(`sox -v ${volume} ${repoPath.path}/public/${fileName} ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav${noCut ? '' : ` trim ${cutStart} ${cutEnd}`}`, (error, stdout, stderr) => handleExecSync(`Generate single sample sound ${s}` , error, stdout, stderr));
+    return execSync(`sox -v  ${volume} ${repoPath.path}/public/${fileName} -r 48000 ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav${noCut ? '' : ` trim ${cutStart} ${cutEnd}`}`, (error, stdout, stderr) => handleExecSync(`Generate single sample sound ${s}` , error, stdout, stderr));
   });
 
   // Generate parameters per file for the mix command
@@ -54,7 +54,7 @@ const generate = (version, jingleId, samplesIds, settings) => {
     return delay ? `"|sox ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav -p pad ${delay}"` : `${repoPath.path}/jingleImageGeneration/audios/out${index}.wav`;
   });
 
-  execSync(`sox -m ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} ${repoPath.path}/jingleImageGeneration/audios/v1_${jingleId}.wav`);
+  execSync(`sox -m -r 48000 ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} -r 48000 ${repoPath.path}/jingleImageGeneration/audios/v1_${jingleId}.wav`);
   execSync(DELETE_SINGLE_OUT_FILES);
 };
 

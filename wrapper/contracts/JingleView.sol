@@ -39,6 +39,7 @@ contract JingleView {
     address public constant JINGLE_V1_ADDR = 0x5B6660ca047Cc351BFEdCA4Fc864d0A88F551485;
 
     struct JingleData {
+        uint256 id;
         string name;
         string author;
         bool onSale;
@@ -76,6 +77,7 @@ contract JingleView {
         }
 
         return JingleData({
+            id: _jingleId,
             name: name,
             author: author,
             onSale: order.exists,
