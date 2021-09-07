@@ -54,8 +54,6 @@ contract JingleView {
         uint sampleType;
     }
 
-    enum Version { V0, V1 }
-
     function getFullJingleData(uint256 _jingleId) public view returns (JingleData memory) {
         IJingle jingleContract = IJingle(JINGLE_V1_ADDR);
 

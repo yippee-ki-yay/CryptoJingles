@@ -276,7 +276,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 68:
     return {
-      type: COMPOSE, name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_Vox Loop.wav', rarity: 1, length: 3.750,
+      type: COMPOSE, name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_VoxLoop.wav', rarity: 1, length: 3.750,
     };
   case 69:
     return {

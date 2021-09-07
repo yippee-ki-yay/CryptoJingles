@@ -33,12 +33,12 @@ const cryptoJingles = new web3.eth.Contract(
   cryptoJinglesAddress,
 );
 
-const startBlock = '13158511';
+const startBlock = '13173875';
 // const endBlock = parseInt(startBlock, 10) + 2000;
 
 // console.log(endBlock);
 
-const endBlock = 'latest';
+const endBlock = '13175300';
 
 let lastCycleBlock = startBlock;
 
@@ -67,7 +67,7 @@ async function update() {
             const sampleTypes = _jingle.jingleTypes.map((s) => s.valueOf());
             const settings = _jingle.settings.map((s) => s.valueOf());
 
-            if (_jingle.jingleId.valueOf() >= numJinglesInDb) {
+            // if (_jingle.jingleId.valueOf() >= numJinglesInDb) {
               const saved = await jingleCtrl.addJingle({
                 jingleId: _jingle.jingleId.valueOf(),
                 name: _jingle.name,
@@ -79,8 +79,12 @@ async function update() {
                 price: 0,
                 settings,
               });
+
+              // eslint-disable-next-line no-use-before-define
+              await generateWebm(_jingle.jingleId.valueOf(), sampleTypes, settings);
+
               resolve(saved);
-            }
+            // }
           }),
         );
 
@@ -92,62 +96,62 @@ async function update() {
     },
   );
 
-  cryptoJingles.getPastEvents(
-    'Purchased',
-    { fromBlock: lastCycleBlock, toBlock: endBlock },
-    async (err, ress) => {
-      ress.forEach(async (res) => {
-        const address = res.returnValues.user;
-        const numSamples = res.returnValues.numJingles.valueOf();
+  // cryptoJingles.getPastEvents(
+  //   'Purchased',
+  //   { fromBlock: lastCycleBlock, toBlock: endBlock },
+  //   async (err, ress) => {
+  //     ress.forEach(async (res) => {
+  //       const address = res.returnValues.user;
+  //       const numSamples = res.returnValues.numJingles.valueOf();
 
-        console.log(address, numSamples);
+  //       console.log(address, numSamples);
 
-        await userCtrl.addUser(address, numSamples);
-      });
-    },
-  );
+  //       await userCtrl.addUser(address, numSamples);
+  //     });
+  //   },
+  // );
 
-  const marketplace = {};
+  // const marketplace = {};
 
-  marketplaceContract.getPastEvents(
-    'allEvents',
-    { fromBlock: lastCycleBlock, toBlock: endBlock },
-    async (err, events) => {
-      console.log(err, events);
-      // eslint-disable-next-line no-use-before-define
-      addMarketplaceEvents(events, marketplace);
+  // marketplaceContract.getPastEvents(
+  //   'allEvents',
+  //   { fromBlock: lastCycleBlock, toBlock: endBlock },
+  //   async (err, events) => {
+  //     console.log(err, events);
+  //     // eslint-disable-next-line no-use-before-define
+  //     addMarketplaceEvents(events, marketplace);
 
-      for (const key of Object.keys(marketplace)) {
-        const eventList = marketplace[key];
+  //     for (const key of Object.keys(marketplace)) {
+  //       const eventList = marketplace[key];
 
-        let numOrders = 0;
-        let numCancels = 0;
+  //       let numOrders = 0;
+  //       let numCancels = 0;
 
-        eventList.forEach((e) => {
-          if (e.event === 'SellOrder') {
-            numOrders++;
-          } else {
-            numCancels++;
-          }
-        });
+  //       eventList.forEach((e) => {
+  //         if (e.event === 'SellOrder') {
+  //           numOrders++;
+  //         } else {
+  //           numCancels++;
+  //         }
+  //       });
 
-        const e = eventList[eventList.length - 1];
+  //       const e = eventList[eventList.length - 1];
 
-        if (numOrders > numCancels) {
-          // add
-          await putOnSale(eventList[eventList.length - 1]);
-        } else {
-          // cancel
+  //       if (numOrders > numCancels) {
+  //         // add
+  //         await putOnSale(eventList[eventList.length - 1]);
+  //       } else {
+  //         // cancel
 
-          if (e.event === 'Bought') {
-            await boughtJingle(e);
-          } else {
-            await cancelJingle(e);
-          }
-        }
-      }
-    },
-  );
+  //         if (e.event === 'Bought') {
+  //           await boughtJingle(e);
+  //         } else {
+  //           await cancelJingle(e);
+  //         }
+  //       }
+  //     }
+  //   },
+  // );
 }
 
 async function boughtJingle(res) {
@@ -200,11 +204,12 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-  setInterval(async () => {
-    await update();
-    console.log('Block before: ', lastCycleBlock);
 
-    lastCycleBlock = (await web3.eth.getBlockNumber()).toString();
-    console.log('Block after: ', lastCycleBlock);
-  }, 1000 * 60 * 1);
+  // setInterval(async () => {
+    await update();
+    // console.log('Block before: ', lastCycleBlock);
+
+    // lastCycleBlock = (await web3.eth.getBlockNumber()).toString();
+    // console.log('Block after: ', lastCycleBlock);
+ // }, 1000 * 60 * 1);
 })();

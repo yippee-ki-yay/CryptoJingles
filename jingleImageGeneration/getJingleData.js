@@ -274,7 +274,7 @@ module.exports = (jingleId) => {
     };
   case 68:
     return {
-      name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_Vox Loop.wav', rarity: 1, length: 3.750,
+      name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_VoxLoop.wav', rarity: 1, length: 3.750,
     };
   case 69:
     return {

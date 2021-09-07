@@ -17,6 +17,8 @@ module.exports = {
 
     const addFrame = _addFrame && canAddFrame(version, jingleId);
 
+    console.log('jingleId: ', jingleId);
+
     const maps = [
       'architecture.jpg', 'church2.jpg', 'city2.jpg', 'city5.jpg',
       'eye.jpg', 'fractal1.jpg', 'fractal2.jpg', 'geo1.jpg', 'geo3.jpg',
