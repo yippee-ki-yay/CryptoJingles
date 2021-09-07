@@ -4,6 +4,8 @@ const { handleExecSync } = require('./generationUtils');
 
 const DELETE_SINGLE_OUT_FILES = 'find . -name \'out*.wav\' -delete';
 
+const repoPath = require('./path');
+
 const handleExec = (error, stdout, stderr) => {
   if (error) {
     console.log(`error: ${error.message}`);
@@ -14,7 +16,7 @@ const handleExec = (error, stdout, stderr) => {
 };
 
 const generateV0Jingles = (jingleId, samplesFiles) => {
-  const singleCommands = samplesFiles.map((fileName, index) => `./audios/out${index}.wav`);
+  const singleCommands = samplesFiles.map((fileName, index) => `${repoPath.path}/audios/out${index}.wav`);
   execSync(`sox -m ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} ./audios/v0_${jingleId}.wav`);
   execSync(DELETE_SINGLE_OUT_FILES);
 };
@@ -42,17 +44,17 @@ const generate = (version, jingleId, samplesIds, settings) => {
 
     const noCut = cutStart === 0 && cutEnd === 0;
 
-    return execSync(`sox -v ${volume} ../public/${fileName} ./audios/out${index}.wav${noCut ? '' : ` trim ${cutStart} ${cutEnd}`}`, (error, stdout, stderr) => handleExecSync(`Generate single sample sound ${s}` , error, stdout, stderr));
+    return execSync(`sox -v  ${volume} ${repoPath.path}/public/${fileName} -r 48000 ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav${noCut ? '' : ` trim ${cutStart} ${cutEnd}`}`, (error, stdout, stderr) => handleExecSync(`Generate single sample sound ${s}` , error, stdout, stderr));
   });
 
   // Generate parameters per file for the mix command
   const singleCommands = samplesFiles.map((fileName, index) => {
     const delay = parseInt(delays[index], 10) / 10;
 
-    return delay ? `"|sox ./audios/out${index}.wav -p pad ${delay}"` : `./audios/out${index}.wav`;
+    return delay ? `"|sox ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav -p pad ${delay}"` : `${repoPath.path}/jingleImageGeneration/audios/out${index}.wav`;
   });
 
-  execSync(`sox -m ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} ./audios/v1_${jingleId}.wav`);
+  execSync(`sox -m -r 48000 ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} -r 48000 ${repoPath.path}/jingleImageGeneration/audios/v1_${jingleId}.wav`);
   execSync(DELETE_SINGLE_OUT_FILES);
 };
 

@@ -6,6 +6,8 @@ const { createCanvas } = require('canvas');
 const Whammy = require('./whamy');
 const createRenderer = require('./createRenderer');
 
+const repoPath = require('./path');
+
 const { Image } = Canvas;
 
 const canvasToWebp = (canvas) => new Promise((resolve, reject) => {
@@ -67,7 +69,7 @@ const render = async (_encoder, _renderer, _steps, _interval, _fileName, _versio
   frames.map((frame) => _encoder.add(frame));
 
   const output = _encoder.compile(true);
-  fs.writeFileSync(`./videos/${_fileName}.webm`, output, { encoding: 'binary' });
+  fs.writeFileSync(`${repoPath.path}/jingleImageGeneration/videos/${_fileName}.webm`, output, { encoding: 'binary' });
 
   _cb(null, true);
 };

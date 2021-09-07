@@ -118,7 +118,7 @@ module.exports = (jingleId) => {
     };
   case 29:
     return {
-      name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.mp3', rarity: 0, length: 6.060,
+      name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.wav', rarity: 0, length: 6.060,
     };
   case 30:
     return {
@@ -274,7 +274,7 @@ module.exports = (jingleId) => {
     };
   case 68:
     return {
-      name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_Vox Loop.wav', rarity: 1, length: 3.750,
+      name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_VoxLoop.wav', rarity: 1, length: 3.750,
     };
   case 69:
     return {
@@ -326,7 +326,7 @@ module.exports = (jingleId) => {
     };
   case 81:
     return {
-      name: 'Virus FM', source: 'https://cryptojingles.app/public/Virus FM_F#_140.wav', rarity: 1, length: 6.857,
+      name: 'Virus FM', source: 'https://cryptojingles.app/public/VirusFM_F#_140.wav', rarity: 1, length: 6.857,
     };
   case 82:
     return {

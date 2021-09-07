@@ -3,6 +3,11 @@ build/
 dist/
 build_webpack/
 
+audios/
+videos/
+videosWithSound/
+path.json
+
 .env
 opener/.env
 opener/node_modules

@@ -120,7 +120,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 29:
     return {
-      type: COMPOSE, name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.mp3', rarity: 0, length: 6.060,
+      type: COMPOSE, name: 'Rock Guitar', source: 'https://cryptojingles.app/public/rock-guitar.wav', rarity: 0, length: 6.060,
     };
   case 30:
     return {
@@ -276,7 +276,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 68:
     return {
-      type: COMPOSE, name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_Vox Loop.wav', rarity: 1, length: 3.750,
+      type: COMPOSE, name: 'Vox Loop', source: 'https://cryptojingles.app/public/128BPM_VoxLoop.wav', rarity: 1, length: 3.750,
     };
   case 69:
     return {
@@ -328,7 +328,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 81:
     return {
-      type: COMPOSE, name: 'Virus FM', source: 'https://cryptojingles.app/public/Virus FM_F#_140.wav', rarity: 1, length: 6.857,
+      type: COMPOSE, name: 'Virus FM', source: 'https://cryptojingles.app/public/VirusFM_F#_140.wav', rarity: 1, length: 6.857,
     };
   case 82:
     return {

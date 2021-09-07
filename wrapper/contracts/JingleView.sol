@@ -39,6 +39,7 @@ contract JingleView {
     address public constant JINGLE_V1_ADDR = 0x5B6660ca047Cc351BFEdCA4Fc864d0A88F551485;
 
     struct JingleData {
+        uint256 id;
         string name;
         string author;
         bool onSale;
@@ -53,8 +54,6 @@ contract JingleView {
         uint sampleId;
         uint sampleType;
     }
-
-    enum Version { V0, V1 }
 
     function getFullJingleData(uint256 _jingleId) public view returns (JingleData memory) {
         IJingle jingleContract = IJingle(JINGLE_V1_ADDR);
@@ -78,6 +77,7 @@ contract JingleView {
         }
 
         return JingleData({
+            id: _jingleId,
             name: name,
             author: author,
             onSale: order.exists,
