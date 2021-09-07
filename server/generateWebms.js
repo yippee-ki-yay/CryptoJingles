@@ -32,6 +32,4 @@ function generateWebm(jingleId, sampleTypes, settings) {
 
     await jingle.save();
   }, 60 * 1000 * 1);
-
-  db.closeConnection();
 })();
