@@ -84,6 +84,8 @@
   "join.paragraph_3": "The longer you provide liquidity for, the higher the rewards!",
   "join.audit": "HORD LP Staking Farm Smart Contract Audit can be found <joinLink>Here</joinLink>",
 
+  "wallet.blocker": "In order to see this page please connect your wallet",
+
   "footer.reserved": "Hordapp Ltd. All rights Reserved 2021",
 
   "modal.copy_address": "Copy address",

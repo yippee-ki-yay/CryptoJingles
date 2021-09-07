@@ -17,10 +17,7 @@ export const getAllV1UserJingles = async (address) => {
   }));
 };
 
-export const getAllV0UserJingles = async (address) => {
-  const res = await getAllV1UserJingles(address);
-  return res.map((jingle) => ({ ...jingle, version: 0 }));
-};
+export const getAllV0UserJingles = (address) => [];
 
 export const wrapJingle = () => {};
 

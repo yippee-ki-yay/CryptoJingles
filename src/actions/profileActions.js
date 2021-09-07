@@ -219,7 +219,7 @@ export const buySamplesAction = () => async (dispatch, getState) => {
     const { address } = state.app;
     const numJinglesToBuy = state.profile.numSamplesToBuy;
 
-    const txParams = { from: address, value: numJinglesToBuy * SAMPLE_PRICE };
+    const txParams = { from: address, value: parseInt(numJinglesToBuy, 10) * SAMPLE_PRICE };
     await window.contract.buySamples(parseInt(numJinglesToBuy, 10), address, txParams);
 
     dispatch({ type: BUY_SAMPLES_SUCCESS });

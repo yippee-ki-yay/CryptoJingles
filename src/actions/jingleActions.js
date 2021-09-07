@@ -14,12 +14,11 @@ import {
   WRAP_JINGLE_REQUEST,
   WRAP_JINGLE_SUCCESS,
   WRAP_JINGLE_FAILURE,
+  CLEAR_WRAP_JINGLE,
 } from '../redux/actionTypes/jingleActionTypes';
 import { wrapJingle, getAllV0UserJingles, getAllV1UserJingles } from '../services/jingleService';
 import { wait } from '../services/utilsService';
 import { approveAddressOnAssetAction } from './assetsActions';
-import { WrappedOGJingleAddress } from '../util/config';
-import { APPROVE_TYPES } from '../constants/assets';
 
 /**
  * Handles the redux state for getting all the users v0 jingles
@@ -113,4 +112,18 @@ export const wrapJingleAction = (id, version, approved, approveAddress, approveT
   } catch (err) {
     dispatch({ type: WRAP_JINGLE_FAILURE, wrapKey, payload: err.message });
   }
+};
+
+/**
+ * Handles the reducer state for clearing the remove action state
+ *
+ * @param id {Number}
+ * @param version {Number}
+ * @param wrapKey {String}
+ * @return {Function}
+ */
+export const clearWrapAction = (id, version, wrapKey) => (dispatch, getState) => {
+  const singleWrappingJingle = getState().jingle.wrappingJingles[wrapKey];
+
+  if (singleWrappingJingle && !singleWrappingJingle.wrapping) dispatch({ type: CLEAR_WRAP_JINGLE, wrapKey });
 };

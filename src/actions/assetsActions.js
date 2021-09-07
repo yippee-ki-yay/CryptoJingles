@@ -25,7 +25,6 @@ import {
   getAssetPrice,
   getAssetInfo,
 } from 'services/assetsService';
-import { ZERO_ADDRESS } from '../constants/general';
 
 /**
  * Handles redux states when an assets balance is being fetched
@@ -98,7 +97,7 @@ export const isAddressApprovedOnAssetAction = (asset, spender, tokenId, approveT
       toBlock: 'latest',
     });
 
-    const payload = events.length > 0 && events[events.length - 1].returnValues.approved !== ZERO_ADDRESS;
+    const payload = events.length > 0;
 
     dispatch({ type: GET_IS_ADDRESS_APPROVED_ON_ASSET_SUCCESS, asset, gettingPropName, isApprovedPropName, payload }); // eslint-disable-line object-curly-newline
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import t from 'translate';
 
 import WalletIcon from '../../Common/Icons/WalletIcon';
 import './Blocker.scss';
@@ -8,11 +8,9 @@ const Blocker = () => (
   <div className="blocker-wrapper">
     <div className="width-container">
       <WalletIcon />
-      <div className="block-text">In order to see this page please connect your wallet.</div>
+      <div className="block-text">{ t('wallet.blocker') }</div>
     </div>
   </div>
 );
-
-Blocker.propTypes = {};
 
 export default Blocker;

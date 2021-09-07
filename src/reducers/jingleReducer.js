@@ -14,6 +14,7 @@ import {
   WRAP_JINGLE_REQUEST,
   WRAP_JINGLE_SUCCESS,
   WRAP_JINGLE_FAILURE,
+  CLEAR_WRAP_JINGLE,
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
@@ -138,6 +139,18 @@ export default (state = INITIAL_STATE, action) => {
         [action.wrapKey]: {
           wrapping: false,
           error: payload,
+        },
+      },
+    };
+
+  case CLEAR_WRAP_JINGLE:
+    return {
+      ...state,
+      wrappingJingles: {
+        ...state.wrappingJingles,
+        [action.wrapKey]: {
+          wrapping: false,
+          error: '',
         },
       },
     };

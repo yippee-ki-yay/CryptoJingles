@@ -9,7 +9,7 @@ import t from 'translate';
 import { MESSAGE_BOX_TYPES } from 'constants/general';
 import { getApprovingState, getIsApprovedReducerPropName } from 'services/assetsService';
 import { isAddressApprovedOnAssetAction } from '../../../../actions/assetsActions';
-import { wrapJingleAction } from '../../../../actions/jingleActions';
+import { clearWrapAction, wrapJingleAction } from '../../../../actions/jingleActions';
 import SingleJingle from '../../../SingleJingle/SingleJingle';
 import MessageBox from '../../../Common/MessageBox/MessageBox';
 
@@ -18,14 +18,8 @@ import './WrapJinglesContentJingleItem.scss';
 const WrapJinglesContentJingleItem = ({
   jingle, approveAddress, approveKey, assetSymbol, wrapKey,
   isAddressApprovedOnAssetAction, assetApproved, approvingAsset,
-  wrapJingleAction, jingleWrapping, jingleWrappingError, isOg,
+  wrapJingleAction, clearWrapAction, jingleWrapping, jingleWrappingError, isOg,
 }) => {
-  useEffect(() => {
-    isAddressApprovedOnAssetAction(assetSymbol, approveAddress, jingle.jingleId, approveKey);
-  }, [jingle, isAddressApprovedOnAssetAction, approveAddress, assetSymbol, approveKey]);
-
-  // TODO - clear wrap error
-
   const buttonLabel = useMemo(() => {
     if (approvingAsset) return isOg ? t('jingles.approving_og_wrapper') : t('jingles.approving_new_wrapper');
     if (!assetApproved) return isOg ? t('jingles.approve_og_wrapper') : t('jingles.approve_new_wrapper');
@@ -35,9 +29,17 @@ const WrapJinglesContentJingleItem = ({
     return isOg ? t('jingles.wrap_with_og_wrapper') : t('jingles.wrap_with_new_wrapper');
   }, [assetApproved, approvingAsset, jingleWrapping, isOg]);
 
+  const disabled = useMemo(() => jingleWrapping || approvingAsset, [jingleWrapping, approvingAsset]);
+
   const handleJingleWrapCallback = useCallback(() => wrapJingleAction(jingle.jingleId, jingle.version, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey), [jingle, wrapJingleAction, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey]);
 
-  const disabled = useMemo(() => jingleWrapping || approvingAsset, [jingleWrapping, approvingAsset]);
+  const clearWrapActionCallback = useCallback(() => clearWrapAction(jingle.jingleId, jingle.version, wrapKey), [jingle, wrapKey]);
+
+  useEffect(() => {
+    isAddressApprovedOnAssetAction(assetSymbol, approveAddress, jingle.jingleId, approveKey);
+  }, [jingle, isAddressApprovedOnAssetAction, approveAddress, assetSymbol, approveKey]);
+
+  useEffect(() => () => { clearWrapActionCallback(); }, [clearWrapActionCallback]);
 
   return (
     <div className="wrap-jingles-content-jingle-item-wrapper">
@@ -70,6 +72,7 @@ WrapJinglesContentJingleItem.propTypes = {
   jingle: PropTypes.object.isRequired,
   isAddressApprovedOnAssetAction: PropTypes.func.isRequired,
   wrapJingleAction: PropTypes.func.isRequired,
+  clearWrapAction: PropTypes.func.isRequired,
   jingleWrapping: PropTypes.bool.isRequired,
   jingleWrappingError: PropTypes.string.isRequired,
   approveAddress: PropTypes.string.isRequired,
@@ -107,6 +110,6 @@ const mapStateToProps = (state, { jingle, approveType }) => {
   });
 };
 
-const mapDispatchToProps = { isAddressApprovedOnAssetAction, wrapJingleAction };
+const mapDispatchToProps = { isAddressApprovedOnAssetAction, wrapJingleAction, clearWrapAction };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrapJinglesContentJingleItem);
