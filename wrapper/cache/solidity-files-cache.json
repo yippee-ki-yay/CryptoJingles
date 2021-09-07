@@ -145,8 +145,8 @@
       ]
     },
     "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
-      "lastModificationDate": 1630515235696,
-      "contentHash": "a4f6dccf3f15b6844e357f737a572388",
+      "lastModificationDate": 1630856544656,
+      "contentHash": "6b77c4fb0644ed6f6af0b3758f48b078",
       "sourceName": "@openzeppelin/contracts/token/ERC721/ERC721.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -462,6 +462,43 @@
       ],
       "artifacts": [
         "console"
+      ]
+    },
+    "/Users/nenadpalinkasevic/Documents/code/CryptoJingles/wrapper/contracts/JingleView.sol": {
+      "lastModificationDate": 1630955440069,
+      "contentHash": "6495f34ff5536b7fbd380ed5c9ec4a14",
+      "sourceName": "contracts/JingleView.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IJingle",
+        "IMarketplace",
+        "ISample",
+        "JingleView"
       ]
     }
   }
