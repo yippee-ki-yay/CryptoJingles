@@ -1,6 +1,5 @@
 const { execSync } = require('child_process');
 const getJingleData = require('./getJingleData');
-const { handleExecSync } = require('./generationUtils');
 
 const DELETE_SINGLE_OUT_FILES = 'find . -name \'out*.wav\' -delete';
 
@@ -44,7 +43,7 @@ const generate = (version, jingleId, samplesIds, settings) => {
 
     const noCut = cutStart === 0 && cutEnd === 0;
 
-    return execSync(`sox -v  ${volume} ${repoPath.path}/public/${fileName} -r 48000 ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav${noCut ? '' : ` trim ${cutStart} ${cutEnd}`}`, (error, stdout, stderr) => handleExecSync(`Generate single sample sound ${s}` , error, stdout, stderr));
+    return execSync(`sox -v  ${volume} ${repoPath.path}/public/${fileName} -r 48000 ${repoPath.path}/jingleImageGeneration/audios/out${index}.wav${noCut ? '' : ` trim ${cutStart} ${cutEnd}`}`);
   });
 
   // Generate parameters per file for the mix command
