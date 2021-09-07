@@ -1,0 +1,30 @@
+@import "partials/text";
+@import "partials/variables";
+
+.button {
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  color: var(--button-white);
+  font-size: $font-size-medium;
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  @include hover-transition;
+
+  &:hover { opacity: 0.7; }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.disconnect {
+    background: var(--button-red);
+
+    &:hover {
+      background: var(--button-red-hover);
+    }
+  }
+}

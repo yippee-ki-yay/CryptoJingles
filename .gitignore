@@ -11,6 +11,8 @@ server/node_modules
 server/.env
 .DS_Store
 
+cache/
+
 # Logs
 logs
 *.log

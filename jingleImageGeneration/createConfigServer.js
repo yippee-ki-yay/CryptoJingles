@@ -3,11 +3,19 @@ const seedRandom = require('seed-random');
 const createRandomRange = require('./random-range');
 const createLocalConfig = require('./config');
 
+const canAddFrame = (version, jingleId) => {
+  if (version === 0) return jingleId <= 30;
+
+  return jingleId <= 47;
+};
+
 module.exports = {
-  create: (_seed, jingleId, version) => {
-    const seed = parseInt(_seed, 10);
+  create: (version, _seed, jingleId, _addFrame) => {
+    const seed = parseInt(version === 0 ? _seed : jingleId, 10);
     const randomFunc = seedRandom(seed);
     const random = createRandomRange(randomFunc);
+
+    const addFrame = _addFrame && canAddFrame(version, jingleId);
 
     const maps = [
       'architecture.jpg', 'church2.jpg', 'city2.jpg', 'city5.jpg',
@@ -19,8 +27,8 @@ module.exports = {
     const mapSrc = maps[Math.floor(random(maps.length))];
 
     const outputDir = path.resolve('../public');
-    const fileName = `${version}_${jingleId}`;
+    const fileName = `v${version}_${jingleId}`;
 
-    return (createLocalConfig(seed, random, randomFunc, mapSrc, outputDir, fileName));
+    return (createLocalConfig(seed, random, randomFunc, mapSrc, outputDir, fileName, addFrame));
   },
 };

@@ -58,6 +58,11 @@ export const SET_PROFILE_ADDRESS = 'set_profile_address';
 export const SET_MY_SAMPLES_SORTING = 'set_my_samples_sorting';
 export const PROFILE_LIKE_UNLIKE_JINGLE = 'profile_like_unlike_jingle';
 
+export const BUY_SAMPLES_REQUEST = 'BUY_SAMPLES_REQUEST';
+export const BUY_SAMPLES_SUCCESS = 'BUY_SAMPLES_SUCCESS';
+export const BUY_SAMPLES_FAILURE = 'BUY_SAMPLES_FAILURE';
+export const CLEAR_BUY_SAMPLES = 'CLEAR_BUY_SAMPLES';
+
 // Compose actions
 export const UPDATE_VOLUME = 'update_volume';
 export const UPDATE_DELAY = 'update_delay';

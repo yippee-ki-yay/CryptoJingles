@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { MESSAGE_BOX_TYPES } from '../../../constants/general';
 
-import CloseIcon from '../Icons/CloseIcon';
+import ErrorStatusIcon from '../Icons/StatusIcons/ErrorStatusIcon';
 import DoneStatusIcon from '../Icons/DoneStatusIcon';
 import './MessageBox.scss';
 
@@ -15,7 +15,7 @@ const MessageBox = ({
   >
     <div className="message-box">
       <div className={clsx('status-icon-wrapper', { 'can-click': canClick })} onClick={handleClick}>
-        { type === MESSAGE_BOX_TYPES.ERROR && <span><CloseIcon /></span> }
+        { type === MESSAGE_BOX_TYPES.ERROR && <span><ErrorStatusIcon /></span> }
         { type === MESSAGE_BOX_TYPES.SUCCESS && <DoneStatusIcon /> }
       </div>
 

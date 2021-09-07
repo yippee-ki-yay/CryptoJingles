@@ -1,6 +1,6 @@
 const serverConfig = require('./createConfigServer');
 const createFileRenderer = require('./createFileRenderer');
 
-const config = serverConfig.create(5 + 1 + 10 + 3 + 8, 0, 'v0');
+const config = serverConfig.create(0, 0 + 1 + 2 + 3 + 4, 0, true);
 
 createFileRenderer(config);

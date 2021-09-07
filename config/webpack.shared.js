@@ -55,6 +55,7 @@ const createDevServer = (prod = true) => {
   const base = {
     stats: 'minimal',
     contentBase: './dist',
+    port: 8585,
     open: true,
     historyApiFallback: {
       disableDotRule: true,

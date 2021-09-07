@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import SampleBox2 from '../../SampleBox/SampleBox2';
 import BoxLoader from '../../Decorative/BoxLoader';
 import SortSamples from '../../SortSamples/SortSamples';
-import {
-  getSamplesForUser, buySamples, handleNumSamplesToBuyChange, onMySamplesSort,
-} from '../../../actions/profileActions';
+import { getSamplesForUser, onMySamplesSort } from '../../../actions/profileActions';
+import BuySamples from '../../Common/BuySamples/BuySamples';
 
 import './MySamples.scss';
 
@@ -25,41 +24,13 @@ class MySamples extends Component {
 
   render() {
     const {
-      isOwner, mySamples, loading, numSamplesToBuy, selectedMySampleSort, mySamplesSortingOptions,
+      isOwner, mySamples, loading, selectedMySampleSort, mySamplesSortingOptions,
     } = this.props;
-    const { buySamples, handleNumSamplesToBuyChange, onMySamplesSort } = this.props;
+    const { onMySamplesSort } = this.props;
 
     return (
       <div className="my-jingles-wrapper">
-        {
-          isOwner && (
-            <div className="buy-samples-section-wrapper">
-              <div className="buy-samples-section">
-                <div>
-                  <form className="form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
-                    <div className="buy-samples-wrapper">
-                      <h2>Buy some samples:</h2>
-
-                      <div className="form-items-wrapper">
-                        <input
-                          name="numJinglesToBuy"
-                          value={numSamplesToBuy}
-                          onChange={(event) => { handleNumSamplesToBuyChange(event.target); }}
-                          type="number"
-                          className="form-control"
-                          placeholder="Num. of Jingles"
-                        />
-
-                        <button type="submit" className="btn buy-button" onClick={buySamples}>Buy!</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div className="separator" />
-            </div>
-          )
-        }
+        { isOwner && (<BuySamples />) }
 
         <SortSamples
           value={selectedMySampleSort}
@@ -105,14 +76,11 @@ class MySamples extends Component {
 MySamples.propTypes = {
   address: PropTypes.string.isRequired,
   mySamples: PropTypes.array.isRequired,
-  numSamplesToBuy: PropTypes.number.isRequired,
   loading: PropTypes.bool.isRequired,
   isOwner: PropTypes.bool.isRequired,
   selectedMySampleSort: PropTypes.object.isRequired,
   mySamplesSortingOptions: PropTypes.array.isRequired,
   getSamplesForUser: PropTypes.func.isRequired,
-  buySamples: PropTypes.func.isRequired,
-  handleNumSamplesToBuyChange: PropTypes.func.isRequired,
   onMySamplesSort: PropTypes.func.isRequired,
 };
 
@@ -126,7 +94,7 @@ const mapStateToProps = ({ profile }) => ({
 });
 
 const mapDispatchToProps = {
-  getSamplesForUser, buySamples, handleNumSamplesToBuyChange, onMySamplesSort,
+  getSamplesForUser, onMySamplesSort,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MySamples);
