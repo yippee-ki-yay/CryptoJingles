@@ -134,9 +134,7 @@ export const approveAddressOnAsset = async (
   const assetInfo = getAssetInfo(assetSymbol);
   const assetContract = await assetInfo.contract();
 
-  // return callTx(assetContract, 'approve', [approveAddress, tokenId], { from });
-  await wait(2000);
-  return true;
+  return callTx(assetContract, 'approve', [approveAddress, tokenId], { from });
 };
 
 /**

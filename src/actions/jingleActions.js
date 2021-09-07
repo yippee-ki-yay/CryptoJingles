@@ -90,15 +90,16 @@ export const getAllUserJinglesAction = (address) => async (dispatch) => {
  * @param approveType
  * @param assetSymbol
  * @param wrapKey
+ * @param isOg
  * @return {(function(*): Promise<void>)|*}
  */
-export const wrapJingleAction = (id, version, approved, approveAddress, approveType, assetSymbol, wrapKey) => async (dispatch, getState) => {
+export const wrapJingleAction = (id, version, approved, approveAddress, approveType, assetSymbol, wrapKey, isOg) => async (dispatch, getState) => {
   dispatch({ type: WRAP_JINGLE_REQUEST, wrapKey });
 
   try {
     if (!approved) await dispatch(approveAddressOnAssetAction(assetSymbol, approveAddress, approveType, id));
 
-    await wrapJingle();
+    await wrapJingle(id, version, getState().app.address, isOg);
 
     const { jingle } = getState();
     const jinglesVersionArr = version === 0 ? jingle.v0UserJingles : jingle.v1UserJingles;

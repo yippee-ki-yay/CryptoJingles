@@ -31,9 +31,9 @@ const WrapJinglesContentJingleItem = ({
 
   const disabled = useMemo(() => jingleWrapping || approvingAsset, [jingleWrapping, approvingAsset]);
 
-  const handleJingleWrapCallback = useCallback(() => wrapJingleAction(jingle.jingleId, jingle.version, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey), [jingle, wrapJingleAction, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey]);
+  const handleJingleWrapCallback = useCallback(() => wrapJingleAction(jingle.jingleId, jingle.version, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey, isOg), [jingle, wrapJingleAction, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey, isOg]);
 
-  const clearWrapActionCallback = useCallback(() => clearWrapAction(jingle.jingleId, jingle.version, wrapKey), [jingle, wrapKey]);
+  const clearWrapActionCallback = useCallback(() => clearWrapAction(jingle.jingleId, jingle.version, wrapKey), [jingle, wrapKey, clearWrapAction]);
 
   useEffect(() => {
     isAddressApprovedOnAssetAction(assetSymbol, approveAddress, jingle.jingleId, approveKey);

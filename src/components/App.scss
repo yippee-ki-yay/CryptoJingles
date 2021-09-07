@@ -61,10 +61,12 @@ a {
     align-items: center;
   }
 
-  &:not(.center) { padding-bottom: 130px; }
+  &:not(.center) .page-content-wrapper {
+    padding: 50px 0 130px 0;
+  }
 
   .page-header-wrapper {
-    padding: 50px 0;
+    padding-top: 50px;
 
     .page-title {
       font-size: $font-size-title;

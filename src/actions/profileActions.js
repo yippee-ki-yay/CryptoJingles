@@ -14,8 +14,6 @@ import { getSamples } from '../util/web3/ethereumService';
 import { addPendingTx, removePendingTx, guid } from './appActions';
 import { SAMPLE_PRICE, API_URL } from '../util/config';
 import { likeUnlikeJingle } from './utils';
-import { getAllJingles } from '../services/jingleService';
-import { wait } from '../services/utilsService';
 
 /**
  * Dispatches action to show that the profile address URL param
