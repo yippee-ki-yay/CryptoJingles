@@ -105,31 +105,37 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       wrappingJingles: {
         ...state.wrappingJingles,
-        [action.id]: {
+        [action.wrapKey]: {
           wrapping: true,
           error: '',
         },
       },
     };
 
-  case WRAP_JINGLE_SUCCESS:
-    return {
+  case WRAP_JINGLE_SUCCESS: {
+    const initial = {
       ...state,
       wrappingJingles: {
         ...state.wrappingJingles,
-        [action.id]: {
+        [action.wrapKey]: {
           wrapping: false,
           error: '',
         },
       },
     };
 
+    if (action.version === 0) initial.v0UserJingles = payload;
+    else initial.v1UserJingles = payload;
+
+    return initial;
+  }
+
   case WRAP_JINGLE_FAILURE:
     return {
       ...state,
       wrappingJingles: {
         ...state.wrappingJingles,
-        [action.id]: {
+        [action.wrapKey]: {
           wrapping: false,
           error: payload,
         },

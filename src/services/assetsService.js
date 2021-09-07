@@ -5,6 +5,7 @@ import {
 } from '../constants/assets';
 import callTx from './txService';
 import { ethToWei } from './web3Service';
+import { wait } from './utilsService';
 
 /**
  * Gets full asset data for the asset symbol
@@ -124,15 +125,18 @@ export const isAddressApprovedOnAsset = async (assetSymbol, account, addressToCh
  * @param assetSymbol {String} Token symbol
  * @param from {String}
  * @param approveAddress {String} Spender address
+ * @param tokenId {Number} Spender address
  * @return {Promise<Boolean>}
  */
 export const approveAddressOnAsset = async (
-  assetSymbol, from, approveAddress,
+  assetSymbol, from, approveAddress, tokenId,
 ) => {
-  const assetContract = await getErc20Contract(getAssetInfo(assetSymbol).address);
-  const num = ethToWei(Number.MAX_SAFE_INTEGER.toString());
+  const assetInfo = getAssetInfo(assetSymbol);
+  const assetContract = await assetInfo.contract();
 
-  return callTx(assetContract, 'approve', [approveAddress, num], { from });
+  // return callTx(assetContract, 'approve', [approveAddress, tokenId], { from });
+  await wait(2000);
+  return true;
 };
 
 /**
@@ -150,23 +154,12 @@ export const getAssetBalance = async (assetSymbol, address) => {
 
   if (isEth) data = await window._web3.eth.getBalance(address);
   else {
-    const contract = await getErc20Contract(getAssetInfo(assetSymbol).address);
+    const contract = await getErc20Contract(getAssetInfo(assetSymbol).contract);
     data = (await contract.methods.balanceOf(address).call()).toString();
   }
 
   // This maybe needs to be changed if we are checking
   // the balance of one token on another token
-  return assetAmountInEth(data, assetSymbol);
-};
-
-/**
- * Fetches total supply of any asset
- * @param assetSymbol {String}
- * @returns {Promise<String>}
- */
-export const getAssetTotalSupply = async (assetSymbol) => {
-  const contract = await getErc20Contract(getAssetInfo(assetSymbol).address);
-  const data = (await contract.methods.totalSupply().call()).toString();
   return assetAmountInEth(data, assetSymbol);
 };
 

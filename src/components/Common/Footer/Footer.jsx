@@ -27,6 +27,7 @@ const Footer = () => (
         <a
           className="medium"
           href="https://medium.com/@cryptojingles"
+          target="_blank"
           rel="noopener noreferrer"
         >
           <MediumIcon />
@@ -35,6 +36,7 @@ const Footer = () => (
         <a
           className="discord"
           href="https://discord.gg/AEHvH7Bv"
+          target="_blank"
           rel="noopener noreferrer"
         >
           <DiscordIcon />

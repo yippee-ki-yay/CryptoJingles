@@ -23,7 +23,9 @@ import {
   getIsApprovedReducerPropName,
   isAddressApprovedOnAsset,
   getAssetPrice,
+  getAssetInfo,
 } from 'services/assetsService';
+import { ZERO_ADDRESS } from '../constants/general';
 
 /**
  * Handles redux states when an assets balance is being fetched
@@ -35,7 +37,7 @@ export const getAssetBalanceAction = (asset) => async (dispatch, getState) => {
   dispatch({ type: GET_ASSET_BALANCE_REQUEST, asset });
 
   try {
-    const payload = await getAssetBalance(asset, getState().wallet.account);
+    const payload = await getAssetBalance(asset, getState().app.address);
 
     dispatch({ type: GET_ASSET_BALANCE_SUCCESS, asset, payload });
 
@@ -75,18 +77,28 @@ export const getAssetPriceAction = (asset, currency) => async (dispatch, getStat
  *
  * @param asset {String}
  * @param spender {String}
- * @param amount {String}
+ * @param tokenId {Number}
  * @param approveType {String}
  * @return {Function}
  */
-export const isAddressApprovedOnAssetAction = (asset, spender, amount, approveType) => async (dispatch, getState) => {
+export const isAddressApprovedOnAssetAction = (asset, spender, tokenId, approveType) => async (dispatch, getState) => {
   const gettingPropName = getGettingIsApprovedReducerPropName(approveType);
   const isApprovedPropName = getIsApprovedReducerPropName(approveType);
 
   dispatch({ type: GET_IS_ADDRESS_APPROVED_ON_ASSET_REQUEST, asset, gettingPropName }); // eslint-disable-line object-curly-newline
 
+  const assetInfo = getAssetInfo(asset);
+
   try {
-    const payload = await isAddressApprovedOnAsset(asset, getState().wallet.account, spender, amount);
+    const contract = await assetInfo.contract();
+
+    const events = await contract.getPastEvents('Approval', {
+      filter: { owner: getState().app.address, spender, tokenId: tokenId.toString() }, // Using an array means OR: e.g. 20 or 23
+      fromBlock: assetInfo.fromBlock,
+      toBlock: 'latest',
+    });
+
+    const payload = events.length > 0 && events[events.length - 1].returnValues.approved !== ZERO_ADDRESS;
 
     dispatch({ type: GET_IS_ADDRESS_APPROVED_ON_ASSET_SUCCESS, asset, gettingPropName, isApprovedPropName, payload }); // eslint-disable-line object-curly-newline
 
@@ -104,23 +116,24 @@ export const isAddressApprovedOnAssetAction = (asset, spender, amount, approveTy
  * @param asset {String}
  * @param spender {String}
  * @param approveType {String}
+ * @param tokenId {Number}
  * @return {Function}
  */
-export const approveAddressOnAssetAction = (asset, spender, approveType) => async (dispatch, getState) => {
+export const approveAddressOnAssetAction = (asset, spender, approveType, tokenId) => async (dispatch, getState) => {
   const propName = getApprovingReducerPropName(approveType);
   const isApprovedPropName = getIsApprovedReducerPropName(approveType);
-  const { account } = getState().wallet;
+  const { address } = getState().app;
 
   dispatch({
-    type: APPROVE_ADDRESS_ON_ASSET_REQUEST, asset, account, propName,
+    type: APPROVE_ADDRESS_ON_ASSET_REQUEST, asset, address, propName,
   });
 
   try {
-    await approveAddressOnAsset(asset, account, spender);
+    await approveAddressOnAsset(asset, address, spender, tokenId);
 
-    dispatch({ type: APPROVE_ADDRESS_ON_ASSET_SUCCESS, asset, account, propName, isApprovedPropName }); // eslint-disable-line object-curly-newline
+    dispatch({ type: APPROVE_ADDRESS_ON_ASSET_SUCCESS, asset, address, propName, isApprovedPropName }); // eslint-disable-line object-curly-newline
   } catch (err) {
-    dispatch({ type: APPROVE_ADDRESS_ON_ASSET_FAILURE, asset, account, propName, payload: err.message }); // eslint-disable-line object-curly-newline
+    dispatch({ type: APPROVE_ADDRESS_ON_ASSET_FAILURE, asset, address, propName, payload: err.message }); // eslint-disable-line object-curly-newline
 
     // do not remove - this is here to stop any methods from executing after this one
     throw new Error(err.message);

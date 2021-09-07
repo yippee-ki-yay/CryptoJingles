@@ -23,7 +23,7 @@
   &.green {
     background: var(--button-green-bg);
 
-    &:hover { background: var(--button-green-bg-hover); }
+    &:hover:not(:disabled) { background: var(--button-green-bg-hover); }
   }
 
   &.disconnect {

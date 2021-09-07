@@ -8,7 +8,7 @@ const Blocker = () => (
   <div className="blocker-wrapper">
     <div className="width-container">
       <WalletIcon />
-      <div className="block-text">In order to enter page please connect your wallet.</div>
+      <div className="block-text">In order to see this page please connect your wallet.</div>
     </div>
   </div>
 );

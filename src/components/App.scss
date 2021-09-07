@@ -12,6 +12,8 @@ div {
     box-sizing: border-box;
 }
 
+#root { position: relative; }
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -19,7 +21,7 @@ div {
   padding-top: 80px;
 
   @media only screen and (max-width: 850px) {
-    padding-top: 60px;
+    padding-top: 80px;
   }
 }
 

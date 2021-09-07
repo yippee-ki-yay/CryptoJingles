@@ -14,7 +14,10 @@ export const SampleAddress = '0x57fd3480581f72b0df1adead72b4181a52a1d7de';
 export const SampleStorage = '0xddcAB0EcE1816A517683D858BE471E377d421300';
 export const MarketplaceAddress = '0xc1ef465527343f68bb1841f99b9adeb061cc7ac9';
 export const WrappedOGJingleAddress = '0x87260c09fd1c7b6a47324f39f391b25e89002fc9';
+export const WrappedNewJingleAddress = '0x000000000000000000000000000000000000dead'; // TODO - add this
 export const JingleV1ViewAddress = '0xad8d088f5921abbee3c0f431ebbc7c8dcc38e227';
+
+export const JingleV0Address = '0x5af7af54e8bc34b293e356ef11fffe51d6f9ae78';
 
 export const API_URL = process.env.API_ROOT;
 

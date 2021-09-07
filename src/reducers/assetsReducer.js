@@ -96,8 +96,8 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       [action.asset]: {
         ...state[action.asset],
-        [action.account]: {
-          ...state[action.asset][action.account],
+        [action.address]: {
+          ...state[action.asset][action.address],
           [action.propName]: true,
           [`${action.propName}Error`]: '',
         },
@@ -111,8 +111,8 @@ export default (state = INITIAL_STATE, action) => {
         ...state[action.asset],
         [action.isApprovedPropName]: true,
 
-        [action.account]: {
-          ...state[action.asset][action.account],
+        [action.address]: {
+          ...state[action.asset][action.address],
           [action.propName]: false,
           [`${action.propName}Error`]: '',
         },
@@ -124,8 +124,8 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       [action.asset]: {
         ...state[action.asset],
-        [action.account]: {
-          ...state[action.asset][action.account],
+        [action.address]: {
+          ...state[action.asset][action.address],
           [action.propName]: false,
           [`${action.propName}Error`]: payload,
         },

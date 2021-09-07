@@ -17,6 +17,9 @@ import {
 } from '../redux/actionTypes/jingleActionTypes';
 import { wrapJingle, getAllV0UserJingles, getAllV1UserJingles } from '../services/jingleService';
 import { wait } from '../services/utilsService';
+import { approveAddressOnAssetAction } from './assetsActions';
+import { WrappedOGJingleAddress } from '../util/config';
+import { APPROVE_TYPES } from '../constants/assets';
 
 /**
  * Handles the redux state for getting all the users v0 jingles
@@ -79,18 +82,35 @@ export const getAllUserJinglesAction = (address) => async (dispatch) => {
 };
 
 /**
- * Wraps selected jingle
+ * Handles the redux state for wrapping any jingle type
  *
- * @return {Function}
+ * @param id
+ * @param version
+ * @param approved
+ * @param approveAddress
+ * @param approveType
+ * @param assetSymbol
+ * @param wrapKey
+ * @return {(function(*): Promise<void>)|*}
  */
-export const wrapJingleAction = (id) => async (dispatch) => {
-  dispatch({ type: WRAP_JINGLE_REQUEST, id });
+export const wrapJingleAction = (id, version, approved, approveAddress, approveType, assetSymbol, wrapKey) => async (dispatch, getState) => {
+  dispatch({ type: WRAP_JINGLE_REQUEST, wrapKey });
 
   try {
+    if (!approved) await dispatch(approveAddressOnAssetAction(assetSymbol, approveAddress, approveType, id));
+
     await wrapJingle();
 
-    dispatch({ type: WRAP_JINGLE_SUCCESS, id });
+    const { jingle } = getState();
+    const jinglesVersionArr = version === 0 ? jingle.v0UserJingles : jingle.v1UserJingles;
+    const newJingles = [...jinglesVersionArr].filter(({ jingleId }) => jingleId !== id);
+
+    // TODO - add to wrappedUserOgJingles or to wrappedUserNewJingles
+
+    dispatch({
+      type: WRAP_JINGLE_SUCCESS, wrapKey, version, payload: newJingles,
+    });
   } catch (err) {
-    dispatch({ type: WRAP_JINGLE_FAILURE, id, payload: err.message });
+    dispatch({ type: WRAP_JINGLE_FAILURE, wrapKey, payload: err.message });
   }
 };

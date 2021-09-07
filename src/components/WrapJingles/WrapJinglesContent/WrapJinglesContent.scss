@@ -1,14 +1,22 @@
 @import "partials/text";
 
 .wrap-jingles-content-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 200px);
-  grid-gap: 20px 35px;
 
-  .single-jingle-content-item-wrapper {
+  .wrap-section {
 
-    .single-song {
-      margin: 0 0 5px 0;
+    &:not(:last-child) { margin-bottom: 70px; }
+
+    .wrap-title {
+      font-size: $font-size-title-small;
+      margin-bottom: 30px;
+    }
+
+    .wrap-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 200px);
+      grid-gap: 40px 35px;
+
+      .wrap-jingles-content-jingle-item-wrapper .single-song { margin: 0 0 5px 0; }
     }
   }
 }
