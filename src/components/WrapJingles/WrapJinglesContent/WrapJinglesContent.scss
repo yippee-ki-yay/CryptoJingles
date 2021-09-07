@@ -1,4 +1,5 @@
 @import "partials/text";
+@import "partials/variables";
 
 .wrap-jingles-content-wrapper {
 
@@ -17,6 +18,14 @@
       grid-gap: 40px 35px;
 
       .wrap-jingles-content-jingle-item-wrapper .single-song { margin: 0 0 5px 0; }
+    }
+  }
+
+  @include for-sm-screen{
+    .wrap-section {
+
+      .wrap-title { text-align: center; }
+      .wrap-content { justify-content: center; }
     }
   }
 }
