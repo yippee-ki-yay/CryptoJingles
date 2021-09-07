@@ -328,7 +328,7 @@ export const getJingleMetadata = (jingleType) => {
     };
   case 81:
     return {
-      type: COMPOSE, name: 'Virus FM', source: 'https://cryptojingles.app/public/Virus FM_F#_140.wav', rarity: 1, length: 6.857,
+      type: COMPOSE, name: 'Virus FM', source: 'https://cryptojingles.app/public/VirusFM_F#_140.wav', rarity: 1, length: 6.857,
     };
   case 82:
     return {
