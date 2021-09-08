@@ -54,9 +54,7 @@ const WrapJinglesContentJingleItem = ({
         {buttonLabel}
       </button>
 
-      {
-        jingleWrappingError && (<MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{ jingleWrappingError }</MessageBox>)
-      }
+      { jingleWrappingError && (<MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{ jingleWrappingError }</MessageBox>) }
     </div>
   );
 };

@@ -185,8 +185,11 @@ export default (state = INITIAL_STATE, action) => {
       },
     };
 
-    if (action.version === 0) initial.v0UserJingles = payload;
-    else initial.v1UserJingles = payload;
+    if (action.version === 0) initial.v0UserJingles = payload.newJingles;
+    else initial.v1UserJingles = payload.newJingles;
+
+    if (action.isOg) initial.ogWrappedUserJingles = payload.newWrappedJingles;
+    else initial.newWrappedUserJingles = payload.newWrappedJingles;
 
     return initial;
   }

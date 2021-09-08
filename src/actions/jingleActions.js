@@ -166,10 +166,12 @@ export const wrapJingleAction = (id, version, approved, approveAddress, approveT
     const jinglesVersionArr = version === 0 ? jingle.v0UserJingles : jingle.v1UserJingles;
     const newJingles = [...jinglesVersionArr].filter(({ jingleId }) => jingleId !== id);
 
-    // TODO - add to wrappedUserOgJingles or to wrappedUserNewJingles
+    const wrappedJinglesArr = isOg ? jingle.ogWrappedUserJingles : jingle.newWrappedUserJingles;
+    const changedJingle = jinglesVersionArr.find(({ jingleId }) => jingleId === id);
+    const newWrappedJingles = [{ ...changedJingle, wrapped: true }, ...wrappedJinglesArr];
 
     dispatch({
-      type: WRAP_JINGLE_SUCCESS, wrapKey, version, payload: newJingles,
+      type: WRAP_JINGLE_SUCCESS, wrapKey, version, isOg, payload: { newJingles, newWrappedJingles },
     });
   } catch (err) {
     dispatch({ type: WRAP_JINGLE_FAILURE, wrapKey, payload: err.message });

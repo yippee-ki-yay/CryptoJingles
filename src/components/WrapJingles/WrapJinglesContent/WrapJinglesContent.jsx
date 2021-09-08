@@ -41,7 +41,7 @@ const WrapJinglesContent = ({
 
             <div className="wrap-content">
               {
-                hasNewWrappedUserJingles.map((jingle) => (
+                newWrappedUserJingles.map((jingle) => (
                   <div key={`new-w-${jingle.version}-${jingle.jingleId}`}>New Wrapped ${jingle.jingleId}</div>
                 ))
               }
