@@ -1,24 +1,35 @@
-import { JingleV1ViewContract, WrappedNewJinglesContract, WrappedOGJinglesContract } from './contractsRegistryService';
+import {
+  JingleV0ViewContract,
+  JingleV1ViewContract,
+  WrappedNewJinglesContract,
+  WrappedOGJinglesContract,
+} from './contractsRegistryService';
 import { NUM_V0_OG_JINGLES, NUM_V1_OG_JINGLES } from '../constants/general';
 import callTx from './txService';
+
+const formatViewJingle = (version, jingle) => ({
+  ...jingle,
+  jingleId: parseInt(jingle.id, 10),
+  version,
+  liked: false,
+  likeCount: 0,
+  price: parseFloat(jingle.price),
+  type: '',
+});
 
 export const getAllV1UserJingles = async (address) => {
   const contract = await JingleV1ViewContract();
 
   const res = await contract.methods.getFullJingleDataForUser(address).call();
-  // TODO - change jingleId everywhere
-  return res.map((jingle) => ({
-    ...jingle,
-    jingleId: parseInt(jingle.id, 10),
-    version: 1,
-    liked: false,
-    likeCount: 0,
-    price: parseFloat(jingle.price),
-    type: '',
-  }));
+  return res.map((jingle) => formatViewJingle(1, jingle));
 };
 
-export const getAllV0UserJingles = (address) => [];
+export const getAllV0UserJingles = async (address) => {
+  const contract = await JingleV0ViewContract();
+
+  const res = await contract.methods.getFullJingleDataForUser(address).call();
+  return res.map((jingle) => formatViewJingle(0, jingle));
+};
 
 // set wrapped prop or for these 2 methods
 export const getAllOgWrappedUserJingles = (address) => [];

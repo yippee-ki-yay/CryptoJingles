@@ -7,6 +7,7 @@ import {
   SampleAddress,
   WrappedOGJingleAddress,
   WrappedNewJingleAddress,
+  JingleV0ViewAddress,
   JingleV1ViewAddress,
   JingleV0Address,
 } from '../util/config';
@@ -15,6 +16,7 @@ import Marketplace from '../../server/abis/Marketplace.json';
 import Sample from '../../server/abis/Sample.json';
 import WrappedOGJingle from '../../server/abis/WrappedOGJingle.json';
 import WrappedNewJingle from '../../server/abis/WrappedNewJingle.json';
+import JingleV0View from '../../server/abis/JingleV0View.json';
 import JingleV1View from '../../server/abis/JingleV1View.json';
 import JingleV0 from '../../server/abis/JingleV0.json';
 import Erc20 from '../../server/abis/Erc20.json';
@@ -48,6 +50,7 @@ createNewContract(Marketplace, MarketplaceAddress, 'marketplaceContract');
 createNewContract(Sample, SampleAddress, 'samplesContract');
 createNewContract(WrappedOGJingle, WrappedOGJingleAddress, 'wrappedOGJingleContract');
 
+export const JingleV0ViewContract = createContract(JingleV0View.abi, JingleV1ViewAddress);
 export const JingleV1ViewContract = createContract(JingleV1View.abi, JingleV1ViewAddress);
 export const JingleV1Contract = createContract(Jingle.abi, JingleAddress);
 export const JingleV0Contract = createContract(JingleV0.abi, JingleV0Address);
