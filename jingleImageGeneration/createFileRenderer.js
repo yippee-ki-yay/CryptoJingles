@@ -68,6 +68,8 @@ const render = async (_encoder, _renderer, _steps, _interval, _fileName, _versio
   const frames = await Promise.all(promises);
   frames.map((frame) => _encoder.add(frame));
 
+  console.log('HERE');
+
   const output = _encoder.compile(true);
   fs.writeFileSync(`${repoPath.path}/jingleImageGeneration/videos/${_fileName}.webm`, output, { encoding: 'binary' });
 

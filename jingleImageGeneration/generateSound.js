@@ -15,8 +15,8 @@ const handleExec = (error, stdout, stderr) => {
 };
 
 const generateV0Jingles = (jingleId, samplesFiles) => {
-  const singleCommands = samplesFiles.map((fileName, index) => `${repoPath.path}/audios/out${index}.wav`);
-  execSync(`sox -m ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} ./audios/v0_${jingleId}.wav`);
+  const singleCommands = samplesFiles.map((fileName, index) => `${repoPath.path}/jingleImageGeneration/audios/out${index}.wav`);
+  execSync(`sox -m ${singleCommands[0]} ${singleCommands[1]} ${singleCommands[2]} ${singleCommands[3]} ${singleCommands[4]} ${repoPath.path}/jingleImageGeneration/audios/v0_${jingleId}.wav`);
   execSync(DELETE_SINGLE_OUT_FILES);
 };
 

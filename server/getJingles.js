@@ -38,7 +38,7 @@ const startBlock = '13173875';
 
 // console.log(endBlock);
 
-const endBlock = '13175300';
+const endBlock = 'latest';
 
 let lastCycleBlock = startBlock;
 
@@ -96,62 +96,79 @@ async function update() {
     },
   );
 
-  // cryptoJingles.getPastEvents(
-  //   'Purchased',
-  //   { fromBlock: lastCycleBlock, toBlock: endBlock },
-  //   async (err, ress) => {
-  //     ress.forEach(async (res) => {
-  //       const address = res.returnValues.user;
-  //       const numSamples = res.returnValues.numJingles.valueOf();
+  jinglesContract.getPastEvents(
+    'Transfer',
+    { fromBlock: lastCycleBlock, toBlock: endBlock },
+    async (err, events) => {
+      console.log(events);
 
-  //       console.log(address, numSamples);
+      for (let i = 0; i < events.length; ++i) {
+        const event = events[i];
 
-  //       await userCtrl.addUser(address, numSamples);
-  //     });
-  //   },
-  // );
+        const { to } = event.returnValues;
+        const { tokenId } = event.returnValues;
 
-  // const marketplace = {};
+        // eslint-disable-next-line no-await-in-loop
+        const updated = await jingleCtrl.updateJingleOwner(tokenId, to);
+      }
+    });
 
-  // marketplaceContract.getPastEvents(
-  //   'allEvents',
-  //   { fromBlock: lastCycleBlock, toBlock: endBlock },
-  //   async (err, events) => {
-  //     console.log(err, events);
-  //     // eslint-disable-next-line no-use-before-define
-  //     addMarketplaceEvents(events, marketplace);
+  cryptoJingles.getPastEvents(
+    'Purchased',
+    { fromBlock: lastCycleBlock, toBlock: endBlock },
+    async (err, ress) => {
+      ress.forEach(async (res) => {
+        const address = res.returnValues.user;
+        const numSamples = res.returnValues.numJingles.valueOf();
 
-  //     for (const key of Object.keys(marketplace)) {
-  //       const eventList = marketplace[key];
+        console.log(address, numSamples);
 
-  //       let numOrders = 0;
-  //       let numCancels = 0;
+        await userCtrl.addUser(address, numSamples);
+      });
+    },
+   );
 
-  //       eventList.forEach((e) => {
-  //         if (e.event === 'SellOrder') {
-  //           numOrders++;
-  //         } else {
-  //           numCancels++;
-  //         }
-  //       });
+  const marketplace = {};
 
-  //       const e = eventList[eventList.length - 1];
+  marketplaceContract.getPastEvents(
+    'allEvents',
+    { fromBlock: lastCycleBlock, toBlock: endBlock },
+    async (err, events) => {
+      console.log(err, events);
+      // eslint-disable-next-line no-use-before-define
+      addMarketplaceEvents(events, marketplace);
 
-  //       if (numOrders > numCancels) {
-  //         // add
-  //         await putOnSale(eventList[eventList.length - 1]);
-  //       } else {
-  //         // cancel
+      for (const key of Object.keys(marketplace)) {
+        const eventList = marketplace[key];
 
-  //         if (e.event === 'Bought') {
-  //           await boughtJingle(e);
-  //         } else {
-  //           await cancelJingle(e);
-  //         }
-  //       }
-  //     }
-  //   },
-  // );
+        let numOrders = 0;
+        let numCancels = 0;
+
+        eventList.forEach((e) => {
+          if (e.event === 'SellOrder') {
+            numOrders++;
+          } else {
+            numCancels++;
+          }
+        });
+
+        const e = eventList[eventList.length - 1];
+
+        if (numOrders > numCancels) {
+          // add
+          await putOnSale(eventList[eventList.length - 1]);
+        } else {
+          // cancel
+
+          if (e.event === 'Bought') {
+            await boughtJingle(e);
+          } else {
+            await cancelJingle(e);
+          }
+        }
+      }
+    },
+  );
 }
 
 async function boughtJingle(res) {
@@ -204,12 +221,11 @@ function addMarketplaceEvents(events, marketplace) {
 }
 
 (async () => {
-
-  // setInterval(async () => {
+  setInterval(async () => {
     await update();
-    // console.log('Block before: ', lastCycleBlock);
+    console.log('Block before: ', lastCycleBlock);
 
-    // lastCycleBlock = (await web3.eth.getBlockNumber()).toString();
-    // console.log('Block after: ', lastCycleBlock);
- // }, 1000 * 60 * 1);
+    lastCycleBlock = (await web3.eth.getBlockNumber()).toString();
+    console.log('Block after: ', lastCycleBlock);
+  }, 1000 * 60 * 1);
 })();

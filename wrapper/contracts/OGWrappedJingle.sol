@@ -104,7 +104,7 @@ contract OGWrappedJingle is ERC721URIStorage {
         }
 
         if (_version == Version.V1) {
-            if (_tokenId > NUM_V0_JINGLES) return true;
+            if (_tokenId > NUM_V1_JINGLES) return true;
         }
 
         return true;

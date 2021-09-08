@@ -2,7 +2,14 @@ const router = require('express').Router();
 
 require('./models/jingles.model');
 const jingleCtrl = require('./controllers/jingles.controller');
+
+const wrappedJingleCtrl = require('./controllers/wrappedJingles.controller');
+
+require('./models/jinglesV0.model');
+const jingleV0Ctrl = require('./controllers/jinglesV0.controller');
 // const jingleImageCtrl = require('./controllers/jingle.image.controller');
+
+router.get('/wrapped-jingle/:jingleId', wrappedJingleCtrl.getWrappedJingle);
 
 router.get('/jingles/pagination/:owner/page/:page/filter/:filter', jingleCtrl.getJinglesForOwner);
 router.get('/jingles/count/owner/:owner/sale/:sale', jingleCtrl.getJingleNumForOwner);
@@ -18,6 +25,13 @@ router.get('/jingle/can-like/:address', jingleCtrl.canLikeJingle);
 router.get('/jingles/check-liked/:address/:jingleIds', jingleCtrl.checkIfLikedJingles);
 router.get('/jingle/check-liked/:address/:jingleId', jingleCtrl.checkIfLikedJingle);
 
-// router.get('/jingle/get-image-url/:jingleId', jingleImageCtrl.getJingleImageUrl);
+// V0
+router.get('/jingles/v0/pagination/:owner/page/:page/filter/:filter', jingleV0Ctrl.getJinglesForOwner);
+router.get('/jingles/v0/count/owner/:owner/sale/:sale', jingleV0Ctrl.getJingleNumForOwner);
+router.get('/jingles/v0/sale/:owner/page/:page/filter/:filter', jingleV0Ctrl.getJinglesOnSaleForOwner);
+router.get('/jingle/v0/:jingleId', jingleV0Ctrl.getJingle);
+router.get('/jingles/v0/pagination/:page/filter/:filter', jingleV0Ctrl.getJingles);
+router.get('/jingles/v0/sale/:page/filter/:filter', jingleV0Ctrl.getJinglesForSale);
+router.get('/jingles/v0/count/filter/:filter/sale/:sale', jingleV0Ctrl.getJingleNum);
 
 module.exports = router;

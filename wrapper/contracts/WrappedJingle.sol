@@ -23,7 +23,6 @@ contract WrappedJingle is ERC721URIStorage {
 
     uint256 constant public NUM_V0_JINGLES = 30;
     uint256 constant public NUM_V1_JINGLES = 47;
-
     struct OldToken {
         uint256 tokenId;
         bool isWrapped;
@@ -104,7 +103,7 @@ contract WrappedJingle is ERC721URIStorage {
         }
 
         if (_version == Version.V1) {
-            if (_tokenId <= NUM_V0_JINGLES) return true;
+            if (_tokenId <= NUM_V1_JINGLES) return true;
         }
 
         return true;
