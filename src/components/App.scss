@@ -264,6 +264,11 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
   z-index: 9;
   width:100%;
   vertical-align:top;
+
+  video {
+    width: 200px;
+    height: 200px;
+  }
 }
 
 .jingle-image-container .jingle-image-wrapper {

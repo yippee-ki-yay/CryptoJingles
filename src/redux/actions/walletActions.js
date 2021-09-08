@@ -44,7 +44,7 @@ export const loginInPageProvider = (silent) => async (dispatch, getState) => {
 
     dispatch({
       type: CONNECT_WALLET_PROVIDER_SUCCESS,
-      payload: { address, accountType, network },
+      payload: { address: '0x93cdB0a93Fc36f6a53ED21eCf6305Ab80D06becA', accountType, network },
     });
 
     localStorage.setItem(LS_ACCOUNT, WALLET_TYPES.inPageProvider);

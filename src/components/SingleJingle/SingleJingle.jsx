@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Sound, Group } from 'pizzicato';
 import PropTypes from 'prop-types';
-import JingleImage from '../JingleImage/JingleImage';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import Heart from '../Decorative/Heart';
-import { getJingleMetadata } from '../../constants/getMockData';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
-import { playWithDelay } from '../../util/soundHelper';
 import { formatSalePrice } from '../../actions/utils';
+
+import loadingGif from './loadingGif.gif';
+import './SingleJingle.scss';
 
 class SingleJingle extends Component {
   constructor(props) {
@@ -24,18 +23,12 @@ class SingleJingle extends Component {
 
     this.stopSound = this.stopSound.bind(this);
     this.playSound = this.playSound.bind(this);
-    this.loadJingle = this.loadJingle.bind(this);
   }
 
   componentWillUnmount() { this.stopSound(); }
 
   playSound = () => {
-    if (this.state.sound === null) {
-      this.loadJingle();
-      return;
-    }
-
-    playWithDelay(this.state.sound, this.props.settings);
+    // TODO - play jingle
     this.setState({ start: true });
   };
 
@@ -51,43 +44,16 @@ class SingleJingle extends Component {
     if (this.props.type === 'profile') this.props.likeUnLikeProfileJingle(jingleId, action);
   };
 
-  loadJingle() {
-    console.log('this.props.settings', this.props.settings);
-    let delays = this.props.settings.slice(5, 11);
-    delays = delays.map((d) => parseInt(d, 10));
-
-    const sampleSrcs = this.props.sampleTypes.map((sampleType, i) => new Promise((resolve) => {
-      const sound = new Sound(getJingleMetadata(sampleType).source, () => { resolve(sound); });
-      sound.volume = parseInt(this.props.settings[i], 10) / 100;
-    }));
-
-    this.setState({ loading: true });
-
-    Promise.all(sampleSrcs).then((sources) => {
-      const longestSound = sources.reduce((prev, current, i) => ((
-        (prev.getRawSourceNode().buffer.duration + delays[i]) >
-        (current.getRawSourceNode().buffer.duration) + delays[i]) ?
-        prev : current));
-
-      longestSound.on('stop', () => { this.setState({ start: false }); });
-
-      const sound = new Group(sources);
-
-      sound.on('stop', () => { this.setState({ start: false }); });
-
-      this.setState({ sound, start: false, loading: false });
-      this.playSound();
-    });
-  }
-
   render() {
     const {
       jingleId, author, name, onSale, price, likeCount, liked, hasMM, lockedMM, type, canLike,
       version,
     } = this.props;
 
+    const videoSrc = `https://cryptojingles.app/public/videosWithSound/v${version}_${jingleId}.webm`;
+
     return (
-      <div key={jingleId} className="single-song">
+      <div key={jingleId} className="single-song single-jingle-wrapper">
         <div className="jingle-image-actions">
           {
             onSale && (
@@ -99,7 +65,15 @@ class SingleJingle extends Component {
           }
 
           <div className="jingle-image-container">
-            <JingleImage width={200} height={200} id={jingleId} />
+            <video // eslint-disable-line
+              muted
+              autoPlay
+              loop
+              playsInline
+              poster={loadingGif}
+            >
+              <source src={videoSrc} type="video/webm" />
+            </video>
           </div>
 
           <div className="overlay">
@@ -153,8 +127,6 @@ SingleJingle.propTypes = {
   hasMM: PropTypes.bool.isRequired,
   lockedMM: PropTypes.bool.isRequired,
   canLike: PropTypes.bool.isRequired,
-  settings: PropTypes.array.isRequired,
-  sampleTypes: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
   jingleId: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,

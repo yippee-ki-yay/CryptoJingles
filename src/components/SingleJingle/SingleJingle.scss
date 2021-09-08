@@ -1,0 +1,23 @@
+.single-jingle-wrapper {
+
+  .jingle-footer {
+    margin-top: 10px;
+  }
+
+  .jingle-footer-name, .jingle-footer-author {
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .jingle-footer .id-likes-wrapper, .jingle-footer .id-likes-wrapper span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .jingle-footer .id-likes-wrapper {
+    justify-content: space-between;
+  }
+}
