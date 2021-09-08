@@ -72,3 +72,5 @@ export const getUserSamples = async (address) => {
     ...getJingleMetadata(jingleType),
   }));
 };
+
+export const createJingle = (settings, sampleIds, name, address) => window.contract.composeJingle(name, sampleIds, settings, { from: address });

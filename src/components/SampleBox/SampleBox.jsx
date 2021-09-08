@@ -48,7 +48,6 @@ class SampleBox extends Component {
   componentWillUnmount() { this.stopSound(); }
 
   scroll = () => {
-    console.log('this.props.slots.getBoundingClientRect().top', this.props.slots.getBoundingClientRect().top);
     const scrollTo = window.pageYOffset + this.props.slots.getBoundingClientRect().top - 150;
     window.scrollTo({ top: scrollTo, behavior: 'smooth' });
   }

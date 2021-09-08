@@ -32,6 +32,10 @@ import {
   GET_USER_SAMPLES_REQUEST,
   GET_USER_SAMPLES_SUCCESS,
   GET_USER_SAMPLES_FAILURE,
+
+  CREATE_JINGLE_REQUEST,
+  CREATE_JINGLE_SUCCESS,
+  CREATE_JINGLE_FAILURE,
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
@@ -60,6 +64,9 @@ const INITIAL_STATE = {
   gettingUserSamples: false,
   gettingUserSamplesError: '',
   userSamples: null,
+
+  creatingJingle: false,
+  creatingJingleError: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -309,6 +316,27 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       gettingUserSamples: false,
       gettingUserSamplesError: payload,
+    };
+
+  case CREATE_JINGLE_REQUEST:
+    return {
+      ...state,
+      creatingJingle: true,
+      creatingJingleError: '',
+    };
+
+  case CREATE_JINGLE_SUCCESS:
+    return {
+      ...state,
+      creatingJingle: false,
+      creatingJingleError: '',
+    };
+
+  case CREATE_JINGLE_FAILURE:
+    return {
+      ...state,
+      creatingJingle: false,
+      creatingJingleError: payload,
     };
 
   default:

@@ -32,6 +32,10 @@ import {
   GET_USER_SAMPLES_REQUEST,
   GET_USER_SAMPLES_SUCCESS,
   GET_USER_SAMPLES_FAILURE,
+
+  CREATE_JINGLE_REQUEST,
+  CREATE_JINGLE_SUCCESS,
+  CREATE_JINGLE_FAILURE,
 } from '../actionTypes/jingleActionTypes';
 import {
   wrapJingle,
@@ -41,6 +45,7 @@ import {
   getAllOgWrappedUserJingles,
   getAllNewWrappedUserJingles,
   getUserSamples,
+  createJingle,
 } from '../../services/jingleService';
 import { approveAddressOnAssetAction } from './assetsActions';
 
@@ -264,3 +269,29 @@ export const getUserSamplesAction = (address) => async (dispatch) => {
     dispatch({ type: GET_USER_SAMPLES_FAILURE, payload: err.message });
   }
 };
+
+/**
+ * Handles the reducer state for when a user is creating a jingle
+ *
+ * @param settings
+ * @param sampleIds
+ * @param name
+ * @return {(function(*, *): Promise<void>)|*}
+ */
+export const createJingleAction = (settings, sampleIds, name) => async (dispatch, getState) => {
+  dispatch({ type: CREATE_JINGLE_REQUEST });
+
+  try {
+    const { address } = getState().app;
+
+    const payload = await createJingle(settings, sampleIds, name, address);
+
+    dispatch({ type: CREATE_JINGLE_SUCCESS, payload });
+
+    dispatch(getUserSamplesAction(address));
+  } catch (err) {
+    dispatch({ type: CREATE_JINGLE_FAILURE, payload: err.message });
+  }
+};
+
+// TODO - create clear here

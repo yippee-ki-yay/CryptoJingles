@@ -7,9 +7,8 @@ import { Sound, Group } from 'pizzicato';
 import t from 'translate';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getUserSamplesAction } from 'redux/actions/jingleActions';
+import { getUserSamplesAction, createJingleAction } from 'redux/actions/jingleActions';
 import { getSampleSlots } from 'constants/getMockData';
-import { getSamples } from '../../util/web3/ethereumService';
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
 import StopIcon from '../Decorative/StopIcon';
@@ -36,7 +35,6 @@ class Compose extends Component {
       droppedBoxIds: [],
       playing: false,
       group: null,
-      mySamples: [],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -106,32 +104,12 @@ class Compose extends Component {
   }
 
   createSong = async () => {
-    const selectedSongSources = this.state.mySamples.filter(({ id }) => {
-      const res = this.state.droppedBoxIds.find((selectedId) => id === selectedId);
-      return res !== undefined;
-    });
-
-    const jingleIds = selectedSongSources.map((s) => parseInt(s.id, 10));
-
-    if (jingleIds.length !== 5) return; // TODO - show message in the  UI instead of return
-
     const settings = createSettings(this.props);
+    const sampleIds = this.state.sampleSlots.map(({ lastDroppedItem }) => lastDroppedItem.id);
 
-    const sampleIds = [];
+    await this.props.createJingleAction(settings, sampleIds, this.state.jingleName);
 
-    this.state.sampleSlots.forEach((s) => {
-      sampleIds.push(s.lastDroppedItem.id);
-    });
-
-    const name = this.state.jingleName;
-
-    await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
-
-    this.setState({ loading: true });
-
-    const mySamples = await getSamples(this.props.address);
-
-    this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
+    this.setState({ sampleSlots: getSampleSlots() });
   };
 
   stopSound() {
@@ -157,7 +135,7 @@ class Compose extends Component {
   loadGroup(cb) {
     let selectedSongSources = this.state.sampleSlots.filter((slot) => slot.lastDroppedItem !== null);
 
-    selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) => this.state.mySamples.find((sample) => lastDroppedItem.id === sample.id));
+    selectedSongSources = selectedSongSources.map(({ lastDroppedItem }) => this.props.userSamples.find((sample) => lastDroppedItem.id === sample.id));
 
     const { delays } = this.props;
 
@@ -281,7 +259,7 @@ class Compose extends Component {
                         type="submit"
                         className="button green"
                         onClick={this.createSong}
-                        disabled={this.state.droppedBoxIds.length < 5}
+                        // disabled={this.state.droppedBoxIds.length < 5}
                       >
                         Mint
                       </button>
@@ -352,6 +330,8 @@ Compose.propTypes = {
   gettingUserSamples: PropTypes.bool.isRequired,
   gettingUserSamplesError: PropTypes.string.isRequired,
   userSamples: PropTypes.array,
+
+  createJingleAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ compose, app, jingle }) => ({
@@ -363,8 +343,11 @@ const mapStateToProps = ({ compose, app, jingle }) => ({
   gettingUserSamples: jingle.gettingUserSamples,
   gettingUserSamplesError: jingle.gettingUserSamplesError,
   userSamples: jingle.userSamples,
+
+  creatingJingle: app.creatingJingle,
+  creatingJingleError: app.creatingJingleError,
 });
 
-const mapDispatchToProps = { getUserSamplesAction };
+const mapDispatchToProps = { getUserSamplesAction, createJingleAction };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);
