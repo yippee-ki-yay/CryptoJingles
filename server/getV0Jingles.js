@@ -32,7 +32,7 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
     idsSum += parseInt(sampleIds[i], 10);
   }
 
-  const seed = (parseInt(jingleId, 10) + idsSum) * 1_000_000; // for V0
+  const seed = (parseInt(jingleId, 10) + idsSum) * 1_111_111; // for V0
 
   console.log('seed: ', seed);
 
@@ -41,11 +41,11 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
   createFileRenderer(config, () => { generateVideoWithSound(jingleVersion, jingleId); }, () => {});
 }
 
-let jingleId = 1;
+let jingleId = 0;
 const numJingles = 55;
 
 (async () => {
- // setInterval(async () => {
+  setInterval(async () => {
     if (jingleId < numJingles) {
       console.log(`${jingleId}: jingleId`);
       const jingleViewV0Contract = new web3.eth.Contract(jingleViewV0.abi, jingleViewV0Addr);
@@ -74,5 +74,5 @@ const numJingles = 55;
     }
 
     jingleId += 1;
-// }, 10 * 1000 * 1);
+ }, 40 * 1000 * 1);
 })();
