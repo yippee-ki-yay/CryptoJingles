@@ -41,11 +41,11 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
   createFileRenderer(config, () => { generateVideoWithSound(jingleVersion, jingleId); }, () => {});
 }
 
-let jingleId = 0;
+let jingleId = 1;
 const numJingles = 55;
 
 (async () => {
- setInterval(async () => {
+ // setInterval(async () => {
     if (jingleId < numJingles) {
       console.log(`${jingleId}: jingleId`);
       const jingleViewV0Contract = new web3.eth.Contract(jingleViewV0.abi, jingleViewV0Addr);
@@ -74,5 +74,5 @@ const numJingles = 55;
     }
 
     jingleId += 1;
- }, 10 * 1000 * 1);
+// }, 10 * 1000 * 1);
 })();
