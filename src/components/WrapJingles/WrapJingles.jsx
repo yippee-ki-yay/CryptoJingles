@@ -16,11 +16,14 @@ import './WrapJingles.scss';
 const WrapJingles = ({
   getAllUserJinglesAction, gettingAllUserJingles,
   gettingAllUserJinglesError, v0UserJingles, v1UserJingles, address,
+  ogWrappedUserJingles, newWrappedUserJingles,
 }) => {
   const history = useHistory();
 
-  const allJingles = useMemo(() => (v0UserJingles && v1UserJingles ? [...v0UserJingles, ...v1UserJingles] : null), [v0UserJingles, v1UserJingles]);
-  const hasJingles = useMemo(() => allJingles && allJingles.length > 0, [allJingles]);
+  const allNonWrappedJingles = useMemo(() => (v0UserJingles && v1UserJingles ? [...v0UserJingles, ...v1UserJingles] : null), [v0UserJingles, v1UserJingles]);
+  const hasNonWrappedJingles = useMemo(() => allNonWrappedJingles && allNonWrappedJingles.length > 0, [allNonWrappedJingles]);
+
+  const hasJingles = useMemo(() => hasNonWrappedJingles || (ogWrappedUserJingles && ogWrappedUserJingles.length > 0) || (newWrappedUserJingles && newWrappedUserJingles.length > 0), [hasNonWrappedJingles, ogWrappedUserJingles, newWrappedUserJingles]);
 
   const center = useMemo(() => gettingAllUserJingles || gettingAllUserJinglesError || !hasJingles, [gettingAllUserJingles, gettingAllUserJinglesError, hasJingles]);
 
@@ -50,7 +53,13 @@ const WrapJingles = ({
                 <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingAllUserJinglesError}</MessageBox>
                 :
                 hasJingles ?
-                  (<WrapJinglesContent jingles={allJingles} />)
+                  (
+                    <WrapJinglesContent
+                      nonWrappedJingles={allNonWrappedJingles}
+                      ogWrappedUserJingles={ogWrappedUserJingles}
+                      newWrappedUserJingles={newWrappedUserJingles}
+                    />
+                  )
                   :
                   (
                     <EmptyState
@@ -67,17 +76,20 @@ const WrapJingles = ({
 };
 
 WrapJingles.defaultProps = {
-  gettingAllUserJinglesError: '',
   v0UserJingles: null,
   v1UserJingles: null,
+  ogWrappedUserJingles: null,
+  newWrappedUserJingles: null,
 };
 
 WrapJingles.propTypes = {
   getAllUserJinglesAction: PropTypes.func.isRequired,
   gettingAllUserJingles: PropTypes.bool.isRequired,
-  gettingAllUserJinglesError: PropTypes.string,
+  gettingAllUserJinglesError: PropTypes.string.isRequired,
   v0UserJingles: PropTypes.array,
   v1UserJingles: PropTypes.array,
+  ogWrappedUserJingles: PropTypes.array,
+  newWrappedUserJingles: PropTypes.array,
   address: PropTypes.string.isRequired,
 };
 
@@ -86,6 +98,8 @@ const mapStateToProps = ({ jingle, app }) => ({
   gettingAllUserJinglesError: jingle.gettingAllUserJinglesError,
   v0UserJingles: jingle.v0UserJingles,
   v1UserJingles: jingle.v1UserJingles,
+  ogWrappedUserJingles: jingle.ogWrappedUserJingles,
+  newWrappedUserJingles: jingle.newWrappedUserJingles,
   address: app.address,
 });
 

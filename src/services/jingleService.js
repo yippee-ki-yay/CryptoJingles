@@ -20,6 +20,11 @@ export const getAllV1UserJingles = async (address) => {
 
 export const getAllV0UserJingles = (address) => [];
 
+// set wrapped prop or for these 2 methods
+export const getAllOgWrappedUserJingles = (address) => [];
+
+export const getAllNewWrappedUserJingles = (address) => [];
+
 export const wrapJingle = async (id, version, address, isOg) => {
   const contractCreator = isOg ? WrappedOGJinglesContract : WrappedNewJinglesContract;
   const contract = await contractCreator();
@@ -27,11 +32,11 @@ export const wrapJingle = async (id, version, address, isOg) => {
   return callTx(contract, 'wrap', [id, version], { from: address });
 };
 
-export const filterOGJingles = (jingles) => jingles.filter(({ jingleId, version }) => {
+export const filterOGJingles = (jingles) => jingles.filter(({ jingleId, version, wrapped }) => {
   const isV0OG = version === 0 && jingleId < NUM_V0_OG_JINGLES;
   const isV1OG = version === 1 && jingleId < NUM_V1_OG_JINGLES;
 
-  return isV0OG || isV1OG;
+  return (isV0OG || isV1OG) && !wrapped;
 });
 
-export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, version }) => version === 1 && jingleId >= NUM_V1_OG_JINGLES);
+export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, wrapped, version }) => version === 1 && jingleId >= NUM_V1_OG_JINGLES && !wrapped);

@@ -15,6 +15,14 @@ import {
   WRAP_JINGLE_SUCCESS,
   WRAP_JINGLE_FAILURE,
   CLEAR_WRAP_JINGLE,
+
+  GET_ALL_OG_WRAPPED_USER_JINGLES_REQUEST,
+  GET_ALL_OG_WRAPPED_USER_JINGLES_SUCCESS,
+  GET_ALL_OG_WRAPPED_USER_JINGLES_FAILURE,
+
+  GET_ALL_NEW_WRAPPED_USER_JINGLES_REQUEST,
+  GET_ALL_NEW_WRAPPED_USER_JINGLES_SUCCESS,
+  GET_ALL_NEW_WRAPPED_USER_JINGLES_FAILURE,
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
@@ -28,6 +36,14 @@ const INITIAL_STATE = {
   gettingV1UserJingles: false,
   gettingV1UserJinglesError: '',
   v1UserJingles: null,
+
+  gettingOgWrappedUserJingles: false,
+  gettingOgWrappedUserJinglesError: '',
+  ogWrappedUserJingles: null,
+
+  gettingNewWrappedUserJingles: false,
+  gettingNewWrappedUserJinglesError: '',
+  newWrappedUserJingles: null,
 
   wrappingJingles: {},
 };
@@ -99,6 +115,50 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       gettingV1UserJingles: false,
       gettingV1UserJinglesError: payload,
+    };
+
+  case GET_ALL_OG_WRAPPED_USER_JINGLES_REQUEST:
+    return {
+      ...state,
+      gettingOgWrappedUserJingles: true,
+      gettingOgWrappedUserJinglesError: '',
+    };
+
+  case GET_ALL_OG_WRAPPED_USER_JINGLES_SUCCESS:
+    return {
+      ...state,
+      gettingOgWrappedUserJingles: false,
+      gettingOgWrappedUserJinglesError: '',
+      ogWrappedUserJingles: payload,
+    };
+
+  case GET_ALL_OG_WRAPPED_USER_JINGLES_FAILURE:
+    return {
+      ...state,
+      gettingOgWrappedUserJingles: false,
+      gettingOgWrappedUserJinglesError: payload,
+    };
+
+  case GET_ALL_NEW_WRAPPED_USER_JINGLES_REQUEST:
+    return {
+      ...state,
+      gettingNewWrappedUserJingles: true,
+      gettingNewWrappedUserJinglesError: '',
+    };
+
+  case GET_ALL_NEW_WRAPPED_USER_JINGLES_SUCCESS:
+    return {
+      ...state,
+      gettingNewWrappedUserJingles: false,
+      gettingNewWrappedUserJinglesError: '',
+      newWrappedUserJingles: payload,
+    };
+
+  case GET_ALL_NEW_WRAPPED_USER_JINGLES_FAILURE:
+    return {
+      ...state,
+      gettingNewWrappedUserJingles: false,
+      gettingNewWrappedUserJinglesError: payload,
     };
 
   case WRAP_JINGLE_REQUEST:

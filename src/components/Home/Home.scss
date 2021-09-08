@@ -1,11 +1,11 @@
 @import "partials/variables";
+@import "partials/text";
 
 .headline {
     margin-top: 30px;
 }
 
 .homepage-main {
-    font-family: 'Lato', sans-serif;
     text-align: center;
     color: black;
     margin-top: 100px;
@@ -107,9 +107,9 @@
 
 .home-title {
     font-size: 32px;
-    font-weight: bold;
-    max-width: 633px;
-    line-height: 45px;
+    max-width: 650px;
+    font-weight: $font-weight-bold;
+    line-height: normal;
     margin: 50px auto;
     margin-bottom: 20px;
 }

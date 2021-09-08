@@ -29,6 +29,10 @@
   "jingles.wrap_with_og_wrapper": "Wrap with OG wrapper",
   "jingles.wrapping_with_new_wrapper": "Wrapping with new wrapper",
   "jingles.wrap_with_new_wrapper": "Wrap with new wrapper",
+  "jingles.og_jingles": "OG Jingles",
+  "jingles.new_jingles": "New Jingles",
+  "jingles.wrapped_og_jingles": "Wrapped OG Jingles",
+  "jingles.wrapped_new_jingles": "Wrapped new Jingles",
 
   "header.get_hord_lp": "Get HORD-ETH LP Tokens",
 
