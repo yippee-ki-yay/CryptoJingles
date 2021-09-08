@@ -32,7 +32,7 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
     idsSum += parseInt(sampleIds[i], 10);
   }
 
-  const seed = parseInt(jingleId, 10) + idsSum; // for V0
+  const seed = (parseInt(jingleId, 10) + idsSum) * 1_000_000; // for V0
 
   console.log('seed: ', seed);
 
