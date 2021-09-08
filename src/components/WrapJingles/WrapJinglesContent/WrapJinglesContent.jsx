@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import t from 'translate';
 import { APPROVE_TYPES } from 'constants/assets';
 import { filterNonOGJingles, filterOGJingles } from 'services/jingleService';
-import WrapJinglesContentJingleItem from './WrapJinglesContentJingleItem/WrapJinglesContentJingleItem';
+import WrapJinglesContentWrapJingleItem from './WrapJinglesContentWrapJingleItem/WrapJinglesContentWrapJingleItem';
+import WrapJinglesContentUnwrapJingleItem from './WrapJinglesContentUnwrapJingleItem/WrapJinglesContentUnwrapJingleItem';
 import { WrappedOGJingleAddress, WrappedNewJingleAddress } from '../../../util/config';
 
 import './WrapJinglesContent.scss';
@@ -26,7 +27,11 @@ const WrapJinglesContent = ({
             <div className="wrap-content">
               {
                 ogWrappedUserJingles.map((jingle) => (
-                  <div key={`new-w-${jingle.version}-${jingle.jingleId}`}>OG Wrapped ${jingle.jingleId}</div>
+                  <WrapJinglesContentUnwrapJingleItem
+                    key={`new-w-${jingle.version}-${jingle.jingleId}`}
+                    jingle={jingle}
+                    isOg
+                  />
                 ))
               }
             </div>
@@ -42,7 +47,10 @@ const WrapJinglesContent = ({
             <div className="wrap-content">
               {
                 newWrappedUserJingles.map((jingle) => (
-                  <div key={`new-w-${jingle.version}-${jingle.jingleId}`}>New Wrapped ${jingle.jingleId}</div>
+                  <WrapJinglesContentUnwrapJingleItem
+                    key={`new-w-${jingle.version}-${jingle.jingleId}`}
+                    jingle={jingle}
+                  />
                 ))
               }
             </div>
@@ -58,7 +66,7 @@ const WrapJinglesContent = ({
             <div className="wrap-content">
               {
                 oGJingles.map((jingle) => (
-                  <WrapJinglesContentJingleItem
+                  <WrapJinglesContentWrapJingleItem
                     key={`og-${jingle.version}-${jingle.jingleId}`}
                     jingle={jingle}
                     approveAddress={WrappedOGJingleAddress}
@@ -80,7 +88,7 @@ const WrapJinglesContent = ({
             <div className="wrap-content">
               {
                 nonOgJingles.map((jingle) => (
-                  <WrapJinglesContentJingleItem
+                  <WrapJinglesContentWrapJingleItem
                     key={`new-${jingle.version}-${jingle.jingleId}`}
                     jingle={jingle}
                     approveAddress={WrappedNewJingleAddress}

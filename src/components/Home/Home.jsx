@@ -46,7 +46,7 @@ class Home extends Component {
 
           <div className="btn-wrapper">
             <Link to={hasMM && !lockedMM ? `/profile/${address}` : '/marketplace'}>
-              <button type="button" className="btn buy-button">
+              <button type="button" className="button red">
                 Start jamming!
               </button>
             </Link>

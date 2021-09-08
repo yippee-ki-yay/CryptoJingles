@@ -14,10 +14,21 @@
 
     .wrap-content {
       display: grid;
-      grid-template-columns: repeat(auto-fill, 200px);
+      grid-template-columns: repeat(auto-fit, 200px);
       grid-gap: 40px 35px;
 
-      .wrap-jingles-content-jingle-item-wrapper .single-song { margin: 0 0 5px 0; }
+      .wrap-jingles-content-jingle-item-wrapper {
+
+        .single-song { margin: 0 0 5px 0; }
+
+        .message-box-wrapper.error {
+          width: 100%;
+
+          .message-box .text-wrapper { word-break: break-all; }
+        }
+
+        .button { margin-top: 15px; }
+      }
     }
   }
 

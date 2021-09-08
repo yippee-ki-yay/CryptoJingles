@@ -114,19 +114,11 @@
     margin-bottom: 20px;
 }
 
-.homepage-main .btn-wrapper a {
-    color: white;
-
-  button { background: lightcoral; }
-}
-
-.homepage-main .btn-wrapper a:hover {
-    color: white;
-    text-decoration: none;
-}
-
-.homepage-main .buy-button {
-    font-size: 24px;
+.homepage-main .button.red {
+  font-size: $font-size-title-small;
+  width: fit-content;
+  padding: 5px 20px;
+  margin: 0 auto;
 }
 
 .home .separator {

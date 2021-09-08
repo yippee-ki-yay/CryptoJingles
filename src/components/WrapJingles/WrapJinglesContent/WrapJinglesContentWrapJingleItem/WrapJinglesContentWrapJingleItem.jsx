@@ -8,14 +8,12 @@ import { connect } from 'react-redux';
 import t from 'translate';
 import { MESSAGE_BOX_TYPES } from 'constants/general';
 import { getApprovingState, getIsApprovedReducerPropName } from 'services/assetsService';
-import { isAddressApprovedOnAssetAction } from '../../../../actions/assetsActions';
-import { clearWrapAction, wrapJingleAction } from '../../../../actions/jingleActions';
+import { isAddressApprovedOnAssetAction } from 'redux/actions/assetsActions';
+import { clearWrapAction, wrapJingleAction } from 'redux/actions/jingleActions';
 import SingleJingle from '../../../SingleJingle/SingleJingle';
 import MessageBox from '../../../Common/MessageBox/MessageBox';
 
-import './WrapJinglesContentJingleItem.scss';
-
-const WrapJinglesContentJingleItem = ({
+const WrapJinglesContentWrapJingleItem = ({
   jingle, approveAddress, approveKey, assetSymbol, wrapKey,
   isAddressApprovedOnAssetAction, assetApproved, approvingAsset,
   wrapJingleAction, clearWrapAction, jingleWrapping, jingleWrappingError, isOg,
@@ -31,7 +29,7 @@ const WrapJinglesContentJingleItem = ({
 
   const disabled = useMemo(() => jingleWrapping || approvingAsset, [jingleWrapping, approvingAsset]);
 
-  const handleJingleWrapCallback = useCallback(() => wrapJingleAction(jingle.jingleId, jingle.version, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey, isOg), [jingle, wrapJingleAction, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey, isOg]);
+  const wrapJingleActionCallback = useCallback(() => wrapJingleAction(jingle.jingleId, jingle.version, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey, isOg), [jingle, wrapJingleAction, assetApproved, approveAddress, approveKey, assetSymbol, wrapKey, isOg]);
 
   const clearWrapActionCallback = useCallback(() => clearWrapAction(jingle.jingleId, jingle.version, wrapKey), [jingle, wrapKey, clearWrapAction]);
 
@@ -42,12 +40,12 @@ const WrapJinglesContentJingleItem = ({
   useEffect(() => () => { clearWrapActionCallback(); }, [clearWrapActionCallback]);
 
   return (
-    <div className="wrap-jingles-content-jingle-item-wrapper">
+    <div className="wrap-jingles-content-jingle-item-wrapper wrap">
       <SingleJingle {...jingle} />
 
       <button
         type="button"
-        onClick={handleJingleWrapCallback}
+        onClick={wrapJingleActionCallback}
         className="button green"
         disabled={disabled}
       >
@@ -59,14 +57,14 @@ const WrapJinglesContentJingleItem = ({
   );
 };
 
-WrapJinglesContentJingleItem.defaultProps = {
+WrapJinglesContentWrapJingleItem.defaultProps = {
   address: '',
   approvingAsset: false,
   assetApproved: false,
   isOg: false,
 };
 
-WrapJinglesContentJingleItem.propTypes = {
+WrapJinglesContentWrapJingleItem.propTypes = {
   jingle: PropTypes.object.isRequired,
   isAddressApprovedOnAssetAction: PropTypes.func.isRequired,
   wrapJingleAction: PropTypes.func.isRequired,
@@ -110,4 +108,4 @@ const mapStateToProps = (state, { jingle, approveType }) => {
 
 const mapDispatchToProps = { isAddressApprovedOnAssetAction, wrapJingleAction, clearWrapAction };
 
-export default connect(mapStateToProps, mapDispatchToProps)(WrapJinglesContentJingleItem);
+export default connect(mapStateToProps, mapDispatchToProps)(WrapJinglesContentWrapJingleItem);

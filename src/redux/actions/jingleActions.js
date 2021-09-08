@@ -23,15 +23,20 @@ import {
   WRAP_JINGLE_SUCCESS,
   WRAP_JINGLE_FAILURE,
   CLEAR_WRAP_JINGLE,
-} from '../redux/actionTypes/jingleActionTypes';
+
+  UNWRAP_JINGLE_REQUEST,
+  UNWRAP_JINGLE_SUCCESS,
+  UNWRAP_JINGLE_FAILURE,
+  CLEAR_UNWRAP_JINGLE,
+} from '../actionTypes/jingleActionTypes';
 import {
   wrapJingle,
+  unwrapJingle,
   getAllV0UserJingles,
   getAllV1UserJingles,
   getAllOgWrappedUserJingles,
   getAllNewWrappedUserJingles,
-} from '../services/jingleService';
-import { wait } from '../services/utilsService';
+} from '../../services/jingleService';
 import { approveAddressOnAssetAction } from './assetsActions';
 
 /**
@@ -190,4 +195,49 @@ export const clearWrapAction = (id, version, wrapKey) => (dispatch, getState) =>
   const singleWrappingJingle = getState().jingle.wrappingJingles[wrapKey];
 
   if (singleWrappingJingle && !singleWrappingJingle.wrapping) dispatch({ type: CLEAR_WRAP_JINGLE, wrapKey });
+};
+
+/**
+ * Handles the redux state for unwrapping any jingle type
+ *
+ * @param id
+ * @param version
+ * @param unwrapKey
+ * @param isOg
+ * @return {(function(*): Promise<void>)|*}
+ */
+export const unwrapJingleAction = (id, version, unwrapKey, isOg) => async (dispatch, getState) => {
+  dispatch({ type: UNWRAP_JINGLE_REQUEST, unwrapKey });
+
+  try {
+    await unwrapJingle(id, version, getState().app.address, isOg);
+
+    const { jingle } = getState();
+    const wrappedJinglesArr = isOg ? jingle.ogWrappedUserJingles : jingle.newWrappedUserJingles;
+    const newWrappedJingles = [...wrappedJinglesArr].filter(({ jingleId }) => jingleId !== id);
+
+    const jinglesVersionArr = version === 0 ? jingle.v0UserJingles : jingle.v1UserJingles;
+    const changedJingle = wrappedJinglesArr.find(({ jingleId }) => jingleId === id);
+    const newJingles = [{ ...changedJingle, wrapped: false }, ...jinglesVersionArr];
+
+    dispatch({
+      type: UNWRAP_JINGLE_SUCCESS, unwrapKey, version, isOg, payload: { newJingles, newWrappedJingles },
+    });
+  } catch (err) {
+    dispatch({ type: UNWRAP_JINGLE_FAILURE, unwrapKey, payload: err.message });
+  }
+};
+
+/**
+ * Handles the reducer state for clearing the remove action state
+ *
+ * @param id {Number}
+ * @param version {Number}
+ * @param unwrapKey {String}
+ * @return {Function}
+ */
+export const clearUnwrapAction = (id, version, unwrapKey) => (dispatch, getState) => {
+  const singleUnwrappingJingle = getState().jingle.unwrappingJingles[unwrapKey];
+
+  if (singleUnwrappingJingle && !singleUnwrappingJingle.unwrapping) dispatch({ type: CLEAR_UNWRAP_JINGLE, unwrapKey });
 };

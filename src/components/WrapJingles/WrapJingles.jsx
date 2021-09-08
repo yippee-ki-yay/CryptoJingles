@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import t from 'translate';
 import { useHistory } from 'react-router-dom';
-import { getAllUserJinglesAction } from '../../actions/jingleActions';
+import { getAllUserJinglesAction } from 'redux/actions/jingleActions';
 import { MESSAGE_BOX_TYPES } from '../../constants/general';
 import WrapJinglesContent from './WrapJinglesContent/WrapJinglesContent';
 import MessageBox from '../Common/MessageBox/MessageBox';

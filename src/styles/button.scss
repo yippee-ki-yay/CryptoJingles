@@ -26,6 +26,12 @@
     &:hover:not(:disabled) { background: var(--button-green-bg-hover); }
   }
 
+  &.red {
+    background: var(--button-red-bg);
+
+    &:hover:not(:disabled) { background: var(--button-red-bg-hover); }
+  }
+
   &.disconnect {
     background: var(--button-red);
 

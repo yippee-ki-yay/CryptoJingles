@@ -33,6 +33,10 @@
   "jingles.new_jingles": "New Jingles",
   "jingles.wrapped_og_jingles": "Wrapped OG Jingles",
   "jingles.wrapped_new_jingles": "Wrapped new Jingles",
+  "jingles.unwrapping_og_wrapper": "Unwrapping OG wrapper",
+  "jingles.unwrapping_new_wrapper": "Unwrapping new wrapper",
+  "jingles.unwrap_og_wrapper": "Unwrap OG wrapper",
+  "jingles.unwrap_new_wrapper": "Unwrap new wrapper",
 
   "header.get_hord_lp": "Get HORD-ETH LP Tokens",
 

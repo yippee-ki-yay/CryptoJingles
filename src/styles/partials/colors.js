@@ -73,6 +73,9 @@ export default {
     '--button-green-bg': PALLET.green,
     '--button-green-bg-hover': PALLET.greenHover,
 
+    '--button-red-bg': PALLET.red,
+    '--button-red-bg-hover': PALLET.red2,
+
     // OLD
 
     '--color-main': PALLET.brown,

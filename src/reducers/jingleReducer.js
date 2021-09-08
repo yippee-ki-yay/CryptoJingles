@@ -23,6 +23,11 @@ import {
   GET_ALL_NEW_WRAPPED_USER_JINGLES_REQUEST,
   GET_ALL_NEW_WRAPPED_USER_JINGLES_SUCCESS,
   GET_ALL_NEW_WRAPPED_USER_JINGLES_FAILURE,
+
+  UNWRAP_JINGLE_REQUEST,
+  UNWRAP_JINGLE_SUCCESS,
+  UNWRAP_JINGLE_FAILURE,
+  CLEAR_UNWRAP_JINGLE,
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
@@ -46,6 +51,7 @@ const INITIAL_STATE = {
   newWrappedUserJingles: null,
 
   wrappingJingles: {},
+  unwrappingJingles: {},
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -213,6 +219,63 @@ export default (state = INITIAL_STATE, action) => {
         ...state.wrappingJingles,
         [action.wrapKey]: {
           wrapping: false,
+          error: '',
+        },
+      },
+    };
+
+  case UNWRAP_JINGLE_REQUEST:
+    return {
+      ...state,
+      unwrappingJingles: {
+        ...state.unwrappingJingles,
+        [action.unwrapKey]: {
+          unwrapping: true,
+          error: '',
+        },
+      },
+    };
+
+  case UNWRAP_JINGLE_SUCCESS: {
+    const initial = {
+      ...state,
+      unwrappingJingles: {
+        ...state.unwrappingJingles,
+        [action.unwrapKey]: {
+          unwrapping: false,
+          error: '',
+        },
+      },
+    };
+
+    if (action.version === 0) initial.v0UserJingles = payload.newJingles;
+    else initial.v1UserJingles = payload.newJingles;
+
+    if (action.isOg) initial.ogWrappedUserJingles = payload.newWrappedJingles;
+    else initial.newWrappedUserJingles = payload.newWrappedJingles;
+
+    return initial;
+  }
+
+  case UNWRAP_JINGLE_FAILURE:
+    return {
+      ...state,
+      unwrappingJingles: {
+        ...state.unwrappingJingles,
+        [action.unwrapKey]: {
+          unwrapping: false,
+          error: payload,
+        },
+      },
+    };
+
+  case CLEAR_UNWRAP_JINGLE:
+    return {
+      ...state,
+      unwrappingJingles: {
+        ...state.unwrappingJingles,
+        [action.unwrapKey]: {
+          unwrapping: false,
           error: '',
         },
       },

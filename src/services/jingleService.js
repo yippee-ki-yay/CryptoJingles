@@ -32,6 +32,13 @@ export const wrapJingle = async (id, version, address, isOg) => {
   return callTx(contract, 'wrap', [id, version], { from: address });
 };
 
+export const unwrapJingle = async (id, version, address, isOg) => {
+  const contractCreator = isOg ? WrappedOGJinglesContract : WrappedNewJinglesContract;
+  const contract = await contractCreator();
+
+  return callTx(contract, 'unwrap', [id, version], { from: address });
+};
+
 export const filterOGJingles = (jingles) => jingles.filter(({ jingleId, version, wrapped }) => {
   const isV0OG = version === 0 && jingleId < NUM_V0_OG_JINGLES;
   const isV1OG = version === 1 && jingleId < NUM_V1_OG_JINGLES;
