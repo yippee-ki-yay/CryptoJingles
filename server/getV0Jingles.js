@@ -32,7 +32,7 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
     idsSum += parseInt(sampleIds[i], 10);
   }
 
-  const seed = jingleId + idsSum; // for V0
+  const seed = parseInt(jingleId, 10) + idsSum; // for V0
 
   console.log('seed: ', seed);
 
@@ -74,5 +74,5 @@ const numJingles = 55;
     }
 
     jingleId += 1;
- }, 60 * 1000 * 1);
+ }, 10 * 1000 * 1);
 })();
