@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import update from 'immutability-helper';
+import clsx from 'clsx';
 import { Sound, Group } from 'pizzicato';
 import t from 'translate';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import { getSampleSlots } from '../../constants/getMockData';
+import { getUserSamplesAction } from 'redux/actions/jingleActions';
+import { getSampleSlots } from 'constants/getMockData';
 import { getSamples } from '../../util/web3/ethereumService';
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
@@ -16,13 +16,13 @@ import StopIcon from '../Decorative/StopIcon';
 import LoadingIcon from '../Decorative/LoadingIcon';
 import SampleBox from '../SampleBox/SampleBox';
 import SampleSlot from '../SampleSlot/SampleSlot';
-import SortSamples from '../SortSamples/SortSamples';
-import { addPendingTx, guid, removePendingTx } from '../../actions/appActions';
-import { SAMPLE_SORTING_OPTIONS } from '../../constants/actionTypes';
 import { playWithDelay, createSettings } from '../../util/soundHelper';
 import BuySamples from '../Common/BuySamples/BuySamples';
+import Blocker from '../AccountRouteChecker/Blocker/Blocker';
+import MessageBox from '../Common/MessageBox/MessageBox';
+import { MESSAGE_BOX_TYPES } from '../../constants/general';
+import EmptyState from '../Common/EmptyState/EmptyState';
 
-import '../../util/config';
 import './Compose.scss';
 
 class Compose extends Component {
@@ -30,7 +30,6 @@ class Compose extends Component {
     super(props);
 
     this.state = {
-      loading: true,
       loadingGroup: false,
       updatedSlots: false,
       sampleSlots: getSampleSlots(),
@@ -38,8 +37,6 @@ class Compose extends Component {
       playing: false,
       group: null,
       mySamples: [],
-      sortingOptions: SAMPLE_SORTING_OPTIONS,
-      selectedSort: SAMPLE_SORTING_OPTIONS[0],
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -49,15 +46,16 @@ class Compose extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.loadGroup = this.loadGroup.bind(this);
     this.handleJingleNameChange = this.handleJingleNameChange.bind(this);
-    this.onComposeSamplesSort = this.onComposeSamplesSort.bind(this);
   }
 
   async UNSAFE_componentWillMount() { // eslint-disable-line
-    console.log('mySamples', this.props.address);
-    const mySamples = await getSamples(this.props.address);
+    if (this.props.address) this.props.getUserSamplesAction(this.props.address);
+  }
 
-    this.setState({ mySamples, loading: false });
-    this.onComposeSamplesSort(this.state.selectedSort);
+  async UNSAFE_componentWillReceiveProps(newProps, nextContext) { // eslint-disable-line
+    if (newProps.address === this.props.address || !newProps.address) return;
+
+    this.props.getUserSamplesAction(newProps.address);
   }
 
   componentWillUnmount() {
@@ -107,74 +105,33 @@ class Compose extends Component {
     this.setState({ updatedSlots: true });
   }
 
-  onComposeSamplesSort = (option) => {
-    let { mySamples, selectedSort } = this.state;
-
-    if (!this.state.mySamples) return;
-
-    switch (option.value) {
-    case '-rarity': {
-      mySamples = mySamples.sort((a, b) => b.rarity - a.rarity);
-      selectedSort = SAMPLE_SORTING_OPTIONS[0]; // eslint-disable-line
-      break;
-    }
-    case 'rarity': {
-      mySamples = mySamples.sort((a, b) => a.rarity - b.rarity);
-      selectedSort = SAMPLE_SORTING_OPTIONS[1]; // eslint-disable-line
-      break;
-    }
-    case '-length': {
-      mySamples = mySamples.sort((a, b) => b.length - a.length);
-      selectedSort = SAMPLE_SORTING_OPTIONS[2]; // eslint-disable-line
-      break;
-    }
-    case 'length': {
-      mySamples = mySamples.sort((a, b) => a.length - b.length);
-      selectedSort = SAMPLE_SORTING_OPTIONS[3]; // eslint-disable-line
-      break;
-    }
-    default:
-      break;
-    }
-
-    this.setState({ mySamples, selectedSort });
-  };
-
   createSong = async () => {
-    const id = guid();
+    const selectedSongSources = this.state.mySamples.filter(({ id }) => {
+      const res = this.state.droppedBoxIds.find((selectedId) => id === selectedId);
+      return res !== undefined;
+    });
 
-    try {
-      const selectedSongSources = this.state.mySamples.filter(({ id }) => {
-        const res = this.state.droppedBoxIds.find((selectedId) => id === selectedId);
-        return res !== undefined;
-      });
+    const jingleIds = selectedSongSources.map((s) => parseInt(s.id, 10));
 
-      const jingleIds = selectedSongSources.map((s) => parseInt(s.id, 10));
+    if (jingleIds.length !== 5) return; // TODO - show message in the  UI instead of return
 
-      if (jingleIds.length !== 5) return; // TODO - show message in the  UI instead of return
+    const settings = createSettings(this.props);
 
-      const settings = createSettings(this.props);
+    const sampleIds = [];
 
-      const sampleIds = [];
+    this.state.sampleSlots.forEach((s) => {
+      sampleIds.push(s.lastDroppedItem.id);
+    });
 
-      this.state.sampleSlots.forEach((s) => {
-        sampleIds.push(s.lastDroppedItem.id);
-      });
+    const name = this.state.jingleName;
 
-      const name = this.state.jingleName;
-      this.props.addPendingTx(id, 'Compose jingle');
-      await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
+    await window.contract.composeJingle(name, sampleIds, settings, { from: this.props.address });
 
-      this.setState({ loading: true });
+    this.setState({ loading: true });
 
-      const mySamples = await getSamples(this.props.address);
+    const mySamples = await getSamples(this.props.address);
 
-      this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
-
-      this.props.removePendingTx(id);
-    } catch (err) {
-      this.props.removePendingTx(id);
-    }
+    this.setState({ mySamples, loading: false, sampleSlots: getSampleSlots() });
   };
 
   stopSound() {
@@ -241,7 +198,12 @@ class Compose extends Component {
   isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1; }
 
   render() {
-    const { hasMM, lockedMM, address } = this.props;
+    const {
+      address, gettingUserSamples, gettingUserSamplesError, userSamples,
+    } = this.props;
+
+    const hasSamples = userSamples && userSamples.length > 0;
+    const center = gettingUserSamples || gettingUserSamplesError || !hasSamples;
 
     return (
       <div className="page-wrapper compose-wrapper">
@@ -284,11 +246,11 @@ class Compose extends Component {
                     </div>
                   </div>
 
-                  <div className="sample-slots-wrapper">
+                  <div className="sample-slots-wrapper" ref={(ref) => { this.sampleSlots = ref; }}>
                     {
-                      this.state.sampleSlots.map(({ accepts, lastDroppedItem }, index) => (
+                      this.state.sampleSlots.map(({ accepts, lastDroppedItem, id }, index) => (
                         <SampleSlot
-                          key={`item-${guid()}`}
+                          key={`item-${id}`}
                           index={index}
                           accepts={accepts}
                           lastDroppedItem={lastDroppedItem}
@@ -303,8 +265,8 @@ class Compose extends Component {
               </div>
 
               {
-                (hasMM && !lockedMM) && (
-                  <form onSubmit={(e) => { e.preventDefault(); }} className="form-horizontal create-jingle-form">
+                address && (
+                  <form onSubmit={(e) => { e.preventDefault(); }} className="create-jingle-form">
                     <div className="form-title">{ t('compose.mint_a_jingle') }</div>
 
                     <div className="input-submit-wrapper">
@@ -328,92 +290,45 @@ class Compose extends Component {
                 )
               }
 
-              <SortSamples
-                value={this.state.selectedSort}
-                options={this.state.sortingOptions}
-                onSortChange={this.onComposeSamplesSort}
-              />
+              <div className="samples-section-container">
+                <div className="section-title">{ t('common.your_samples') }</div>
 
-              {
-                (this.state.mySamples.length > 0) &&
-                !this.state.loading &&
-                <div className="my-jingles-num">{ this.state.mySamples.length } samples</div>
-              }
+                <div className={clsx('samples-section-wrapper', { center })}>
+                  { !address && (<Blocker text="compose.unlock_wallet" />) }
 
-              {
-                (!hasMM && !lockedMM) && (
-                  <h1 className="buy-samples-link mm-link">
-                    Install
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
-                    >
-                      MetaMask
-                    </a>
-                    in order to see your samples.
-                  </h1>
-                )
-              }
-
-              {
-                (hasMM && lockedMM) && (
-                  <h1 className="buy-samples-link mm-link">
-                    Please unlock your MetaMask account.
-                  </h1>
-                )
-              }
-
-              {
-                (hasMM && !lockedMM) && (
-                  <div>
-
-                    {
-                      this.state.loading && (
+                  {
+                    gettingUserSamples ?
+                      (
                         <div className="loader-wrapper">
                           <BoxLoader />
+                          <div className="loader-message">{ t('common.getting_all_your_samples') }</div>
                         </div>
                       )
-                    }
-
-                    {
-                      (this.state.mySamples.length === 0) &&
-                      !this.state.loading && (
-                        <div>
-                          { /* TODO - insert buy sample form here */ }
-                          <h1 className="no-samples-heading">
-                            <span>You do not own any Sound Samples yet!</span>
-
-                            <span className="buy-samples-link">
-                              <Link to={`/profile/${this.props.address}`}>Buy samples here.</Link>
-                            </span>
-                          </h1>
-                        </div>
-                      )
-                    }
-
-                    {
-                      (this.state.mySamples.length > 0) &&
-                      !this.state.loading && (
-                        <div className="samples-slider">
-                          <div className="compose-samples-wrapper">
-                            {
-                              this.state.mySamples.map((sample) => (
-                                <SampleBox
-                                  draggable
-                                  key={sample.id}
-                                  isDropped={this.isDropped(sample.id)}
-                                  {...sample}
-                                />
-                              ))
-                            }
-                          </div>
-                        </div>
-                      )
-                    }
-                  </div>
-                )
-              }
+                      :
+                      gettingUserSamplesError ?
+                        <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingUserSamplesError}</MessageBox>
+                        :
+                        hasSamples ?
+                          (
+                            <div className="compose-samples-wrapper">
+                              {
+                                userSamples.map((sample) => (
+                                  <SampleBox
+                                    draggable
+                                    slots={this.sampleSlots}
+                                    key={sample.id}
+                                    isDropped={this.isDropped(sample.id)}
+                                    {...sample}
+                                  />
+                                ))
+                              }
+                            </div>
+                          )
+                          :
+                          (<EmptyState text={t('common.no_samples')} />)
+                  }
+                </div>
+              </div>
             </DndProvider>
           </div>
         </div>
@@ -422,26 +337,34 @@ class Compose extends Component {
   }
 }
 
+Compose.defaultProps = {
+  userSamples: null,
+};
+
 Compose.propTypes = {
   volumes: PropTypes.array.isRequired,
   delays: PropTypes.array.isRequired,
   cuts: PropTypes.array.isRequired,
-  hasMM: PropTypes.bool.isRequired,
-  lockedMM: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
-  addPendingTx: PropTypes.func.isRequired,
   removePendingTx: PropTypes.func.isRequired,
+  getUserSamplesAction: PropTypes.func.isRequired,
+
+  gettingUserSamples: PropTypes.bool.isRequired,
+  gettingUserSamplesError: PropTypes.string.isRequired,
+  userSamples: PropTypes.array,
 };
 
-const mapStateToProps = (state) => ({
-  volumes: state.compose.volumes,
-  delays: state.compose.delays,
-  cuts: state.compose.cuts,
-  hasMM: state.app.hasMM,
-  lockedMM: state.app.lockedMM,
-  address: state.app.address,
+const mapStateToProps = ({ compose, app, jingle }) => ({
+  volumes: compose.volumes,
+  delays: compose.delays,
+  cuts: compose.cuts,
+  address: app.address,
+
+  gettingUserSamples: jingle.gettingUserSamples,
+  gettingUserSamplesError: jingle.gettingUserSamplesError,
+  userSamples: jingle.userSamples,
 });
 
-const mapDispatchToProps = { addPendingTx, removePendingTx };
+const mapDispatchToProps = { getUserSamplesAction };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);

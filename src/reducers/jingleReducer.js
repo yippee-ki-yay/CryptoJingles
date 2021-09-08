@@ -28,6 +28,10 @@ import {
   UNWRAP_JINGLE_SUCCESS,
   UNWRAP_JINGLE_FAILURE,
   CLEAR_UNWRAP_JINGLE,
+
+  GET_USER_SAMPLES_REQUEST,
+  GET_USER_SAMPLES_SUCCESS,
+  GET_USER_SAMPLES_FAILURE,
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
@@ -52,6 +56,10 @@ const INITIAL_STATE = {
 
   wrappingJingles: {},
   unwrappingJingles: {},
+
+  gettingUserSamples: false,
+  gettingUserSamplesError: '',
+  userSamples: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -279,6 +287,28 @@ export default (state = INITIAL_STATE, action) => {
           error: '',
         },
       },
+    };
+
+  case GET_USER_SAMPLES_REQUEST:
+    return {
+      ...state,
+      gettingUserSamples: true,
+      gettingUserSamplesError: '',
+    };
+
+  case GET_USER_SAMPLES_SUCCESS:
+    return {
+      ...state,
+      gettingUserSamples: false,
+      gettingUserSamplesError: '',
+      userSamples: payload,
+    };
+
+  case GET_USER_SAMPLES_FAILURE:
+    return {
+      ...state,
+      gettingUserSamples: false,
+      gettingUserSamplesError: payload,
     };
 
   default:

@@ -28,6 +28,10 @@ import {
   UNWRAP_JINGLE_SUCCESS,
   UNWRAP_JINGLE_FAILURE,
   CLEAR_UNWRAP_JINGLE,
+
+  GET_USER_SAMPLES_REQUEST,
+  GET_USER_SAMPLES_SUCCESS,
+  GET_USER_SAMPLES_FAILURE,
 } from '../actionTypes/jingleActionTypes';
 import {
   wrapJingle,
@@ -36,6 +40,7 @@ import {
   getAllV1UserJingles,
   getAllOgWrappedUserJingles,
   getAllNewWrappedUserJingles,
+  getUserSamples,
 } from '../../services/jingleService';
 import { approveAddressOnAssetAction } from './assetsActions';
 
@@ -240,4 +245,22 @@ export const clearUnwrapAction = (id, version, unwrapKey) => (dispatch, getState
   const singleUnwrappingJingle = getState().jingle.unwrappingJingles[unwrapKey];
 
   if (singleUnwrappingJingle && !singleUnwrappingJingle.unwrapping) dispatch({ type: CLEAR_UNWRAP_JINGLE, unwrapKey });
+};
+
+/**
+ * Handles the redux state for getting all the users v1 samples
+ *
+ * @param address {String}
+ * @return {Function}
+ */
+export const getUserSamplesAction = (address) => async (dispatch) => {
+  dispatch({ type: GET_USER_SAMPLES_REQUEST });
+
+  try {
+    const payload = await getUserSamples(address);
+
+    dispatch({ type: GET_USER_SAMPLES_SUCCESS, payload });
+  } catch (err) {
+    dispatch({ type: GET_USER_SAMPLES_FAILURE, payload: err.message });
+  }
 };

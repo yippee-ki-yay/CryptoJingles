@@ -1,27 +1,8 @@
 @import "partials/text";
-
-.first-row {
-  margin-top: 30px;
-}
-
-.play-btn {
-  padding-left: 30px;
-  margin-bottom: 50px;
-}
-
-.create-song-btn {
-  margin-left: 12px;
-}
-
-.loader-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-}
+@import "partials/variables";
 
 .sort-samples-wrapper {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   display: flex;
   overflow-x: auto;
 }
@@ -53,19 +34,6 @@
 .slot-options div {
   margin-top: 33px;
   font-size: 16px;
-}
-
-.compose-samples-wrapper {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.compose-samples-wrapper:after {
-  content: "";
-  clear: both;
-  display: table;
 }
 
 .compose-play {
@@ -101,8 +69,8 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: 40px;
+    margin-bottom: 40px;
     border-bottom: 1px solid #d1d1d1;
-    margin: 0;
 
     .form-title { font-size: $font-size-title-small; }
 
@@ -126,17 +94,45 @@
       }
     }
   }
-}
 
-.buy-samples-link a {
-  text-decoration: underline;
-  color: #16add8;
-  margin-left: 10px;
-  transition: 0.2s;
-}
+  .samples-section-wrapper {
 
-.buy-samples-link a:hover {
-  opacity: 0.75;
+    &.center {
+      min-height: 400px;
+
+      .loader-wrapper, .empty-state-wrapper { height: 100%; }
+    }
+
+    .compose-samples-wrapper {
+      width: 100%;
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 175px);
+      grid-gap: 40px 66px;
+    }
+  }
+
+  @include for-sm-screen {
+    .create-jingle-form {
+      flex-direction: column;
+
+      .form-title { margin-bottom: 20px }
+
+      .input-submit-wrapper {
+        width: 100%;
+        flex-direction: column;
+
+        .form-input {
+          max-width: 100%;
+          margin: 0 0 15px 0;
+        }
+
+        .button { max-width: 100%; }
+      }
+    }
+
+    .samples-section-wrapper .compose-samples-wrapper { justify-content: center;  }
+  }
 }
 
 .disabled-play, .disabled-play svg  {
@@ -147,13 +143,4 @@
 
 .disabled-play svg:hover {
   opacity: 0.5;
-}
-
-.mm-link {
-  border-top: 1px solid black;
-  padding-top: 30px;
-}
-
-.mm-link a {
-  margin-right: 10px;
 }

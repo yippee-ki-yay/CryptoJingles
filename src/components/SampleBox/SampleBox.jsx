@@ -38,9 +38,20 @@ class SampleBox extends Component {
     this.stopSound = this.stopSound.bind(this);
     this.playSound = this.playSound.bind(this);
     this.loadSample = this.loadSample.bind(this);
+    this.scroll = this.scroll.bind(this);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.draggable && !prevProps.isDragging && this.props.isDragging) this.scroll();
   }
 
   componentWillUnmount() { this.stopSound(); }
+
+  scroll = () => {
+    console.log('this.props.slots.getBoundingClientRect().top', this.props.slots.getBoundingClientRect().top);
+    const scrollTo = window.pageYOffset + this.props.slots.getBoundingClientRect().top - 150;
+    window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+  }
 
   playSound = () => {
     if (this.state.sound === null) {
@@ -82,7 +93,7 @@ class SampleBox extends Component {
     const background = getColorForRarity(rarity);
 
     return connectDragSource((() => (
-      <div style={{ ...style }}>
+      <div>
         <div className="sample-wrapper" style={{ width: '175px' }}>
           <div className="top" style={{ background }}>
             { this.state.loading && <div><LoadingIcon /></div> }
@@ -118,6 +129,8 @@ class SampleBox extends Component {
 SampleBox.defaultProps = {
   connectDragSource: () => {},
   isDragging: false,
+  draggable: false,
+  slots: null,
 };
 
 SampleBox.propTypes = {
@@ -126,8 +139,15 @@ SampleBox.propTypes = {
   name: PropTypes.string.isRequired,
   isDropped: PropTypes.bool.isRequired,
   isDragging: PropTypes.bool,
+  draggable: PropTypes.bool,
   rarity: PropTypes.number.isRequired,
   jingleType: PropTypes.number.isRequired,
+  slots: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.func,
+    PropTypes.object,
+  ]),
 };
 
 export default SampleBox;

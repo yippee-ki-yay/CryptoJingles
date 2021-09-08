@@ -410,9 +410,9 @@ export const getJingleMetadata = (jingleType) => {
 };
 
 export const getSampleSlots = () => [
-  { accepts: [COMPOSE], lastDroppedItem: null },
-  { accepts: [COMPOSE], lastDroppedItem: null },
-  { accepts: [COMPOSE], lastDroppedItem: null },
-  { accepts: [COMPOSE], lastDroppedItem: null },
-  { accepts: [COMPOSE], lastDroppedItem: null },
+  { accepts: [COMPOSE], lastDroppedItem: null, id: 0 },
+  { accepts: [COMPOSE], lastDroppedItem: null, id: 1 },
+  { accepts: [COMPOSE], lastDroppedItem: null, id: 2 },
+  { accepts: [COMPOSE], lastDroppedItem: null, id: 3 },
+  { accepts: [COMPOSE], lastDroppedItem: null, id: 4 },
 ];

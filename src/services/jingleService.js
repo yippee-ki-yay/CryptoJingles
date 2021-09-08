@@ -6,6 +6,7 @@ import {
 } from './contractsRegistryService';
 import { NUM_V0_OG_JINGLES, NUM_V1_OG_JINGLES } from '../constants/general';
 import callTx from './txService';
+import { getJingleMetadata } from '../constants/getMockData';
 
 const formatViewJingle = (version, jingle) => ({
   ...jingle,
@@ -58,3 +59,16 @@ export const filterOGJingles = (jingles) => jingles.filter(({ jingleId, version,
 });
 
 export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, wrapped, version }) => version === 1 && jingleId >= NUM_V1_OG_JINGLES && !wrapped);
+
+export const getUserSamples = async (address) => {
+  const contract = await JingleV1ViewContract();
+
+  const res = await contract.methods.getSamplesForUser(address).call();
+
+  // TODO - rename to sample id everywhere
+  return res.map(({ sampleId: id, sampleType: jingleType }) => ({
+    id: parseInt(id, 10),
+    jingleType: parseInt(jingleType, 10),
+    ...getJingleMetadata(jingleType),
+  }));
+};
