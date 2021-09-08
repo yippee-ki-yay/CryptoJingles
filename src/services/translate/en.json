@@ -42,6 +42,8 @@
   "jingles.unwrap_new_wrapper": "Unwrap new wrapper",
   "jingles.wrap_jingles": "Wrap Jingles",
 
+  "compose.mint_a_jingle": "Mint a Jingle",
+
   "header.get_hord_lp": "Get HORD-ETH LP Tokens",
 
   "connect_wallet_button.not_connected": "Connect Wallet",

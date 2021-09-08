@@ -23,6 +23,7 @@ const BuySamples = ({
 
         <form className="form-wrapper form-horizontal" onSubmit={(e) => { e.preventDefault(); }}>
           <input
+            className="form-input"
             name="numJinglesToBuy"
             value={numSamplesToBuy}
             disabled={buyingSamples}

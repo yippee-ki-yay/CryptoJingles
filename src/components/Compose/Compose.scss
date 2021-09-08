@@ -1,3 +1,5 @@
+@import "partials/text";
+
 .first-row {
   margin-top: 30px;
 }
@@ -19,9 +21,8 @@
 }
 
 .sort-samples-wrapper {
-  margin: 20px 0 20px 0;
+  margin-bottom: 30px;
   display: flex;
-  padding-bottom: 10px;
   overflow-x: auto;
 }
 
@@ -61,11 +62,6 @@
   margin-bottom: 20px;
 }
 
-//.scroll-wrapper {
-//  height: calc(100vh - 60px);
-//  overflow: auto;
-//}
-
 .compose-samples-wrapper:after {
   content: "";
   clear: both;
@@ -96,36 +92,40 @@
   stroke: #d5d5d5;
 }
 
-.form-horizontal.create-jingle-form {
-  margin-top: 50px;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #d1d1d1;
-}
+.compose-wrapper {
 
-.form-horizontal.create-jingle-form div {
-  display: flex;
-  align-items: center;
-}
+  .buy-samples-wrapper { margin-bottom: 40px; }
 
-.form-horizontal.create-jingle-form input {
-  width: 200px;
-  margin-right: 10px;
-  height: 40px;
-  font-size: 18px;
-}
+  .create-jingle-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #d1d1d1;
+    margin: 0;
 
-.form-horizontal.create-jingle-form h4 {
-  font-size: 28px;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
+    .form-title { font-size: $font-size-title-small; }
 
-.form-horizontal.create-jingle-form button {
-  margin: 0;
-  width: 250px;
+    .input-submit-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-grow: 1;
+
+      .form-input {
+        max-width: 250px;
+
+        &:not(:focus) { border: 1px solid var(--input-border); }
+      }
+
+      .button {
+        max-width: 150px;
+        padding-top: 15px;
+        padding-bottom: 16px;
+        font-size: $font-size-extra-large;
+      }
+    }
+  }
 }
 
 .buy-samples-link a {

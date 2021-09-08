@@ -7,8 +7,7 @@
 
     &:not(:last-child) { margin-bottom: 70px; }
 
-    .wrap-title {
-      font-size: $font-size-title-small;
+    .section-title {
       margin-bottom: 30px;
     }
 
@@ -34,8 +33,6 @@
 
   @include for-sm-screen{
     .wrap-section {
-
-      .wrap-title { text-align: center; }
       .wrap-content { justify-content: center; }
     }
   }

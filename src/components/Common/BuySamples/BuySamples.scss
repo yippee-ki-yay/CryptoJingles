@@ -37,29 +37,7 @@
         background: var(--buy-samples-button);
       }
 
-      input {
-        margin-right: 15px;
-        height: 100%;
-        font-size: $font-size-extra-large;
-        padding: 14px 20px;
-        background-color: white;
-        max-width: 100px;
-        border-radius: 0;
-        width: 100%;
-        box-shadow: none;
-        outline: none;
-        border: 1px solid transparent;
-        @include hover-transition;
-
-        &:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        &:focus {
-          border: 1px solid black;
-        }
-      }
+      input { max-width: 100px; }
     }
   }
 
@@ -75,9 +53,9 @@
 
       .form-wrapper {
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
 
-        input {
+        .form-input {
           font-size: $font-size-large;
           padding: 10px;
           max-width: 70px;

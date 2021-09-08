@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import withScrolling from 'react-dnd-scrollzone';
 import update from 'immutability-helper';
 import { Sound, Group } from 'pizzicato';
 import t from 'translate';
@@ -25,8 +24,6 @@ import BuySamples from '../Common/BuySamples/BuySamples';
 
 import '../../util/config';
 import './Compose.scss';
-
-const ScrollingComponent = withScrolling('div');
 
 class Compose extends Component {
   constructor(props) {
@@ -244,12 +241,10 @@ class Compose extends Component {
   isDropped(jingleId) { return this.state.droppedBoxIds.indexOf(jingleId) > -1; }
 
   render() {
-    const { hasMM, lockedMM } = this.props;
-
-    console.log('droppedBoxIds', this.state.droppedBoxIds);
+    const { hasMM, lockedMM, address } = this.props;
 
     return (
-      <div className="page-wrapper">
+      <div className="page-wrapper compose-wrapper">
         <div className="width-container">
           <div className="page-header-wrapper">
             <div className="page-title">{ t('common.compose') }</div>
@@ -259,31 +254,7 @@ class Compose extends Component {
           <div className="page-content-wrapper">
             <DndProvider backend={HTML5Backend}>
               <div className="compose-top-wrapper">
-
-                {
-                  (hasMM && !lockedMM) && (
-                    <form onSubmit={(e) => { e.preventDefault(); }} className="form-horizontal create-jingle-form">
-                      <h4>Compose jingle:</h4>
-                      <div>
-                        <input
-                          className="form-control"
-                          placeholder="Jingle name"
-                          type="text"
-                          onChange={this.handleJingleNameChange}
-                        />
-
-                        <button
-                          type="submit"
-                          className="btn buy-button"
-                          onClick={this.createSong}
-                          disabled={this.state.droppedBoxIds.length < 5}
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </form>
-                  )
-                }
+                { address && (<BuySamples />) }
 
                 <div className="sort-samples-wrapper">
                   <div className="compose-left-column">
@@ -331,7 +302,31 @@ class Compose extends Component {
                 </div>
               </div>
 
-              <BuySamples />
+              {
+                (hasMM && !lockedMM) && (
+                  <form onSubmit={(e) => { e.preventDefault(); }} className="form-horizontal create-jingle-form">
+                    <div className="form-title">{ t('compose.mint_a_jingle') }</div>
+
+                    <div className="input-submit-wrapper">
+                      <input
+                        className="form-input"
+                        placeholder="Jingle name"
+                        type="text"
+                        onChange={this.handleJingleNameChange}
+                      />
+
+                      <button
+                        type="submit"
+                        className="button green"
+                        onClick={this.createSong}
+                        disabled={this.state.droppedBoxIds.length < 5}
+                      >
+                        Mint
+                      </button>
+                    </div>
+                  </form>
+                )
+              }
 
               <SortSamples
                 value={this.state.selectedSort}

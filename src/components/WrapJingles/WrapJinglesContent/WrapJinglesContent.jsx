@@ -22,7 +22,7 @@ const WrapJinglesContent = ({
       {
         hasOgWrappedUserJingles && (
           <div className="wrap-section">
-            <div className="wrap-title">{ t('jingles.wrapped_og_jingles') }</div>
+            <div className="section-title">{ t('jingles.wrapped_og_jingles') }</div>
 
             <div className="wrap-content">
               {
@@ -42,7 +42,7 @@ const WrapJinglesContent = ({
       {
         hasNewWrappedUserJingles && (
           <div className="wrap-section">
-            <div className="wrap-title">{ t('jingles.wrapped_new_jingles') }</div>
+            <div className="section-title">{ t('jingles.wrapped_new_jingles') }</div>
 
             <div className="wrap-content">
               {
@@ -61,7 +61,7 @@ const WrapJinglesContent = ({
       {
         hasOGJingles && (
           <div className="wrap-section">
-            <div className="wrap-title">{ t('jingles.og_jingles') }</div>
+            <div className="section-title">{ t('jingles.og_jingles') }</div>
 
             <div className="wrap-content">
               {
@@ -83,7 +83,7 @@ const WrapJinglesContent = ({
       {
         hasNonOgJingles && (
           <div className="wrap-section">
-            <div className="wrap-title">{ t('jingles.new_jingles') }</div>
+            <div className="section-title">{ t('jingles.new_jingles') }</div>
 
             <div className="wrap-content">
               {

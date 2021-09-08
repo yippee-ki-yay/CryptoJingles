@@ -309,3 +309,31 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 .marketplace-page-wrapper .pagination-wrapper {
   margin-left: 15px;
 }
+
+.form-input {
+  margin-right: 15px;
+  font-size: $font-size-extra-large;
+  padding: 14px 20px;
+  background-color: white;
+  border-radius: 0;
+  width: 100%;
+  box-shadow: none;
+  outline: none;
+  border: 1px solid transparent;
+  @include hover-transition;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    border: 1px solid black;
+  }
+}
+
+.section-title {
+  font-size: $font-size-title-small;
+
+  @include for-sm-screen { text-align: center; }
+}
