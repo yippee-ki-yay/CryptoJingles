@@ -30,6 +30,10 @@ class Marketplace extends Component {
         <div className="width-container">
           <div className="page-header-wrapper">
             <div className="page-title">{ t('common.marketplace') }</div>
+            <div className="page-description">
+              The marketplace currently supports only v1 Jingles. We are working on adding support for the minted v0 jingles as well!
+              If you want to list your jingles someplace else, head over to the Wrap Jingles page.
+            </div>
           </div>
 
           <div className="page-content-wrapper">

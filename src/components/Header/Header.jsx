@@ -28,10 +28,10 @@ const Header = ({ address }) => {
 
           <div className="links-container">
             <div className="links-wrapper">
-              <NavLink activeClasssName="active" onClick={closeMenu} to="/wrap-jingle">Wrap Jingles</NavLink>
-              <NavLink activeClasssName="active" onClick={closeMenu} to="/compose">Compose</NavLink>
-              <NavLink activeClasssName="active" onClick={closeMenu} to="/marketplace">Marketplace</NavLink>
-              { address && (<NavLink activeClasssName="active" onClick={closeMenu} to={`/profile/${address}`}>Profile</NavLink>) }
+              <NavLink activeClassName="active" onClick={closeMenu} to="/wrap-jingle">Wrap Jingles</NavLink>
+              <NavLink activeClassName="active" onClick={closeMenu} to="/compose">Compose</NavLink>
+              <NavLink activeClassName="active" onClick={closeMenu} to="/marketplace">Marketplace</NavLink>
+              { address && (<NavLink activeClassName="active" onClick={closeMenu} to={`/profile/${address}`}>Profile</NavLink>) }
             </div>
 
             <ConnectWalletButton closeMenu={setChecked} />
