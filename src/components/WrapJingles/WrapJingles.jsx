@@ -35,7 +35,7 @@ const WrapJingles = ({
     <div className={clsx('wrap-jingle-wrapper page-wrapper', { center })}>
       <div className="width-container">
         <div className="page-header-wrapper">
-          <div className="page-title">Wrap Jingles</div>
+          <div className="page-title">{ t('jingles.wrap_jingles') }</div>
           <div className="page-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus animi beatae cupiditate deserunt id impedit incidunt natus necessitatibus obcaecati odio odit porro quibusdam recusandae rem repellat repellendus reprehenderit, suscipit voluptate!</div>
         </div>
 

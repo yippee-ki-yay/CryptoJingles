@@ -1,7 +1,7 @@
-// TODO - move file to components folder
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Dropdown from 'react-dropdown';
+import t from 'translate';
 import 'react-dropdown/style.css';
 import PropTypes from 'prop-types';
 import SingleJingle from '../SingleJingle/SingleJingle';
@@ -14,7 +14,6 @@ import { MARKETPLACE_JINGLES_PER_PAGE } from '../../constants/actionTypes';
 
 import './Marketplace.scss';
 
-// TODO - Add prototypes
 class Marketplace extends Component {
   async componentDidMount() {
     this.props.getMarketplaceJingles();
@@ -27,56 +26,64 @@ class Marketplace extends Component {
     const { changeMarketplaceCategory, changeMarketplaceSorting, onMarketplacePaginationChange } = this.props;
 
     return (
-      <div className="marketplace-page-wrapper container">
-        <div className="marketplace-wrapper">
-
-          { /* SIDEBAR RENDER (TODO - Create component) */ }
-          <div className="sidebar">
-
-            <div className="sort-wrapper">
-              <div className="sort-wrapper-label">Category:</div>
-              <Dropdown
-                onChange={(val) => { changeMarketplaceCategory(val); }}
-                value={category}
-                options={categories}
-              />
-            </div>
-
-            <div className="sort-wrapper">
-              <div className="sort-wrapper-label">Sort by:</div>
-              <Dropdown
-                onChange={(val) => { changeMarketplaceSorting(val); }}
-                value={sorting}
-                options={sortingOptions}
-              />
-            </div>
-
+      <div className="marketplace-page-wrapper page-wrapper">
+        <div className="width-container">
+          <div className="page-header-wrapper">
+            <div className="page-title">{ t('common.marketplace') }</div>
           </div>
 
-          { /* JINGLES RENDER (TODO - Create component) */ }
-          <div className="songs-section">
-            <div className="songs-count">
-              { totalJingles } Jingles
-            </div>
+          <div className="page-content-wrapper">
+            <div className="marketplace-wrapper">
 
-            <div className="songs-wrapper">
-              { jingles.map((jingle) => (
-                <SingleJingle
-                  type="marketplace"
-                  key={jingle.jingleId}
-                  {...jingle}
-                />
-              )) }
-            </div>
+              { /* SIDEBAR RENDER (TODO - Create component) */ }
+              <div className="sidebar">
 
-            {
-              totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
-                <Pagination
-                  pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                  onPageChange={onMarketplacePaginationChange}
-                />
-              )
-            }
+                <div className="sort-wrapper">
+                  <div className="sort-wrapper-label">Category:</div>
+                  <Dropdown
+                    onChange={(val) => { changeMarketplaceCategory(val); }}
+                    value={category}
+                    options={categories}
+                  />
+                </div>
+
+                <div className="sort-wrapper">
+                  <div className="sort-wrapper-label">Sort by:</div>
+                  <Dropdown
+                    onChange={(val) => { changeMarketplaceSorting(val); }}
+                    value={sorting}
+                    options={sortingOptions}
+                  />
+                </div>
+
+              </div>
+
+              { /* JINGLES RENDER (TODO - Create component) */ }
+              <div className="songs-section">
+                <div className="songs-count">
+                  { totalJingles } Jingles
+                </div>
+
+                <div className="songs-wrapper">
+                  { jingles.map((jingle) => (
+                    <SingleJingle
+                      type="marketplace"
+                      key={jingle.jingleId}
+                      {...jingle}
+                    />
+                  )) }
+                </div>
+
+                {
+                  totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
+                    <Pagination
+                      pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+                      onPageChange={onMarketplacePaginationChange}
+                    />
+                  )
+                }
+              </div>
+            </div>
           </div>
         </div>
       </div>

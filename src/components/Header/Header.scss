@@ -4,7 +4,7 @@
 .header-wrapper {
   background: white;
   position: fixed;
-  z-index: 1000;
+  z-index: 100;
   width: 100%;
   top: 0;
   align-items: center;
@@ -19,7 +19,7 @@
 
     .logo-wrapper {
       display: flex;
-      z-index: 1000;
+      z-index: 100;
       align-items: center;
       flex-shrink: 0;
       @include hover-transition;
@@ -67,7 +67,7 @@
       width: 35px;
       top: 25px;
       height: 35px;
-      z-index: 1000;
+      z-index: 100;
 
       &:hover .navicon {
         background-color: var(--header-navicon-hover);
