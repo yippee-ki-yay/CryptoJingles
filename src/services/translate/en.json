@@ -25,6 +25,9 @@
   "common.marketplace": "Marketplace",
   "common.compose": "Compose",
   "common.no_samples": "You currently don't own any samples",
+  "common.getting_jingles": "Getting Jingles...",
+
+  "marketplace.no_jingles": "There are currently no jingles on sale",
 
   "jingles.approving_og_wrapper": "Approving OG wrapper",
   "jingles.approve_og_wrapper": "Approve OG wrapper",

@@ -1,5 +1,5 @@
 import {
-  SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_JINGLES, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE,
+  SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE,
   MARKETPLACE_LIKE_UNLIKE_JINGLE,
 
   GET_MARKETPLACE_JINGLES_REQUEST,
@@ -16,6 +16,12 @@ import { likeUnlikeJingle } from './utils';
 import { getMarketplaceJinglesIdsWithPrices, sortMarketplaceJingles } from '../services/marketplaceService';
 import { getJinglesV1FullData } from '../services/jingleService';
 
+/**
+ * Handles the reducer state for getting the full
+ * jingle data for the current page
+ *
+ * @return {(function(*, *): Promise<void>)|*}
+ */
 export const getMarketplaceFullJinglesDataPerPageAction = () => async (dispatch, getState) => {
   dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST });
 
@@ -31,7 +37,7 @@ export const getMarketplaceFullJinglesDataPerPageAction = () => async (dispatch,
 
     dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS, payload });
   } catch (err) {
-    dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE });
+    dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE, payload: err.message });
   }
 };
 
@@ -52,7 +58,7 @@ export const getMarketplaceJinglesAction = () => async (dispatch, getState) => {
 
     dispatch(getMarketplaceFullJinglesDataPerPageAction());
   } catch (err) {
-    dispatch({ type: GET_MARKETPLACE_JINGLES_FAILURE });
+    dispatch({ type: GET_MARKETPLACE_JINGLES_FAILURE, payload: err.message });
   }
 };
 

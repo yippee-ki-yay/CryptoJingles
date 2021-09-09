@@ -1,12 +1,24 @@
+@import "partials/variables";
+
 .marketplace-page-wrapper {
   background: white;
+
+  &:not(.center), &.loading-error-overlay {
+    padding-bottom: 130px;
+
+    .page-content-wrapper {
+      padding: 0;
+      margin-top: 40px;
+      margin-bottom: 80px;
+    }
+  }
 
   .page-header-wrapper {
     margin-bottom: 50px;
   }
 
-  .page-content-wrapper:not(.center) {
-    padding-top: 30px;
+  .page-content-wrapper {
+    position: relative;
   }
 
   .songs-wrapper {
@@ -20,9 +32,10 @@
     }
   }
 
-  .pagination-wrapper {
-    margin-top: 40px;
+  .pagination-wrapper .pagination { margin: 0; }
 
-    .pagination { margin: 0; }
+  @include for-sm-screen {
+    .pagination-wrapper { margin: 0 auto; }
+    .songs-wrapper { justify-content: center; }
   }
 }

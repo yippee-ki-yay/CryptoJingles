@@ -36,7 +36,6 @@ export const REMOVE_PENDING_TX = 'remove_pending_tx';
 
 // Marketplace action types
 export const CHANGE_MARKETPLACE_PAGE = 'change_marketplace_page';
-export const SET_MARKETPLACE_JINGLES = 'set_marketplace_jingles';
 export const SET_MARKETPLACE_CATEGORY = 'set_marketplace_category';
 export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
 export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';

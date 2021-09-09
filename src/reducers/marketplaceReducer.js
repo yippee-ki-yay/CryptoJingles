@@ -1,7 +1,6 @@
 import {
   CATEGORY_OPTIONS,
   CHANGE_MARKETPLACE_PAGE,
-  SET_MARKETPLACE_JINGLES,
   SET_MARKETPLACE_CATEGORY,
   SET_MARKETPLACE_SORT,
   MARKETPLACE_JINGLES_PER_PAGE,
@@ -42,9 +41,6 @@ export default (state = INITIAL_STATE, action) => {
   case CHANGE_MARKETPLACE_PAGE:
     return { ...state, currentPage: payload };
 
-  case SET_MARKETPLACE_JINGLES:
-    return { ...state, jingles: payload.jingles, totalJingles: payload.num };
-
   case SET_MARKETPLACE_CATEGORY:
     return { ...state, category: payload };
 
@@ -60,15 +56,15 @@ export default (state = INITIAL_STATE, action) => {
   case GET_MARKETPLACE_JINGLES_REQUEST:
     return {
       ...state,
-      gettingMarketplaceJingles: true,
-      gettingMarketplaceJinglesError: '',
+      gettingJinglesBasic: true,
+      gettingJinglesBasicError: '',
     };
 
   case GET_MARKETPLACE_JINGLES_SUCCESS:
     return {
       ...state,
-      gettingMarketplaceJingles: false,
-      gettingMarketplaceJinglesError: '',
+      gettingJinglesBasic: false,
+      gettingJinglesBasicError: '',
       jinglesBasic: payload,
       totalJingles: payload.length,
     };
@@ -76,30 +72,30 @@ export default (state = INITIAL_STATE, action) => {
   case GET_MARKETPLACE_JINGLES_FAILURE:
     return {
       ...state,
-      gettingMarketplaceJingles: false,
-      gettingMarketplaceJinglesError: payload,
+      gettingJinglesBasic: false,
+      gettingJinglesBasicError: payload,
     };
 
   case GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST:
     return {
       ...state,
-      gettingFULL_JINGLES_DATA_PER_PAGEJingles: true,
-      gettingFULL_JINGLES_DATA_PER_PAGEJinglesError: '',
+      gettingJingles: true,
+      gettingJinglesError: '',
     };
 
   case GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS:
     return {
       ...state,
-      gettingFULL_JINGLES_DATA_PER_PAGEJingles: false,
-      gettingFULL_JINGLES_DATA_PER_PAGEJinglesError: '',
+      gettingJingles: false,
+      gettingJinglesError: '',
       jingles: payload,
     };
 
   case GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE:
     return {
       ...state,
-      gettingFULL_JINGLES_DATA_PER_PAGEJingles: false,
-      gettingFULL_JINGLES_DATA_PER_PAGEJinglesError: payload,
+      gettingJingles: false,
+      gettingJinglesError: payload,
     };
 
   default:

@@ -1,3 +1,18 @@
+@import "partials/colors";
+
+.pagination-wrapper {
+  width: fit-content;
+}
+
+.pagination-wrapper.disabled {
+  cursor: not-allowed;
+
+  ul > li > a {
+    pointer-events: none;
+    background: $pale-white;
+  }
+}
+
 .pagination-wrapper .pagination > .active > a {
     background: black;
     color: white;

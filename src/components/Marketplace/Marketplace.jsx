@@ -1,23 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import t from 'translate';
 import 'react-dropdown/style.css';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { MESSAGE_BOX_TYPES } from 'constants/general';
 import { getMarketplaceJinglesAction, onMarketplacePaginationChange } from '../../actions/marketplaceActions';
 import { MARKETPLACE_JINGLES_PER_PAGE } from '../../constants/actionTypes';
 import SingleJingle from '../SingleJingle/SingleJingle';
 import Pagination from '../Pagination/Pagination';
 import MarketplaceSort from './MarketplaceSort/MarketplaceSort';
+import LoadingErrorOverlay from '../Common/LoadingErrorOverlay/LoadingErrorOverlay';
+import BoxLoader from '../Decorative/BoxLoader';
+import MessageBox from '../Common/MessageBox/MessageBox';
+import EmptyState from '../Common/EmptyState/EmptyState';
 
 import './Marketplace.scss';
 
 const Marketplace = ({
   jingles, jinglesPerPage, totalJingles, onMarketplacePaginationChange, getMarketplaceJinglesAction,
+  gettingJinglesBasic, gettingJinglesBasicError, gettingJingles, gettingJinglesError,
 }) => {
   useEffect(() => { getMarketplaceJinglesAction(); }, [getMarketplaceJinglesAction]);
 
+  const loadedJingles = useMemo(() => jingles !== null, [jingles]);
+  const hasJingles = useMemo(() => loadedJingles && jingles.length > 0, [loadedJingles, jingles]);
+
+  const loading = useMemo(() => gettingJinglesBasic || gettingJingles, [gettingJinglesBasic, gettingJingles]);
+  const error = useMemo(() => gettingJinglesBasicError || gettingJinglesError, [gettingJinglesBasicError, gettingJinglesError]);
+  const center = useMemo(() => error || loading || !hasJingles, [error, loading, hasJingles]);
+
   return (
-    <div className="marketplace-page-wrapper page-wrapper">
+    <div className={clsx('marketplace-page-wrapper page-wrapper', { center, 'loading-error-overlay': jingles && (gettingJingles || gettingJinglesError) })}>
       <div className="width-container">
         <div className="page-header-wrapper">
           <div className="page-title">
@@ -30,28 +44,64 @@ const Marketplace = ({
           </div>
         </div>
 
-        <MarketplaceSort />
+        <MarketplaceSort disabled={!jingles || gettingJingles || gettingJinglesBasic} />
 
         <div className="page-content-wrapper">
-          <div className="songs-wrapper">
-            { jingles && jingles.map((jingle) => (
-              <SingleJingle
-                type="marketplace"
-                key={jingle.jingleId}
-                {...jingle}
-              />
-            )) }
-          </div>
 
           {
-            totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
-              <Pagination
-                pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                onPageChange={onMarketplacePaginationChange}
-              />
-            )
+            !loadedJingles ?
+              (
+                <>
+                  {
+                    loading ?
+                      (
+                        <div className="loader-wrapper">
+                          <BoxLoader />
+                          <div className="loader-message">{ t('common.getting_jingles') }</div>
+                        </div>
+                      )
+                      :
+                      (error) && (<MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{error}</MessageBox>)
+                  }
+                </>
+              )
+              :
+              (
+                <>
+                  {
+                    (gettingJingles || gettingJinglesError) && (<LoadingErrorOverlay loading={gettingJingles} error={gettingJinglesError} loadingText="common.getting_jingles" />)
+                  }
+
+                  {
+                    !hasJingles ?
+                      (<EmptyState text={t('marketplace.no_jingles')} />)
+                      :
+                      (
+                        <div className="songs-wrapper">
+                          { jingles && jingles.map((jingle) => (
+                            <SingleJingle
+                              type="marketplace"
+                              key={jingle.jingleId}
+                              {...jingle}
+                            />
+                          )) }
+                        </div>
+                      )
+                  }
+                </>
+              )
           }
         </div>
+
+        {
+          jingles && totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
+            <Pagination
+              disabled={gettingJingles}
+              pageCount={Math.ceil(totalJingles / jinglesPerPage)}
+              onPageChange={onMarketplacePaginationChange}
+            />
+          )
+        }
       </div>
     </div>
   );
@@ -67,12 +117,23 @@ Marketplace.propTypes = {
   totalJingles: PropTypes.number.isRequired,
   getMarketplaceJinglesAction: PropTypes.func.isRequired,
   onMarketplacePaginationChange: PropTypes.func.isRequired,
+
+  gettingJinglesBasic: PropTypes.bool.isRequired,
+  gettingJinglesBasicError: PropTypes.string.isRequired,
+  gettingJingles: PropTypes.bool.isRequired,
+  gettingJinglesError: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  totalJingles: state.marketplace.totalJingles,
-  jinglesPerPage: state.marketplace.jinglesPerPage,
-  jingles: state.marketplace.jingles,
+const mapStateToProps = ({ marketplace }) => ({
+  totalJingles: marketplace.totalJingles,
+  jinglesPerPage: marketplace.jinglesPerPage,
+  jingles: marketplace.jingles,
+
+  gettingJinglesBasic: marketplace.gettingJinglesBasic,
+  gettingJinglesBasicError: marketplace.gettingJinglesBasicError,
+
+  gettingJingles: marketplace.gettingJingles,
+  gettingJinglesError: marketplace.gettingJinglesError,
 });
 
 const mapDispatchToProps = {

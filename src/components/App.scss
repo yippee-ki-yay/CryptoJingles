@@ -307,4 +307,15 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
       min-width: 220px;
     }
   }
+
+  @include for-sm-screen {
+    flex-direction: column;
+
+    .sort-item-wrapper {
+      flex-direction: column;
+
+      .sort-wrapper-label { margin: 0 0 15px 0; }
+      .select { width: 100%; }
+    }
+  }
 }

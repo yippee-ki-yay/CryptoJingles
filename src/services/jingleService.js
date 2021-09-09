@@ -79,5 +79,5 @@ export const getJinglesV1FullData = async (jingleIds) => {
   const contract = await JingleV1ViewContract();
 
   const res = await Promise.all(jingleIds.map((id) => contract.methods.getFullJingleData(id).call()));
-  return res.map((jingle) => ({ ...jingle, jingleId: jingle.id, version: 1 }));
+  return res.map((jingle) => formatViewJingle(1, jingle));
 };

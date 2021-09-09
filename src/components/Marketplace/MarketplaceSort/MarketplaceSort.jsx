@@ -5,7 +5,9 @@ import Select from 'react-select';
 import { changeMarketplaceSorting } from '../../../actions/marketplaceActions';
 
 // disabled when getting new jingles
-const MarketplaceSort = ({ sorting, sortingOptions, changeMarketplaceSorting }) => (
+const MarketplaceSort = ({
+  sorting, sortingOptions, changeMarketplaceSorting, disabled,
+}) => (
   <div className="sort-section-wrapper">
     <div className="sort-item-wrapper">
       <div className="sort-wrapper-label">Sort by:</div>
@@ -18,15 +20,21 @@ const MarketplaceSort = ({ sorting, sortingOptions, changeMarketplaceSorting }) 
         options={sortingOptions}
         onBlur={(event) => event.preventDefault()}
         isSearchable={false}
+        isDisabled={disabled}
       />
     </div>
   </div>
 );
 
+MarketplaceSort.defaultProps = {
+  disabled: false,
+};
+
 MarketplaceSort.propTypes = {
   sorting: PropTypes.object.isRequired,
   sortingOptions: PropTypes.array.isRequired,
   changeMarketplaceSorting: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 const mapStateToProps = ({ marketplace }) => ({
