@@ -6,12 +6,14 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
 interface IJIngle {
     function transfer(address _to, uint256 _tokenId) external virtual;
 }
 
-/// @title A wrapped contract for CryptoJingles V0 and V1
-contract OGWrappedJingle is ERC721URIStorage {
+/// @title A wrapped contract for CryptoJingles V0 and V1 (Only 2018 mints)
+contract OGWrappedJingle is ERC721URIStorage, Ownable {
 
     event Wrapped(uint256 indexed, uint256, address);
     event Unwrapped(uint256 indexed, uint256, address);
@@ -31,7 +33,7 @@ contract OGWrappedJingle is ERC721URIStorage {
 
     mapping (uint256 => mapping (address => OldToken)) public tokenMap;
 
-    constructor() ERC721("New WrappedJingle", "WJL") {}
+    constructor() ERC721("OG Jingles", "GJ") {}
 
     /// @notice Locks an old v0/v1 jingle and gives the user a wrapped jingle
     /// @dev User must approve the contract to withdraw the asset
@@ -39,13 +41,13 @@ contract OGWrappedJingle is ERC721URIStorage {
     /// @param _version 0 - v0 version, 1 - v1 version
     function wrap(uint256 _tokenId, Version _version) public {
         address jingleContract = getJingleAddr(_version);
-        address owner = IERC721(jingleContract).ownerOf(_tokenId);
+        address tokenOwner = IERC721(jingleContract).ownerOf(_tokenId);
 
         // check if v0 can wrap
-        require(wrapCheck(_tokenId, _version), "Only old V0 jingles");
+        require(wrapCheck(_tokenId, _version), "Wrap check not passed");
 
         // check if user is owner
-        require(owner == msg.sender, "Not token owner");
+        require(tokenOwner == msg.sender, "Not token owner");
 
         // pull user jingle
         IERC721(jingleContract).transferFrom(msg.sender, address(this), _tokenId);
@@ -63,15 +65,14 @@ contract OGWrappedJingle is ERC721URIStorage {
 
 
     /// @notice Unlocks an old v0/v1 jingle and burnes the users wrapped jingle
-    /// @dev User must approve the contract to withdraw the asset
     /// @param _wrappedTokenId Token id of the wrapped jingle
     /// @param _version 0 - v0 version, 1 - v1 version
     function unwrap(uint256 _wrappedTokenId, Version _version) public {
         // check if user is owner
         address jingleContract = getJingleAddr(_version);
-        address owner = ownerOf(_wrappedTokenId);
+        address tokenOwner = ownerOf(_wrappedTokenId);
 
-        require(owner == msg.sender, "Not token owner");
+        require(tokenOwner == msg.sender, "Not token owner");
 
         // burn wrapped
         _burn(_wrappedTokenId);
@@ -100,11 +101,11 @@ contract OGWrappedJingle is ERC721URIStorage {
 
     function wrapCheck(uint256 _tokenId, Version _version) internal pure returns (bool) {
         if (_version == Version.V0) {
-            if (_tokenId > NUM_V0_JINGLES) return true;
+            if (_tokenId <= NUM_V0_JINGLES) return true;
         }
 
         if (_version == Version.V1) {
-            if (_tokenId > NUM_V1_JINGLES) return true;
+            if (_tokenId <= NUM_V1_JINGLES) return true;
         }
 
         return true;
@@ -129,10 +130,10 @@ contract OGWrappedJingle is ERC721URIStorage {
     }
 
     function baseTokenURI() public pure returns (string memory) {
-        return "https://cryptojingles.me/api/wrapped-jingles/";
+        return "https://cryptojingles.app/api/wrapped-jingles/";
     }
 
     function contractURI() public pure returns (string memory) {
-        return "https://cryptojingles.me/metadata";
+        return "https://cryptojingles.app/api/metadataOG";
     }
 }
