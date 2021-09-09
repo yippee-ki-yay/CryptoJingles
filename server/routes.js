@@ -9,7 +9,7 @@ require('./models/jinglesV0.model');
 const jingleV0Ctrl = require('./controllers/jinglesV0.controller');
 // const jingleImageCtrl = require('./controllers/jingle.image.controller');
 
-router.get('/wrapped-jingle/:wrappedId', wrappedJingleCtrl.getWrappedJingleMetadata);
+router.get('/wrapped-jingles/:wrappedId', wrappedJingleCtrl.getWrappedJingleMetadata);
 
 router.get('/jingles/pagination/:owner/page/:page/filter/:filter', jingleCtrl.getJinglesForOwner);
 router.get('/jingles/count/owner/:owner/sale/:sale', jingleCtrl.getJingleNumForOwner);
