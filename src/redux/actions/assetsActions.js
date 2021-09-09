@@ -92,7 +92,7 @@ export const isAddressApprovedOnAssetAction = (asset, spender, tokenId, approveT
     const contract = await assetInfo.contract();
 
     const events = await contract.getPastEvents('Approval', {
-      filter: { owner: getState().app.address, spender, tokenId: tokenId.toString() }, // Using an array means OR: e.g. 20 or 23
+      filter: { owner: getState().app.address, approved: spender, tokenId: tokenId.toString() }, // Using an array means OR: e.g. 20 or 23
       fromBlock: assetInfo.fromBlock,
       toBlock: 'latest',
     });
