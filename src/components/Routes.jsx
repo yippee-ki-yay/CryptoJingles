@@ -20,6 +20,7 @@ const MarketplaceLazy = lazy(() => import('./Marketplace/Marketplace'));
 const ComposeLazy = lazy(() => import('./Compose/Compose'));
 const JinglePageLazy = lazy(() => import('./JinglePage/JinglePage'));
 const WrapJinglesLazy = lazy(() => import('./WrapJingles/WrapJingles'));
+const ExploreLazy = lazy(() => import('./Explore/Explore'));
 
 const Routes = ({ listenToAccChange, silentLogin }) => {
   const [windowWidth, windowHeight] = useWindowSize();
@@ -43,6 +44,7 @@ const Routes = ({ listenToAccChange, silentLogin }) => {
             <Switch>
               <Route path="/" exact component={HomeLazy} />
               <Route path="/marketplace" component={MarketplaceLazy} />
+              <Route path="/explore" component={ExploreLazy} />
               <Route path="/jingle/:id" component={JinglePageLazy} />
               <AccountRouteChecker path="/wrap-jingle" component={WrapJinglesLazy} requireLogin requireLoginBlocker />
               <Route path="/compose" component={ComposeLazy} />

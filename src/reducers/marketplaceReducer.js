@@ -15,6 +15,8 @@ import {
   GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST,
   GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS,
   GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE,
+
+  CLEAR_MARKETPLACE_JINGLES_ACTION,
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
@@ -97,6 +99,9 @@ export default (state = INITIAL_STATE, action) => {
       gettingJingles: false,
       gettingJinglesError: payload,
     };
+
+  case CLEAR_MARKETPLACE_JINGLES_ACTION:
+    return INITIAL_STATE;
 
   default:
     return state;

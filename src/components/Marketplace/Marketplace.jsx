@@ -5,7 +5,9 @@ import 'react-dropdown/style.css';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { MESSAGE_BOX_TYPES } from 'constants/general';
-import { getMarketplaceJinglesAction, onMarketplacePaginationChange } from '../../actions/marketplaceActions';
+import {
+  getMarketplaceJinglesAction, onMarketplacePaginationChange, clearMarketplaceJinglesAction,
+} from '../../actions/marketplaceActions';
 import { MARKETPLACE_JINGLES_PER_PAGE } from '../../constants/actionTypes';
 import SingleJingle from '../SingleJingle/SingleJingle';
 import Pagination from '../Pagination/Pagination';
@@ -19,10 +21,8 @@ import './Marketplace.scss';
 
 const Marketplace = ({
   jingles, jinglesPerPage, totalJingles, onMarketplacePaginationChange, getMarketplaceJinglesAction,
-  gettingJinglesBasic, gettingJinglesBasicError, gettingJingles, gettingJinglesError,
+  gettingJinglesBasic, gettingJinglesBasicError, gettingJingles, gettingJinglesError, clearMarketplaceJinglesAction,
 }) => {
-  useEffect(() => { getMarketplaceJinglesAction(); }, [getMarketplaceJinglesAction]);
-
   const loadedJingles = useMemo(() => jingles !== null, [jingles]);
   const hasJingles = useMemo(() => loadedJingles && jingles.length > 0, [loadedJingles, jingles]);
 
@@ -30,13 +30,19 @@ const Marketplace = ({
   const error = useMemo(() => gettingJinglesBasicError || gettingJinglesError, [gettingJinglesBasicError, gettingJinglesError]);
   const center = useMemo(() => error || loading || !hasJingles, [error, loading, hasJingles]);
 
+  useEffect(() => {
+    getMarketplaceJinglesAction();
+
+    return () => { clearMarketplaceJinglesAction(); };
+  }, [getMarketplaceJinglesAction, clearMarketplaceJinglesAction]);
+
   return (
     <div className={clsx('marketplace-page-wrapper page-wrapper', { center, 'loading-error-overlay': jingles && (gettingJingles || gettingJinglesError) })}>
       <div className="width-container">
         <div className="page-header-wrapper">
           <div className="page-title">
             { t('common.marketplace') }
-            { totalJingles && ` (${totalJingles} Jingles)` }
+            { totalJingles !== 0 && ` (${totalJingles} Jingles)` }
           </div>
           <div className="page-description">
             The marketplace currently supports only v1 Jingles. We are working on adding support for the minted v0 jingles as well!
@@ -116,6 +122,7 @@ Marketplace.propTypes = {
   jinglesPerPage: PropTypes.number.isRequired,
   totalJingles: PropTypes.number.isRequired,
   getMarketplaceJinglesAction: PropTypes.func.isRequired,
+  clearMarketplaceJinglesAction: PropTypes.func.isRequired,
   onMarketplacePaginationChange: PropTypes.func.isRequired,
 
   gettingJinglesBasic: PropTypes.bool.isRequired,
@@ -137,7 +144,7 @@ const mapStateToProps = ({ marketplace }) => ({
 });
 
 const mapDispatchToProps = {
-  getMarketplaceJinglesAction, onMarketplacePaginationChange,
+  getMarketplaceJinglesAction, onMarketplacePaginationChange, clearMarketplaceJinglesAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Marketplace);

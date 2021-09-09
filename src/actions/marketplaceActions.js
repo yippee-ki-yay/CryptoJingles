@@ -10,11 +10,14 @@ import {
   GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS,
   GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE,
 
+  CLEAR_MARKETPLACE_JINGLES_ACTION,
+
   MARKETPLACE_JINGLES_PER_PAGE,
 } from '../constants/actionTypes';
 import { likeUnlikeJingle } from './utils';
 import { getMarketplaceJinglesIdsWithPrices, sortMarketplaceJingles } from '../services/marketplaceService';
 import { getJinglesV1FullData } from '../services/jingleService';
+import { wait } from '../services/utilsService';
 
 /**
  * Handles the reducer state for getting the full
@@ -52,6 +55,7 @@ export const getMarketplaceJinglesAction = () => async (dispatch, getState) => {
   try {
     const { sorting } = getState().marketplace;
 
+    await wait(2000);
     const payload = await getMarketplaceJinglesIdsWithPrices();
 
     dispatch({ type: GET_MARKETPLACE_JINGLES_SUCCESS, payload: sortMarketplaceJingles(sorting.value, payload) });
@@ -61,6 +65,13 @@ export const getMarketplaceJinglesAction = () => async (dispatch, getState) => {
     dispatch({ type: GET_MARKETPLACE_JINGLES_FAILURE, payload: err.message });
   }
 };
+
+/**
+ * Handles the reducer state for clearing all marketplace data
+ *
+ * @return {(function(*, *))|*}
+ */
+export const clearMarketplaceJinglesAction = () => (dispatch) => dispatch({ type: CLEAR_MARKETPLACE_JINGLES_ACTION });
 
 /**
  * Changes the current selected category for the marketplace
