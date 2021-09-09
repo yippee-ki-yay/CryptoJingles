@@ -9,6 +9,8 @@ const WrappedJingle = mongoose.model('WrappedJingle');
 const JingleV0 = mongoose.model('JingleV0');
 const Jingle = mongoose.model('Jingle');
 
+const getJingleData = require('../../jingleImageGeneration/getJingleData');
+
 const wrappedJingleAbi = require('../abis/WrappedJingle.json');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NODE_URL_HTTPS));
@@ -16,6 +18,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NODE_URL_HTTPS
 const wrappedContractAddr = '0x87260c09fd1c7b6a47324f39f391b25e89002fc9';
 
 const jingleV0Addr = '0x5AF7Af54E8Bc34b293e356ef11fffE51d6f9Ae78';
+const jingleV1Addr = '0x5B6660ca047Cc351BFEdCA4Fc864d0A88F551485';
 
 const wrappedJingleContract = new web3.eth.Contract(
   wrappedJingleAbi.abi,
@@ -30,24 +33,25 @@ module.exports.removeWrappedJingle = async (wrappedId, jingleVersion, jingleId) 
   }
 };
 
-
 module.exports.getWrappedJingleMetadata = async (req, res) => {
   try {
     const { wrappedId } = req.params;
 
     let wrappedJingle = await WrappedJingle.findOne({ wrappedId });
 
-    // TODO: check V1 as well
     if (!wrappedJingle) {
       console.log(wrappedId, jingleV0Addr);
-      const tokenId = await wrappedJingleContract.methods.tokenMap(wrappedId, jingleV0Addr).call();
+      const tokenIdV0 = await wrappedJingleContract.methods.tokenMap(wrappedId, jingleV0Addr).call();
+      const tokenIdV1 = await wrappedJingleContract.methods.tokenMap(wrappedId, jingleV0Addr).call();
+
+      const tokenId = tokenIdV0.isWrapped === false ? tokenIdV1.tokenId : tokenIdV0.tokenId;
 
       console.log('tokenId: ', tokenId.tokenId);
 
       const newWrapped = new WrappedJingle({
         wrappedId,
         jingleId: tokenId.tokenId,
-        jingleVersion: 'v0', // TODO: FIX
+        jingleVersion: 'v0',
       });
 
       await newWrapped.save();
@@ -74,12 +78,21 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
 
       const webmName = `${wrappedJingle.jingleVersion}_${jingleData.jingleId}`;
 
-      metadata.description = 'This is a wrapped jingle';
-      metadata.name = `${jingleData.name}`;
+      const attributes = [];
+
+      jingleData.sampleTypes.forEach((sampleType) => {
+        attributes.push({
+          trait_type: getJingleData(sampleType).name,
+          value: getJingleData(sampleType).rarity,
+        });
+      });
+
+      metadata.description = `Wrapped version of jingle number #${jingleData.jingleId}`;
+      metadata.name = `Wrapped #${jingleData.jingleId} - ${jingleData.name}`;
       metadata.animation_url = `${base}/public/videosWithSound/${webmName}.webm`;
       metadata.external_url = `${base}/jingle/${jingleData.jingleId}`;
       metadata.image = `${base}/public/videosWithSound/${webmName}.webm`;
-      metadata.attributes = [];
+      metadata.attributes = attributes;
     }
 
     res.status(200);
