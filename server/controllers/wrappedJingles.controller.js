@@ -79,7 +79,7 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
       metadata.animation_url = `${base}/public/videosWithSound/${webmName}.webm`;
       metadata.external_url = `${base}/jingle/${jingleData.jingleId}`;
       metadata.image = `${base}/public/videosWithSound/${webmName}.webm`;
-      metadata.attributes = {};
+      metadata.attributes = [];
     }
 
     res.status(200);
