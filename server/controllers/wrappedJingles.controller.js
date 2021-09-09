@@ -70,15 +70,15 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
 
       console.log(jingleData);
 
-      const base = 'https://cryptojingle.app';
+      const base = 'https://cryptojingles.app';
 
       const webmName = `${wrappedJingle.jingleVersion}_${jingleData.jingleId}`;
 
       metadata.description = 'This is a wrapped jingle';
       metadata.name = `${jingleData.name}`;
-      metadata.animation_url = `${base}/public/videosWithSound/${webmName}`;
+      metadata.animation_url = `${base}/public/videosWithSound/${webmName}.webm`;
       metadata.external_url = `${base}/jingle/${jingleData.jingleId}`;
-      metadata.image = `${base}/public/videosWithSound/${webmName}`;
+      metadata.image = `${base}/public/videosWithSound/${webmName}.webm`;
       metadata.attributes = {};
     }
 
