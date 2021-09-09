@@ -74,3 +74,10 @@ export const getUserSamples = async (address) => {
 };
 
 export const createJingle = (settings, sampleIds, name, address) => window.contract.composeJingle(name, sampleIds, settings, { from: address });
+
+export const getJinglesV1FullData = async (jingleIds) => {
+  const contract = await JingleV1ViewContract();
+
+  const res = await Promise.all(jingleIds.map((id) => contract.methods.getFullJingleData(id).call()));
+  return res.map((jingle) => ({ ...jingle, jingleId: jingle.id, version: 1 }));
+};

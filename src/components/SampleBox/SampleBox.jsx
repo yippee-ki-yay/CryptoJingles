@@ -11,15 +11,7 @@ import './SampleBox.scss';
 
 const boxSource = { beginDrag(props) { return { name: props.name, id: props.id, type: props.jingleType }; } };
 
-const style = {
-  margin: '14px 27px 7px 26px',
-  width: '175px',
-  height: '230px',
-  float: 'left',
-  cursor: 'move',
-  position: 'relative',
-  background: '#fff',
-};
+const style = {};
 
 @DragSource((props) => props.type, boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
@@ -92,7 +84,7 @@ class SampleBox extends Component {
     const background = getColorForRarity(rarity);
 
     return connectDragSource((() => (
-      <div>
+      <div style={{ ...style }}>
         <div className="sample-wrapper" style={{ width: '175px' }}>
           <div className="top" style={{ background }}>
             { this.state.loading && <div><LoadingIcon /></div> }

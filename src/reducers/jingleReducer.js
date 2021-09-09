@@ -36,6 +36,7 @@ import {
   CREATE_JINGLE_REQUEST,
   CREATE_JINGLE_SUCCESS,
   CREATE_JINGLE_FAILURE,
+  CLEAR_CREATE_JINGLE,
 } from '../redux/actionTypes/jingleActionTypes';
 
 const INITIAL_STATE = {
@@ -67,6 +68,7 @@ const INITIAL_STATE = {
 
   creatingJingle: false,
   creatingJingleError: '',
+  creatingJingleSuccess: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -323,6 +325,7 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       creatingJingle: true,
       creatingJingleError: '',
+      creatingJingleSuccess: false,
     };
 
   case CREATE_JINGLE_SUCCESS:
@@ -330,6 +333,7 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       creatingJingle: false,
       creatingJingleError: '',
+      creatingJingleSuccess: true,
     };
 
   case CREATE_JINGLE_FAILURE:
@@ -337,6 +341,15 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       creatingJingle: false,
       creatingJingleError: payload,
+      creatingJingleSuccess: false,
+    };
+
+  case CLEAR_CREATE_JINGLE:
+    return {
+      ...state,
+      creatingJingle: false,
+      creatingJingleError: '',
+      creatingJingleSuccess: false,
     };
 
   default:

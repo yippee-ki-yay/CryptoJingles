@@ -50,6 +50,8 @@ createNewContract(Marketplace, MarketplaceAddress, 'marketplaceContract');
 createNewContract(Sample, SampleAddress, 'samplesContract');
 createNewContract(WrappedOGJingle, WrappedOGJingleAddress, 'wrappedOGJingleContract');
 
+export const MarketplaceV1Contract = createContract(Marketplace.abi, MarketplaceAddress);
+
 export const JingleV0ViewContract = createContract(JingleV0View.abi, JingleV1ViewAddress);
 export const JingleV1ViewContract = createContract(JingleV1View.abi, JingleV1ViewAddress);
 export const JingleV1Contract = createContract(Jingle.abi, JingleAddress);

@@ -23,7 +23,7 @@ const Pagination = ({ pageCount, onPageChange, range }) => (
 );
 
 Pagination.defaultProps = {
-  range: 10,
+  range: 5,
 };
 
 Pagination.propTypes = {

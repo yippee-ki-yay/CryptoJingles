@@ -13,6 +13,7 @@ import '../css/custom.scss';
 import '../css/theme.scss';
 import '../styles/tooltip.scss';
 import '../styles/button.scss';
+import '../styles/select.scss';
 import './App.scss';
 
 Object.keys(colors.main).forEach((key) => {

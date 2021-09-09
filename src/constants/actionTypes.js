@@ -8,10 +8,18 @@ export const SAMPLE_SORTING_OPTIONS = [
 export const SORTING_OPTIONS = [
   { value: '-jingleId', label: 'Newest first' },
   { value: 'jingleId', label: 'Oldest first' },
-  { value: '-likeCount', label: 'Most loved' },
   { value: '-price', label: 'Most expensive first' },
   { value: 'price', label: 'Cheapest first' },
 ];
+
+// TODO - change when v0 is added
+export const MARKETPLACE_SORTING_OPTIONS = [
+  { value: '-jingleId', label: 'Newest first' },
+  { value: 'jingleId', label: 'Oldest first' },
+  { value: '-price', label: 'Most expensive first' },
+  { value: 'price', label: 'Cheapest first' },
+];
+
 export const MARKETPLACE_JINGLES_PER_PAGE = 10;
 
 export const PROFILE_TABS = [
@@ -20,9 +28,6 @@ export const PROFILE_TABS = [
   { label: 'Songs', value: 'songs' },
   { label: 'Albums', value: 'albums' },
 ];
-
-export const MARKETPLACE_JINNGLES_PER_PAGE = 10;
-// TODO put everything above this comment in a constants file
 
 // App action types
 export const INIT_APP = 'init_app';
@@ -36,6 +41,14 @@ export const SET_MARKETPLACE_CATEGORY = 'set_marketplace_category';
 export const SET_MARKETPLACE_SORT = 'set_marketplace_sort';
 export const SET_MARKETPLACE_PAGE = 'set_marketplace_page';
 export const MARKETPLACE_LIKE_UNLIKE_JINGLE = 'marketplace_like_unlike_jingle';
+
+export const GET_MARKETPLACE_JINGLES_REQUEST = 'GET_MARKETPLACE_JINGLES_REQUEST';
+export const GET_MARKETPLACE_JINGLES_SUCCESS = 'GET_MARKETPLACE_JINGLES_SUCCESS';
+export const GET_MARKETPLACE_JINGLES_FAILURE = 'GET_MARKETPLACE_JINGLES_FAILURE';
+
+export const GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST = 'GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST';
+export const GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS = 'GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS';
+export const GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE = 'GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE';
 
 // Audio action types
 export const SET_SINGLE_AUDIO = 'set_single_audio';

@@ -7,7 +7,7 @@ import { Sound, Group } from 'pizzicato';
 import t from 'translate';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getUserSamplesAction, createJingleAction } from 'redux/actions/jingleActions';
+import { getUserSamplesAction, createJingleAction, clearCreateJingleAction } from 'redux/actions/jingleActions';
 import { getSampleSlots } from 'constants/getMockData';
 import BoxLoader from '../Decorative/BoxLoader';
 import PlayIcon from '../Decorative/PlayIcon';
@@ -35,6 +35,7 @@ class Compose extends Component {
       droppedBoxIds: [],
       playing: false,
       group: null,
+      jingleName: '',
     };
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -57,6 +58,8 @@ class Compose extends Component {
   }
 
   componentWillUnmount() {
+    this.props.clearCreateJingleAction();
+
     if (this.state.group === null) return;
 
     this.state.group.stop();
@@ -65,7 +68,8 @@ class Compose extends Component {
 
   handleJingleNameChange(e) {
     const val = e.target.value;
-    if (val > 30) return;
+    if (val.length > 30) return;
+
     this.setState({ jingleName: val });
   }
 
@@ -76,6 +80,8 @@ class Compose extends Component {
    * @param {Object} item
    */
   handleDrop(index, item) {
+    if (this.props.creatingJingle) return;
+
     this.setState((preState) => update(preState, { // eslint-disable-line
       sampleSlots: { [index]: { lastDroppedItem: { $set: item } } },
       droppedBoxIds: { $push: [item.id] },
@@ -91,6 +97,8 @@ class Compose extends Component {
    * @param {Object} item
    */
   handleCancel(index, { id }) {
+    if (this.props.creatingJingle) return;
+
     const droppedBoxIds = [...this.state.droppedBoxIds]; // eslint-disable-line
     const boxIndex = droppedBoxIds.findIndex((_id) => _id === id);
     droppedBoxIds.splice(boxIndex, 1);
@@ -109,7 +117,8 @@ class Compose extends Component {
 
     await this.props.createJingleAction(settings, sampleIds, this.state.jingleName);
 
-    this.setState({ sampleSlots: getSampleSlots() });
+    this.setState({ jingleName: '', droppedBoxIds: [], sampleSlots: getSampleSlots() });
+    this.jingleNameRef.value = '';
   };
 
   stopSound() {
@@ -178,6 +187,7 @@ class Compose extends Component {
   render() {
     const {
       address, gettingUserSamples, gettingUserSamplesError, userSamples,
+      creatingJingle, creatingJingleError, creatingJingleSuccess,
     } = this.props;
 
     const hasSamples = userSamples && userSamples.length > 0;
@@ -245,25 +255,33 @@ class Compose extends Component {
               {
                 address && (
                   <form onSubmit={(e) => { e.preventDefault(); }} className="create-jingle-form">
-                    <div className="form-title">{ t('compose.mint_a_jingle') }</div>
+                    <div className="create-form-contents">
+                      <div className="form-title">{ t('compose.mint_a_jingle') }</div>
 
-                    <div className="input-submit-wrapper">
-                      <input
-                        className="form-input"
-                        placeholder="Jingle name"
-                        type="text"
-                        onChange={this.handleJingleNameChange}
-                      />
+                      <div className="input-submit-wrapper">
+                        <input
+                          ref={(_ref) => { this.jingleNameRef = _ref; }}
+                          className="form-input"
+                          placeholder="Jingle name"
+                          type="text"
+                          disabled={creatingJingle}
+                          value={this.state.jingleName}
+                          onChange={this.handleJingleNameChange}
+                        />
 
-                      <button
-                        type="submit"
-                        className="button green"
-                        onClick={this.createSong}
-                        // disabled={this.state.droppedBoxIds.length < 5}
-                      >
-                        Mint
-                      </button>
+                        <button
+                          type="submit"
+                          className="button green"
+                          onClick={this.createSong}
+                          disabled={this.state.droppedBoxIds.length < 5 || creatingJingle || !this.state.jingleName}
+                        >
+                          { creatingJingle ? 'Minting' : 'Mint' }
+                        </button>
+                      </div>
                     </div>
+
+                    { creatingJingleSuccess && (<MessageBox type={MESSAGE_BOX_TYPES.SUCCESS}>{ t('compose.success_message') }</MessageBox>) }
+                    { creatingJingleError && (<MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{ creatingJingleError }</MessageBox>) }
                   </form>
                 )
               }
@@ -272,7 +290,7 @@ class Compose extends Component {
                 <div className="section-title">{ t('common.your_samples') }</div>
 
                 <div className={clsx('samples-section-wrapper', { center })}>
-                  { !address && (<Blocker text="compose.unlock_wallet" />) }
+                  { !address && (<Blocker text="compose.connect_wallet" />) }
 
                   {
                     gettingUserSamples ?
@@ -324,7 +342,6 @@ Compose.propTypes = {
   delays: PropTypes.array.isRequired,
   cuts: PropTypes.array.isRequired,
   address: PropTypes.string.isRequired,
-  removePendingTx: PropTypes.func.isRequired,
   getUserSamplesAction: PropTypes.func.isRequired,
 
   gettingUserSamples: PropTypes.bool.isRequired,
@@ -332,6 +349,10 @@ Compose.propTypes = {
   userSamples: PropTypes.array,
 
   createJingleAction: PropTypes.func.isRequired,
+  clearCreateJingleAction: PropTypes.func.isRequired,
+  creatingJingle: PropTypes.bool.isRequired,
+  creatingJingleError: PropTypes.string.isRequired,
+  creatingJingleSuccess: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = ({ compose, app, jingle }) => ({
@@ -344,10 +365,11 @@ const mapStateToProps = ({ compose, app, jingle }) => ({
   gettingUserSamplesError: jingle.gettingUserSamplesError,
   userSamples: jingle.userSamples,
 
-  creatingJingle: app.creatingJingle,
-  creatingJingleError: app.creatingJingleError,
+  creatingJingle: jingle.creatingJingle,
+  creatingJingleError: jingle.creatingJingleError,
+  creatingJingleSuccess: jingle.creatingJingleSuccess,
 });
 
-const mapDispatchToProps = { getUserSamplesAction, createJingleAction };
+const mapDispatchToProps = { getUserSamplesAction, createJingleAction, clearCreateJingleAction };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Compose);

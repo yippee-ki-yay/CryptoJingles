@@ -176,35 +176,6 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
   }
 }
 
-.marketplace-wrapper {
-  background: white;
-  display: flex;
-  margin-top: 20px;
-}
-
-.marketplace-play-wrapper {
-  height: 200px;
-  font-size: 40px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.marketplace-wrapper .songs-wrapper {
-  padding: 10px;
-  padding-left: 0;
-  width: 100%;
-  justify-content: flex-start;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.songs-count {
-  margin: 20px 0 5px 20px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
 .single-song {
   display: flex;
   position:relative;
@@ -280,23 +251,6 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.5);
 }
 
-/*img:after*/
-/*opacity: 1;*/
-
-.marketplace-wrapper .sidebar {
-  border-right: 1px solid #d1d1d1;
-  color: black;
-  padding: 20px;
-  padding-left: 0;
-  flex: 1;
-  flex-basis: 240px;
-  min-width: 240px;
-  max-width: 240px;
-  margin-right: 10px;
-  margin-bottom: 20px;
-}
-
-
 .sort-wrapper:not(:last-child) {
   margin-bottom: 20px;
 }
@@ -304,10 +258,6 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
 .sort-wrapper .sort-wrapper-label {
   font-size: 20px;
   margin-bottom: 15px;
-}
-
-.marketplace-page-wrapper .pagination-wrapper {
-  margin-left: 15px;
 }
 
 .form-input {
@@ -336,4 +286,25 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
   font-size: $font-size-title-small;
 
   @include for-sm-screen { text-align: center; }
+}
+
+.sort-section-wrapper {
+  display: flex;
+  position: relative;
+  z-index: 50;
+
+  .sort-item-wrapper {
+    display: flex;
+    align-items: center;
+
+    .sort-wrapper-label {
+      font-size: $font-size-extra-large;
+      margin-right: 15px;
+    }
+
+    .select {
+      flex-grow: 1;
+      min-width: 220px;
+    }
+  }
 }

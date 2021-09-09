@@ -45,7 +45,8 @@
   "jingles.wrap_jingles": "Wrap Jingles",
 
   "compose.mint_a_jingle": "Mint a Jingle",
-  "compose.unlock_wallet": "Unlock your wallet in order to see your samples",
+  "compose.connect_wallet": "Connect your wallet in order to see your samples",
+  "compose.success_message": "You have successfully minted a Jingle. You can see it on your profile page",
 
   "header.get_hord_lp": "Get HORD-ETH LP Tokens",
 

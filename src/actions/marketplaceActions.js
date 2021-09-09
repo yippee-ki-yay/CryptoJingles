@@ -1,47 +1,58 @@
-import axios from 'axios';
-import { API_URL } from '../util/config';
 import {
   SET_MARKETPLACE_CATEGORY, SET_MARKETPLACE_JINGLES, SET_MARKETPLACE_SORT, SET_MARKETPLACE_PAGE,
   MARKETPLACE_LIKE_UNLIKE_JINGLE,
+
+  GET_MARKETPLACE_JINGLES_REQUEST,
+  GET_MARKETPLACE_JINGLES_SUCCESS,
+  GET_MARKETPLACE_JINGLES_FAILURE,
+
+  GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST,
+  GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS,
+  GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE,
+
+  MARKETPLACE_JINGLES_PER_PAGE,
 } from '../constants/actionTypes';
 import { likeUnlikeJingle } from './utils';
+import { getMarketplaceJinglesIdsWithPrices, sortMarketplaceJingles } from '../services/marketplaceService';
+import { getJinglesV1FullData } from '../services/jingleService';
+
+export const getMarketplaceFullJinglesDataPerPageAction = () => async (dispatch, getState) => {
+  dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_REQUEST });
+
+  const { currentPage, jinglesBasic } = getState().marketplace;
+
+  const idsEnd = currentPage * MARKETPLACE_JINGLES_PER_PAGE;
+  const idsStart = idsEnd - MARKETPLACE_JINGLES_PER_PAGE;
+
+  const ids = [...jinglesBasic.map((item) => item[0])].slice(idsStart, idsEnd);
+
+  try {
+    const payload = await getJinglesV1FullData(ids);
+
+    dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_SUCCESS, payload });
+  } catch (err) {
+    dispatch({ type: GET_MARKETPLACE_FULL_JINGLES_DATA_PER_PAGE_FAILURE });
+  }
+};
 
 /**
  * Gets all jingles for category and sort option fromm the server and then sets it in the state
  *
  * @return {Function}
  */
-export const getMarketplaceJingles = () => async (dispatch, getState) => {
-  const { currentPage, category, sorting } = getState().marketplace;
-  const { hasMM, lockedMM, address } = getState().app;
-  let jingles = [];
+export const getMarketplaceJinglesAction = () => async (dispatch, getState) => {
+  dispatch({ type: GET_MARKETPLACE_JINGLES_REQUEST });
 
   try {
-    // TODO - export this to Api.js
-    const response = await axios(`${API_URL}/jingles/${category.value}/${currentPage}/filter/${sorting.value}`);
+    const { sorting } = getState().marketplace;
 
-    const jingleIds = response.data.map((_jingle) => _jingle.jingleId).toString();
+    const payload = await getMarketplaceJinglesIdsWithPrices();
 
-    if ((hasMM && !lockedMM) && jingleIds.length > 0) {
-      const likedJinglesResponse = await axios(`${API_URL}/jingles/check-liked/${address}/${jingleIds}`);
-      jingles = response.data.map((_jingle, index) => ({
-        ..._jingle, liked: likedJinglesResponse.data[index],
-      }));
-    }
+    dispatch({ type: GET_MARKETPLACE_JINGLES_SUCCESS, payload: sortMarketplaceJingles(sorting.value, payload) });
 
-    if ((!hasMM || lockedMM) && jingleIds.length > 0) {
-      jingles = response.data.map((_jingle) => ({ ..._jingle, liked: false }));
-    }
-
-    if (jingleIds.length === 0) jingles = response.data;
-
-    // false for all jingles, true to get jingles on sale
-    const query = `${API_URL}/jingles/count/filter/${sorting.value}/sale/${(category.value === 'sale').toString()}`;
-    const num = await axios(query);
-
-    dispatch({ type: SET_MARKETPLACE_JINGLES, payload: { jingles, num: num.data } });
+    dispatch(getMarketplaceFullJinglesDataPerPageAction());
   } catch (err) {
-    // console.error('Get marketplace jingles error:', err); // TODO Handle this in the future
+    dispatch({ type: GET_MARKETPLACE_JINGLES_FAILURE });
   }
 };
 
@@ -55,7 +66,7 @@ export const getMarketplaceJingles = () => async (dispatch, getState) => {
  */
 export const changeMarketplaceCategory = (payload) => (dispatch) => {
   dispatch({ type: SET_MARKETPLACE_CATEGORY, payload });
-  dispatch(getMarketplaceJingles());
+  dispatch(getMarketplaceFullJinglesDataPerPageAction());
 };
 
 /**
@@ -66,9 +77,11 @@ export const changeMarketplaceCategory = (payload) => (dispatch) => {
  *
  * @return {Function}
  */
-export const changeMarketplaceSorting = (payload) => (dispatch) => {
-  dispatch({ type: SET_MARKETPLACE_SORT, payload });
-  dispatch(getMarketplaceJingles());
+export const changeMarketplaceSorting = (newVal) => (dispatch, getState) => {
+  const newJinglesBasic = sortMarketplaceJingles(newVal.value, [...getState().marketplace.jinglesBasic]);
+
+  dispatch({ type: SET_MARKETPLACE_SORT, payload: { newVal, newJinglesBasic } });
+  dispatch(getMarketplaceFullJinglesDataPerPageAction());
 };
 
 /**
@@ -80,7 +93,7 @@ export const changeMarketplaceSorting = (payload) => (dispatch) => {
  */
 export const onMarketplacePaginationChange = (pageNum) => (dispatch) => {
   dispatch({ type: SET_MARKETPLACE_PAGE, payload: pageNum + 1 });
-  dispatch(getMarketplaceJingles());
+  dispatch(getMarketplaceFullJinglesDataPerPageAction());
 };
 
 /**

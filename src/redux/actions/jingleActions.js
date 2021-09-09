@@ -36,6 +36,7 @@ import {
   CREATE_JINGLE_REQUEST,
   CREATE_JINGLE_SUCCESS,
   CREATE_JINGLE_FAILURE,
+  CLEAR_CREATE_JINGLE,
 } from '../actionTypes/jingleActionTypes';
 import {
   wrapJingle,
@@ -48,6 +49,7 @@ import {
   createJingle,
 } from '../../services/jingleService';
 import { approveAddressOnAssetAction } from './assetsActions';
+import { wait } from '../../services/utilsService';
 
 /**
  * Handles the redux state for getting all the users v0 jingles
@@ -284,14 +286,24 @@ export const createJingleAction = (settings, sampleIds, name) => async (dispatch
   try {
     const { address } = getState().app;
 
-    const payload = await createJingle(settings, sampleIds, name, address);
+    await createJingle(settings, sampleIds, name, address);
 
-    dispatch({ type: CREATE_JINGLE_SUCCESS, payload });
+    dispatch({ type: CREATE_JINGLE_SUCCESS });
 
     dispatch(getUserSamplesAction(address));
   } catch (err) {
     dispatch({ type: CREATE_JINGLE_FAILURE, payload: err.message });
+
+    // this is because of how it is called in Compose.jsx
+    throw new Error(err);
   }
 };
 
-// TODO - create clear here
+/**
+ * Handles the reducer state for clearing the create jingle action state
+ *
+ * @return {(function(*, *): void)|*}
+ */
+export const clearCreateJingleAction = () => (dispatch, getState) => {
+  if (!getState().jingle.creatingJingle) dispatch({ type: CLEAR_CREATE_JINGLE });
+};
