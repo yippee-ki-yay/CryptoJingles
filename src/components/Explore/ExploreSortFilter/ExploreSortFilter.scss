@@ -1,0 +1,10 @@
+@import "partials/variables";
+
+.explore-sort-filter-wrapper {
+
+  .sort-item-wrapper:not(:last-child) { margin-right: 40px; }
+
+  @include for-sm-screen {
+    .sort-item-wrapper:not(:last-child) { margin: 0 0 20px 0; }
+  }
+}

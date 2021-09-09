@@ -15,6 +15,7 @@
   "common.error": "Error",
   "common.get_hord_tokens": "Get HORD Tokens",
   "common.home": "Home",
+  "common.explore": "Explore",
   "common.token": "Token",
   "common.connecting_wallet": "Connecting {wallet}...",
   "common.connecting": "Connecting",

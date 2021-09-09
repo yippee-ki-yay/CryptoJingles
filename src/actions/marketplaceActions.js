@@ -17,7 +17,6 @@ import {
 import { likeUnlikeJingle } from './utils';
 import { getMarketplaceJinglesIdsWithPrices, sortMarketplaceJingles } from '../services/marketplaceService';
 import { getJinglesV1FullData } from '../services/jingleService';
-import { wait } from '../services/utilsService';
 
 /**
  * Handles the reducer state for getting the full
@@ -55,7 +54,6 @@ export const getMarketplaceJinglesAction = () => async (dispatch, getState) => {
   try {
     const { sorting } = getState().marketplace;
 
-    await wait(2000);
     const payload = await getMarketplaceJinglesIdsWithPrices();
 
     dispatch({ type: GET_MARKETPLACE_JINGLES_SUCCESS, payload: sortMarketplaceJingles(sorting.value, payload) });

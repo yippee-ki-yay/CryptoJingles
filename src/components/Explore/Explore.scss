@@ -1,1 +1,47 @@
-.explore-page-wrapper {}
+@import "partials/variables";
+
+.explore-page-wrapper.page-wrapper {
+
+  &:not(.center), &.loading-error-overlay {
+    padding-bottom: 130px;
+
+    .page-content-wrapper {
+      padding: 0;
+      margin-top: 40px;
+      margin-bottom: 80px;
+      flex-grow: initial;
+      min-height: fit-content;
+    }
+  }
+
+  .sort-section-wrapper .sort-item-wrapper .select {
+    min-width: 200px;
+  }
+
+  .page-header-wrapper {
+    margin-bottom: 50px;
+  }
+
+  .page-content-wrapper {
+    position: relative;
+  }
+
+  .songs-wrapper {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, 200px);
+    grid-gap: 40px 35px;
+
+    .single-song {
+      margin: 0;
+    }
+  }
+
+  .pagination-wrapper .pagination { margin: 0; }
+
+  @include for-sm-screen {
+    .pagination-wrapper { margin: 0 auto; }
+
+    .songs-wrapper { justify-content: center; }
+  }
+}

@@ -3,6 +3,7 @@ import { routerReducer } from 'react-router-redux';
 import web3Reducer from '../util/web3/web3Reducer';
 // import audioReducer from './audioReducer';
 import appReducer from './appReducer';
+import exploreReducer from './exploreReducer';
 import marketplaceReducer from './marketplaceReducer';
 import profileReducer from './profileReducer';
 import composeReducer from './composeReducer';
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   modal: modalReducer,
   jingle: jingleReducer,
   assets: assetsReducer,
+  explore: exploreReducer,
   // web3: web3Reducer,
   // audio: audioReducer,
 });

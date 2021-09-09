@@ -50,7 +50,7 @@
             text-decoration: underline;
           }
 
-          &:not(:last-child) { margin-right: 25px; }
+          &:not(:last-child) { margin-right: 20px; }
         }
       }
     }
@@ -122,7 +122,7 @@
     .menu-btn { display: none; }
   }
 
-  @media only screen and (max-width: 800px) {
+  @media only screen and (max-width: 860px) {
     .width-container {
       align-items: center;
       height: 81px;
@@ -173,13 +173,13 @@
             display: flex;
             align-items: center;
             flex-direction: column;
-            margin-bottom: 60px;
+            margin-bottom: 30px;
 
             a {
-              font-size: $font-size-title;
+              font-size: $font-size-title-small;
               margin-right: 0;
 
-              &:not(:last-child) { margin-bottom: 60px; }
+              &:not(:last-child) { margin-bottom: 30px; }
             }
           }
 

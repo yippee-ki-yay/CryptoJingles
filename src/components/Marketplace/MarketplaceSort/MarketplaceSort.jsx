@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { changeMarketplaceSorting } from '../../../actions/marketplaceActions';
 
-// disabled when getting new jingles
 const MarketplaceSort = ({
   sorting, sortingOptions, changeMarketplaceSorting, disabled,
 }) => (

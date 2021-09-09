@@ -81,3 +81,24 @@ export const getJinglesV1FullData = async (jingleIds) => {
   const res = await Promise.all(jingleIds.map((id) => contract.methods.getFullJingleData(id).call()));
   return res.map((jingle) => formatViewJingle(1, jingle));
 };
+
+export const getJinglesFullData = async (idsAndVersions) => {
+  const contract1 = await JingleV1ViewContract();
+  const contract = await JingleV0ViewContract();
+
+  const v0JinglesIdsAndVersions = idsAndVersions.filter((idAndVer) => idAndVer[1] === 0);
+  const v0JinglesPromises = v0JinglesIdsAndVersions.map((idAndVer) => contract.methods.getFullJingleData(idAndVer[0]).call());
+
+  const v1JinglesIdsAndVersions = idsAndVersions.filter((idAndVer) => idAndVer[1] === 1);
+  const v1JinglesPromises = v1JinglesIdsAndVersions.map((idAndVer) => contract1.methods.getFullJingleData(idAndVer[0]).call());
+
+  const promiseAll0 = Promise.all(v0JinglesPromises);
+  const promiseAll1 = Promise.all(v1JinglesPromises);
+
+  const [v0Jingles, v1Jingles] = await Promise.all([promiseAll0, promiseAll1]);
+
+  const formattedV0Jingles = v0Jingles.map((jingle) => formatViewJingle(0, jingle));
+  const formattedV1Jingles = v1Jingles.map((jingle) => formatViewJingle(1, jingle));
+
+  return [...formattedV1Jingles, ...formattedV0Jingles];
+};
