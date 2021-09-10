@@ -25,7 +25,7 @@ const MyJingles = ({
 
   const handleEmptyStateButtonClickCallback = useCallback(() => history.push('/compose'), [history]);
 
-  useEffect(() => getAllUserJinglesAction(address), [getAllUserJinglesAction, address]);
+  useEffect(() => getAllUserJinglesAction(address, true), [getAllUserJinglesAction, address]);
   useEffect(() => () => { clearAllUserJinglesAction(); }, [clearAllUserJinglesAction]);
 
   return (

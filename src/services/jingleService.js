@@ -1,12 +1,17 @@
 import {
+  JingleV0Contract,
   JingleV0ViewContract,
+  JingleV1Contract,
   JingleV1ViewContract,
+  MarketplaceV0Contract,
+  MarketplaceV1Contract,
   WrappedNewJinglesContract,
   WrappedOGJinglesContract,
 } from './contractsRegistryService';
 import { NUM_V0_OG_JINGLES, NUM_V1_OG_JINGLES } from '../constants/general';
 import callTx from './txService';
 import { getJingleMetadata } from '../constants/getMockData';
+import { MarketplaceAddress, MarketplaceV0Address } from '../util/config';
 
 const checkIfJingleOg = (version, jingleId) => {
   const isV0OG = version === 0 && jingleId <= NUM_V0_OG_JINGLES;
@@ -43,6 +48,39 @@ export const getAllV0UserJingles = async (address) => {
 export const getAllOgWrappedUserJingles = (address) => [];
 
 export const getAllNewWrappedUserJingles = (address) => [];
+
+// ALL MARKETPLACE
+const getUserJinglesFromMarketplace = async (address, jinglesContract, marketplaceAddress, marketplaceContract, viewContractCreator, version) => {
+  const idsOnSale = await jinglesContract.methods.getAllJingles(marketplaceAddress).call();
+
+  const promises = idsOnSale.map((id) => marketplaceContract.methods.sellOrders(parseInt(id, 10)).call());
+
+  const res = await Promise.all(promises);
+
+  const resWithIds = res.map((item, index) => ({ ...item, id: parseInt(idsOnSale[index], 10) }));
+
+  const userJingles = resWithIds.filter(({ seller }) => seller === address);
+
+  const viewContract = await viewContractCreator();
+  const promises2 = userJingles.map(({ id }) => viewContract.methods.getFullJingleData(id).call());
+
+  const payload = await Promise.all(promises2);
+  return payload.map((jingle) => formatViewJingle(version, jingle));
+};
+
+export const getAllV0MarketplaceUserJingles = async (address) => {
+  const marketplaceContract = await MarketplaceV0Contract();
+  const jingleContract = await JingleV0Contract();
+
+  return getUserJinglesFromMarketplace(address, jingleContract, MarketplaceV0Address, marketplaceContract, JingleV0ViewContract, 0);
+};
+
+export const getAllV1MarketplaceUserJingles = async (address) => {
+  const marketplaceContract = await MarketplaceV1Contract();
+  const jingleContract = await JingleV1Contract();
+
+  return getUserJinglesFromMarketplace(address, jingleContract, MarketplaceAddress, marketplaceContract, JingleV1ViewContract, 1);
+};
 
 export const wrapJingle = async (id, version, address, isOg) => {
   const contractCreator = isOg ? WrappedOGJinglesContract : WrappedNewJinglesContract;

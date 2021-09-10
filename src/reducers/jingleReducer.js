@@ -25,6 +25,14 @@ import {
   GET_ALL_NEW_WRAPPED_USER_JINGLES_SUCCESS,
   GET_ALL_NEW_WRAPPED_USER_JINGLES_FAILURE,
 
+  GET_ALL_V0_MARKETPLACE_USER_JINGLES_REQUEST,
+  GET_ALL_V0_MARKETPLACE_USER_JINGLES_SUCCESS,
+  GET_ALL_V0_MARKETPLACE_USER_JINGLES_FAILURE,
+
+  GET_ALL_V1_MARKETPLACE_USER_JINGLES_REQUEST,
+  GET_ALL_V1_MARKETPLACE_USER_JINGLES_SUCCESS,
+  GET_ALL_V1_MARKETPLACE_USER_JINGLES_FAILURE,
+
   UNWRAP_JINGLE_REQUEST,
   UNWRAP_JINGLE_SUCCESS,
   UNWRAP_JINGLE_FAILURE,
@@ -60,6 +68,14 @@ const INITIAL_STATE = {
   gettingNewWrappedUserJingles: false,
   gettingNewWrappedUserJinglesError: '',
   newWrappedUserJingles: null,
+
+  gettingV0MarketplaceUserJingles: false,
+  gettingV0MarketplaceUserJinglesError: '',
+  v0MarketplaceJingles: null,
+
+  gettingV1MarketplaceUserJingles: false,
+  gettingV1MarketplaceUserJinglesError: '',
+  v1MarketplaceJingles: null,
 
   wrappingJingles: {},
   unwrappingJingles: {},
@@ -195,6 +211,50 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       gettingNewWrappedUserJingles: false,
       gettingNewWrappedUserJinglesError: payload,
+    };
+
+  case GET_ALL_V0_MARKETPLACE_USER_JINGLES_REQUEST:
+    return {
+      ...state,
+      gettingV0MarketplaceUserJingles: true,
+      gettingV0MarketplaceUserJinglesError: '',
+    };
+
+  case GET_ALL_V0_MARKETPLACE_USER_JINGLES_SUCCESS:
+    return {
+      ...state,
+      gettingV0MarketplaceUserJingles: false,
+      gettingV0MarketplaceUserJinglesError: '',
+      v0MarketplaceJingles: payload,
+    };
+
+  case GET_ALL_V0_MARKETPLACE_USER_JINGLES_FAILURE:
+    return {
+      ...state,
+      gettingV0MarketplaceUserJingles: false,
+      gettingV0MarketplaceUserJinglesError: payload,
+    };
+
+  case GET_ALL_V1_MARKETPLACE_USER_JINGLES_REQUEST:
+    return {
+      ...state,
+      gettingV1MarketplaceUserJingles: true,
+      gettingV1MarketplaceUserJinglesError: '',
+    };
+
+  case GET_ALL_V1_MARKETPLACE_USER_JINGLES_SUCCESS:
+    return {
+      ...state,
+      gettingV1MarketplaceUserJingles: false,
+      gettingV1MarketplaceUserJinglesError: '',
+      v1MarketplaceJingles: payload,
+    };
+
+  case GET_ALL_V1_MARKETPLACE_USER_JINGLES_FAILURE:
+    return {
+      ...state,
+      gettingV1MarketplaceUserJingles: false,
+      gettingV1MarketplaceUserJinglesError: payload,
     };
 
   case WRAP_JINGLE_REQUEST:

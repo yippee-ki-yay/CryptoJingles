@@ -38,6 +38,14 @@ import {
   CREATE_JINGLE_SUCCESS,
   CREATE_JINGLE_FAILURE,
   CLEAR_CREATE_JINGLE,
+
+  GET_ALL_V0_MARKETPLACE_USER_JINGLES_REQUEST,
+  GET_ALL_V0_MARKETPLACE_USER_JINGLES_SUCCESS,
+  GET_ALL_V0_MARKETPLACE_USER_JINGLES_FAILURE,
+
+  GET_ALL_V1_MARKETPLACE_USER_JINGLES_REQUEST,
+  GET_ALL_V1_MARKETPLACE_USER_JINGLES_SUCCESS,
+  GET_ALL_V1_MARKETPLACE_USER_JINGLES_FAILURE,
 } from '../actionTypes/jingleActionTypes';
 import {
   wrapJingle,
@@ -48,9 +56,10 @@ import {
   getAllNewWrappedUserJingles,
   getUserSamples,
   createJingle,
+  getAllV0MarketplaceUserJingles,
+  getAllV1MarketplaceUserJingles,
 } from '../../services/jingleService';
 import { approveAddressOnAssetAction } from './assetsActions';
-import { wait } from '../../services/utilsService';
 
 /**
  * Handles the redux state for getting all the users v0 jingles
@@ -145,23 +154,79 @@ export const getAllNewWrappedUserJinglesAction = (address) => async (dispatch, g
 };
 
 /**
- * Handles the redux state for getting all the users v0 and v1 jingles
+ * Handles the redux state for getting all the users v0 jingles
+ * on sale on the marketplace
  *
  * @param address {String}
  * @return {Function}
  */
-export const getAllUserJinglesAction = (address) => async (dispatch) => {
+export const getAllV0MarketplaceUserJinglesAction = (address) => async (dispatch) => {
+  dispatch({ type: GET_ALL_V0_MARKETPLACE_USER_JINGLES_REQUEST });
+
+  try {
+    const payload = await getAllV0MarketplaceUserJingles(address);
+
+    dispatch({ type: GET_ALL_V0_MARKETPLACE_USER_JINGLES_SUCCESS, payload });
+
+    return payload;
+  } catch (err) {
+    dispatch({ type: GET_ALL_V0_MARKETPLACE_USER_JINGLES_FAILURE, payload: err.message });
+
+    // Do not remove this, action called in other actions
+    throw new Error(err);
+  }
+};
+
+/**
+ * Handles the redux state for getting all the users v1 jingles
+ * on sale on the marketplace
+ *
+ * @param address {String}
+ * @return {Function}
+ */
+export const getAllV1MarketplaceUserJinglesAction = (address) => async (dispatch) => {
+  dispatch({ type: GET_ALL_V1_MARKETPLACE_USER_JINGLES_REQUEST });
+
+  try {
+    const payload = await getAllV1MarketplaceUserJingles(address);
+
+    dispatch({ type: GET_ALL_V1_MARKETPLACE_USER_JINGLES_SUCCESS, payload });
+
+    return payload;
+  } catch (err) {
+    dispatch({ type: GET_ALL_V1_MARKETPLACE_USER_JINGLES_FAILURE, payload: err.message });
+
+    // Do not remove this, action called in other actions
+    throw new Error(err);
+  }
+};
+
+/**
+ * Handles the redux state for getting all the users v0 and v1 jingles
+ *
+ * @param address {String}
+ * @param loadFromMarketplaces {Boolean}
+ * @return {Function}
+ */
+export const getAllUserJinglesAction = (address, loadFromMarketplaces) => async (dispatch) => {
   dispatch({ type: GET_ALL_USER_JINGLES_REQUEST });
 
   try {
-    const [jingles1, jingles2, jingles3, jingles4] = await Promise.all([
+    const promises = [
       dispatch(getAllOGWrappedUserJinglesAction(address)),
       dispatch(getAllNewWrappedUserJinglesAction(address)),
       dispatch(getAllV0UserJinglesAction(address)),
       dispatch(getAllV1UserJinglesAction(address)),
-    ]);
+    ];
 
-    const payload = [...jingles1, ...jingles2, ...jingles3, ...jingles4];
+    if (loadFromMarketplaces) {
+      promises.push(dispatch(getAllV0MarketplaceUserJinglesAction(address)));
+      promises.push(dispatch(getAllV1MarketplaceUserJinglesAction(address)));
+    }
+
+    const res = await Promise.all(promises);
+
+    const payload = res.reduce((acc, jingleArr) => [...acc, ...jingleArr], []);
 
     dispatch({ type: GET_ALL_USER_JINGLES_SUCCESS, payload });
   } catch (err) {
