@@ -3,16 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ethereumAddress from 'ethereum-address';
 import t from 'translate';
+import { openEditAuthorNameModal } from 'redux/actions/modalActions';
 import MySamples from './MySamples/MySamples';
 import MyJingles from './MyJingles/MyJingles';
 import MySongs from './MySongs/MySongs';
 import MyAlbums from './MyAlbums/MyAlbums';
 import {
-  setActiveTab, checkIfOwnerProfile, toggleEditAuthor, onEditAuthorChange, submitEditAuthorForm, getAuthor,
+  setActiveTab, checkIfOwnerProfile, getAuthor,
   setProfileAddress, setInvalidProfile,
 } from '../../actions/profileActions';
-import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
-import profilePlaceholder from './profile-placeholder.png';
 
 import './Profile.scss';
 
@@ -48,9 +47,9 @@ class Profile extends Component {
 
   render() {
     const {
-      tabs, isOwner, match: { params }, author, editAuthorActive, authorEdit, submitEditAuthorForm, isValidProfile,
+      tabs, isOwner, match: { params }, author, isValidProfile,
     } = this.props;
-    const { setActiveTab, toggleEditAuthor, onEditAuthorChange } = this.props;
+    const { setActiveTab } = this.props;
     const activeTab = tabs.find((_tab) => _tab.active).value;
 
     return (
@@ -61,77 +60,31 @@ class Profile extends Component {
           </div>
 
           <div className="page-content-wrapper">
-            { /* TODO - create component out of this, fix html layout */ }
             {
               isValidProfile && (
-                <div>
+                <div className="profile-container">
                   <div className="profile-info-wrapper">
-                    <div className="profile-image-wrapper">
-                      <img src={profilePlaceholder} alt="profile placeholder" />
-                      <div>
-                        <h2>
-                          <span className="author">
-                            { !isOwner && author}
+                    <div className="author-link-wrapper">
+                      <div className="author-wrapper">
+                        <div className="author-name">{author}</div>
 
-                            {
-                              isOwner && (
-                                <div>
-                                  {
-                                    !editAuthorActive && (
-                                      <span>
-                                        <span>{author}</span>
-                                        <span onClick={() => { toggleEditAuthor(true); }}>
-                                          <i className="material-icons edit-icon">edit</i>
-                                        </span>
-                                      </span>
-                                    )
-                                  }
-
-                                  {
-                                    editAuthorActive && (
-                                      <div className="edit-author-wrapper">
-                                        <OutsideAlerter onClickOutside={() => { toggleEditAuthor(false); }}>
-                                          <form onSubmit={(e) => { e.preventDefault(); }}>
-                                            <span>
-                                              <input
-                                                maxLength="30"
-                                                autoFocus
-                                                onChange={onEditAuthorChange}
-                                                type="text"
-                                                value={authorEdit}
-                                              />
-                                              <span>
-                                                <span>
-                                                  <button type="submit" onClick={submitEditAuthorForm}>
-                                                    <i className="material-icons save">save</i>
-                                                  </button>
-                                                </span>
-                                                <span onClick={() => { toggleEditAuthor(false); }}>
-                                                  <i className="material-icons close-icon">close</i>
-                                                </span>
-                                              </span>
-                                            </span>
-                                          </form>
-                                        </OutsideAlerter>
-                                      </div>
-                                    )
-                                  }
-                                </div>
-                              )
-                            }
-                          </span>
-                        </h2>
-                        <h4>
-                          <a
-                            className="etherscan-link"
-                            href={`https://etherscan.io/address/${params.address}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            { params.address }
-                          </a>
-                        </h4>
+                        {
+                          isOwner && author && (
+                            <div className="edit-author-icon-wrapper" onClick={this.props.openEditAuthorNameModal}>
+                              <i className="material-icons edit-icon">edit</i>
+                            </div>
+                          )
+                        }
                       </div>
+
+                      <a
+                        className="etherscan-link"
+                        href={`https://etherscan.io/address/${params.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        { params.address }
+                      </a>
                     </div>
 
                     { /* TODO - create component out of this */ }
@@ -174,20 +127,16 @@ class Profile extends Component {
 
 Profile.propTypes = {
   tabs: PropTypes.array.isRequired,
-  editAuthorActive: PropTypes.bool.isRequired,
   isOwner: PropTypes.bool.isRequired,
   author: PropTypes.string.isRequired,
-  authorEdit: PropTypes.string.isRequired,
   isValidProfile: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   setActiveTab: PropTypes.func.isRequired,
   checkIfOwnerProfile: PropTypes.func.isRequired,
-  toggleEditAuthor: PropTypes.func.isRequired,
-  onEditAuthorChange: PropTypes.func.isRequired,
-  submitEditAuthorForm: PropTypes.func.isRequired,
   getAuthor: PropTypes.func.isRequired,
   setProfileAddress: PropTypes.func.isRequired,
   setInvalidProfile: PropTypes.func.isRequired,
+  openEditAuthorNameModal: PropTypes.func.isRequired,
   address: PropTypes.string.isRequired,
 };
 
@@ -204,12 +153,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   setActiveTab,
   checkIfOwnerProfile,
-  toggleEditAuthor,
-  onEditAuthorChange,
-  submitEditAuthorForm,
   getAuthor,
   setProfileAddress,
   setInvalidProfile,
+  openEditAuthorNameModal,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

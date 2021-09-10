@@ -2,8 +2,13 @@ import axios from 'axios';
 import {
   SET_ACTIVE_PROFILE_TAB, SET_PROFILE_SAMPLES, SET_PROFILE_NUM_SAMPLES_TO_BUY, SET_PROFILE_IS_OWNER,
   SET_PROFILE_JINGLES, SET_PROFILE_JINGLES_CATEGORY, SET_PROFILE_JINGLES_SORT, TOGGLE_PROFILE_AUTHOR,
-  SET_PROFILE_AUTHOR_EDIT, SET_PENDING_AUTHOR, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
+  SET_PROFILE_AUTHOR_EDIT, AUTHOR_EDIT_SUCCESS, SET_MY_JINGLES_PAGE, SET_PROFILE_ADDRESS,
   SAMPLE_SORTING_OPTIONS, SET_MY_SAMPLES_SORTING, PROFILE_LIKE_UNLIKE_JINGLE, SET_INVALID_PROFILE,
+
+  UPDATE_AUTHOR_REQUEST,
+  UPDATE_AUTHOR_SUCCESS,
+  UPDATE_AUTHOR_FAILURE,
+  CLEAR_UPDATE_AUTHOR,
 
   BUY_SAMPLES_REQUEST,
   BUY_SAMPLES_SUCCESS,
@@ -11,9 +16,9 @@ import {
   CLEAR_BUY_SAMPLES,
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
-import { addPendingTx, removePendingTx, guid } from './appActions';
 import { SAMPLE_PRICE, API_URL } from '../util/config';
 import { likeUnlikeJingle } from './utils';
+import { wait } from '../services/utilsService';
 
 /**
  * Dispatches action to show that the profile address URL param
@@ -106,25 +111,23 @@ export const getAuthor = () => async (dispatch, getState) => {
  *
  * @return {Function}
  */
-export const submitEditAuthorForm = () => async (dispatch, getState) => {
-  const id = guid();
+export const submitEditAuthorForm = (newAuthorName, closeModal) => async (dispatch, getState) => {
+  dispatch({ type: UPDATE_AUTHOR_REQUEST });
+
   try {
-    const state = getState();
-    const { address } = state.app;
-
-    const newAuthorName = state.profile.authorEdit;
-
-    dispatch(addPendingTx(id, 'Edit author name'));
-    dispatch({ type: SET_PENDING_AUTHOR });
+    const { address } = getState().app;
 
     await window.contract.setAuthorName(newAuthorName, { from: address });
 
-    dispatch(removePendingTx(id));
-    dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: newAuthorName });
+    dispatch({ type: UPDATE_AUTHOR_SUCCESS, payload: newAuthorName });
+    dispatch(closeModal());
   } catch (err) {
-    dispatch(removePendingTx(id));
-    dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: getState().profile.author });
+    dispatch({ type: UPDATE_AUTHOR_FAILURE, payload: err.message });
   }
+};
+
+export const clearSubmitAuthorForm = () => (dispatch, getState) => {
+  if (!getState().profile.updatingAuthor) dispatch({ type: CLEAR_UPDATE_AUTHOR });
 };
 
 // SAMPLES TODO - create separate reducer & actions for this

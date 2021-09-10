@@ -72,6 +72,11 @@ export const SET_PROFILE_ADDRESS = 'set_profile_address';
 export const SET_MY_SAMPLES_SORTING = 'set_my_samples_sorting';
 export const PROFILE_LIKE_UNLIKE_JINGLE = 'profile_like_unlike_jingle';
 
+export const UPDATE_AUTHOR_REQUEST = 'UPDATE_AUTHOR_REQUEST';
+export const UPDATE_AUTHOR_SUCCESS = 'UPDATE_AUTHOR_SUCCESS';
+export const UPDATE_AUTHOR_FAILURE = 'UPDATE_AUTHOR_FAILURE';
+export const CLEAR_UPDATE_AUTHOR = 'CLEAR_UPDATE_AUTHOR';
+
 export const BUY_SAMPLES_REQUEST = 'BUY_SAMPLES_REQUEST';
 export const BUY_SAMPLES_SUCCESS = 'BUY_SAMPLES_SUCCESS';
 export const BUY_SAMPLES_FAILURE = 'BUY_SAMPLES_FAILURE';

@@ -9,12 +9,17 @@ import {
   BUY_SAMPLES_SUCCESS,
   BUY_SAMPLES_FAILURE,
   CLEAR_BUY_SAMPLES,
+
+  UPDATE_AUTHOR_REQUEST,
+  UPDATE_AUTHOR_SUCCESS,
+  UPDATE_AUTHOR_FAILURE,
+  CLEAR_UPDATE_AUTHOR,
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   isValidProfile: true,
   author: 'Satoshi Nakajingles',
-  authorEdit: 'Satoshi Nakajingles',
+  authorEdit: '',
   editAuthorActive: false,
   profileAddress: '',
   isOwner: false,
@@ -35,6 +40,9 @@ const INITIAL_STATE = {
 
   buyingSamples: false,
   buyingSamplesError: '',
+
+  updatingAuthor: false,
+  updatingAuthorError: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -127,6 +135,36 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       buyingSamples: false,
       buyingSamplesError: '',
+    };
+
+  case UPDATE_AUTHOR_REQUEST:
+    return {
+      ...state,
+      updatingAuthor: true,
+      updatingAuthorError: '',
+    };
+
+  case UPDATE_AUTHOR_SUCCESS:
+    return {
+      ...state,
+      updatingAuthor: false,
+      updatingAuthorError: '',
+      author: payload,
+    };
+
+  case UPDATE_AUTHOR_FAILURE:
+    return {
+      ...state,
+      updatingAuthor: false,
+      updatingAuthorError: payload,
+    };
+
+  case CLEAR_UPDATE_AUTHOR:
+    return {
+      ...state,
+      updatingAuthor: false,
+      updatingAuthorError: '',
+      authorEdit: '',
     };
 
   default:

@@ -1,7 +1,9 @@
 import { TOGGLE_MODAL } from 'redux/actionTypes/modalActionTypes';
 import {
+  EDIT_AUTHOR_NAME_MODAL,
   WALLET_MODAL,
 } from '../../components/Modals/modalTypes';
+import { SET_PROFILE_AUTHOR_EDIT } from '../../constants/actionTypes';
 
 /**
  * Dispatches action to toggle modal.
@@ -46,4 +48,12 @@ export const openWalletModal = (resolveOnUnlock) => (dispatch) => {
   dispatch(toggleModal(WALLET_MODAL, modalProps, true));
 
   if (resolveOnUnlock) return modalPromise;
+};
+
+export const openEditAuthorNameModal = () => (dispatch, getState) => {
+  const { profile } = getState();
+
+  if (!profile.updatingAuthor) dispatch({ type: SET_PROFILE_AUTHOR_EDIT, payload: profile.author });
+
+  dispatch(toggleModal(EDIT_AUTHOR_NAME_MODAL, { width: 410, closeModal }, true));
 };

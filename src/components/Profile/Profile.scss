@@ -1,32 +1,44 @@
+@import "partials/text";
+@import "partials/variables";
+
 .profile-wrapper {
 
+  .page-content-wrapper:not(.center) { padding: 0; }
+
+  .page-header-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .author-link-wrapper {
+    margin-bottom: 20px;
+
+    .author-wrapper {
+      display: flex;
+      align-items: center;
+
+      .author-name {
+        font-size: $font-size-title-small + 0.5;
+        margin-right: 20px;
+      }
+    }
+
+    .etherscan-link {
+      text-decoration: underline;
+      font-size: $font-size-extra-large;
+      width: 100%;
+      display: block;
+      @include ellipsis;
+      @include hover-transition;
+
+      &:hover { color: lighten(#000, 20); }
+    }
+  }
 }
 
 .profile-info-wrapper {
-    margin-top: 30px;
     display: flex;
     justify-content: center;
     flex-direction: column;
-}
-
-.profile-image-wrapper {
-    display: flex;
-    align-items: center;
-    color: black;
-}
-
-.profile-image-wrapper img {
-    width: 80px;
-    height: 80px;
-    margin-right: 25px;
-}
-
-.profile-image-wrapper h2 {
-    font-size: 20px;
-}
-
-.profile-image-wrapper h4 {
-    margin-bottom: 30px;
 }
 
 .profile-info-wrapper .separator {
@@ -38,12 +50,12 @@
 }
 
 .profile-info-wrapper .edit-icon {
-    font-size: 18px;
+    font-size: 24px;
     cursor: pointer;
-    margin-left: 10px;
-    position: relative;
-    top: 2px;
     color: #3F6699;
+    @include hover-transition;
+
+  &:hover { color: lighten(#3F6699, 15) }
 }
 
 .profile-info-wrapper .edit-icon:hover {
@@ -122,15 +134,8 @@
 .not-valid-message {
     text-align: center;
     font-size: 35px;
-    margin-top: 100px;
-}
-
-.profile-info-wrapper .etherscan-link  {
-    color: black;
-    transition: 0.1s ease-in;
-    text-decoration: none;
-}
-
-.profile-info-wrapper .etherscan-link:hover {
-    opacity: 0.6;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
 }
