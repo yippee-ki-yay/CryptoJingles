@@ -27,8 +27,8 @@
         flex-grow: 1;
       }
 
-      &:not(.center) .profile-tab-content-wrapper {
-        padding: 30px 0 130px 0;
+      &:not(.center) {
+        padding-bottom: 130px;
       }
     }
   }
@@ -51,9 +51,10 @@
     }
 
     .etherscan-link {
+      // TODO - DO this on responsive
       text-decoration: underline;
       font-size: $font-size-extra-large;
-      width: 100%;
+      width: fit-content;
       display: block;
       @include ellipsis;
       @include hover-transition;
@@ -73,7 +74,6 @@
   }
 
   .profile-info-wrapper {
-    margin-bottom: 30px;
     display: flex;
     justify-content: center;
     flex-direction: column;

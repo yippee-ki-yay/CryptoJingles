@@ -61,7 +61,6 @@ MySamples.defaultProps = {
 
 MySamples.propTypes = {
   address: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired,
   isOwner: PropTypes.bool.isRequired,
   getUserSamplesAction: PropTypes.func.isRequired,
 

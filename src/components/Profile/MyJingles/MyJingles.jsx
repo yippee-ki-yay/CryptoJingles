@@ -1,140 +1,116 @@
-import React, { Component } from 'react';
-import Dropdown from 'react-dropdown';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import t from 'translate';
+import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
+import { getAllUserJinglesAction } from 'redux/actions/jingleActions';
 import BoxLoader from '../../Decorative/BoxLoader';
-import Pagination from '../../Pagination/Pagination';
 import SingleJingle from '../../SingleJingle/SingleJingle';
-import {
-  getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange,
-} from '../../../actions/profileActions';
-import { MARKETPLACE_JINGLES_PER_PAGE } from '../../../constants/actionTypes';
+import MessageBox from '../../Common/MessageBox/MessageBox';
+import { MESSAGE_BOX_TYPES } from '../../../constants/general';
+import EmptyState from '../../Common/EmptyState/EmptyState';
 
 import './MyJingles.scss';
 
-class MyJingles extends Component {
-  // eslint-disable-next-line camelcase
-  async UNSAFE_componentWillMount() {
-    this.props.getJinglesForUser();
-  }
+const MyJingles = ({
+  address, isOwner,
+  getAllUserJinglesAction, gettingAllUserJingles, gettingAllUserJinglesError,
+  v0UserJingles, v1UserJingles, ogWrappedUserJingles, newWrappedUserJingles,
+}) => {
+  const history = useHistory();
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.address === this.props.address) return;
+  const allNonWrappedJingles = useMemo(() => (v0UserJingles && v1UserJingles ? [...v0UserJingles, ...v1UserJingles] : null), [v0UserJingles, v1UserJingles]);
+  const hasNonWrappedJingles = useMemo(() => allNonWrappedJingles && allNonWrappedJingles.length > 0, [allNonWrappedJingles]);
 
-    this.props.getJinglesForUser();
-  }
+  const hasJingles = useMemo(() => hasNonWrappedJingles || (ogWrappedUserJingles && ogWrappedUserJingles.length > 0) || (newWrappedUserJingles && newWrappedUserJingles.length > 0), [hasNonWrappedJingles, ogWrappedUserJingles, newWrappedUserJingles]);
 
-  render() {
-    const {
-      myJingles, loading, jingleSorting, jingleSortingOptions, jingleCategory, jingleCategories, totalJingles,
-      jinglesPerPage,
-    } = this.props;
-    const { changeProfileJinglesSorting, changeProfileJinglesCategory, onMyJinglesPaginationChange } = this.props;
+  const allJingles = useMemo(() => {
+    if (!hasJingles) return [];
 
-    return (
-      <div className="my-jingles-wrapper">
-        <div className="samples-wrapper">
-          <div>
-            <div className="my-jingles-sorting-wrapper">
-              <div className="sort-wrapper">
-                <div className="sort-wrapper-label">Category:</div>
-                <Dropdown
-                  onChange={(val) => { changeProfileJinglesCategory(val); }}
-                  value={jingleCategory}
-                  options={jingleCategories}
-                />
-              </div>
+    const ogWrappedUserJinglesArr = ogWrappedUserJingles || [];
+    const newWrappedUserJinglesArr = newWrappedUserJingles || [];
+    const allNonWrappedJinglesArr = allNonWrappedJingles || [];
 
-              <div className="sort-wrapper">
-                <div className="sort-wrapper-label">Sort by:</div>
-                <Dropdown
-                  onChange={(val) => { changeProfileJinglesSorting(val); }}
-                  value={jingleSorting}
-                  options={jingleSortingOptions}
-                />
-              </div>
-            </div>
-            <div className="separator" />
-          </div>
+    return [...ogWrappedUserJinglesArr, ...newWrappedUserJinglesArr, ...allNonWrappedJinglesArr];
+  }, [hasJingles, allNonWrappedJingles, ogWrappedUserJingles, newWrappedUserJingles]);
 
-          {
-            loading && (
+  const center = useMemo(() => gettingAllUserJingles || gettingAllUserJinglesError || !hasJingles, [gettingAllUserJingles, gettingAllUserJinglesError, hasJingles]);
+
+  const handleEmptyStateButtonClickCallback = useCallback(() => history.push('/compose'), [history]);
+
+  useEffect(() => getAllUserJinglesAction(address), [getAllUserJinglesAction, address]);
+
+  return (
+    <div className={clsx('my-jingles-wrapper profile-tab-content-container', { center })}>
+      <div className="profile-tab-content-wrapper">
+        {
+          gettingAllUserJingles ?
+            (
               <div className="loader-wrapper">
                 <BoxLoader />
-              </div>
-            )
-          }
-
-          {
-            (myJingles.length === 0) && !loading && (
-              <div className="empty-state">
-                <h2>There are no jingles with this filtering.</h2>
-              </div>
-            )
-          }
-
-          {
-            (myJingles.length > 0) && !loading && (
-              <div>
-                <div className="my-jingles-num">
-                  { totalJingles } Jingles
-                </div>
-
-                <div className="my-jingles-list">
-                  {
-                    myJingles.map((jingle) => (
-                      <SingleJingle key={jingle.jingleId} {...jingle} type="profile" />
-                    ))
-                  }
+                <div className="loader-message">
+                  { isOwner ? t('common.getting_all_your_jingles') : t('common.getting_jingles') }
                 </div>
               </div>
             )
-          }
-
-          {
-            totalJingles > MARKETPLACE_JINGLES_PER_PAGE && (
-              <Pagination
-                pageCount={Math.ceil(totalJingles / jinglesPerPage)}
-                onPageChange={onMyJinglesPaginationChange}
-              />
-            )
-          }
-        </div>
+            :
+            gettingAllUserJinglesError ?
+              <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingAllUserJinglesError}</MessageBox>
+              :
+              hasJingles ?
+                (
+                  <div className="jingles-grid-wrapper">
+                    { allJingles.map((jingle) => (<SingleJingle key={`${jingle.version}-${jingle.jingleId}`} {...jingle} />)) }
+                  </div>
+                )
+                :
+                (
+                  <EmptyState
+                    text={isOwner ? t('common.no_jingles') : t('common.no_jingles_some_user')}
+                    buttonText={isOwner ? t('common.compose_your_first_jingle') : ''}
+                    handleButtonClick={handleEmptyStateButtonClickCallback}
+                  />
+                )
+        }
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+MyJingles.defaultProps = {
+  v0UserJingles: null,
+  v1UserJingles: null,
+  ogWrappedUserJingles: null,
+  newWrappedUserJingles: null,
+};
 
 MyJingles.propTypes = {
   address: PropTypes.string.isRequired,
-  myJingles: PropTypes.array.isRequired,
-  totalJingles: PropTypes.number.isRequired,
-  jinglesPerPage: PropTypes.number.isRequired,
-  loading: PropTypes.bool.isRequired,
-  jingleSorting: PropTypes.object.isRequired,
-  jingleSortingOptions: PropTypes.array.isRequired,
-  jingleCategory: PropTypes.object.isRequired,
-  jingleCategories: PropTypes.array.isRequired,
-  getJinglesForUser: PropTypes.func.isRequired,
-  changeProfileJinglesCategory: PropTypes.func.isRequired,
-  changeProfileJinglesSorting: PropTypes.func.isRequired,
-  onMyJinglesPaginationChange: PropTypes.func.isRequired,
+  isOwner: PropTypes.bool.isRequired,
+
+  getAllUserJinglesAction: PropTypes.func.isRequired,
+  gettingAllUserJingles: PropTypes.bool.isRequired,
+  gettingAllUserJinglesError: PropTypes.string.isRequired,
+  v0UserJingles: PropTypes.array,
+  v1UserJingles: PropTypes.array,
+  ogWrappedUserJingles: PropTypes.array,
+  newWrappedUserJingles: PropTypes.array,
 };
 
-const mapStateToProps = (state) => ({
-  myJingles: state.profile.myJingles,
-  totalJingles: state.profile.totalJingles,
-  jinglesPerPage: state.profile.jinglesPerPage,
-  loading: state.profile.loading,
-  jingleSorting: state.profile.jingleSorting,
-  jingleSortingOptions: state.profile.jingleSortingOptions,
-  jingleCategory: state.profile.jingleCategory,
-  jingleCategories: state.profile.jingleCategories,
+const mapStateToProps = ({ profile, jingle }) => ({
+  isOwner: profile.isOwner,
+
+  gettingAllUserJingles: jingle.gettingAllUserJingles,
+  gettingAllUserJinglesError: jingle.gettingAllUserJinglesError,
+  v0UserJingles: jingle.v0UserJingles,
+  v1UserJingles: jingle.v1UserJingles,
+  ogWrappedUserJingles: jingle.ogWrappedUserJingles,
+  newWrappedUserJingles: jingle.newWrappedUserJingles,
 });
 
 const mapDispatchToProps = {
-  getJinglesForUser, changeProfileJinglesCategory, changeProfileJinglesSorting, onMyJinglesPaginationChange,
+  getAllUserJinglesAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyJingles);

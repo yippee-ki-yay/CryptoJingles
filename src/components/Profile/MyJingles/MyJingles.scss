@@ -1,58 +1,12 @@
 .my-jingles-wrapper {
-}
 
-.my-jingles-list {
-    width: 100%;
-    justify-content: space-evenly;
-    display: flex;
-    flex-wrap: wrap;
-}
+  &:not(.center) { padding-top: 30px; }
 
-.my-jingles-sorting-wrapper {
-    display: flex;
-    align-items: center;
-    margin: 10px 0 20px 0;
-}
+  .jingles-grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 200px);
+    grid-gap: 40px 35px;
 
-.my-jingles-sorting-wrapper .Dropdown-root {
-    width: 180px;
-}
-
-.my-jingles-sorting-wrapper .sort-wrapper {
-    display: inline-flex;
-    align-items: center;
-    margin-bottom: 0 !important;
-}
-
-.my-jingles-sorting-wrapper .sort-wrapper:not(:last-child) {
-    margin-right: 30px;
-}
-
-.my-jingles-sorting-wrapper .sort-wrapper .sort-wrapper-label {
-    margin-bottom: 0;
-    margin-right: 20px;
-}
-
-.my-jingles-wrapper .samples-wrapper {
-    margin-top: 0;
-}
-
-.my-jingles-wrapper .my-jingles-list {
-    justify-content: flex-start;
-}
-
-.my-jingles-wrapper .my-jingles-list .single-song {
-    margin: 14px;
-    margin-bottom: 7px;
-}
-
-.empty-state {
-    margin-top: 20px;
-}
-
-.my-jingles-num {
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 3px;
+    .single-song { margin: 0; }
+  }
 }

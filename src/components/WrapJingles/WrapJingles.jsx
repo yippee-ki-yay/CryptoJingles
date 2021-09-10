@@ -63,7 +63,7 @@ const WrapJingles = ({
                   :
                   (
                     <EmptyState
-                      text={t('wrapper.no_jingles')}
+                      text={t('common.no_jingles')}
                       buttonText={t('common.compose_your_first_jingle')}
                       handleButtonClick={handleEmptyStateButtonClickCallback}
                     />

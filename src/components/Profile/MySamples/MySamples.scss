@@ -1,10 +1,13 @@
 .my-samples-wrapper.profile-tab-content-container {
 
   .buy-samples-wrapper {
-    margin-bottom: 0;
+    margin: 30px 0;
+
+    &+ .profile-tab-content-wrapper .samples-grid-container { margin-top: 0; }
   }
 
   .samples-grid-container {
+    margin-top: 30px;
     display: grid;
     grid-template-columns: repeat(auto-fit, 175px);
     grid-gap: 40px 66px;
