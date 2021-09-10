@@ -8,13 +8,9 @@ import LoadingIcon from '../Decorative/LoadingIcon';
 import { playAudio } from '../../actions/audioActions';
 import { getColorForRarity } from '../../actions/profileActions';
 
-// import './SampleBox.css';
+import './SampleBox.scss';
 
-const style = {
-  margin: '14px 27px 7px 26px',
-  width: '175px',
-  float: 'left',
-};
+const style = {};
 
 class SampleBox2 extends Component {
   constructor(props) {

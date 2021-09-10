@@ -6,13 +6,13 @@ import t from 'translate';
 import { openEditAuthorNameModal } from 'redux/actions/modalActions';
 import MySamples from './MySamples/MySamples';
 import MyJingles from './MyJingles/MyJingles';
+import ThreeDotsLoader from '../Common/ThreeDotsLoader/TreeDotsLoader';
 import {
   setActiveTab, checkIfOwnerProfile, getAuthor,
   setProfileAddress, setInvalidProfile,
 } from '../../actions/profileActions';
 
 import './Profile.scss';
-import ThreeDotsLoader from '../Common/ThreeDotsLoader/TreeDotsLoader';
 
 class Profile extends Component {
   // eslint-disable-next-line camelcase

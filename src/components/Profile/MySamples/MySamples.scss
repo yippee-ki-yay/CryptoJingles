@@ -1,28 +1,12 @@
-.my-jingles-wrapper {
-    color: black;
-}
+.my-samples-wrapper.profile-tab-content-container {
 
-.buy-samples-section {
-  margin: 10px 0 20px 0;
-}
+  .buy-samples-wrapper {
+    margin-bottom: 0;
+  }
 
-input.form-control {
-    background: white;
-    border: 1px solid black;
-    width: 60px;
-}
-
-.form-items-wrapper {
-    display: inline-flex;
-}
-
-.samples-wrapper {
-    margin-top: 30px;
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.profile-wrapper .my-jingles-wrapper .sort-samples-container {
-    margin-bottom: 10px;
+  .samples-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 175px);
+    grid-gap: 40px 66px;
+  }
 }

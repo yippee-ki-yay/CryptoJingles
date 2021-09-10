@@ -1,100 +1,85 @@
-import React, { Component } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import SampleBox2 from '../../SampleBox/SampleBox2';
+import t from 'translate';
+import clsx from 'clsx';
+import { MESSAGE_BOX_TYPES } from 'constants/general';
+import { getUserSamplesAction } from 'redux/actions/jingleActions';
 import BoxLoader from '../../Decorative/BoxLoader';
-import SortSamples from '../../SortSamples/SortSamples';
-import { getSamplesForUser, onMySamplesSort } from '../../../actions/profileActions';
 import BuySamples from '../../Common/BuySamples/BuySamples';
+import MessageBox from '../../Common/MessageBox/MessageBox';
+import SampleBox2 from '../../SampleBox/SampleBox2';
+import EmptyState from '../../Common/EmptyState/EmptyState';
 
 import './MySamples.scss';
 
-class MySamples extends Component {
-  // eslint-disable-next-line camelcase
-  async UNSAFE_componentWillMount() {
-    this.props.getSamplesForUser(this.props.address);
-  }
+const MySamples = ({
+  getUserSamplesAction, address, isOwner, userSamples,
+  gettingUserSamples, gettingUserSamplesError,
+}) => {
+  const hasSamples = useMemo(() => userSamples && userSamples.length > 0, [userSamples]);
+  const center = useMemo(() => gettingUserSamples || gettingUserSamplesError || !hasSamples, [gettingUserSamples, gettingUserSamplesError, hasSamples]);
 
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.address === this.props.address) return;
+  useEffect(() => { getUserSamplesAction(address); }, [address, getUserSamplesAction]);
 
-    this.props.getSamplesForUser(newProps.address);
-  }
+  return (
+    <div className={clsx('my-samples-wrapper profile-tab-content-container', { center })}>
+      { isOwner && (<BuySamples />) }
 
-  render() {
-    const {
-      isOwner, mySamples, loading, selectedMySampleSort, mySamplesSortingOptions,
-    } = this.props;
-    const { onMySamplesSort } = this.props;
-
-    return (
-      <div className="my-jingles-wrapper">
-        { isOwner && (<BuySamples />) }
-
-        <SortSamples
-          value={selectedMySampleSort}
-          options={mySamplesSortingOptions}
-          onSortChange={onMySamplesSort}
-        />
-
+      <div className="profile-tab-content-wrapper">
         {
-          (mySamples.length > 0) &&
-              !loading &&
-              <div className="my-jingles-num">{ mySamples.length } samples</div>
-        }
-
-        <div className="samples-wrapper">
-          { loading && <div className="loader-wrapper"><BoxLoader /></div> }
-
-          {
-            (mySamples.length === 0) &&
-                !loading &&
-                <div className="empty-state"><h2>You do not own any samples yet!</h2></div>
-          }
-
-          {
-            (mySamples.length > 0) && !loading && (
-              <div>
-                {
-                  mySamples.map((sample) => (
-                    <SampleBox2
-                      key={sample.id}
-                      {...sample}
-                    />
-                  ))
-                }
+          gettingUserSamples ?
+            (
+              <div className="loader-wrapper">
+                <BoxLoader />
+                <div className="loader-message">
+                  { isOwner ? t('common.getting_all_your_samples') : t('common.getting_samples') }
+                </div>
               </div>
             )
-          }
-        </div>
+            :
+            gettingUserSamplesError ?
+              <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingUserSamplesError}</MessageBox>
+              :
+              hasSamples ?
+                (
+                  <div className="samples-grid-container">
+                    { userSamples.map((sample) => (<SampleBox2 key={sample.id} {...sample} />)) }
+                  </div>
+                )
+                :
+                (<EmptyState text={isOwner ? t('common.no_samples') : t('common.no_samples_some_user')} />)
+        }
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+MySamples.defaultProps = {
+  userSamples: null,
+};
 
 MySamples.propTypes = {
   address: PropTypes.string.isRequired,
-  mySamples: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   isOwner: PropTypes.bool.isRequired,
-  selectedMySampleSort: PropTypes.object.isRequired,
-  mySamplesSortingOptions: PropTypes.array.isRequired,
-  getSamplesForUser: PropTypes.func.isRequired,
-  onMySamplesSort: PropTypes.func.isRequired,
+  getUserSamplesAction: PropTypes.func.isRequired,
+
+  userSamples: PropTypes.array,
+  gettingUserSamples: PropTypes.bool.isRequired,
+  gettingUserSamplesError: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ profile }) => ({
-  mySamples: profile.mySamples,
-  numSamplesToBuy: profile.numSamplesToBuy,
-  loading: profile.loading,
+const mapStateToProps = ({ profile, jingle }) => ({
   isOwner: profile.isOwner,
-  selectedMySampleSort: profile.selectedMySampleSort,
-  mySamplesSortingOptions: profile.mySamplesSortingOptions,
+
+  gettingUserSamples: jingle.gettingUserSamples,
+  gettingUserSamplesError: jingle.gettingUserSamplesError,
+  userSamples: jingle.userSamples,
 });
 
 const mapDispatchToProps = {
-  getSamplesForUser, onMySamplesSort,
+  getUserSamplesAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MySamples);

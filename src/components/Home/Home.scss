@@ -66,6 +66,10 @@
     justify-content: center;
     flex-wrap: wrap;
     height: 100%;
+
+  .sample-wrapper {
+    margin: 14px 27px 7px 26px;
+  }
 }
 
 .explanation-section .left {
@@ -178,9 +182,9 @@
 
       .sample-wrapper .top div {
         .loading-icon-wrapper {
-          width: 100%;
+          //width: 100%;
 
-          svg { width: 100% !important; }
+          //svg { width: 100% !important; }
         }
       }
     }
@@ -198,35 +202,37 @@
     }
   }
 
+  .sample-text-jingle {
+    margin-bottom: 50px;
+  }
+
   .explanation-section {
     .left, .right {
       max-width: 100%;
       font-size: 18px;
       line-height: 27px;
     }
+
+    .left {
+      margin-bottom: 40px;
+    }
   }
 
   .explanation-section-2 {
+
     .description {
       width: 100%;
 
       .sample-text {
         font-size: 18px;
         line-height: 25px;
+        margin-bottom: 50px;
       }
     }
 
-    .home-samples-wrapper .home-samples div {
-      //margin: auto;
+    .home-samples-wrapper {
 
-      .sample-wrapper .top div {
-        width: 170px;
-        .loading-icon-wrapper {
-          width: 100%;
-
-          svg { width: 100% !important; }
-        }
-      }
+      div:not(:last-child) .sample-wrapper { margin-bottom: 40px; }
     }
   }
 }

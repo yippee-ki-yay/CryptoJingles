@@ -55,5 +55,5 @@ export const openEditAuthorNameModal = () => (dispatch, getState) => {
 
   if (!profile.updatingAuthor) dispatch({ type: SET_PROFILE_AUTHOR_EDIT, payload: profile.author });
 
-  dispatch(toggleModal(EDIT_AUTHOR_NAME_MODAL, { width: 410, closeModal }, true));
+  dispatch(toggleModal(EDIT_AUTHOR_NAME_MODAL, { width: 410 }, true));
 };
