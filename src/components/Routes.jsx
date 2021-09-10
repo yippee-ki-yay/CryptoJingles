@@ -16,6 +16,7 @@ import '../services/contractsRegistryService';
 // Layouts
 const HomeLazy = lazy(() => import('./Home/Home'));
 const ProfileLazy = lazy(() => import('./Profile/Profile'));
+const NoProfileLazy = lazy(() => import('./NoProfile/NoProfile'));
 const MarketplaceLazy = lazy(() => import('./Marketplace/Marketplace'));
 const ComposeLazy = lazy(() => import('./Compose/Compose'));
 const JinglePageLazy = lazy(() => import('./JinglePage/JinglePage'));
@@ -45,10 +46,11 @@ const Routes = ({ listenToAccChange, silentLogin }) => {
               <Route path="/" exact component={HomeLazy} />
               <Route path="/marketplace" component={MarketplaceLazy} />
               <Route path="/explore" component={ExploreLazy} />
-              <Route path="/jingle/:id" component={JinglePageLazy} />
+              <Route path="/jingle/:version/:id" component={JinglePageLazy} />
               <AccountRouteChecker path="/wrap-jingle" component={WrapJinglesLazy} requireLogin requireLoginBlocker />
               <Route path="/compose" component={ComposeLazy} />
               <Route path="/profile/:address" component={ProfileLazy} />
+              <AccountRouteChecker path="/no-profile" component={NoProfileLazy} requireLogin requireLoginBlocker />
               <Route path="/404" component={Page404} />
               <Redirect from="*" to="/404" />
             </Switch>
