@@ -15,8 +15,8 @@ interface IJIngle {
 /// @title A wrapped contract for CryptoJingles V0 and V1 (Only 2018 mints)
 contract OGWrappedJingle is ERC721URIStorage, Ownable {
 
-    event Wrapped(uint256 indexed, uint256, address);
-    event Unwrapped(uint256 indexed, uint256, address);
+    event Wrapped(address indexed, uint256 indexed, uint256, address);
+    event Unwrapped(address indexed, uint256 indexed, uint256, address);
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -25,15 +25,17 @@ contract OGWrappedJingle is ERC721URIStorage, Ownable {
 
     uint256 constant public NUM_V0_JINGLES = 30;
     uint256 constant public NUM_V1_JINGLES = 47;
-
-    struct OldToken {
+    struct JingleToken {
         uint256 tokenId;
+        address jingleContract;
         bool isWrapped;
     }
 
-    mapping (uint256 => mapping (address => OldToken)) public tokenMap;
+    mapping (uint256 => JingleToken) public wrappedToUnwrapped;
+    
+    mapping (uint256 => mapping (address => uint256)) public unwrappedToWrapped;
 
-    constructor() ERC721("OG Jingles", "GJ") {}
+    constructor() ERC721("Genesis Jingles", "GJ") {}
 
     /// @notice Locks an old v0/v1 jingle and gives the user a wrapped jingle
     /// @dev User must approve the contract to withdraw the asset
@@ -52,15 +54,26 @@ contract OGWrappedJingle is ERC721URIStorage, Ownable {
         // pull user jingle
         IERC721(jingleContract).transferFrom(msg.sender, address(this), _tokenId);
 
-        // mint wrapped
-        uint256 wrappedTokenId = mintNewToken();
+        uint256 wrappedTokenId;
 
-        tokenMap[wrappedTokenId][jingleContract] = OldToken({
+        if (unwrappedToWrapped[_tokenId][jingleContract] == 0) { // mint new wrapped token
+            wrappedTokenId = mintNewToken();
+            unwrappedToWrapped[_tokenId][jingleContract] = wrappedTokenId;
+        } else { 
+            // re-use the old wrapped id for the same jingle
+            wrappedTokenId = unwrappedToWrapped[_tokenId][jingleContract];
+
+            require(ownerOf(wrappedTokenId) == address(this), "Wrapper must be owner");
+            _transfer(address(this), msg.sender, wrappedTokenId);
+        }
+
+        wrappedToUnwrapped[wrappedTokenId] = JingleToken({
             tokenId: _tokenId,
+            jingleContract: jingleContract,
             isWrapped: true
         });
 
-        emit Wrapped(wrappedTokenId, _tokenId, jingleContract);
+        emit Wrapped(msg.sender, wrappedTokenId, _tokenId, jingleContract);
     }
 
 
@@ -74,20 +87,20 @@ contract OGWrappedJingle is ERC721URIStorage, Ownable {
 
         require(tokenOwner == msg.sender, "Not token owner");
 
-        // burn wrapped
-        _burn(_wrappedTokenId);
+        // pull the wrapped token to the contract
+        transferFrom(msg.sender, address(this), _wrappedTokenId);
 
-        OldToken memory tokenData = tokenMap[_wrappedTokenId][jingleContract];
+        JingleToken memory tokenData = wrappedToUnwrapped[_wrappedTokenId];
 
         require(tokenData.isWrapped, "Token not wrapped");
 
         tokenData.isWrapped = false;
-        tokenMap[_wrappedTokenId][jingleContract] = tokenData;
+        wrappedToUnwrapped[_wrappedTokenId] = tokenData;
 
         // send token to caller
         IJIngle(jingleContract).transfer(msg.sender, tokenData.tokenId);
 
-        emit Unwrapped(_wrappedTokenId, tokenData.tokenId, jingleContract);
+        emit Unwrapped(msg.sender, _wrappedTokenId, tokenData.tokenId, jingleContract);
     }
 
     function mintNewToken() internal returns (uint256) {
@@ -108,7 +121,7 @@ contract OGWrappedJingle is ERC721URIStorage, Ownable {
             if (_tokenId <= NUM_V1_JINGLES) return true;
         }
 
-        return true;
+        return false;
     }
 
     function getJingleAddr(Version _version) internal pure returns (address) {
