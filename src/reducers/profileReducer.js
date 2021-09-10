@@ -105,6 +105,8 @@ export default (state = INITIAL_STATE, action) => {
   case SET_PROFILE_ADDRESS:
     return {
       ...INITIAL_STATE,
+      updatingAuthor: state.updatingAuthor,
+      updatingAuthorError: state.updatingAuthorError,
       buyingSamples: state.buyingSamples,
       buyingSamplesError: state.buyingSamplesError,
       profileAddress: payload,

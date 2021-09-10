@@ -17,6 +17,9 @@ export const WrappedOGJingleAddress = '0x87260c09fd1c7b6a47324f39f391b25e89002fc
 export const WrappedNewJingleAddress = '0x000000000000000000000000000000000000dead'; // TODO - add this
 export const JingleV0ViewAddress = '0x78c05d5654c8d9f595371c47f1452e08317832e7';
 export const JingleV1ViewAddress = '0xad8d088f5921abbee3c0f431ebbc7c8dcc38e227';
+export const MarketplaceV0Address = '0xb8e392da7abb836cff06d827531a7e5f1b00bed2';
+
+export const NO_PROFILE_ADDRESSES = [MarketplaceV0Address, MarketplaceAddress, WrappedOGJingleAddress, WrappedNewJingleAddress];
 
 export const JingleV0Address = '0x5af7af54e8bc34b293e356ef11fffe51d6f9ae78';
 

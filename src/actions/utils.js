@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { API_URL } from '../util/config';
+import {
+  API_URL,
+  NO_PROFILE_ADDRESSES,
+  MarketplaceAddress,
+  MarketplaceV0Address,
+  WrappedNewJingleAddress,
+  WrappedOGJingleAddress,
+} from '../util/config';
 import { LIKES_MESSAGE_TO_SIGN } from '../../config/universalConstants';
 
 /**
@@ -61,4 +68,15 @@ export const likeUnlikeJingle = async (jingleId, action, address) => {
     // TODO Handle this in the future
     return false;
   }
+};
+
+export const notSupportedAddressText = (address) => {
+  if (NO_PROFILE_ADDRESSES.includes(address)) {
+    if (address === MarketplaceV0Address) return 'Viewing the v0 marketplace is disabled here';
+    if (address === MarketplaceAddress) return 'Viewing the v1 marketplace is disabled here';
+    if (address === WrappedOGJingleAddress) return 'Viewing the OG wrapper is disabled here';
+    if (address === WrappedNewJingleAddress) return 'Viewing the new wrapper is disabled here';
+  }
+
+  return 'Provided address is not valid.';
 };

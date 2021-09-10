@@ -13,6 +13,8 @@ import {
 } from '../../actions/profileActions';
 
 import './Profile.scss';
+import { MarketplaceV0Address, NO_PROFILE_ADDRESSES } from '../../util/config';
+import { notSupportedAddressText } from '../../actions/utils';
 
 class Profile extends Component {
   // eslint-disable-next-line camelcase
@@ -38,7 +40,9 @@ class Profile extends Component {
 
   isValidProfile = (address) => {
     const isValid = ethereumAddress.isAddress(address);
-    if (isValid) return true;
+    const supported = !NO_PROFILE_ADDRESSES.includes(address);
+
+    if (isValid && supported) return true;
 
     this.props.setInvalidProfile();
     return false;
@@ -121,7 +125,7 @@ class Profile extends Component {
             {
               !isValidProfile && (
                 <div className="not-valid-message">
-                  Provided address is not valid.
+                  { notSupportedAddressText(params.address) }
                 </div>
               )
             }
