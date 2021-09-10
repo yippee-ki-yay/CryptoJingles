@@ -13,7 +13,7 @@ const jingleSchema = new mongoose.Schema({
     settings: {type: Array},
     likeCount: {type: Number, default: 0, required: true},
     likes: [{ type: String, required: true }],
-    hasWebm: {type: Boolean}
+    hasWebm: {type: Boolean, default: false}
 });
 
 mongoose.model('Jingle', jingleSchema);
