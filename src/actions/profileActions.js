@@ -14,11 +14,15 @@ import {
   BUY_SAMPLES_SUCCESS,
   BUY_SAMPLES_FAILURE,
   CLEAR_BUY_SAMPLES,
+
+  GET_AUTHOR_REQUEST,
+  GET_AUTHOR_SUCCESS,
+  GET_AUTHOR_FAILURE,
 } from '../constants/actionTypes';
 import { getSamples } from '../util/web3/ethereumService';
 import { SAMPLE_PRICE, API_URL } from '../util/config';
 import { likeUnlikeJingle } from './utils';
-import { wait } from '../services/utilsService';
+import { CryptoJinglesV1Contract } from '../services/contractsRegistryService';
 
 /**
  * Dispatches action to show that the profile address URL param
@@ -96,13 +100,16 @@ export const toggleEditAuthor = (hideOrShow) => (dispatch) => {
  * @return {Function}
  */
 export const getAuthor = () => async (dispatch, getState) => {
-  try {
-    let author = await window.contract.authors(getState().profile.profileAddress);
-    author = author || getState().profile.author;
+  dispatch({ type: GET_AUTHOR_REQUEST });
 
-    dispatch({ type: AUTHOR_EDIT_SUCCESS, payload: author });
+  try {
+    const contract = await CryptoJinglesV1Contract();
+    let author = await contract.methods.authors(getState().profile.profileAddress).call();
+    author = author || 'Satoshi Nakajingles';
+
+    dispatch({ type: GET_AUTHOR_SUCCESS, payload: author });
   } catch (err) {
-    // TODO - Handle this
+    dispatch({ type: GET_AUTHOR_FAILURE, payload: err.message });
   }
 };
 
@@ -115,9 +122,7 @@ export const submitEditAuthorForm = (newAuthorName, closeModal) => async (dispat
   dispatch({ type: UPDATE_AUTHOR_REQUEST });
 
   try {
-    const { address } = getState().app;
-
-    await window.contract.setAuthorName(newAuthorName, { from: address });
+    await window.contract.setAuthorName(newAuthorName, { from: getState().app.address });
 
     dispatch({ type: UPDATE_AUTHOR_SUCCESS, payload: newAuthorName });
     dispatch(closeModal());

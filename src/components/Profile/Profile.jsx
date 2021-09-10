@@ -14,6 +14,7 @@ import {
 } from '../../actions/profileActions';
 
 import './Profile.scss';
+import ThreeDotsLoader from '../Common/ThreeDotsLoader/TreeDotsLoader';
 
 class Profile extends Component {
   // eslint-disable-next-line camelcase
@@ -48,6 +49,7 @@ class Profile extends Component {
   render() {
     const {
       tabs, isOwner, match: { params }, author, isValidProfile,
+      gettingAuthor, gettingAuthorError,
     } = this.props;
     const { setActiveTab } = this.props;
     const activeTab = tabs.find((_tab) => _tab.active).value;
@@ -66,7 +68,17 @@ class Profile extends Component {
                   <div className="profile-info-wrapper">
                     <div className="author-link-wrapper">
                       <div className="author-wrapper">
-                        <div className="author-name">{author}</div>
+                        <div className="author-name">
+                          {
+                            gettingAuthor ?
+                              (<ThreeDotsLoader big />)
+                              :
+                              gettingAuthorError ?
+                                (<div className="author-error">Error</div>)
+                                :
+                                author
+                          }
+                        </div>
 
                         {
                           isOwner && author && (
@@ -128,7 +140,6 @@ class Profile extends Component {
 Profile.propTypes = {
   tabs: PropTypes.array.isRequired,
   isOwner: PropTypes.bool.isRequired,
-  author: PropTypes.string.isRequired,
   isValidProfile: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   setActiveTab: PropTypes.func.isRequired,
@@ -138,16 +149,23 @@ Profile.propTypes = {
   setInvalidProfile: PropTypes.func.isRequired,
   openEditAuthorNameModal: PropTypes.func.isRequired,
   address: PropTypes.string.isRequired,
+
+  gettingAuthor: PropTypes.bool.isRequired,
+  gettingAuthorError: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   tabs: state.profile.tabs,
   editAuthorActive: state.profile.editAuthorActive,
   isOwner: state.profile.isOwner,
-  author: state.profile.author,
   authorEdit: state.profile.authorEdit,
   isValidProfile: state.profile.isValidProfile,
   address: state.app.address,
+
+  gettingAuthor: state.profile.gettingAuthor,
+  gettingAuthorError: state.profile.gettingAuthorError,
+  author: state.profile.author,
 });
 
 const mapDispatchToProps = {

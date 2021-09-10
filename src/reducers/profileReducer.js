@@ -14,12 +14,14 @@ import {
   UPDATE_AUTHOR_SUCCESS,
   UPDATE_AUTHOR_FAILURE,
   CLEAR_UPDATE_AUTHOR,
+
+  GET_AUTHOR_REQUEST,
+  GET_AUTHOR_SUCCESS,
+  GET_AUTHOR_FAILURE,
 } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   isValidProfile: true,
-  author: 'Satoshi Nakajingles',
-  authorEdit: '',
   editAuthorActive: false,
   profileAddress: '',
   isOwner: false,
@@ -41,6 +43,11 @@ const INITIAL_STATE = {
   buyingSamples: false,
   buyingSamplesError: '',
 
+  gettingAuthor: false,
+  gettingAuthorError: '',
+  author: '',
+
+  authorEdit: '',
   updatingAuthor: false,
   updatingAuthorError: '',
 };
@@ -165,6 +172,28 @@ export default (state = INITIAL_STATE, action) => {
       updatingAuthor: false,
       updatingAuthorError: '',
       authorEdit: '',
+    };
+
+  case GET_AUTHOR_REQUEST:
+    return {
+      ...state,
+      gettingAuthor: true,
+      gettingAuthorError: '',
+    };
+
+  case GET_AUTHOR_SUCCESS:
+    return {
+      ...state,
+      gettingAuthor: false,
+      gettingAuthorError: '',
+      author: payload,
+    };
+
+  case GET_AUTHOR_FAILURE:
+    return {
+      ...state,
+      gettingAuthor: false,
+      gettingAuthorError: payload,
     };
 
   default:

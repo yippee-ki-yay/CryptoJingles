@@ -78,6 +78,8 @@ export default {
 
     '--input-border': PALLET.gray,
 
+    '--profile-author-name-error': PALLET.red,
+
     // OLD
 
     '--color-main': PALLET.brown,
