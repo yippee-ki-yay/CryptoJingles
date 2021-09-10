@@ -51,7 +51,6 @@
     }
 
     .etherscan-link {
-      // TODO - DO this on responsive
       text-decoration: underline;
       font-size: $font-size-extra-large;
       width: fit-content;
@@ -118,5 +117,35 @@
         border-bottom: 5px solid var(--profile-tabs-active-tab-border-bottom);
       }
     }
+  }
+
+  @include for-sm-screen {
+    .profile-info-wrapper {
+
+      .author-link-wrapper {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .author-wrapper {
+          flex-direction: column;
+          margin-bottom: 10px;
+
+          .author-name { margin-bottom: 10px; }
+        }
+
+        .etherscan-link { width: 100%; }
+      }
+    }
+
+    .tabs-wrapper {
+      justify-content: center;
+
+      .tab { flex-grow: 1; }
+    }
+
+    .jingles-grid-wrapper, .samples-grid-container { justify-content: center; }
   }
 }

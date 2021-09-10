@@ -28,8 +28,6 @@ const MyJingles = ({
   useEffect(() => getAllUserJinglesAction(address), [getAllUserJinglesAction, address]);
   useEffect(() => () => { clearAllUserJinglesAction(); }, [clearAllUserJinglesAction]);
 
-  console.log('allUserJingles', allUserJingles);
-
   return (
     <div className={clsx('my-jingles-wrapper profile-tab-content-container', { center })}>
       <div className="profile-tab-content-wrapper">

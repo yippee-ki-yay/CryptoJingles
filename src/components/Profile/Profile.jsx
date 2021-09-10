@@ -40,7 +40,7 @@ class Profile extends Component {
 
   isValidProfile = (address) => {
     const isValid = ethereumAddress.isAddress(address);
-    const supported = !NO_PROFILE_ADDRESSES.includes(address);
+    const supported = !NO_PROFILE_ADDRESSES.includes(address.toLowerCase());
 
     if (isValid && supported) return true;
 

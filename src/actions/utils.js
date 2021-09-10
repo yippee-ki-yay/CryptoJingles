@@ -71,11 +71,13 @@ export const likeUnlikeJingle = async (jingleId, action, address) => {
 };
 
 export const notSupportedAddressText = (address) => {
-  if (NO_PROFILE_ADDRESSES.includes(address)) {
-    if (address === MarketplaceV0Address) return 'Viewing the v0 marketplace is disabled here';
-    if (address === MarketplaceAddress) return 'Viewing the v1 marketplace is disabled here';
-    if (address === WrappedOGJingleAddress) return 'Viewing the OG wrapper is disabled here';
-    if (address === WrappedNewJingleAddress) return 'Viewing the new wrapper is disabled here';
+  const lcAddress = address.toLowerCase();
+
+  if (NO_PROFILE_ADDRESSES.includes(lcAddress)) {
+    if (lcAddress === MarketplaceV0Address) return 'Viewing the v0 marketplace is disabled here';
+    if (lcAddress === MarketplaceAddress) return 'Viewing the v1 marketplace is disabled here';
+    if (lcAddress === WrappedOGJingleAddress) return 'Viewing the OG wrapper is disabled here';
+    if (lcAddress === WrappedNewJingleAddress) return 'Viewing the new wrapper is disabled here';
   }
 
   return 'Provided address is not valid.';

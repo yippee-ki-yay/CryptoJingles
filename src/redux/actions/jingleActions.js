@@ -162,7 +162,6 @@ export const getAllUserJinglesAction = (address) => async (dispatch) => {
     ]);
 
     const payload = [...jingles1, ...jingles2, ...jingles3, ...jingles4];
-    console.log('payload', payload);
 
     dispatch({ type: GET_ALL_USER_JINGLES_SUCCESS, payload });
   } catch (err) {
