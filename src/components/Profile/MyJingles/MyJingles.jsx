@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import t from 'translate';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
-import { getAllUserJinglesAction } from 'redux/actions/jingleActions';
+import { clearAllUserJinglesAction, getAllUserJinglesAction } from 'redux/actions/jingleActions';
 import BoxLoader from '../../Decorative/BoxLoader';
 import SingleJingle from '../../SingleJingle/SingleJingle';
 import MessageBox from '../../Common/MessageBox/MessageBox';
@@ -16,30 +16,19 @@ import './MyJingles.scss';
 const MyJingles = ({
   address, isOwner,
   getAllUserJinglesAction, gettingAllUserJingles, gettingAllUserJinglesError,
-  v0UserJingles, v1UserJingles, ogWrappedUserJingles, newWrappedUserJingles,
+  allUserJingles, clearAllUserJinglesAction,
 }) => {
   const history = useHistory();
 
-  const allNonWrappedJingles = useMemo(() => (v0UserJingles && v1UserJingles ? [...v0UserJingles, ...v1UserJingles] : null), [v0UserJingles, v1UserJingles]);
-  const hasNonWrappedJingles = useMemo(() => allNonWrappedJingles && allNonWrappedJingles.length > 0, [allNonWrappedJingles]);
-
-  const hasJingles = useMemo(() => hasNonWrappedJingles || (ogWrappedUserJingles && ogWrappedUserJingles.length > 0) || (newWrappedUserJingles && newWrappedUserJingles.length > 0), [hasNonWrappedJingles, ogWrappedUserJingles, newWrappedUserJingles]);
-
-  const allJingles = useMemo(() => {
-    if (!hasJingles) return [];
-
-    const ogWrappedUserJinglesArr = ogWrappedUserJingles || [];
-    const newWrappedUserJinglesArr = newWrappedUserJingles || [];
-    const allNonWrappedJinglesArr = allNonWrappedJingles || [];
-
-    return [...ogWrappedUserJinglesArr, ...newWrappedUserJinglesArr, ...allNonWrappedJinglesArr];
-  }, [hasJingles, allNonWrappedJingles, ogWrappedUserJingles, newWrappedUserJingles]);
-
+  const hasJingles = useMemo(() => allUserJingles && allUserJingles.length > 0, [allUserJingles]);
   const center = useMemo(() => gettingAllUserJingles || gettingAllUserJinglesError || !hasJingles, [gettingAllUserJingles, gettingAllUserJinglesError, hasJingles]);
 
   const handleEmptyStateButtonClickCallback = useCallback(() => history.push('/compose'), [history]);
 
   useEffect(() => getAllUserJinglesAction(address), [getAllUserJinglesAction, address]);
+  useEffect(() => () => { clearAllUserJinglesAction(); }, [clearAllUserJinglesAction]);
+
+  console.log('allUserJingles', allUserJingles);
 
   return (
     <div className={clsx('my-jingles-wrapper profile-tab-content-container', { center })}>
@@ -61,7 +50,7 @@ const MyJingles = ({
               hasJingles ?
                 (
                   <div className="jingles-grid-wrapper">
-                    { allJingles.map((jingle) => (<SingleJingle key={`${jingle.version}-${jingle.jingleId}`} {...jingle} />)) }
+                    { allUserJingles.map((jingle) => (<SingleJingle key={`${jingle.version}-${jingle.jingleId}`} {...jingle} />)) }
                   </div>
                 )
                 :
@@ -79,10 +68,7 @@ const MyJingles = ({
 };
 
 MyJingles.defaultProps = {
-  v0UserJingles: null,
-  v1UserJingles: null,
-  ogWrappedUserJingles: null,
-  newWrappedUserJingles: null,
+  allUserJingles: null,
 };
 
 MyJingles.propTypes = {
@@ -90,12 +76,10 @@ MyJingles.propTypes = {
   isOwner: PropTypes.bool.isRequired,
 
   getAllUserJinglesAction: PropTypes.func.isRequired,
+  clearAllUserJinglesAction: PropTypes.func.isRequired,
   gettingAllUserJingles: PropTypes.bool.isRequired,
   gettingAllUserJinglesError: PropTypes.string.isRequired,
-  v0UserJingles: PropTypes.array,
-  v1UserJingles: PropTypes.array,
-  ogWrappedUserJingles: PropTypes.array,
-  newWrappedUserJingles: PropTypes.array,
+  allUserJingles: PropTypes.array,
 };
 
 const mapStateToProps = ({ profile, jingle }) => ({
@@ -103,14 +87,12 @@ const mapStateToProps = ({ profile, jingle }) => ({
 
   gettingAllUserJingles: jingle.gettingAllUserJingles,
   gettingAllUserJinglesError: jingle.gettingAllUserJinglesError,
-  v0UserJingles: jingle.v0UserJingles,
-  v1UserJingles: jingle.v1UserJingles,
-  ogWrappedUserJingles: jingle.ogWrappedUserJingles,
-  newWrappedUserJingles: jingle.newWrappedUserJingles,
+  allUserJingles: jingle.allUserJingles,
 });
 
 const mapDispatchToProps = {
   getAllUserJinglesAction,
+  clearAllUserJinglesAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyJingles);

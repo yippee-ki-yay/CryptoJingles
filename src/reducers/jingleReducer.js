@@ -2,6 +2,7 @@ import {
   GET_ALL_USER_JINGLES_REQUEST,
   GET_ALL_USER_JINGLES_SUCCESS,
   GET_ALL_USER_JINGLES_FAILURE,
+  CLEAR_ALL_USER_JINGLES,
 
   GET_ALL_USER_V0_JINGLES_REQUEST,
   GET_ALL_USER_V0_JINGLES_SUCCESS,
@@ -42,6 +43,7 @@ import {
 const INITIAL_STATE = {
   gettingAllUserJingles: false,
   gettingAllUserJinglesError: '',
+  allUserJingles: null,
 
   gettingV0UserJingles: false,
   gettingV0UserJinglesError: '',
@@ -87,6 +89,7 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       gettingAllUserJingles: false,
       gettingAllUserJinglesError: '',
+      allUserJingles: payload,
     };
 
   case GET_ALL_USER_JINGLES_FAILURE:
@@ -94,6 +97,16 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       gettingAllUserJingles: false,
       gettingAllUserJinglesError: payload,
+    };
+
+  case CLEAR_ALL_USER_JINGLES:
+    return {
+      ...state,
+      allUserJingles: null,
+      v0UserJingles: null,
+      v1UserJingles: null,
+      ogWrappedUserJingles: null,
+      newWrappedUserJingles: null,
     };
 
   case GET_ALL_USER_V0_JINGLES_REQUEST:

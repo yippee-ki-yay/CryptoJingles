@@ -2,6 +2,7 @@ import {
   GET_ALL_USER_JINGLES_REQUEST,
   GET_ALL_USER_JINGLES_SUCCESS,
   GET_ALL_USER_JINGLES_FAILURE,
+  CLEAR_ALL_USER_JINGLES,
 
   GET_ALL_USER_V0_JINGLES_REQUEST,
   GET_ALL_USER_V0_JINGLES_SUCCESS,
@@ -64,6 +65,8 @@ export const getAllV0UserJinglesAction = (address) => async (dispatch, getState)
     const payload = await getAllV0UserJingles(address);
 
     dispatch({ type: GET_ALL_USER_V0_JINGLES_SUCCESS, payload });
+
+    return payload;
   } catch (err) {
     dispatch({ type: GET_ALL_USER_V0_JINGLES_FAILURE, payload: err.message });
 
@@ -85,6 +88,8 @@ export const getAllV1UserJinglesAction = (address) => async (dispatch, getState)
     const payload = await getAllV1UserJingles(address);
 
     dispatch({ type: GET_ALL_USER_V1_JINGLES_SUCCESS, payload });
+
+    return payload;
   } catch (err) {
     dispatch({ type: GET_ALL_USER_V1_JINGLES_FAILURE, payload: err.message });
 
@@ -106,6 +111,8 @@ export const getAllOGWrappedUserJinglesAction = (address) => async (dispatch, ge
     const payload = await getAllOgWrappedUserJingles(address);
 
     dispatch({ type: GET_ALL_OG_WRAPPED_USER_JINGLES_SUCCESS, payload });
+
+    return payload;
   } catch (err) {
     dispatch({ type: GET_ALL_OG_WRAPPED_USER_JINGLES_FAILURE, payload: err.message });
 
@@ -127,6 +134,8 @@ export const getAllNewWrappedUserJinglesAction = (address) => async (dispatch, g
     const payload = await getAllNewWrappedUserJingles(address);
 
     dispatch({ type: GET_ALL_NEW_WRAPPED_USER_JINGLES_SUCCESS, payload });
+
+    return payload;
   } catch (err) {
     dispatch({ type: GET_ALL_NEW_WRAPPED_USER_JINGLES_FAILURE, payload: err.message });
 
@@ -145,18 +154,23 @@ export const getAllUserJinglesAction = (address) => async (dispatch) => {
   dispatch({ type: GET_ALL_USER_JINGLES_REQUEST });
 
   try {
-    await Promise.all([
+    const [jingles1, jingles2, jingles3, jingles4] = await Promise.all([
       dispatch(getAllOGWrappedUserJinglesAction(address)),
       dispatch(getAllNewWrappedUserJinglesAction(address)),
       dispatch(getAllV0UserJinglesAction(address)),
       dispatch(getAllV1UserJinglesAction(address)),
     ]);
 
-    dispatch({ type: GET_ALL_USER_JINGLES_SUCCESS });
+    const payload = [...jingles1, ...jingles2, ...jingles3, ...jingles4];
+    console.log('payload', payload);
+
+    dispatch({ type: GET_ALL_USER_JINGLES_SUCCESS, payload });
   } catch (err) {
     dispatch({ type: GET_ALL_USER_JINGLES_FAILURE, payload: err.message });
   }
 };
+
+export const clearAllUserJinglesAction = () => (dispatch) => dispatch({ type: CLEAR_ALL_USER_JINGLES });
 
 /**
  * Handles the redux state for wrapping any jingle type

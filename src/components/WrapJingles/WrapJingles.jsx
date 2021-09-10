@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import clsx from 'clsx';
 import t from 'translate';
 import { useHistory } from 'react-router-dom';
-import { getAllUserJinglesAction } from 'redux/actions/jingleActions';
+import { clearAllUserJinglesAction, getAllUserJinglesAction } from 'redux/actions/jingleActions';
 import { MESSAGE_BOX_TYPES } from '../../constants/general';
 import WrapJinglesContent from './WrapJinglesContent/WrapJinglesContent';
 import MessageBox from '../Common/MessageBox/MessageBox';
@@ -16,7 +16,7 @@ import './WrapJingles.scss';
 const WrapJingles = ({
   getAllUserJinglesAction, gettingAllUserJingles,
   gettingAllUserJinglesError, v0UserJingles, v1UserJingles, address,
-  ogWrappedUserJingles, newWrappedUserJingles,
+  ogWrappedUserJingles, newWrappedUserJingles, clearAllUserJinglesAction,
 }) => {
   const history = useHistory();
 
@@ -30,6 +30,7 @@ const WrapJingles = ({
   const handleEmptyStateButtonClickCallback = useCallback(() => history.push('/compose'), [history]);
 
   useEffect(() => getAllUserJinglesAction(address), [getAllUserJinglesAction, address]);
+  useEffect(() => () => { clearAllUserJinglesAction(); }, [clearAllUserJinglesAction]);
 
   return (
     <div className={clsx('wrap-jingle-wrapper page-wrapper', { center })}>
@@ -84,6 +85,7 @@ WrapJingles.defaultProps = {
 
 WrapJingles.propTypes = {
   getAllUserJinglesAction: PropTypes.func.isRequired,
+  clearAllUserJinglesAction: PropTypes.func.isRequired,
   gettingAllUserJingles: PropTypes.bool.isRequired,
   gettingAllUserJinglesError: PropTypes.string.isRequired,
   v0UserJingles: PropTypes.array,
@@ -103,6 +105,6 @@ const mapStateToProps = ({ jingle, app }) => ({
   address: app.address,
 });
 
-const mapDispatchToProps = { getAllUserJinglesAction };
+const mapDispatchToProps = { getAllUserJinglesAction, clearAllUserJinglesAction };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrapJingles);
