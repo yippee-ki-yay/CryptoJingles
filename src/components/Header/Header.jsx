@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -10,6 +10,11 @@ import './Header.scss';
 
 const Header = ({ address }) => {
   const [checked, setChecked] = useState(false);
+
+  const profileLink = useMemo(() => {
+    if (!address) return '/no-profile';
+    return `/profile/${address}`;
+  }, [address]);
 
   const changeCheckedCallback = useCallback(() => { setChecked(!checked); }, [checked, setChecked]);
   const onChangeCallback = useCallback(() => {}, []);
@@ -32,7 +37,7 @@ const Header = ({ address }) => {
               <NavLink activeClassName="active" onClick={closeMenu} to="/marketplace">Marketplace</NavLink>
               <NavLink activeClassName="active" onClick={closeMenu} to="/compose">Compose</NavLink>
               <NavLink activeClassName="active" onClick={closeMenu} to="/wrap-jingle">Wrap Jingles</NavLink>
-              <NavLink activeClassName="active" onClick={closeMenu} to={`/profile/${address || 'none'}`}>Profile</NavLink>
+              <NavLink activeClassName="active" onClick={closeMenu} to={profileLink}>Profile</NavLink>
             </div>
 
             <ConnectWalletButton closeMenu={setChecked} />

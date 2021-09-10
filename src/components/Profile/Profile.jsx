@@ -12,9 +12,9 @@ import {
   setProfileAddress, setInvalidProfile,
 } from '../../actions/profileActions';
 import OutsideAlerter from '../OutsideAlerter/OutsideAlerter';
+import profilePlaceholder from './profile-placeholder.png';
 
 import './Profile.scss';
-import profilePlaceholder from './profile-placeholder.png';
 
 class Profile extends Component {
   // eslint-disable-next-line camelcase
@@ -28,7 +28,7 @@ class Profile extends Component {
 
   // eslint-disable-next-line camelcase
   UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.address !== this.props.address && newProps.address) this.props.checkIfOwnerProfile();
+    if (newProps.address !== this.props.address) this.props.checkIfOwnerProfile();
 
     if (newProps.match.params.address === this.props.match.params.address) return;
     if (!this.isValidProfile(newProps.match.params.address)) return;

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import LoadingIcon from '../Decorative/LoadingIcon';
 import Heart from '../Decorative/Heart';
 import { likeUnLikeMarketplaceJingle } from '../../actions/marketplaceActions';
 import { likeUnLikeProfileJingle } from '../../actions/profileActions';
 import { formatSalePrice } from '../../actions/utils';
+import SingleJingleVideo from './SingleJingleVideo';
 
-import loadingGif from './loadingGif.gif';
 import './SingleJingle.scss';
 
 class SingleJingle extends Component {
@@ -16,26 +14,17 @@ class SingleJingle extends Component {
     super(props);
 
     this.state = {
-      start: false,
-      loading: false,
       sound: null,
     };
 
     this.stopSound = this.stopSound.bind(this);
-    this.playSound = this.playSound.bind(this);
   }
 
   componentWillUnmount() { this.stopSound(); }
 
-  playSound = () => {
-    // TODO - play jingle
-    this.setState({ start: true });
-  };
-
   stopSound = () => {
     if (!this.state.sound) return;
     this.state.sound.stop();
-    this.setState({ start: false });
   };
 
   likeJingle = (jingleId, action) => {
@@ -50,10 +39,8 @@ class SingleJingle extends Component {
       version,
     } = this.props;
 
-    const videoSrc = `https://cryptojingles.app/public/videosWithSound/v${version}_${jingleId}.webm`;
-
     return (
-      <div key={jingleId} className="single-song single-jingle-wrapper">
+      <div className="single-song single-jingle-wrapper">
         <div className="jingle-image-actions">
           {
             onSale && (
@@ -65,33 +52,7 @@ class SingleJingle extends Component {
           }
 
           <div className="jingle-image-container">
-            <video // eslint-disable-line
-              muted
-              autoPlay
-              loop
-              playsInline
-              poster={loadingGif}
-            >
-              <source src={videoSrc} type="video/webm" />
-            </video>
-          </div>
-
-          <div className="overlay">
-            { this.state.loading && <LoadingIcon /> }
-            {
-              !this.state.start && !this.state.loading && (
-                <span onClick={this.playSound}>
-                  <i className="material-icons play">play_circle_outline</i>
-                </span>
-              )
-            }
-            {
-              this.state.start && !this.state.loading &&
-              <span onClick={this.stopSound}><i className="material-icons stop">cancel</i></span>
-            }
-            <Link to={`/jingle/${jingleId}`}>
-              <i className="material-icons open">open_in_new</i>
-            </Link>
+            <SingleJingleVideo version={version} jingleId={jingleId} />
           </div>
         </div>
 
