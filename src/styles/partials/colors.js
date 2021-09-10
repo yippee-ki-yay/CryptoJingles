@@ -26,6 +26,7 @@ const PALLET = {
   grayHover: '#fff',
 
   teal: 'rgba(12, 236, 221, 0.2)',
+  teal2: 'rgba(12, 236, 221, 1)',
 
   pink: '#FF67E7',
 
@@ -79,6 +80,7 @@ export default {
     '--input-border': PALLET.gray,
 
     '--profile-author-name-error': PALLET.red,
+    '--profile-tabs-active-tab-border-bottom': PALLET.teal2,
 
     // OLD
 

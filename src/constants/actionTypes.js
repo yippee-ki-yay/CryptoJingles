@@ -23,10 +23,8 @@ export const MARKETPLACE_SORTING_OPTIONS = [
 export const MARKETPLACE_JINGLES_PER_PAGE = 10;
 
 export const PROFILE_TABS = [
-  { label: 'Samples', value: 'samples', active: true },
-  { label: 'Jingles', value: 'jingles' },
-  { label: 'Songs', value: 'songs' },
-  { label: 'Albums', value: 'albums' },
+  { label: 'Jingles', value: 'jingles', active: true },
+  { label: 'Samples', value: 'samples' },
 ];
 
 // App action types

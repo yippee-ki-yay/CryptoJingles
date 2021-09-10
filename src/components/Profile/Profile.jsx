@@ -6,8 +6,6 @@ import t from 'translate';
 import { openEditAuthorNameModal } from 'redux/actions/modalActions';
 import MySamples from './MySamples/MySamples';
 import MyJingles from './MyJingles/MyJingles';
-import MySongs from './MySongs/MySongs';
-import MyAlbums from './MyAlbums/MyAlbums';
 import {
   setActiveTab, checkIfOwnerProfile, getAuthor,
   setProfileAddress, setInvalidProfile,
@@ -99,7 +97,6 @@ class Profile extends Component {
                       </a>
                     </div>
 
-                    { /* TODO - create component out of this */ }
                     <div className="tabs-wrapper">
                       {
                         tabs.map(({ label, value, active }) => (
@@ -108,17 +105,15 @@ class Profile extends Component {
                             className={`tab ${active ? 'active' : ''}`}
                             onClick={() => { setActiveTab(value); }}
                           >
-                            { label }
+                            <div className="tab-text">{ label }</div>
                           </div>
                         ))
                       }
                     </div>
                   </div>
 
-                  { activeTab === tabs[0].value && <MySamples address={this.props.match.params.address} /> }
-                  { activeTab === tabs[1].value && <MyJingles address={this.props.match.params.address} /> }
-                  { activeTab === tabs[2].value && <MySongs /> }
-                  { activeTab === tabs[3].value && <MyAlbums /> }
+                  { activeTab === tabs[0].value && <MyJingles address={this.props.match.params.address} /> }
+                  { activeTab === tabs[1].value && <MySamples address={this.props.match.params.address} /> }
                 </div>
               )
             }
