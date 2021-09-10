@@ -41,17 +41,14 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
 
     if (!wrappedJingle) {
       console.log(wrappedId, jingleV0Addr);
-      const tokenIdV0 = await wrappedJingleContract.methods.tokenMap(wrappedId, jingleV0Addr).call();
-      const tokenIdV1 = await wrappedJingleContract.methods.tokenMap(wrappedId, jingleV0Addr).call();
+      const tokenId = await wrappedJingleContract.methods.wrappedToUnwrapped(wrappedId).call();
 
-      const tokenId = tokenIdV0.isWrapped === false ? tokenIdV1.tokenId : tokenIdV0.tokenId;
-
-      console.log('tokenId: ', tokenId.tokenId);
+      const version = tokenId.jingleContract.toLowerCase() === jingleV0Addr.toLowerCase() ? 'v0' : 'v1';
 
       const newWrapped = new WrappedJingle({
         wrappedId,
         jingleId: tokenId.tokenId,
-        jingleVersion: 'v0',
+        jingleVersion: version,
       });
 
       await newWrapped.save();

@@ -10,7 +10,7 @@ const jingleSchema = new mongoose.Schema({
     samples: {type: Array, required: true},
     sampleTypes: {type: Array, required: true},
     time: {type: Date, default: Date.now},
-    hasWebm: {type: Boolean}
+    hasWebm: {type: Boolean, default: false}
 });
 
 mongoose.model('JingleV0', jingleSchema);

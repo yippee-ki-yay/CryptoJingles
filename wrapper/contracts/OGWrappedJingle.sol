@@ -143,7 +143,7 @@ contract OGWrappedJingle is ERC721URIStorage, Ownable {
     }
 
     function baseTokenURI() public pure returns (string memory) {
-        return "https://cryptojingles.app/api/wrapped-jingles/";
+        return "https://cryptojingles.app/api/og-wrapped-jingles/";
     }
 
     function contractURI() public pure returns (string memory) {
