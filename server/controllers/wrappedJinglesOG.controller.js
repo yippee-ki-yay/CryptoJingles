@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Web3 = require('web3');
 
-require('../models/wrappedJingle.model');
+require('../models/wrappedJingleOG.model');
 require('../models/jinglesV0.model');
 require('../models/jingles.model');
 
-const WrappedJingle = mongoose.model('WrappedJingle');
+const WrappedJingleOG = mongoose.model('WrappedJingleOG');
 const JingleV0 = mongoose.model('JingleV0');
 const Jingle = mongoose.model('Jingle');
 
@@ -15,36 +15,27 @@ const wrappedJingleAbi = require('../abis/WrappedJingle.json');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NODE_URL_HTTPS));
 
-const wrappedContractAddr = '0x74a24A55e9FAdca1595Ac0682eC2D66922D29ef7';
+const wrappedContractAddrOG = '0xA603806c2bcd429841A075aCadBEBcd53B651B02';
 
 const jingleV0Addr = '0x5AF7Af54E8Bc34b293e356ef11fffE51d6f9Ae78';
 
 const wrappedJingleContract = new web3.eth.Contract(
   wrappedJingleAbi.abi,
-  wrappedContractAddr,
+  wrappedContractAddrOG,
 );
 
-module.exports.removeWrappedJingle = async (wrappedId, jingleVersion, jingleId) => {
-  try {
-    const find = await WrappedJingle.findOneAndDelete({ wrappedId });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-module.exports.getWrappedJingleMetadata = async (req, res) => {
+module.exports.getWrappedJingleMetadataOG = async (req, res) => {
   try {
     const { wrappedId } = req.params;
 
-    let wrappedJingle = await WrappedJingle.findOne({ wrappedId });
+    let wrappedJingle = await WrappedJingleOG.findOne({ wrappedId });
 
     if (!wrappedJingle) {
-      console.log(wrappedId, jingleV0Addr);
       const tokenId = await wrappedJingleContract.methods.wrappedToUnwrapped(wrappedId).call();
 
       const version = tokenId.jingleContract.toLowerCase() === jingleV0Addr.toLowerCase() ? 'v0' : 'v1';
 
-      const newWrapped = new WrappedJingle({
+      const newWrapped = new WrappedJingleOG({
         wrappedId,
         jingleId: tokenId.tokenId,
         jingleVersion: version,

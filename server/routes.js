@@ -5,11 +5,14 @@ const jingleCtrl = require('./controllers/jingles.controller');
 
 const wrappedJingleCtrl = require('./controllers/wrappedJingles.controller');
 
+const wrappedJingleCtrlOG = require('./controllers/wrappedJinglesOG.controller');
+
 require('./models/jinglesV0.model');
 const jingleV0Ctrl = require('./controllers/jinglesV0.controller');
 // const jingleImageCtrl = require('./controllers/jingle.image.controller');
 
 router.get('/wrapped-jingles/:wrappedId', wrappedJingleCtrl.getWrappedJingleMetadata);
+router.get('/og-wrapped-jingles/:wrappedId', wrappedJingleCtrlOG.getWrappedJingleMetadataOG);
 
 router.get('/jingles/pagination/:owner/page/:page/filter/:filter', jingleCtrl.getJinglesForOwner);
 router.get('/jingles/count/owner/:owner/sale/:sale', jingleCtrl.getJingleNumForOwner);
