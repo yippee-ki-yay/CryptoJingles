@@ -12,16 +12,30 @@ const Jingle = mongoose.model('Jingle');
 const getJingleData = require('../../jingleImageGeneration/getJingleData');
 
 const wrappedJingleAbi = require('../abis/WrappedJingle.json');
+const jingleV0ViewAbi = require('../abis/JingleV0View.json');
+const jingleV1ViewAbi = require('../abis/JingleV1View.json');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.NODE_URL_HTTPS));
 
 const wrappedContractAddr = '0x74a24A55e9FAdca1595Ac0682eC2D66922D29ef7';
-
 const jingleV0Addr = '0x5AF7Af54E8Bc34b293e356ef11fffE51d6f9Ae78';
+
+const jingleV0ViewAddr = '0x78c05d5654c8d9f595371c47f1452e08317832e7';
+const jingleV1ViewAddr = '0xad8d088f5921abbee3c0f431ebbc7c8dcc38e227';
 
 const wrappedJingleContract = new web3.eth.Contract(
   wrappedJingleAbi.abi,
   wrappedContractAddr,
+);
+
+const jingleV0ViewContract = new web3.eth.Contract(
+  jingleV0ViewAbi.abi,
+  jingleV0ViewAddr,
+);
+
+const jingleV1ViewContract = new web3.eth.Contract(
+  jingleV1ViewAbi.abi,
+  jingleV1ViewAddr,
 );
 
 module.exports.removeWrappedJingle = async (wrappedId, jingleVersion, jingleId) => {
@@ -39,7 +53,6 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
     let wrappedJingle = await WrappedJingle.findOne({ wrappedId });
 
     if (!wrappedJingle) {
-      console.log(wrappedId, jingleV0Addr);
       const tokenId = await wrappedJingleContract.methods.wrappedToUnwrapped(wrappedId).call();
 
       const version = tokenId.jingleContract.toLowerCase() === jingleV0Addr.toLowerCase() ? 'v0' : 'v1';
@@ -55,17 +68,15 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
       wrappedJingle = newWrapped;
     }
 
-    console.log(wrappedJingle);
-
     const metadata = {};
 
     if (wrappedJingle) {
       let jingleData;
 
       if (wrappedJingle.jingleVersion === 'v0') {
-        jingleData = await JingleV0.findOne({ jingleId: wrappedJingle.jingleId });
+        jingleData = await jingleV0ViewContract.methods.getFullJingleData(wrappedJingle.jingleId).call();
       } else {
-        jingleData = await Jingle.findOne({ jingleId: wrappedJingle.jingleId });
+        jingleData = await jingleV1ViewContract.methods.getFullJingleData(wrappedJingle.jingleId).call();
       }
 
       console.log(jingleData);
@@ -83,10 +94,10 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
         });
       });
 
-      metadata.description = `Wrapped version of ${wrappedJingle.jingleVersion} jingle number #${jingleData.jingleId}`;
-      metadata.name = `Wrapped ${wrappedJingle.jingleVersion} #${jingleData.jingleId} - ${jingleData.name}`;
+      metadata.description = `Wrapped version of ${wrappedJingle.jingleVersion} jingle number #${jingleData.id}`;
+      metadata.name = `Wrapped ${wrappedJingle.jingleVersion} #${jingleData.id} - ${jingleData.name}`;
       metadata.animation_url = `${base}/public/videosWithSound/${webmName}.webm`;
-      metadata.external_url = `${base}/jingle/${jingleData.jingleId}`;
+      metadata.external_url = `${base}/jingle/${wrappedJingle.jingleVersion[1]}/${jingleData.id}`;
       metadata.image = `${base}/public/videosWithSound/${webmName}.webm`;
       metadata.attributes = attributes;
     }
