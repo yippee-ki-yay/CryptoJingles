@@ -14,6 +14,11 @@ import {
   SELL_JINGLE_SUCCESS,
   SELL_JINGLE_FAILURE,
   CLEAR_SELL_JINGLE,
+
+  CANCEL_SALE_JINGLE_REQUEST,
+  CANCEL_SALE_JINGLE_SUCCESS,
+  CANCEL_SALE_JINGLE_FAILURE,
+  CLEAR_CANCEL_SALE_JINGLE,
 } from 'redux/actionTypes/singleJingleActionTypes';
 
 const INITIAL_STATE = {
@@ -25,6 +30,8 @@ const INITIAL_STATE = {
 
   jingleSalePrices: {},
   sellingJingle: {},
+
+  cancelingJingle: {},
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -168,6 +175,55 @@ export default (state = INITIAL_STATE, action) => {
       jingleSalePrices: {
         ...state.jingleSalePrices,
         [action.key]: '',
+      },
+    };
+
+  case CANCEL_SALE_JINGLE_REQUEST:
+    return {
+      ...state,
+      cancelingJingle: {
+        ...state.cancelingJingle,
+        [action.key]: {
+          canceling: true,
+          error: '',
+        },
+      },
+    };
+
+  case CANCEL_SALE_JINGLE_SUCCESS:
+    return {
+      ...state,
+      cancelingJingle: {
+        ...state.cancelingJingle,
+        [action.key]: {
+          canceling: false,
+          error: '',
+        },
+      },
+      singleJingle: payload,
+    };
+
+  case CANCEL_SALE_JINGLE_FAILURE:
+    return {
+      ...state,
+      cancelingJingle: {
+        ...state.cancelingJingle,
+        [action.key]: {
+          canceling: false,
+          error: payload,
+        },
+      },
+    };
+
+  case CLEAR_CANCEL_SALE_JINGLE:
+    return {
+      ...state,
+      cancelingJingle: {
+        ...state.cancelingJingle,
+        [action.key]: {
+          canceling: false,
+          error: '',
+        },
       },
     };
 

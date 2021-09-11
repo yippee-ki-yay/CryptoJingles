@@ -14,13 +14,18 @@ import {
   SELL_JINGLE_SUCCESS,
   SELL_JINGLE_FAILURE,
   CLEAR_SELL_JINGLE,
+
+  CANCEL_SALE_JINGLE_REQUEST,
+  CANCEL_SALE_JINGLE_SUCCESS,
+  CANCEL_SALE_JINGLE_FAILURE,
+  CLEAR_CANCEL_SALE_JINGLE,
 } from 'redux/actionTypes/singleJingleActionTypes';
 import {
   getSingleJingle,
   purchaseJingle,
   sellJingle,
+  cancelJingleSale,
 } from 'services/singleJingleService';
-import { wait } from '../../services/utilsService';
 import { MarketplaceAddress, MarketplaceV0Address } from '../../util/config';
 import { formatToWei } from '../../actions/utils';
 
@@ -147,4 +152,46 @@ export const clearSellJingleAction = (key) => (dispatch, getState) => {
 
   if (!singleSellingJingle) dispatch(setJingleSalePriceAction('', key));
   if (singleSellingJingle && !singleSellingJingle.selling) dispatch({ type: CLEAR_SELL_JINGLE, key });
+};
+
+/**
+ * Handles the reducer state for canceling a jingle sale
+ *
+ * @param version
+ * @param id
+ * @param reducerKey
+ * @return {(function(*, *): Promise<void>)|*}
+ */
+export const cancelSaleJingleAction = (version, id, reducerKey) => async (dispatch, getState) => {
+  const { address } = getState().app;
+
+  dispatch({ type: CANCEL_SALE_JINGLE_REQUEST, key: reducerKey });
+
+  try {
+    await cancelJingleSale(version, id, address);
+
+    const payload = {
+      ...getState().singleJingle.singleJingle,
+      owner: address.toLowerCase(),
+      onSale: false,
+      realOwner: '',
+      price: '',
+    };
+
+    dispatch({ type: CANCEL_SALE_JINGLE_SUCCESS, key: reducerKey, payload });
+  } catch (err) {
+    dispatch({ type: CANCEL_SALE_JINGLE_FAILURE, key: reducerKey, payload: err.message });
+  }
+};
+
+/**
+ * Handles the reducer state for clearing the cancel sale action state
+ *
+ * @param key {String}
+ * @return {Function}
+ */
+export const clearCancelSaleJingleAction = (key) => (dispatch, getState) => {
+  const singleCancelingJingle = getState().singleJingle.cancelingJingle[key];
+
+  if (singleCancelingJingle && !singleCancelingJingle.canceling) dispatch({ type: CLEAR_CANCEL_SALE_JINGLE, key });
 };

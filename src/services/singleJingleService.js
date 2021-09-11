@@ -47,3 +47,8 @@ export const sellJingle = async (version, id, price, address) => {
   const contract = await MarketplaceV1Contract();
   return callTx(contract, 'approveAndSell', [id, price], { from: address });
 };
+
+export const cancelJingleSale = async (version, id, address) => {
+  const contract = await MarketplaceV1Contract();
+  return callTx(contract, 'cancel', [id], { from: address });
+};

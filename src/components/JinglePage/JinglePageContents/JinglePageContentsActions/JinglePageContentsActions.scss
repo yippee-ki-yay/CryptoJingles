@@ -3,6 +3,7 @@
 .jingle-page-contents-actions-wrapper {
 
   .sell-price-wrapper {
+    height: 42px;
     display: flex;
     justify-content: space-between;
     font-size: $font-size-title-small - 0.1;
@@ -10,9 +11,7 @@
     .price-value { font-weight: $font-weight-bold; }
   }
 
-  .purchase-wrapper {
-    margin-top: 10px;
-  }
+  .purchase-wrapper, .cancel-wrapper { margin-top: 10px; }
 
   .message-box-wrapper.error {
     margin-top: 10px;
