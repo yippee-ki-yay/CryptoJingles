@@ -26,7 +26,11 @@
           .message-box .text-wrapper { word-break: break-all; }
         }
 
-        .button { margin-top: 15px; }
+        .button {
+          margin-top: 15px;
+          font-size: $font-size-regular;
+          padding: 11px 0;
+        }
       }
     }
   }
