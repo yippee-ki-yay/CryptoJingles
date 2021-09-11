@@ -4,7 +4,7 @@ import t from 'translate';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { MESSAGE_BOX_TYPES } from 'constants/general';
-import { getSingleJingleAction } from 'redux/actions/singleJingleActions';
+import { getSingleJingleAction, clearSingleJingleAction } from 'redux/actions/singleJingleActions';
 import BoxLoader from '../Decorative/BoxLoader';
 import MessageBox from '../Common/MessageBox/MessageBox';
 import JinglePageContents from './JinglePageContents/JinglePageContents';
@@ -13,7 +13,7 @@ import './JinglePage2.scss';
 
 const JinglePage2 = ({
   match: { params: { version, id } }, getSingleJingleAction,
-  gettingSingleJingle, gettingSingleJingleError, singleJingle,
+  gettingSingleJingle, gettingSingleJingleError, singleJingle, clearSingleJingleAction,
 }) => {
   const hasJingle = useMemo(() => singleJingle !== null, [singleJingle]);
   const center = useMemo(() => gettingSingleJingle || gettingSingleJingleError || !hasJingle, [gettingSingleJingle, gettingSingleJingleError, hasJingle]);
@@ -22,7 +22,10 @@ const JinglePage2 = ({
     getSingleJingleAction(parseInt(version, 10), parseInt(id, 10));
   }, [version, id, getSingleJingleAction]);
 
-  useEffect(() => { getSingleJingleActionCallback(); }, [getSingleJingleActionCallback]);
+  useEffect(() => {
+    getSingleJingleActionCallback();
+    return () => { clearSingleJingleAction(); };
+  }, [getSingleJingleActionCallback, clearSingleJingleAction]);
 
   return (
     <div className={clsx('jingle-page-2-wrapper page-wrapper', { center })}>
@@ -69,6 +72,7 @@ JinglePage2.propTypes = {
   match: PropTypes.object.isRequired,
 
   getSingleJingleAction: PropTypes.func.isRequired,
+  clearSingleJingleAction: PropTypes.func.isRequired,
   gettingSingleJingle: PropTypes.bool.isRequired,
   gettingSingleJingleError: PropTypes.string.isRequired,
   singleJingle: PropTypes.object,
@@ -80,6 +84,6 @@ const mapStateToProps = ({ singleJingle }) => ({
   singleJingle: singleJingle.singleJingle,
 });
 
-const mapDispatchToProps = { getSingleJingleAction };
+const mapDispatchToProps = { getSingleJingleAction, clearSingleJingleAction };
 
 export default connect(mapStateToProps, mapDispatchToProps)(JinglePage2);

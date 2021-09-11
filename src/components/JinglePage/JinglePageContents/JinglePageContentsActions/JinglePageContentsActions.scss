@@ -9,4 +9,13 @@
 
     .price-value { font-weight: $font-weight-bold; }
   }
+
+  .purchase-wrapper {
+    margin-top: 10px;
+  }
+
+  .message-box-wrapper.error {
+    margin-top: 10px;
+    width: 100%;
+  }
 }

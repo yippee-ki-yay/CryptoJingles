@@ -99,4 +99,5 @@ export const formatViewJingle = (version, jingle) => ({
   price: parseFloat(jingle.price),
   isOg: checkIfJingleOg(version, parseInt(jingle.id, 10)),
   type: '',
+  owner: jingle.owner.toLowerCase(),
 });
