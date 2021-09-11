@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { openWalletModal } from 'redux/actions/modalActions';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { shortenAddress } from '../../../services/utilsService';
 import { getSupportedWallets } from '../../../constants/wallet';
 import ThreeDotsLoader from '../../Common/ThreeDotsLoader/TreeDotsLoader';
@@ -16,7 +15,7 @@ const ConnectWalletButton = ({
 
   const handleClick = useCallback(() => {
     openWalletModal(true);
-    closeMenu();
+    closeMenu(false);
   }, [openWalletModal, closeMenu]);
 
   const shortAddress = shortenAddress(address);

@@ -51,7 +51,7 @@ WrapJinglesContentUnwrapJingleItem.propTypes = {
   unwrapJingleAction: PropTypes.func.isRequired,
   clearUnwrapAction: PropTypes.func.isRequired,
   isOg: PropTypes.bool,
-  jingleUnwrappingError: PropTypes.bool.isRequired,
+  jingleUnwrappingError: PropTypes.string.isRequired,
   jingleUnwrapping: PropTypes.bool.isRequired,
 };
 
