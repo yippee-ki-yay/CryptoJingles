@@ -79,12 +79,12 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
       jingleData.sampleTypes.forEach((sampleType) => {
         attributes.push({
           trait_type: getJingleData(sampleType).name,
-          // value: getJingleData(sampleType).rarity,
+          value: 'sample',
         });
       });
 
       metadata.description = `Wrapped version of ${wrappedJingle.jingleVersion} jingle number #${jingleData.jingleId}`;
-      metadata.name = `Wrapped #${jingleData.jingleId} - ${jingleData.name}`;
+      metadata.name = `Wrapped ${wrappedJingle.jingleVersion} #${jingleData.jingleId} - ${jingleData.name}`;
       metadata.animation_url = `${base}/public/videosWithSound/${webmName}.webm`;
       metadata.external_url = `${base}/jingle/${jingleData.jingleId}`;
       metadata.image = `${base}/public/videosWithSound/${webmName}.webm`;
