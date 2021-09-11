@@ -82,6 +82,8 @@ export default {
     '--profile-author-name-error': PALLET.red,
     '--profile-tabs-active-tab-border-bottom': PALLET.teal2,
 
+    '--home-opensea-bg': PALLET.teal2,
+
     // OLD
 
     '--color-main': PALLET.brown,

@@ -17,13 +17,48 @@
     font-weight: bold;
 }
 
-.homepage-main h4 {
-
-}
-
 .explanation-section {
     display: flex;
     align-items: center;
+
+  &.last { margin-bottom: 200px; }
+}
+
+.opensea-wrapper {
+  margin-top: 40px;
+  font-size: $font-size-large;
+
+  .collections {
+
+    a {
+      display: inline-flex;
+      align-items: center;
+
+      &:first-child { margin-right: 45px; }
+
+      svg {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  @include for-sm-screen {
+    .collections {
+      display: flex;
+      flex-direction: column;
+
+      a {
+        justify-content: center;
+
+        &:first-child {
+          margin-right: 0;
+          margin-bottom: 30px;
+        }
+      }
+    }
+  }
 }
 
 .explanation-section-2 {

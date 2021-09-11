@@ -11,6 +11,7 @@ import SingleJingle from '../SingleJingle/SingleJingle';
 
 import bigLogo from './bigLogo.png';
 import './Home.scss';
+import OpenSeaSmallIcon from '../Common/Icons/OpenSeaSmallIcon';
 
 class Home extends Component {
   constructor(props) {
@@ -50,6 +51,30 @@ class Home extends Component {
                 Start jamming!
               </button>
             </Link>
+          </div>
+
+          <div className="opensea-wrapper">
+            <div className="collections">
+              <a
+                className="reddit"
+                href="https://opensea.io/collection/genesis-jingles"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <OpenSeaSmallIcon />
+                OpenSea Genesis Jingles collection
+              </a>
+
+              <a
+                className="reddit"
+                href="https://opensea.io/collection/new-jingles"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <OpenSeaSmallIcon />
+                OpenSea New Jingles collection
+              </a>
+            </div>
           </div>
         </div>
 
@@ -119,7 +144,7 @@ class Home extends Component {
 
         <div className="separator" />
 
-        <div className="explanation-section">
+        <div className="explanation-section last">
           <div className="left">
             <h2>What is next?</h2>
           </div>
@@ -128,8 +153,6 @@ class Home extends Component {
             Stay tuned in to find out more.
           </div>
         </div>
-
-        <div className="separator" />
       </div>
     );
   }

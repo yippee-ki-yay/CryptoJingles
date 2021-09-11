@@ -1,25 +1,50 @@
 @import "partials/variables";
+@import "partials/text";
 
-.footer-wrapper .width-container{
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
+.footer-wrapper .width-container {
   padding-top: 30px;
   padding-bottom: 30px;
 
-  .logo-wrapper img { width: 200px; }
-
-  .socials-wrapper {
+  .top {
     display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
 
-    a:not(:last-child) { margin-right: 20px; }
+    .collections {
+      font-size: $font-size-medium;
 
-    svg {
-      width: 30px;
-      cursor: pointer;
-      @include hover-transition;
+      a {
+        display: inline-flex;
+        align-items: center;
 
-      &:hover { opacity: 0.6; }
+        svg { margin-right: 5px }
+
+        &:first-child { margin-right: 40px; }
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+    .logo-wrapper img { width: 200px; }
+
+    .socials-wrapper {
+      display: flex;
+
+      a:not(:last-child) { margin-right: 20px; }
+
+      svg {
+        width: 30px;
+        cursor: pointer;
+        @include hover-transition;
+
+        &:hover { opacity: 0.6; }
+      }
     }
   }
 }
@@ -27,18 +52,36 @@
 
 @include for-sm-screen {
   .footer-wrapper .width-container {
-    flex-direction: column;
     padding-top: 20px;
     padding-bottom: 20px;
 
-    .logo-wrapper, .socials-wrapper { margin-bottom: 30px; }
+    .top .collections {
+      flex-direction: column;
+      display: flex;
+      text-align: center;
 
-    .socials-wrapper {
+      a {
+        justify-content: center;
+
+        &:first-child {
+          margin-right: 0;
+          margin-bottom: 20px;
+        }
+      }
+    }
+
+    .bottom {
       flex-direction: column;
 
-      a:not(:last-child) {
-        margin-bottom: 20px;
-        margin-right: 0;
+      .logo-wrapper, .socials-wrapper { margin-bottom: 30px; }
+
+      .socials-wrapper {
+        flex-direction: column;
+
+        a:not(:last-child) {
+          margin-bottom: 20px;
+          margin-right: 0;
+        }
       }
     }
   }
