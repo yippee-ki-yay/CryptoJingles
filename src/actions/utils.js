@@ -8,6 +8,7 @@ import {
   WrappedOGJingleAddress,
 } from '../util/config';
 import { LIKES_MESSAGE_TO_SIGN } from '../../config/universalConstants';
+import { NUM_V0_OG_JINGLES, NUM_V1_OG_JINGLES } from '../constants/general';
 
 /**
  * Converts price in wei to price in ETH without web3
@@ -82,3 +83,20 @@ export const notSupportedAddressText = (address) => {
 
   return 'Provided address is not valid.';
 };
+
+export const checkIfJingleOg = (version, jingleId) => {
+  const isV0OG = version === 0 && jingleId <= NUM_V0_OG_JINGLES;
+  const isV1OG = version === 1 && jingleId <= NUM_V1_OG_JINGLES;
+  return isV0OG || isV1OG;
+};
+
+export const formatViewJingle = (version, jingle) => ({
+  ...jingle,
+  jingleId: parseInt(jingle.id, 10),
+  version,
+  liked: false,
+  likeCount: 0,
+  price: parseFloat(jingle.price),
+  isOg: checkIfJingleOg(version, parseInt(jingle.id, 10)),
+  type: '',
+});
