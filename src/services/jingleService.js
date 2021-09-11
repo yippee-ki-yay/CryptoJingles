@@ -11,7 +11,14 @@ import {
 import { NUM_V0_OG_JINGLES, NUM_V1_OG_JINGLES } from '../constants/general';
 import callTx from './txService';
 import { getJingleMetadata } from '../constants/getMockData';
-import { MarketplaceAddress, MarketplaceV0Address } from '../util/config';
+import {
+  JingleAddress,
+  MarketplaceAddress,
+  MarketplaceV0Address,
+  WrappedNewJingleAddress,
+  WrappedOGJingleAddress,
+} from '../util/config';
+import { handleResponse } from './apiService';
 
 const checkIfJingleOg = (version, jingleId) => {
   const isV0OG = version === 0 && jingleId <= NUM_V0_OG_JINGLES;
@@ -45,9 +52,31 @@ export const getAllV0UserJingles = async (address) => {
 };
 
 // set wrapped prop or for these 2 methods
-export const getAllOgWrappedUserJingles = (address) => [];
+const getWrappedJinglesForUserForWrapper = async (address, assetContractAdress) => {
+  const { assets } = await fetch(`https://api.opensea.io/api/v1/assets?owner=${address}&asset_contract_address=${assetContractAdress}`).then((res) => handleResponse(res));
 
-export const getAllNewWrappedUserJingles = (address) => [];
+  const OGTokenIds = assets.map(({ token_id }) => parseInt(token_id, 10)); // eslint-disable-line
+
+  const contract = await WrappedOGJinglesContract();
+
+  const promises = OGTokenIds.map((tokenId) => contract.methods.wrappedToUnwrapped(tokenId).call()); // eslint-disable-line
+
+  const realTokensBasicData = await Promise.all(promises);
+
+  const promises2 = realTokensBasicData.map(async ({ tokenId, jingleContract }) => {
+    const version = jingleContract.toLowerCase() === JingleAddress ? 1 : 0;
+    const contractCreator = version === 1 ? JingleV1ViewContract : JingleV0ViewContract;
+    const contract = await contractCreator();
+
+    const data = await contract.methods.getFullJingleData(parseInt(tokenId, 10)).call();
+    return formatViewJingle(version, data);
+  });
+
+  return Promise.all(promises2);
+};
+
+export const getAllOgWrappedUserJingles = (address) => getWrappedJinglesForUserForWrapper(address, WrappedOGJingleAddress);
+export const getAllNewWrappedUserJingles = (address) => getWrappedJinglesForUserForWrapper(address, WrappedNewJingleAddress);
 
 // ALL MARKETPLACE
 const getUserJinglesFromMarketplace = async (address, jinglesContract, marketplaceAddress, marketplaceContract, viewContractCreator, version) => {
