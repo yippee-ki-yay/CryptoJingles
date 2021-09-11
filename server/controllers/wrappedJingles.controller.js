@@ -83,7 +83,7 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
 
       const base = 'https://cryptojingles.app';
 
-      const webmName = `${wrappedJingle.jingleVersion}_${jingleData.jingleId}`;
+      const webmName = `${wrappedJingle.jingleVersion}_${jingleData.id}`;
 
       const attributes = [];
 
