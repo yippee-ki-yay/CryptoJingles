@@ -10,6 +10,7 @@ import composeReducer from './composeReducer';
 import modalReducer from './modalReducer';
 import jingleReducer from './jingleReducer';
 import assetsReducer from './assetsReducer';
+import singleJingleReducer from './singleJingleReducer';
 
 const reducer = combineReducers({
   routing: routerReducer,
@@ -19,6 +20,7 @@ const reducer = combineReducers({
   app: appReducer,
   modal: modalReducer,
   jingle: jingleReducer,
+  singleJingle: singleJingleReducer,
   assets: assetsReducer,
   explore: exploreReducer,
   // web3: web3Reducer,

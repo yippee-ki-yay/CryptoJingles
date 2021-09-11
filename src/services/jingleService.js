@@ -19,23 +19,7 @@ import {
   WrappedOGJingleAddress,
 } from '../util/config';
 import { handleResponse } from './apiService';
-
-const checkIfJingleOg = (version, jingleId) => {
-  const isV0OG = version === 0 && jingleId <= NUM_V0_OG_JINGLES;
-  const isV1OG = version === 1 && jingleId <= NUM_V1_OG_JINGLES;
-  return isV0OG || isV1OG;
-};
-
-const formatViewJingle = (version, jingle) => ({
-  ...jingle,
-  jingleId: parseInt(jingle.id, 10),
-  version,
-  liked: false,
-  likeCount: 0,
-  price: parseFloat(jingle.price),
-  isOg: checkIfJingleOg(version, parseInt(jingle.id, 10)),
-  type: '',
-});
+import { formatViewJingle } from '../actions/utils';
 
 export const getAllV1UserJingles = async (address) => {
   const contract = await JingleV1ViewContract();

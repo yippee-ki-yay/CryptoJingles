@@ -19,7 +19,7 @@ const ProfileLazy = lazy(() => import('./Profile/Profile'));
 const NoProfileLazy = lazy(() => import('./NoProfile/NoProfile'));
 const MarketplaceLazy = lazy(() => import('./Marketplace/Marketplace'));
 const ComposeLazy = lazy(() => import('./Compose/Compose'));
-const JinglePageLazy = lazy(() => import('./JinglePage/JinglePage'));
+const JinglePage2Lazy = lazy(() => import('./JinglePage/JinglePage2'));
 const WrapJinglesLazy = lazy(() => import('./WrapJingles/WrapJingles'));
 const ExploreLazy = lazy(() => import('./Explore/Explore'));
 
@@ -46,7 +46,7 @@ const Routes = ({ listenToAccChange, silentLogin }) => {
               <Route path="/" exact component={HomeLazy} />
               <Route path="/marketplace" component={MarketplaceLazy} />
               <Route path="/explore" component={ExploreLazy} />
-              <Route path="/jingle/:version/:id" component={JinglePageLazy} />
+              <Route path="/jingle/:version/:id" component={JinglePage2Lazy} />
               <AccountRouteChecker path="/wrap-jingle" component={WrapJinglesLazy} requireLogin requireLoginBlocker />
               <Route path="/compose" component={ComposeLazy} />
               <Route path="/profile/:address" component={ProfileLazy} />
