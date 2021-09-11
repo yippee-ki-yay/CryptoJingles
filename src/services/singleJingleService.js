@@ -16,8 +16,9 @@ export const getSingleJingle = async (version, id) => {
   const jingleData = await viewContract.methods.getFullJingleData(id).call();
   const formattedJingleData = formatViewJingle(version, jingleData);
 
-  if (formattedJingleData.owner === MarketplaceV0Address) {
+  if (formattedJingleData.owner === MarketplaceV0Address.toLowerCase()) {
     formattedJingleData.marketplaceV0 = true;
+    formattedJingleData.externalOwner = true;
 
     const contract = await MarketplaceV0Contract();
     const sellOrder = await contract.methods.sellOrders(id).call();
@@ -25,8 +26,9 @@ export const getSingleJingle = async (version, id) => {
     formattedJingleData.realOwner = sellOrder.seller.toLowerCase();
   }
 
-  if (formattedJingleData.owner === MarketplaceAddress) {
+  if (formattedJingleData.owner === MarketplaceAddress.toLowerCase()) {
     formattedJingleData.marketplaceV1 = true;
+    formattedJingleData.externalOwner = true;
 
     const contract = await MarketplaceV1Contract();
     const sellOrder = await contract.methods.sellOrders(id).call();

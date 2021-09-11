@@ -1,0 +1,68 @@
+@import "partials/text";
+@import "partials/variables";
+
+.jingle-page-contents-info-wrapper {
+
+  .info-item-wrapper {
+
+    &:not(:last-child) { margin-bottom: 45px; }
+
+    &.samples {
+
+      .info-item-label { margin-bottom: 5px; }
+
+      .info-item-value {
+        display: flex;
+        flex-wrap: wrap;
+
+        .single-sample {
+          margin-top: 5px;
+          margin-right: 5px;
+          color: white;
+          padding: 4px 12px;
+          border-radius: 4px;
+          font-size: $font-size-medium;
+
+          &.rarity-0 { background: #005792; }
+          &.rarity-1 { background: #734488; }
+          &.rarity-2 {
+            background: #FFDF00;
+            color: black;
+          }
+          &.rarity-3 { background: #99ff00; }
+        }
+      }
+    }
+
+    .info-item-label {
+      color: #C0C7D1;
+      text-transform: uppercase;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-large;
+      line-height: $font-size-large;
+      margin-bottom: 10px;
+    }
+
+    .info-item-value {
+      color: #4E525EFF;
+      font-size: $font-size-title-small;
+      line-height: $font-size-title-small;
+
+      &.address {
+        @include ellipsis;
+        max-width: 475px;
+      }
+
+      &.link {
+        text-transform: uppercase;
+        @include hover-transition;
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover {
+          color: lighten(#4E525E, 20);
+        }
+      }
+    }
+  }
+}

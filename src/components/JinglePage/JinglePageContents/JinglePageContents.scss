@@ -1,8 +1,14 @@
 .jingle-page-contents-wrapper {
-  display: flex;
 
-  .left-column-wrapper {
-    max-width: 250px;
-    width: 100%;
+  .columns-wrapper {
+    display: flex;
+
+    .left-column-wrapper {
+      max-width: 250px;
+      margin-right: 45px;
+      width: 100%;
+    }
+
+    .right-column-wrapper { overflow: hidden; }
   }
 }

@@ -10,6 +10,7 @@ import MessageBox from '../Common/MessageBox/MessageBox';
 import JinglePageContents from './JinglePageContents/JinglePageContents';
 
 import './JinglePage2.scss';
+import { getJingleMetadata } from '../../constants/getMockData';
 
 const JinglePage2 = ({
   match: { params: { version, id } }, getSingleJingleAction,
