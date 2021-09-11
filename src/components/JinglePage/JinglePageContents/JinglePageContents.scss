@@ -1,3 +1,5 @@
+@import "partials/variables";
+
 .jingle-page-contents-wrapper {
 
   .columns-wrapper {
@@ -10,5 +12,20 @@
     }
 
     .right-column-wrapper { overflow: hidden; }
+  }
+
+  @include for-sm-screen {
+    .columns-wrapper {
+      flex-direction: column;
+
+      .left-column-wrapper {
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .right-column-wrapper {
+        margin-top: 60px;
+      }
+    }
   }
 }

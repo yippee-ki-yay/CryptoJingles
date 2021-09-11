@@ -1,3 +1,5 @@
+@import "partials/variables";
+
 .jingle-page-2-wrapper .width-container {
   max-width: 800px;
 
@@ -8,6 +10,15 @@
       margin-left: 10px;
       color: #C0C7D1;
       font-weight: bold;
+    }
+  }
+
+  @include for-sm-screen {
+    .page-header-wrapper .page-title {
+      justify-content: center;
+      flex-direction: column;
+
+      .title-more { margin-left: 0; }
     }
   }
 }

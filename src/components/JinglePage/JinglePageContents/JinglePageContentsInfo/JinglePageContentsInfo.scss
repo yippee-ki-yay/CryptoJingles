@@ -76,4 +76,18 @@
       }
     }
   }
+
+  @include for-sm-screen {
+    .info-item-wrapper {
+      text-align: center;
+
+      &.samples .info-item-value { justify-content: center }
+
+      .info-item-value {
+        margin: 0 auto;
+
+        &.address { max-width: 100%; }
+      }
+    }
+  }
 }

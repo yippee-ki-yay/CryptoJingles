@@ -77,7 +77,7 @@ export const notSupportedAddressText = (address) => {
   if (NO_PROFILE_ADDRESSES.includes(lcAddress)) {
     if (lcAddress === MarketplaceV0Address) return 'Viewing the v0 marketplace is disabled here';
     if (lcAddress === MarketplaceAddress) return 'Viewing the v1 marketplace is disabled here';
-    if (lcAddress === WrappedOGJingleAddress) return 'Viewing the OG wrapper is disabled here';
+    if (lcAddress === WrappedOGJingleAddress) return 'Viewing the Genesis wrapper is disabled here';
     if (lcAddress === WrappedNewJingleAddress) return 'Viewing the new wrapper is disabled here';
   }
 
