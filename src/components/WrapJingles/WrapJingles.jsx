@@ -37,7 +37,10 @@ const WrapJingles = ({
       <div className="width-container">
         <div className="page-header-wrapper">
           <div className="page-title">{ t('jingles.wrap_jingles') }</div>
-          <div className="page-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus animi beatae cupiditate deserunt id impedit incidunt natus necessitatibus obcaecati odio odit porro quibusdam recusandae rem repellat repellendus reprehenderit, suscipit voluptate!</div>
+          <div className="page-description">
+            You asked for it and we did it, welcome to the wrapper page! There are two seperate Wrapper contracts, one for Jingles minted in 2018 (Genesis Jingles) and one for Jingles minted after that (New Jingles).
+            After you wrap your Jingle, it will be owned by the new Wrapped token, which you will own. <b>Keep in mind that Wrapped tokens have a different ID than the Jingle tokens!</b> You will be able to unwrap tokens here at any time. After that the Jingle token will return to your wallet.
+          </div>
         </div>
 
         <div className="page-content-wrapper">

@@ -198,7 +198,10 @@ class Compose extends Component {
         <div className="width-container">
           <div className="page-header-wrapper">
             <div className="page-title">{ t('common.compose') }</div>
-            <div className="page-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus animi beatae cupiditate deserunt id impedit incidunt natus necessitatibus obcaecati odio odit porro quibusdam recusandae rem repellat repellendus reprehenderit, suscipit voluptate!</div>
+            <div className="page-description">
+              This is the birthplace of all Jingles! Each Jingle is composed of 5 samples. You can buy up to 15 samples per a single transaction.
+              Once a sample is used in a transaction, you won&apos;t be able to use it again. After you mint a jingle, it will show up on your profile page.
+            </div>
           </div>
 
           <div className="page-content-wrapper">
