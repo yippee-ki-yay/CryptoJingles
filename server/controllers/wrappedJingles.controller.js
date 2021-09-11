@@ -55,7 +55,10 @@ module.exports.getWrappedJingleMetadata = async (req, res) => {
     if (!wrappedJingle) {
       const tokenId = await wrappedJingleContract.methods.wrappedToUnwrapped(wrappedId).call();
 
-      if (!tokenId.isWrapped) return;
+      if (!tokenId.isWrapped) {
+        res.json({});
+        return;
+      }
 
       const version = tokenId.jingleContract.toLowerCase() === jingleV0Addr.toLowerCase() ? 'v0' : 'v1';
 
