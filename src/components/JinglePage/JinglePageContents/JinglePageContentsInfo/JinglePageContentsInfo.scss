@@ -7,6 +7,12 @@
 
     &:not(:last-child) { margin-bottom: 45px; }
 
+    &.opensea .info-item-label {
+      display: flex;
+
+      svg { margin-left: 10px; }
+    }
+
     &.samples {
 
       .info-item-label { margin-bottom: 5px; }
@@ -62,6 +68,11 @@
         &:hover {
           color: lighten(#4E525E, 20);
         }
+      }
+
+      &.external {
+        text-transform: none;
+        display: block;
       }
     }
   }

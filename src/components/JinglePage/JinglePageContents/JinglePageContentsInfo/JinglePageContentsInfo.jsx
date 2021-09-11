@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { getJingleMetadata } from 'constants/getMockData';
+import { WrappedNewJingleAddress, WrappedOGJingleAddress } from '../../../../util/config';
 
+import OpenSeaIcon from '../../../Common/Icons/OpenSeaIcon';
 import './JinglePageContentsInfo.scss';
-import { getJingleMetadata } from '../../../../constants/getMockData';
 
 const JinglePageContentsInfo = ({ singleJingle }) => {
   const history = useHistory();
@@ -21,6 +23,13 @@ const JinglePageContentsInfo = ({ singleJingle }) => {
     if (!singleJingle.externalOwner) return;
     history.push(`/profile/${singleJingle.realOwner}`);
   }, [history, singleJingle]);
+
+  const openSeaLink = useMemo(() => {
+    if (!singleJingle.wrapped) return '';
+
+    const contractAddress = singleJingle.ogWrapped ? WrappedOGJingleAddress : WrappedNewJingleAddress;
+    return `https://opensea.io/assets/${contractAddress}/${singleJingle.wrappedTokenId}`;
+  }, [singleJingle]);
 
   return (
     <div className="jingle-page-contents-info-wrapper">
@@ -68,6 +77,23 @@ const JinglePageContentsInfo = ({ singleJingle }) => {
           }
         </div>
       </div>
+
+      {
+        singleJingle.wrapped && (
+          <div className="info-item-wrapper opensea">
+            <div className="info-item-label">See on <OpenSeaIcon /></div>
+
+            <a
+              className="info-item-value link address external"
+              href={openSeaLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              { openSeaLink }
+            </a>
+          </div>
+        )
+      }
     </div>
   );
 };

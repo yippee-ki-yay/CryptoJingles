@@ -36,14 +36,14 @@ export const getAllV0UserJingles = async (address) => {
 };
 
 // set wrapped prop or for these 2 methods
-const getWrappedJinglesForUserForWrapper = async (address, assetContractAdress) => {
-  const { assets } = await fetch(`https://api.opensea.io/api/v1/assets?owner=${address}&asset_contract_address=${assetContractAdress}`).then((res) => handleResponse(res));
+const getWrappedJinglesForUserForWrapper = async (address, assetContractAdress, contractCreatorFunc) => {
+  const { assets } = await fetch(`https://api.opensea.io/api/v1/assets?owner=${address.toLowerCase()}&asset_contract_address=${assetContractAdress.toLowerCase()}`).then((res) => handleResponse(res));
 
-  const OGTokenIds = assets.map(({ token_id }) => parseInt(token_id, 10)); // eslint-disable-line
+  const tokenIds = assets.map(({ token_id }) => parseInt(token_id, 10)); // eslint-disable-line
 
-  const contract = await WrappedOGJinglesContract();
+  const contract = await contractCreatorFunc();
 
-  const promises = OGTokenIds.map((tokenId) => contract.methods.wrappedToUnwrapped(tokenId).call()); // eslint-disable-line
+  const promises = tokenIds.map((tokenId) => contract.methods.wrappedToUnwrapped(tokenId).call()); // eslint-disable-line
 
   const realTokensBasicData = await Promise.all(promises);
 
@@ -59,8 +59,8 @@ const getWrappedJinglesForUserForWrapper = async (address, assetContractAdress) 
   return Promise.all(promises2);
 };
 
-export const getAllOgWrappedUserJingles = (address) => getWrappedJinglesForUserForWrapper(address, WrappedOGJingleAddress);
-export const getAllNewWrappedUserJingles = (address) => getWrappedJinglesForUserForWrapper(address, WrappedNewJingleAddress);
+export const getAllOgWrappedUserJingles = (address) => getWrappedJinglesForUserForWrapper(address, WrappedOGJingleAddress, WrappedOGJinglesContract);
+export const getAllNewWrappedUserJingles = (address) => getWrappedJinglesForUserForWrapper(address, WrappedNewJingleAddress, WrappedNewJinglesContract);
 
 // ALL MARKETPLACE
 const getUserJinglesFromMarketplace = async (address, jinglesContract, marketplaceAddress, marketplaceContract, viewContractCreator, version) => {

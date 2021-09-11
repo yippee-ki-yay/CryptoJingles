@@ -3,9 +3,18 @@ import {
   JingleV1ViewContract,
   MarketplaceV0Contract,
   MarketplaceV1Contract,
+  WrappedNewJinglesContract,
+  WrappedOGJinglesContract,
 } from './contractsRegistryService';
 import { formatViewJingle } from '../actions/utils';
-import { MarketplaceAddress, MarketplaceV0Address } from '../util/config';
+import {
+  JingleAddress,
+  JingleV0Address,
+  MarketplaceAddress,
+  MarketplaceV0Address,
+  WrappedNewJingleAddress,
+  WrappedOGJingleAddress,
+} from '../util/config';
 import callTx from './txService';
 
 export const getSingleJingle = async (version, id) => {
@@ -36,7 +45,34 @@ export const getSingleJingle = async (version, id) => {
     formattedJingleData.realOwner = sellOrder.seller.toLowerCase();
   }
 
-  console.log('formattedJingleData', formattedJingleData);
+  if (formattedJingleData.owner === WrappedOGJingleAddress.toLowerCase()) {
+    formattedJingleData.ogWrapped = true;
+    formattedJingleData.wrapped = true;
+    formattedJingleData.externalOwner = true;
+
+    const addressToCheck = version === 0 ? JingleV0Address : JingleAddress;
+
+    const contract = await WrappedOGJinglesContract();
+    const wrappedTokenId = await contract.methods.unwrappedToWrapped(formattedJingleData.jingleId, addressToCheck).call();
+
+    formattedJingleData.wrappedTokenId = wrappedTokenId;
+    formattedJingleData.realOwner = await contract.methods.ownerOf(wrappedTokenId).call();
+  }
+
+  if (formattedJingleData.owner === WrappedNewJingleAddress.toLowerCase()) {
+    formattedJingleData.newWrapped = true;
+    formattedJingleData.wrapped = true;
+    formattedJingleData.externalOwner = true;
+
+    const addressToCheck = version === 0 ? JingleV0Address : JingleAddress;
+
+    const contract = await WrappedNewJinglesContract();
+    const wrappedTokenId = await contract.methods.unwrappedToWrapped(formattedJingleData.jingleId, addressToCheck).call();
+
+    formattedJingleData.wrappedTokenId = wrappedTokenId;
+    formattedJingleData.realOwner = await contract.methods.ownerOf(wrappedTokenId).call();
+  }
+
   return formattedJingleData;
 };
 
