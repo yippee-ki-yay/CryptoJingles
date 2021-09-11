@@ -8,6 +8,7 @@ import {
 } from 'redux/actions/singleJingleActions';
 import { formatSalePrice } from '../../../../actions/utils';
 import MessageBox from '../../../Common/MessageBox/MessageBox';
+import JinglePageContentsActionsSellForm from './JinglePageContentsActionsSellForm/JinglePageContentsActionsSellForm';
 
 import './JinglePageContentsActions.scss';
 
@@ -20,11 +21,11 @@ const JinglePageContentsActions = ({
   const v1NotOnSaleAndAddressLoaded = useMemo(() => singleJingle.version === 1 && !singleJingle.onSale && address, [address, singleJingle]);
   const v1OnSaleAndAddressLoadedNotOwner = useMemo(() => v1OnSaleAndAddressLoaded && address.toLowerCase() !== singleJingle.realOwner, [v1OnSaleAndAddressLoaded, address, singleJingle]);
 
-  // cancel sale
-  const v1OnSaleAndAddressLoadedOwner = useMemo(() => v1OnSaleAndAddressLoaded && address.toLowerCase() === singleJingle.realOwner, [v1OnSaleAndAddressLoaded, address, singleJingle]);
-
   // put on sale
   const v1ONotOnSaleAddressLoadedOwner = useMemo(() => v1NotOnSaleAndAddressLoaded && address.toLowerCase() === singleJingle.owner, [v1NotOnSaleAndAddressLoaded, address, singleJingle]);
+
+  // cancel sale
+  const v1OnSaleAndAddressLoadedOwner = useMemo(() => v1OnSaleAndAddressLoaded && address.toLowerCase() === singleJingle.realOwner, [v1OnSaleAndAddressLoaded, address, singleJingle]);
 
   // PURCHASE
   const purchaseJingleActionCallback = useCallback(() => {
@@ -66,6 +67,8 @@ const JinglePageContentsActions = ({
           </div>
         )
       }
+
+      { v1ONotOnSaleAddressLoadedOwner && (<JinglePageContentsActionsSellForm reducerKey={reducerKey} />) }
     </div>
   );
 };

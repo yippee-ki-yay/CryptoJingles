@@ -1,0 +1,14 @@
+.jingle-page-contents-actions-sell-form-wrapper {
+
+  form {
+    margin-bottom: 0;
+
+    .form-input {
+      margin-right: 0;
+      margin-bottom: 10px;
+      padding: 6px 10px;
+
+      &:not(:focus) { border: 1px solid var(--input-border); }
+    }
+  }
+}

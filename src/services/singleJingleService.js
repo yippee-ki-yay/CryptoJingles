@@ -40,5 +40,10 @@ export const getSingleJingle = async (version, id) => {
 
 export const purchaseJingle = async (version, id, price, address) => {
   const contract = await MarketplaceV1Contract();
-  return callTx(contract, 'buy', [id], { from: address, value: address });
+  return callTx(contract, 'buy', [id], { from: address, value: price.toString() });
+};
+
+export const sellJingle = async (version, id, price, address) => {
+  const contract = await MarketplaceV1Contract();
+  return callTx(contract, 'approveAndSell', [id, price], { from: address });
 };
