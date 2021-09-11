@@ -42,8 +42,8 @@ module.exports = (seed, random, randomFunc, mapSrc, outputDir = '', fileName = '
 
     // browser/node options
     pixelRatio: 1,
-    width: 250,
-    height: 250,
+    width: 600,
+    height: 600,
     palette: getPalette(),
 
     // node only options

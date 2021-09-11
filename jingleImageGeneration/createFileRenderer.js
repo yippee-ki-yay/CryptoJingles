@@ -78,10 +78,10 @@ const render = async (_encoder, _renderer, _steps, _interval, _fileName, _versio
 
 module.exports = function (opt, cb) {
   const {
-    steps, fileName, addFrame, version,
+    steps, fileName, addFrame, version, width, height,
   } = opt;
 
-  const canvas = createCanvas(250, 250);
+  const canvas = createCanvas(width, height);
   const context = canvas.getContext('2d');
 
   const interval = typeof opt.interval === 'number' ? opt.interval : 0.0001;
