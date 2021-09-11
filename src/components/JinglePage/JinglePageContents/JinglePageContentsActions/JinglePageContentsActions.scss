@@ -1,0 +1,12 @@
+@import "partials/text";
+
+.jingle-page-contents-actions-wrapper {
+
+  .sell-price-wrapper {
+    display: flex;
+    justify-content: space-between;
+    font-size: $font-size-title-small - 0.1;
+
+    .price-value { font-weight: $font-weight-bold; }
+  }
+}

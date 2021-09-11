@@ -7,6 +7,7 @@ import { MESSAGE_BOX_TYPES } from 'constants/general';
 import { getSingleJingleAction } from 'redux/actions/singleJingleActions';
 import BoxLoader from '../Decorative/BoxLoader';
 import MessageBox from '../Common/MessageBox/MessageBox';
+import JinglePageContents from './JinglePageContents/JinglePageContents';
 
 import './JinglePage2.scss';
 
@@ -52,7 +53,7 @@ const JinglePage2 = ({
               gettingSingleJingleError ?
                 <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingSingleJingleError}</MessageBox>
                 :
-                singleJingle && (<div>Test { singleJingle.jingleId }</div>)
+                singleJingle && (<JinglePageContents />)
           }
         </div>
       </div>

@@ -1,0 +1,35 @@
+.jingle-page-contents-video-wrapper {
+  margin-bottom: 10px;
+
+  .single-song {
+    margin: 0 45px 10px 0;
+
+    .jingle-image-container {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      margin: 0;
+
+      .video-container {
+        &.error, &.not-loaded {
+          .overlay { display: none; }
+        }
+      }
+
+      .overlay {
+        height: 100%;
+      }
+
+      video {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .liked-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

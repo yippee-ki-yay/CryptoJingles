@@ -320,3 +320,13 @@ body::-webkit-scrollbar-thumb, div::-webkit-scrollbar-thumb {
     }
   }
 }
+
+.over-video-error-overlay {
+  position: absolute;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  @include flex-center;
+}

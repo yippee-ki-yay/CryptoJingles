@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import loadingGif from './loadingGif.gif';
 
-const SingleJingleVideo = ({ jingleId, version }) => {
+const SingleJingleVideo = ({ jingleId, version, hideExternal }) => {
   const soundRef = useRef();
 
   const [videoError, setVideoError] = useState('');
@@ -52,7 +52,7 @@ const SingleJingleVideo = ({ jingleId, version }) => {
   }, [src, setVideoError, setLoaded]);
 
   return (
-    <div className={clsx('video-container', { error: videoError })}>
+    <div className={clsx('video-container', { error: videoError, 'not-loaded': !loaded })}>
       { videoError && (<div className="over-video-error-overlay">Video is being generated...</div>) }
 
       <div className="overlay">
@@ -66,9 +66,13 @@ const SingleJingleVideo = ({ jingleId, version }) => {
 
         { playing && (<span onClick={stopSoundCallback}><i className="material-icons stop">cancel</i></span>) }
 
-        <Link to={`/jingle/${version}/${jingleId}`}>
-          <i className="material-icons open">open_in_new</i>
-        </Link>
+        {
+          !hideExternal && (
+            <Link to={`/jingle/${version}/${jingleId}`}>
+              <i className="material-icons open">open_in_new</i>
+            </Link>
+          )
+        }
       </div>
 
       <video // eslint-disable-line
@@ -85,9 +89,14 @@ const SingleJingleVideo = ({ jingleId, version }) => {
   );
 };
 
+SingleJingleVideo.defaultProps = {
+  hideExternal: false,
+};
+
 SingleJingleVideo.propTypes = {
   jingleId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   version: PropTypes.number.isRequired,
+  hideExternal: PropTypes.bool,
 };
 
 export default SingleJingleVideo;
