@@ -39,7 +39,7 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
     return;
   }
 
-  generateWebm(jingle.jingleId, jingle.sampleTypes, jingle.sampleIds);
+  generateWebm(jingle.jingleId, jingle.sampleTypes, jingle.samples);
 
   jingle.hasWebm = true;
 
