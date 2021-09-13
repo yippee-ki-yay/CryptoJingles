@@ -26,6 +26,11 @@ function generateWebm(jingleId, sampleTypes, settings) {
   setInterval(async () => {
     const jingle = await Jingle.findOne({ hasWebm: false });
 
+    if (!jingle) {
+      console.log('No jingle found');
+      return;
+    }
+
     generateWebm(jingle.jingleId, jingle.sampleTypes, jingle.settings);
 
     jingle.hasWebm = true;
