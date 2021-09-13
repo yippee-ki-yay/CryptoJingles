@@ -72,7 +72,7 @@ const getUserJinglesFromMarketplace = async (address, jinglesContract, marketpla
 
   const resWithIds = res.map((item, index) => ({ ...item, id: parseInt(idsOnSale[index], 10) }));
 
-  const userJingles = resWithIds.filter(({ seller }) => seller === address);
+  const userJingles = resWithIds.filter(({ seller }) => seller.toLowerCase() === address.toLowerCase());
 
   const viewContract = await viewContractCreator();
   const promises2 = userJingles.map(({ id }) => viewContract.methods.getFullJingleData(id).call());
