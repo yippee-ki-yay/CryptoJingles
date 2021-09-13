@@ -31,5 +31,5 @@ function generateWebm(jingleId, sampleTypes, settings) {
     jingle.hasWebm = true;
 
     await jingle.save();
-  }, 60 * 1000 * 1);
+  }, 40 * 1000 * 1);
 })();

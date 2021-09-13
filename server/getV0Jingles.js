@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-
 const mongoose = require('mongoose');
 const Web3 = require('web3');
 
@@ -41,11 +40,11 @@ function generateWebm(jingleId, sampleTypes, sampleIds) {
   createFileRenderer(config, () => { generateVideoWithSound(jingleVersion, jingleId); }, () => {});
 }
 
-let jingleId = 53;
+let jingleId = 0;
 const numJingles = 55;
 
 (async () => {
-  // setInterval(async () => {
+  setInterval(async () => {
     if (jingleId < numJingles) {
       console.log(`${jingleId}: jingleId`);
       const jingleViewV0Contract = new web3.eth.Contract(jingleViewV0.abi, jingleViewV0Addr);
@@ -65,7 +64,7 @@ const numJingles = 55;
           onSale: jingleData.onSale,
           owner: jingleData.owner,
           samples: jingleData.sampleIds,
-          sampleTypes: jingleData.sampleTypes
+          sampleTypes: jingleData.sampleTypes,
         });
         jingleV0.hasWebm = true;
 
@@ -74,5 +73,5 @@ const numJingles = 55;
     }
 
     jingleId += 1;
- // }, 40 * 1000 * 1);
+ }, 120 * 1000 * 1);
 })();
