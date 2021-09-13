@@ -67,7 +67,7 @@ class Home extends Component {
 
               <a
                 className="reddit"
-                href="https://opensea.io/collection/new-jingles"
+                href="https://opensea.io/collection/new-cryptojingles"
                 target="_blank"
                 rel="noopener noreferrer"
               >
