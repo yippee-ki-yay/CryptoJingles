@@ -293,38 +293,39 @@ class Compose extends Component {
                 <div className="section-title">{ t('common.your_samples') }</div>
 
                 <div className={clsx('samples-section-wrapper', { center })}>
-                  { !address && (<Blocker text="compose.connect_wallet" />) }
-
                   {
-                    gettingUserSamples ?
-                      (
-                        <div className="loader-wrapper">
-                          <BoxLoader />
-                          <div className="loader-message">{ t('common.getting_all_your_samples') }</div>
-                        </div>
-                      )
+                    !address ?
+                      (<Blocker text="compose.connect_wallet" />)
                       :
-                      gettingUserSamplesError ?
-                        <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingUserSamplesError}</MessageBox>
+                      gettingUserSamples ?
+                        (
+                          <div className="loader-wrapper">
+                            <BoxLoader />
+                            <div className="loader-message">{ t('common.getting_all_your_samples') }</div>
+                          </div>
+                        )
                         :
-                        hasSamples ?
-                          (
-                            <div className="compose-samples-wrapper">
-                              {
-                                userSamples.map((sample) => (
-                                  <SampleBox
-                                    draggable
-                                    slots={this.sampleSlots}
-                                    key={sample.id}
-                                    isDropped={this.isDropped(sample.id)}
-                                    {...sample}
-                                  />
-                                ))
-                              }
-                            </div>
-                          )
+                        gettingUserSamplesError ?
+                          <MessageBox type={MESSAGE_BOX_TYPES.ERROR}>{gettingUserSamplesError}</MessageBox>
                           :
-                          (<EmptyState text={t('common.no_samples')} />)
+                          hasSamples ?
+                            (
+                              <div className="compose-samples-wrapper">
+                                {
+                                  userSamples.map((sample) => (
+                                    <SampleBox
+                                      draggable
+                                      slots={this.sampleSlots}
+                                      key={sample.id}
+                                      isDropped={this.isDropped(sample.id)}
+                                      {...sample}
+                                    />
+                                  ))
+                                }
+                              </div>
+                            )
+                            :
+                            (<EmptyState text={t('common.no_samples')} />)
                   }
                 </div>
               </div>
