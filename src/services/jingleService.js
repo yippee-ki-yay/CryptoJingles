@@ -116,7 +116,12 @@ export const filterOGJingles = (jingles) => jingles.filter(({ jingleId, version,
   return (isV0OG || isV1OG) && !wrapped;
 });
 
-export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, wrapped, version }) => version === 1 && jingleId >= NUM_V1_OG_JINGLES && !wrapped);
+export const filterNonOGJingles = (jingles) => jingles.filter(({ jingleId, wrapped, version }) => {
+  if (wrapped) return false;
+  if (version === 0) return jingleId > NUM_V0_OG_JINGLES;
+  if (version === 1) return jingleId > NUM_V1_OG_JINGLES;
+  return true;
+});
 
 export const getUserSamples = async (address) => {
   const contract = await JingleV1ViewContract();
